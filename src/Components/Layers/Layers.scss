@@ -1,0 +1,12 @@
+.row {
+    display: flex;
+}
+
+.row calcite-input {
+    width: 100%;
+}
+
+.row button {
+    background-color: var(--calcite-ui-foreground-2);
+    color: var(--calcite-ui-background-1);
+}

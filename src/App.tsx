@@ -1,26 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import React, { useState } from 'react';
+import { Shell } from './Components/Shell/Shell';
+import './App.scss';
+import { Actions } from './config/config';
+import ThemeContext from './Components/ThemeContext';
+import ActionContext from './Components/ActionContext';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [theme, setTheme] = useState('dark');
+    const [actions, setActions] = useState<any>(Actions);
+
+    return (
+        <ThemeContext.Provider value={{ theme, setTheme }}>
+            <ActionContext.Provider value={{ actions, setActions }}>
+                <Shell actions={actions} />
+            </ActionContext.Provider>
+        </ThemeContext.Provider>
+    );
 }
 
 export default App;

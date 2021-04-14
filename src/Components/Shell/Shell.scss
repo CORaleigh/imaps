@@ -1,0 +1,44 @@
+calcite-panel {
+    max-width: 350px;
+}
+
+calcite-shell-panel {
+    max-width: 400px
+}
+
+calcite-action-bar {
+    min-width: 50px;
+}
+.property-panel {
+    height: 100%;
+  }
+
+  @media only screen and (max-width: 500px) {
+    calcite-panel {
+        max-width: calc(100vw - 50px);
+        position: absolute;
+
+    }
+    .action-group--bottom {
+        display: none;
+    }
+
+    calcite-shell-panel {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        max-width: 100%;
+    }
+    
+
+    calcite-action-bar {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        top: 0;
+    }
+  
+  }
+  
