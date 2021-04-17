@@ -30,7 +30,7 @@ export const Bookmarks = (props: any) => {
     return () => {
       bookmarks && bookmarks.destroy();
     };
-  }, [props.id, props.zoom]); // only after initial render
+  }, [props.id]); // only after initial render
   return <div ref={ref}></div>;
 };
 export default Bookmarks;

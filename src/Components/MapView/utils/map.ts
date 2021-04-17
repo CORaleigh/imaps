@@ -76,17 +76,17 @@ export const createMapView = (mapRef: any, mapProperties: any, viewProperties: a
 export const checkLocalStorage = (view: MapView): void => {
   if (window.localStorage.getItem('imaps')) {
     const webmap: WebMap = WebMap.fromJSON(JSON.parse(window.localStorage.getItem('imaps') as string));
-    webmap.load().then(() => {
-      view.map.allLayers.forEach((layer) => {
-        const lyr = webmap.allLayers.find((l) => {
-          return layer.id === l.id;
-        });
-        layer.visible = lyr?.visible;
-        layer.opacity = lyr?.opacity;
+
+    view.map.allLayers.forEach((layer) => {
+      const lyr = webmap.allLayers.find((l) => {
+        return layer.id === l.id;
       });
-      view.map.basemap = webmap.basemap;
-      view.extent = webmap.initialViewProperties.viewpoint.targetGeometry.extent;
+      layer.visible = lyr?.visible;
+      layer.opacity = lyr?.opacity;
     });
+    view.map.basemap = webmap.basemap;
+
+    view.extent = webmap.initialViewProperties.viewpoint.targetGeometry.extent;
   }
 };
 

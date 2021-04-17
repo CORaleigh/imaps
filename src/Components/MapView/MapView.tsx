@@ -15,28 +15,26 @@ export const MapView = (props: any) => {
 
   const saveMap = () => {
     console.log(document.visibilityState);
-    if (document.visibilityState === 'hidden') {
-      viewRef.current?.map.removeMany(
-        viewRef.current?.map.allLayers
-          .filter((layer) => {
-            return layer.type === 'group' && !(layer as __esri.GroupLayer).layers.length;
-          })
-          .toArray(),
-      );
-      const json = (viewRef.current?.map as any).toJSON();
-      json.initialState.viewpoint.targetGeometry = viewRef.current?.extent;
-      window.localStorage.setItem('imaps', JSON.stringify(json));
-    }
+    // if (document.visibilityState === 'hidden' || document.hidden) {
+    viewRef.current?.map.removeMany(
+      viewRef.current?.map.allLayers
+        .filter((layer) => {
+          return layer.type === 'group' && !(layer as __esri.GroupLayer).layers.length;
+        })
+        .toArray(),
+    );
+    const json = (viewRef.current?.map as any).toJSON();
+    json.initialState.viewpoint.targetGeometry = viewRef.current?.extent;
+    window.localStorage.setItem('imaps', JSON.stringify(json));
+    // }
   };
   useEffect(() => {
     // read map and view properties from props
     const mapProperties = { id: props.id };
-    const viewProperties = { zoom: props.zoom };
+    const viewProperties = {};
     // create map and view
     if (!loaded) {
       createMapView(mapRef.current, mapProperties, viewProperties).when((mapView: __esri.MapView) => {
-        checkLocalStorage(mapView);
-
         setLoaded(true);
 
         props.initialized(mapView);
@@ -51,12 +49,13 @@ export const MapView = (props: any) => {
         viewRef.current?.on('hold', (event: __esri.MapViewHoldEvent) => {
           props.geometryChanged(event.mapPoint);
         });
+        checkLocalStorage(mapView);
       });
     }
 
-    window.addEventListener('visibilitychange', saveMap);
+    window.addEventListener('beforeunload', saveMap);
     return () => {
-      window.removeEventListener('visibilitychange', saveMap);
+      window.removeEventListener('beforeunload', saveMap);
       view && view.destroy();
       widgets.current.forEach((widget) => {
         widget && widget.destroy();

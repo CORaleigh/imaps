@@ -38,13 +38,15 @@ export const PropertySearch = (props: any) => {
     };
   }, [props.view, props.addressTable, props.condosTable, props.propertyLayer, props.searchComplete]); // only after initial render
   useEffect(() => {
-    searchCondos(props.where, [])
-      .then((result) => {
-        props.searchComplete(result);
-      })
-      .catch((reason: any) => {
-        console.log(reason);
-      });
+    if (props.where != 'OBJECTID IS NULL') {
+      searchCondos(props.where, [])
+        .then((result) => {
+          props.searchComplete(result);
+        })
+        .catch((reason: any) => {
+          console.log(reason);
+        });
+    }
   }, [props.where]);
   return <div ref={searchRef}></div>;
 };

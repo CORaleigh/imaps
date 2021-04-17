@@ -85,6 +85,7 @@ export const PropertyPanel = (props: any) => {
       properties.push(match);
 
       feature.geometry = match?.geometry as __esri.Geometry;
+
       view?.goTo(feature.geometry);
       setFeature(feature);
       //featureRef.current = feature;
