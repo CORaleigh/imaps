@@ -21,6 +21,7 @@ export const PropertySearch = (props: any) => {
       });
       widgetRef.current = search;
       search.sources = setSearchSources(props.addressTable, props.condosTable, props.propertyLayer, search);
+      debugger;
       search.on('search-complete', (event) => {
         searchComplete(event).then((result: any) => {
           props.searchComplete(result);
@@ -38,9 +39,13 @@ export const PropertySearch = (props: any) => {
     };
   }, [props.view, props.addressTable, props.condosTable, props.propertyLayer, props.searchComplete]); // only after initial render
   useEffect(() => {
-    searchCondos(props.where, []).then((result) => {
-      props.searchComplete(result);
-    });
+    searchCondos(props.where, [])
+      .then((result) => {
+        props.searchComplete(result);
+      })
+      .catch((reason: any) => {
+        console.log(reason);
+      });
   }, [props.where]);
   return <div ref={searchRef}></div>;
 };

@@ -153,7 +153,7 @@ const searchRelatedCondos = (oids: number[], layer: __esri.FeatureLayer) => {
 //     searchCondos(where, []);
 // };
 export const searchCondos = (where: string, oids: number[]): Promise<any> => {
-  return promiseUtils.create((resolve) => {
+  return promiseUtils.create((resolve, reject) => {
     const params: any = { outFields: ['*'] };
     if (where != '') {
       params.where = where;
@@ -177,7 +177,7 @@ export const searchCondos = (where: string, oids: number[]): Promise<any> => {
           resolve({ properties: properties, features: result.features, feature: feature });
           //this.emit('feature-selected', feature);
         }
-
+        reject('no results');
         // this.emit('properties-selected', properties);
       });
     });

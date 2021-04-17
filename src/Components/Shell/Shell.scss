@@ -1,5 +1,14 @@
 calcite-panel {
     max-width: 350px;
+
+}
+
+calcite-shell-panel[slot=contextual-panel] calcite-panel {
+    position: absolute;
+    right: 50px;
+    top:0;
+    bottom:0;
+    height: 100%;
 }
 
 calcite-shell-panel {
@@ -12,6 +21,13 @@ calcite-action-bar {
 }
 .property-panel {
     height: 100%;
+  }
+
+  .esri-search__suggestions-menu {
+    z-index: 10000 !important;
+}
+  .esri-search__suggestions-menu li, ul {
+      z-index: 10000 !important;
   }
 
   @media only screen and (max-width: 500px) {

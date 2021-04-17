@@ -11,13 +11,14 @@ import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import UniqueValueRenderer from '@arcgis/core/renderers/UniqueValueRenderer';
 import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 
-export const createSelectionLayer = () => {
+export const createSelectionLayer = (view: __esri.MapView) => {
   const layer = new FeatureLayer({
     source: [],
     editingEnabled: true,
     listMode: 'hide',
     legendEnabled: false,
     geometryType: 'polygon',
+    spatialReference: view.spatialReference,
     id: 'selection-layer',
     objectIdField: 'OBJECTID',
     fields: [

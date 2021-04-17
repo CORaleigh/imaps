@@ -15,7 +15,7 @@ export const Header = (props: any) => {
         setTheme(theme);
         document.body.classList.remove(theme === 'light' ? 'dark' : 'light');
         document.body.classList.add(theme === 'light' ? 'light' : 'dark');
-        debugger;
+
         const link = Array.from(document.head.querySelectorAll('link')).find((link: HTMLLinkElement) => {
           return link.href.includes(`${theme}/main.css`);
         });

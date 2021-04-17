@@ -43,7 +43,7 @@ export const MapView = (props: any) => {
         widgets.current.push(createMapWidgets(mapView));
         setView(mapView);
         viewRef.current = mapView;
-        const layer = createSelectionLayer();
+        const layer = createSelectionLayer(mapView);
         setSelectionLayer(layer);
 
         viewRef.current?.map.add(layer);
@@ -65,9 +65,9 @@ export const MapView = (props: any) => {
   }, []); // only after initial render
   useEffect(() => {
     if (props.selectedProperties) {
-      // props.selectedProperties.forEach((feature: __esri.Graphic) => {
-      //     feature.setAttribute('selected', 0);
-      // });
+      props.selectedProperties.forEach((feature: __esri.Graphic) => {
+        feature.setAttribute('selected', 0);
+      });
       if (props.selectedProperties.length === 1) {
         props.selectedProperties[0].setAttribute('selected', 1);
       }

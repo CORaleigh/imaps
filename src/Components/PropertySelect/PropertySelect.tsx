@@ -9,7 +9,6 @@ export const PropertySelect = (props: any) => {
   const ref = useRef<HTMLDivElement>(null);
   const [distance] = useState(0);
   useEffect(() => {
-    debugger;
     const sketch = new SketchWidget({
       container: ref.current as HTMLDivElement,
       view: props.view,
