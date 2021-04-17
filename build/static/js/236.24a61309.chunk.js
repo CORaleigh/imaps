@@ -1,2 +1,0 @@
-(this.webpackJsonpimaps=this.webpackJsonpimaps||[]).push([[236],{1192:function(n,t,u){"use strict";u.r(t);u(46),u(35),u(246),u(573),u(452);var i=u(407);u.d(t,"build",(function(){return i.b})),u.d(t,"defaultAngleCutoff",(function(){return i.c}))}}]);
-//# sourceMappingURL=236.24a61309.chunk.js.map

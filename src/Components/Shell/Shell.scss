@@ -8,6 +8,7 @@ calcite-shell-panel {
 
 calcite-action-bar {
     min-width: 50px;
+    overflow-y: auto;
 }
 .property-panel {
     height: 100%;
@@ -39,6 +40,8 @@ calcite-action-bar {
         bottom: 0;
         top: 0;
     }
+
+
   
   }
   

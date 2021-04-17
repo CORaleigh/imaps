@@ -11,7 +11,21 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+@media only screen and (max-width: 500px) {
 
+.esri-search input{
+  font-size: 16px  !important;
+}
+
+calcite-input input, textarea {
+  font-size: 16px !important;
+}
+
+
+.sc-calcite-input {
+  font-size: 16px !important;
+}
+}
 
 @import '@esri/calcite-components/dist/calcite/calcite.css';
 

@@ -21,12 +21,14 @@
     "jsx": "react-jsx"
   },
   "files": [
-    "src/types/declarations.d.ts"
+    "src/types/declarations.d.ts",
+    "node_modules/@vaadin/vaadin-grid/@types/interfaces.d.ts"
   ],  
   "include": [
     "src/**/*.tsx",
     "src/**/*.ts",
     "src",
-    "src/types/declarations.d.ts"
+    "src/types/declarations.d.ts",
+    "node_modules/@vaadin/vaadin-grid/@types/interfaces.d.ts"
   ]
 }

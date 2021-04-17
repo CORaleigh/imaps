@@ -4,6 +4,8 @@ header calcite-button{
     position: absolute;
     bottom: 0;
     top: 0;
+    width: 50px;
+    height: 50px;
   }
 
 header {
@@ -12,8 +14,9 @@ header {
     justify-content: space-between;
     display: flex;
     flex-direction: row;
+    height: 50px;
 }
 
 header h2 {
-  margin-left: 0.83em;
+  margin: 0.5em;
 }
