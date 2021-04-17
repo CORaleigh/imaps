@@ -77,10 +77,13 @@ export const PropertyPanel = (props: any) => {
           prop.setAttribute('selected', 0);
         }
       });
-      const match = properties.find((prop) => {
+      const match: __esri.Graphic = properties.find((prop) => {
         return prop.getAttribute('PIN_NUM') === feature?.getAttribute('PIN_NUM');
-      });
+      }) as __esri.Graphic;
       match?.setAttribute('selected', 1);
+      properties.splice(properties.indexOf(match), 1);
+      properties.push(match);
+
       feature.geometry = match?.geometry as __esri.Geometry;
       view?.goTo(feature.geometry);
       setFeature(feature);
