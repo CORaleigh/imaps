@@ -19,7 +19,7 @@ function App() {
     <ThemeContext.Provider value={{ theme, setTheme }}>
       <ActionContext.Provider value={{ actions, setActions }}>
         <Suspense fallback={''}>
-          <Shell actions={actions} />
+          <Shell />
         </Suspense>
       </ActionContext.Provider>
     </ThemeContext.Provider>

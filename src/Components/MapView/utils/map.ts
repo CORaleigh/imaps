@@ -1,15 +1,20 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { lazy, Suspense } from 'react';
 import WebMap from '@arcgis/core/WebMap';
 import MapView from '@arcgis/core/views/MapView';
 import Compass from '@arcgis/core/widgets/Compass';
 import Track from '@arcgis/core/widgets/Track';
 import Home from '@arcgis/core/widgets/Home';
 import ScaleBar from '@arcgis/core/widgets/ScaleBar';
+import Expand from '@arcgis/core/widgets/Expand';
+
+import { whenTrueOnce } from '@arcgis/core/core/watchUtils';
 
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import UniqueValueRenderer from '@arcgis/core/renderers/UniqueValueRenderer';
 import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
+import ReactDOM from 'react-dom';
 
 export const createSelectionLayer = (view: __esri.MapView) => {
   const layer = new FeatureLayer({
@@ -88,6 +93,16 @@ export const checkLocalStorage = (view: MapView): void => {
 
     view.extent = webmap.initialViewProperties.viewpoint.targetGeometry.extent;
   }
+};
+export const addOverviewMap = (view: __esri.MapView): Expand => {
+  const expand: Expand = new Expand({
+    mode: 'floating',
+    expandIconClass: 'esri-icon-overview-arrow-top-left',
+    collapseIconClass: 'esri-icon-overview-arrow-bottom-right',
+  });
+
+  view.ui.add(expand, 'bottom-right');
+  return expand;
 };
 
 export const createMapWidgets = (view: MapView): any[] => {

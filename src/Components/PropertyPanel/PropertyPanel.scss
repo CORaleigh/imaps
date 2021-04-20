@@ -19,3 +19,7 @@ calcite-tab {
     right: 0;
     overflow: auto;
 }
+
+.calcite-tab-title {
+    -webkit-overflow-scrolling: touch;
+}

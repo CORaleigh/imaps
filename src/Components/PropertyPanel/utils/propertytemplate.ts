@@ -197,7 +197,7 @@ const deedCreator = (e: any) => {
       const deed = result[e.graphic.getAttribute('OBJECTID')].features[0].getAttribute('DEED_DOC_NUM');
       const bom = result[e.graphic.getAttribute('OBJECTID')].features[0].getAttribute('BOM_DOC_NUM');
       const div = document.createElement('div');
-      div.setAttribute('style', 'display: flex;flex-direction: row;');
+      div.setAttribute('style', 'display: flex;flex-direction: row;justify-content: space-around;');
       if (deed) {
         const deedBtn = document.createElement('calcite-button');
         deedBtn.setAttribute('scale', 's');
@@ -449,7 +449,7 @@ export const createTemplate = (view: __esri.MapView | __esri.SceneView, condoTab
                         ',' +
                         (result.features[0]?.geometry as __esri.Polygon).centroid.longitude;
                       const div = document.createElement('div');
-                      div.setAttribute('style', 'display: flex;flex-direction: row;');
+                      div.setAttribute('style', 'display: flex;flex-direction: row;justify-content: space-around;');
                       const btn = document.createElement('calcite-button');
                       btn.setAttribute('scale', 's');
                       btn.setAttribute('target', '_blank');

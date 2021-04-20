@@ -12,6 +12,9 @@ export const PropertySearch = (props: any) => {
 
   useEffect(() => {
     if (!loaded) {
+      //fix for Safari issue
+      //document.querySelector('calcite-shell-panel[slot=contextual-panel')?.append(searchRef.current as HTMLDivElement);
+      searchRef.current as HTMLDivElement;
       const search = new SearchWidget({
         container: searchRef.current as HTMLDivElement,
         view: props.view,

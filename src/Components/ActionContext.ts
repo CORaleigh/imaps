@@ -5,10 +5,10 @@ import { Actions } from '../config/config';
 // Make sure the shape of the default value passed to
 // createContext matches the shape that the consumers expect!
 export const AppContext = React.createContext({
-    actions: Actions,
-    setActions: (actions: any[]) => {
-        actions = Actions;
-        console.log(actions);
-    },
+  actions: Actions,
+  setActions: (actions: any[]) => {
+    actions = Actions;
+    console.log(actions);
+  },
 });
 export default AppContext;

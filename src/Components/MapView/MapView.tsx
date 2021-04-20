@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
-import React, { useEffect, useRef, useState } from 'react';
-import { checkLocalStorage, createMapView, createMapWidgets, createSelectionLayer } from './utils/map';
+import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
+import { checkLocalStorage, createMapView, createMapWidgets, createSelectionLayer, addOverviewMap } from './utils/map';
 import './MapView.scss';
+import { whenTrueOnce } from '@arcgis/core/core/watchUtils';
+import ReactDOM from 'react-dom';
 export const MapView = (props: any) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [loaded, setLoaded] = useState(false);
@@ -39,6 +41,16 @@ export const MapView = (props: any) => {
 
         props.initialized(mapView);
         widgets.current.push(createMapWidgets(mapView));
+        const expand: __esri.Expand = addOverviewMap(mapView);
+        whenTrueOnce(expand, 'expanded', () => {
+          const Overview = lazy(() => import('../Overview/Overview'));
+          ReactDOM.render(
+            <Suspense fallback={''}>
+              <Overview view={mapView} expand={expand} />
+            </Suspense>,
+            document.createElement('div'),
+          );
+        });
         setView(mapView);
         viewRef.current = mapView;
         const layer = createSelectionLayer(mapView);
@@ -56,19 +68,23 @@ export const MapView = (props: any) => {
     window.addEventListener('beforeunload', saveMap);
     return () => {
       window.removeEventListener('beforeunload', saveMap);
-      view && view.destroy();
-      widgets.current.forEach((widget) => {
-        widget && widget.destroy();
-      });
+      // view && view.destroy();
+      // widgets.current.forEach((widget) => {
+      //   widget && widget.destroy();
+      // });
     };
   }, []); // only after initial render
   useEffect(() => {
     if (props.selectedProperties) {
-      // props.selectedProperties.forEach((feature: __esri.Graphic) => {
-      //   feature.setAttribute('selected', 0);
-      // });
-      if (props.selectedProperties.length === 1) {
-        props.selectedProperties[0].setAttribute('selected', 1);
+      props.selectedProperties.forEach((feature: __esri.Graphic) => {
+        feature.setAttribute('selected', 0);
+      });
+      if (props.selectedFeature?.attributes) {
+        props.selectedProperties
+          .find((feature: __esri.Graphic) => {
+            return feature.attributes.PIN_NUM === props.selectedFeature.attributes.PIN_NUM;
+          })
+          ?.setAttribute('selected', 1);
       }
 
       selectionLayer?.queryFeatures({ where: '1=1', returnGeometry: true }).then((featureSet) => {

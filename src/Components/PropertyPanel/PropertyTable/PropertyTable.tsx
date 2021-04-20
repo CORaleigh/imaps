@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useContext } from 'react';
 import { createFeatureTable, getFeatures, setColumnRenderer } from './utils/propertytable';
 import '@vaadin/vaadin-grid/vaadin-grid-sort-column';
 import { GridElement } from '@vaadin/vaadin-grid';
+import ThemeContext from '../../ThemeContext';
+
 import './PropertyTable.scss';
+
 export const PropertyTable = (props: any) => {
   const [loaded, setLoaded] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -14,10 +17,20 @@ export const PropertyTable = (props: any) => {
   const layer = useRef<__esri.FeatureLayer>();
   const grid = useRef<GridElement>();
   const menuButton = useRef<HTMLButtonElement>(null);
+  const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
     setLoading(props.loading);
   }, [props.loading]);
+
+  useEffect(() => {
+    if (grid.current) {
+      
+      grid.current.render();
+      grid.current.recalculateColumnWidths();
+      grid.current.notifyResize();
+    }
+  }, [props.selectedTab]);
 
   useEffect(() => {
     if (!loaded) {
@@ -84,7 +97,7 @@ export const PropertyTable = (props: any) => {
         </div>
       </div>
 
-      <vaadin-grid aria-label="Sorting Example" theme="compact dark" className="esri-widget esri-grid" ref={grid}>
+      <vaadin-grid aria-label="Sorting Example" theme={`${theme} compact`} className="esri-widget esri-grid" ref={grid}>
         {columns.map((column) => {
           return (
             <vaadin-grid-sort-column

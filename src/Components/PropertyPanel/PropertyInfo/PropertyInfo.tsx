@@ -42,6 +42,8 @@ export const PropertyInfo = (props: any) => {
             document.querySelector('.esri-feature')?.parentElement?.scrollTo({ top: 0, behavior: 'smooth' });
           });
         });
+      } else {
+        featureWidget.current.graphic = props.feature;
       }
     }
   }, [props.feature]);

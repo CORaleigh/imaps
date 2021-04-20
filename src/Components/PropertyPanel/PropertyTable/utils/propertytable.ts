@@ -151,6 +151,7 @@ export const getFeatures = (layer: __esri.FeatureLayer, filter: string, grid: Gr
       .queryFeatures({ where: filter, returnGeometry: true, outFields: ['*'] })
       .then((featureSet: __esri.FeatureSet) => {
         grid.items = featureSet.features;
+        grid.scrollToIndex(0);
         resolve(featureSet.features.length);
       });
   });

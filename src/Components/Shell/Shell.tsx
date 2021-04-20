@@ -24,7 +24,7 @@ import ThemeContext from '../ThemeContext';
 import { links } from '../../config/config';
 import ActionContext from '../ActionContext';
 
-export const Shell = (props: any) => {
+export const Shell = () => {
   //const [actions, setActions] = useState(props.actions);
   const [tips, setTips] = useState<any>([]);
   const [tipsTitle, setTipsTitle] = useState<string>();
@@ -33,11 +33,17 @@ export const Shell = (props: any) => {
   const [view, setView] = useState<__esri.MapView | null>(null);
   const [viewCreated, setViewCreated] = useState(false);
   const [selectedProperties, setSelectedProperties] = useState<__esri.Graphic[]>([]);
+  const [selectedFeature, setSelectedFeature] = useState<any>();
 
   const { theme, setTheme } = useContext(ThemeContext);
   const { actions, setActions } = useContext(ActionContext);
+  const featureSelected = (feature: __esri.Graphic | undefined) => {
+    setSelectedFeature({ ...selectedFeature, ...{ attributes: feature?.attributes } });
+  };
   const propertiesSelected = (properties: __esri.Graphic[]) => {
-    setSelectedProperties([...[], ...properties]);
+    setSelectedProperties([...selectedProperties, ...properties]);
+    setSelectedFeature({ ...selectedFeature, ...{ attributes: null } });
+
     const active = actions.find((action) => {
       return action.isActive;
     });
@@ -47,23 +53,88 @@ export const Shell = (props: any) => {
     const search = actions.find((action) => {
       return action.title === 'Property Search';
     });
+
+    // const panel = document.querySelector(
+    //   'calcite-shell-panel[slot=contextual-panel] calcite-panel',
+    // ) as HTMLCalcitePanelElement;
+    // if (panel) {
+    //   panel.dismissed = false;
+    // }
+
     if (search) {
       search.isActive = true;
     }
+    const container = document.getElementById('propertySearch');
+    if (container) {
+      const panel: HTMLDivElement = container?.closest('.action-panel') as HTMLDivElement;
+      panel.hidden = false;
+      const shell = container?.closest('calcite-shell-panel');
+      shell?.removeAttribute('collapsed');
+    }
+
+    ReactDOM.render(
+      <PropertyPanel
+        propertiesSelected={propertiesSelected}
+        featureSelected={featureSelected}
+        selectedProperties={properties}
+      />,
+      container,
+    );
+
     setActions([...[], ...actions]);
   };
   const windowResize = () => {
     setWidth(window.innerWidth);
+    if (window.innerWidth <= 500) {
+      document
+        .querySelector('calcite-shell-panel')
+        ?.shadowRoot?.querySelector('.content')
+        ?.setAttribute('style', 'width: 100vw');
+    }
+    const activeActions = document.querySelectorAll('calcite-action[active]');
+    activeActions.forEach((button) => {
+      const action = actions.find((action) => {
+        return action.title === button.getAttribute('text');
+      });
+      if (window.innerWidth >= 1000 && action?.isActive) {
+        if (action.isTool) {
+          (document.getElementById(action.container)?.closest('.action-panel') as HTMLElement).hidden = true;
+          (document.querySelector('calcite-shell-panel[slot=contextual-panel]') as HTMLElement)?.setAttribute(
+            'collapsed',
+            '',
+          );
+          action.isActive = false;
+        }
+      }
+      if (window.innerWidth < 1000 && action?.isActive) {
+        if (action.isTool) {
+          (document.querySelector('calcite-shell-panel[slot=primary-panel]') as HTMLElement)?.removeAttribute(
+            'collapsed',
+          );
+        } else {
+          (document.querySelector('calcite-shell-panel[slot=contextual-panel]') as HTMLElement)?.removeAttribute(
+            'collapsed',
+          );
+        }
+      }
+    });
   };
   const setWidget = (action: any) => {
+    console.log('setWidget', action.title);
     if (action) {
       const container = document.getElementById(action.container);
+
       if (!container?.hasChildNodes()) {
         if (action.title === 'Property Search') {
           const PropertyPanel = lazy(() => import('../PropertyPanel/PropertyPanel'));
           ReactDOM.render(
             <Suspense fallback={''}>
-              <PropertyPanel view={view} propertiesSelected={propertiesSelected} />
+              <PropertyPanel
+                view={view}
+                propertiesSelected={propertiesSelected}
+                featureSelected={featureSelected}
+                selectedProperties={selectedProperties}
+              />
             </Suspense>,
             container,
           );
@@ -108,14 +179,7 @@ export const Shell = (props: any) => {
           const PropertySelect = lazy(() => import('../PropertySelect/PropertySelect'));
           ReactDOM.render(
             <Suspense fallback={''}>
-              <PropertySelect
-                view={view}
-                geometrySet={(g: any) => {
-                  const container = document.getElementById('propertySearch');
-
-                  ReactDOM.render(<PropertyPanel geometry={g} propertiesSelected={propertiesSelected} />, container);
-                }}
-              />
+              <PropertySelect view={view} geometrySet={geometryChanged} />
             </Suspense>,
             container,
           );
@@ -193,15 +257,32 @@ export const Shell = (props: any) => {
 
       const container = document.getElementById('propertySearch');
       if (mapView.map) {
-        ReactDOM.render(<PropertyPanel view={mapView} propertiesSelected={propertiesSelected} />, container);
+        ReactDOM.render(
+          <PropertyPanel
+            view={mapView}
+            propertiesSelected={propertiesSelected}
+            featureSelected={featureSelected}
+            selectedProperties={selectedProperties}
+          />,
+          container,
+        );
       }
     }
   };
 
-  const geometryChanged = (point: __esri.Point) => {
+  const geometryChanged = (geometry: __esri.Geometry) => {
     const container = document.getElementById('propertySearch');
 
-    ReactDOM.render(<PropertyPanel geometry={point} propertiesSelected={propertiesSelected} />, container);
+    ReactDOM.render(
+      <PropertyPanel
+        geometry={geometry}
+        propertiesSelected={propertiesSelected}
+        selectedProperties={selectedProperties}
+        featureSelected={featureSelected}
+        selectedFeature={selectedFeature}
+      />,
+      container,
+    );
   };
 
   const updateTheme = (theme: string) => {
@@ -214,13 +295,16 @@ export const Shell = (props: any) => {
       }
     } else {
       if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        theme = 'dark';
         setTheme('dark');
       } else {
+        theme = 'light';
         setTheme('light');
       }
     }
     document.body.classList.remove(theme === 'light' ? 'dark' : 'light');
     document.body.classList.add(theme === 'light' ? 'light' : 'dark');
+
     const link = Array.from(document.head.querySelectorAll('link')).find((link: HTMLLinkElement) => {
       return link.href.includes(`${theme}/main.css`);
     });
@@ -256,7 +340,7 @@ export const Shell = (props: any) => {
       window.removeEventListener('resize', windowResize);
       deactivate();
     };
-  }, [props.actions]);
+  }, [actions]);
   return (
     <div>
       <calcite-shell theme={theme} className="shell">
@@ -272,7 +356,7 @@ export const Shell = (props: any) => {
                       text={action.title}
                       icon={action.icon}
                       onClick={(e: any) => {
-                        setActions([...actionClicked(e, action, props.actions)]);
+                        setActions([...actionClicked(e, action, actions)]);
                         setWidget(action);
                       }}
                       active={action.isActive === true ? '' : null}
@@ -281,7 +365,41 @@ export const Shell = (props: any) => {
                 }
               })}
             </calcite-action-bar>
-            <calcite-panel dismissible dismissed>
+            <div className="action-panel">
+              <div className="panel-header">
+                <div className="panel-title">
+                  {
+                    actions.find((action: any) => {
+                      return action.isActive && action.isTool;
+                    })?.title
+                  }
+                </div>
+                <div className="header-actions">
+                  {showTips()}
+                  <calcite-action
+                    aria-label="Close"
+                    appearance="solid"
+                    scale="m"
+                    calcite-hydrated=""
+                    icon="x"
+                    onClick={(e: Event) => {
+                      (e.target as HTMLElement).parentElement?.parentElement?.parentElement?.toggleAttribute('hidden');
+                      (e.target as HTMLElement).parentElement?.parentElement?.parentElement?.parentElement?.toggleAttribute(
+                        'collapsed',
+                      );
+                    }}
+                  ></calcite-action>
+                </div>
+              </div>
+              <div className="panel-content">
+                {actions.map((action: any) => {
+                  if (action.isTool) {
+                    return <div id={action.container} key={action.container} hidden={!action.isActive}></div>;
+                  }
+                })}
+              </div>
+            </div>
+            {/* <calcite-panel dismissible dismissed>
               <div slot="header-content">
                 {
                   actions.find((action: any) => {
@@ -302,7 +420,7 @@ export const Shell = (props: any) => {
                   return <div id={action.container} key={action.container} hidden={!action.isActive}></div>;
                 }
               })}
-            </calcite-panel>
+            </calcite-panel> */}
           </calcite-shell-panel>
         ) : (
           ''
@@ -319,7 +437,7 @@ export const Shell = (props: any) => {
                     name={action.container}
                     icon={action.icon}
                     onClick={async (e: any) => {
-                      setActions([...actionClicked(e, action, props.actions)]);
+                      setActions([...actionClicked(e, action, actions)]);
                       setWidget(action);
                     }}
                     active={action.isActive === true ? '' : null}
@@ -328,7 +446,41 @@ export const Shell = (props: any) => {
               }
             })}
           </calcite-action-bar>
-          <calcite-panel dismissible>
+          <div className="action-panel">
+            <div className="panel-header">
+              <div className="panel-title">
+                {
+                  actions.find((action: any) => {
+                    return action.isActive;
+                  })?.title
+                }
+              </div>
+              <div className="header-actions">
+                {showTips()}
+                <calcite-action
+                  aria-label="Close"
+                  appearance="solid"
+                  scale="m"
+                  calcite-hydrated=""
+                  icon="x"
+                  onClick={(e: Event) => {
+                    (e.target as HTMLElement).parentElement?.parentElement?.parentElement?.toggleAttribute('hidden');
+                    (e.target as HTMLElement).parentElement?.parentElement?.parentElement?.parentElement?.toggleAttribute(
+                      'collapsed',
+                    );
+                  }}
+                ></calcite-action>
+              </div>
+            </div>
+            <div className="panel-content">
+              {actions.map((action: any) => {
+                if (!action.isTool || width < 1000) {
+                  return <div id={action.container} key={action.container} hidden={!action.isActive}></div>;
+                }
+              })}
+            </div>
+          </div>
+          {/* <calcite-panel dismissible>
             <div slot="header-content">
               {
                 actions.find((action: any) => {
@@ -343,7 +495,7 @@ export const Shell = (props: any) => {
                 return <div id={action.container} key={action.container} hidden={!action.isActive}></div>;
               }
             })}
-          </calcite-panel>
+          </calcite-panel> */}
         </calcite-shell-panel>
 
         <div slot="shell-header">
@@ -357,6 +509,7 @@ export const Shell = (props: any) => {
             initialized={mapInitialized}
             geometryChanged={geometryChanged}
             selectedProperties={selectedProperties}
+            selectedFeature={selectedFeature}
           />
         </Suspense>
       </calcite-shell>

@@ -6,39 +6,41 @@ export const geometryChanged = (
   geometry: __esri.Geometry,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> => {
-  return promiseUtils.create((resolve) => {
-    layer
-      ?.queryFeatures({
-        geometry: geometry,
-        outFields: ['OBJECTID', 'REID', 'PIN_NUM'],
-        returnGeometry: true,
-        outSpatialReference: view?.spatialReference,
-      })
-      .then((featureSet) => {
-        view?.goTo(featureSet.features);
-        const oids = featureSet.features.map((feature) => {
-          return feature.getObjectId();
-        });
-        layer.queryRelatedFeatures({ relationshipId: 0, objectIds: oids, outFields: ['*'] }).then((result) => {
-          const reloids: number[] = [];
-          const features: __esri.Graphic[] = [];
-          oids.forEach((oid) => {
-            result[oid]?.features.forEach((feature: __esri.Graphic) => {
-              reloids.push(feature.getAttribute('OBJECTID'));
-              features.push(feature);
-            });
+  return promiseUtils.create((resolve, reject) => {
+    if (geometry != undefined) {
+      layer
+        ?.queryFeatures({
+          geometry: geometry,
+          outFields: ['OBJECTID', 'REID', 'PIN_NUM'],
+          returnGeometry: true,
+          outSpatialReference: view?.spatialReference,
+        })
+        .then((featureSet) => {
+          view?.goTo(featureSet.features);
+          const oids = featureSet.features.map((feature) => {
+            return feature.getObjectId();
           });
-          if (reloids.length) {
-            resolve({
-              where: `OBJECTID in (${reloids.toString()})`,
-              features: features,
-              properties: featureSet.features,
+          layer.queryRelatedFeatures({ relationshipId: 0, objectIds: oids, outFields: ['*'] }).then((result) => {
+            const reloids: number[] = [];
+            const features: __esri.Graphic[] = [];
+            oids.forEach((oid) => {
+              result[oid]?.features.forEach((feature: __esri.Graphic) => {
+                reloids.push(feature.getAttribute('OBJECTID'));
+                features.push(feature);
+              });
             });
-          } else {
-            reject();
-          }
+            if (reloids.length) {
+              resolve({
+                where: `OBJECTID in (${reloids.toString()})`,
+                features: features,
+                properties: featureSet.features,
+              });
+            } else {
+              reject();
+            }
+          });
         });
-      });
+    }
   });
 };
 
@@ -61,5 +63,7 @@ export const setSearchParams = (features: __esri.Graphic[]): void => {
     }
 
     //url.searchParams
+  } else {
+    history.replaceState(history.state, '', location.pathname);
   }
 };
