@@ -29,7 +29,13 @@ calcite-action-bar {
   .esri-search__suggestions-menu li, ul {
       z-index: 10000 !important;
   }
-
+  .panel-header {
+overflow: visible;   
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+  z-index: 100000;
+  }
   @media only screen and (max-width: 500px) {
     calcite-panel {
         max-width: calc(100vw - 50px);

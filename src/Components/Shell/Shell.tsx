@@ -365,32 +365,31 @@ export const Shell = () => {
                 }
               })}
             </calcite-action-bar>
-            <div className="action-panel">
-              <div className="panel-header">
-                <div className="panel-title">
-                  {
-                    actions.find((action: any) => {
-                      return action.isActive && action.isTool;
-                    })?.title
-                  }
-                </div>
-                <div className="header-actions">
-                  {showTips()}
-                  <calcite-action
-                    aria-label="Close"
-                    appearance="solid"
-                    scale="m"
-                    calcite-hydrated=""
-                    icon="x"
-                    onClick={(e: Event) => {
-                      (e.target as HTMLElement).parentElement?.parentElement?.parentElement?.toggleAttribute('hidden');
-                      (e.target as HTMLElement).parentElement?.parentElement?.parentElement?.parentElement?.toggleAttribute(
-                        'collapsed',
-                      );
-                    }}
-                  ></calcite-action>
-                </div>
+            <div className="panel-header">
+              <div className="panel-title">
+                {
+                  actions.find((action: any) => {
+                    return action.isActive && action.isTool;
+                  })?.title
+                }
               </div>
+              <div className="header-actions">
+                {showTips()}
+                <calcite-action
+                  aria-label="Close"
+                  appearance="solid"
+                  scale="m"
+                  calcite-hydrated=""
+                  icon="x"
+                  onClick={(e: Event) => {
+                    (e.target as HTMLElement).closest('.panel-header')?.toggleAttribute('hidden');
+                    (e.target as HTMLElement).closest('.action-panel')?.toggleAttribute('hidden');
+                    (e.target as HTMLElement).closest('calcite-shell-panel')?.toggleAttribute('collapsed');
+                  }}
+                ></calcite-action>
+              </div>
+            </div>
+            <div className="action-panel">
               <div className="panel-content">
                 {actions.map((action: any) => {
                   if (action.isTool) {
@@ -446,32 +445,31 @@ export const Shell = () => {
               }
             })}
           </calcite-action-bar>
-          <div className="action-panel">
-            <div className="panel-header">
-              <div className="panel-title">
-                {
-                  actions.find((action: any) => {
-                    return action.isActive;
-                  })?.title
-                }
-              </div>
-              <div className="header-actions">
-                {showTips()}
-                <calcite-action
-                  aria-label="Close"
-                  appearance="solid"
-                  scale="m"
-                  calcite-hydrated=""
-                  icon="x"
-                  onClick={(e: Event) => {
-                    (e.target as HTMLElement).parentElement?.parentElement?.parentElement?.toggleAttribute('hidden');
-                    (e.target as HTMLElement).parentElement?.parentElement?.parentElement?.parentElement?.toggleAttribute(
-                      'collapsed',
-                    );
-                  }}
-                ></calcite-action>
-              </div>
+          <div className="panel-header">
+            <div className="panel-title">
+              {
+                actions.find((action: any) => {
+                  return action.isActive;
+                })?.title
+              }
             </div>
+            <div className="header-actions">
+              {showTips()}
+              <calcite-action
+                aria-label="Close"
+                appearance="solid"
+                scale="m"
+                calcite-hydrated=""
+                icon="x"
+                onClick={(e: Event) => {
+                  (e.target as HTMLElement).closest('.panel-header')?.toggleAttribute('hidden');
+                  (e.target as HTMLElement).closest('.action-panel')?.toggleAttribute('hidden');
+                  (e.target as HTMLElement).closest('calcite-shell-panel')?.toggleAttribute('collapsed');
+                }}
+              ></calcite-action>
+            </div>
+          </div>
+          <div className="action-panel">
             <div className="panel-content">
               {actions.map((action: any) => {
                 if (!action.isTool || width < 1000) {
