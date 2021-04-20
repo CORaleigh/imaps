@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/Components/Overview/Overview.scss"],"names":[],"mappings":"AAAA,cACI,WAAA,CACA,YAAA,CAEJ,yCAEI,sBACI,YAAA,CAAA","file":"171.f0930ee5.chunk.css","sourcesContent":[".overview-map {\n    width: 200px;\n    height: 200px;\n}\n@media only screen and (max-width: 500px) {\n\n    .esri-ui-bottom-right {\n        display: none;\n    }\n}"]}
