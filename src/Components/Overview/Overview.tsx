@@ -8,7 +8,6 @@ export const Panel = (props: any) => {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    debugger;
     if (props.view && props.expand) {
       const overview = createOverview(props.view);
       overview.container = ref.current as HTMLDivElement;
