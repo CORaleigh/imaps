@@ -25,7 +25,6 @@ export const PropertyTable = (props: any) => {
 
   useEffect(() => {
     if (grid.current) {
-      
       grid.current.render();
       grid.current.recalculateColumnWidths();
       grid.current.notifyResize();
@@ -97,7 +96,7 @@ export const PropertyTable = (props: any) => {
         </div>
       </div>
 
-      <vaadin-grid aria-label="Sorting Example" theme={`${theme} compact`} className="esri-widget esri-grid" ref={grid}>
+      <vaadin-grid aria-label="Sorting Example" theme={theme} className="esri-widget esri-grid" ref={grid}>
         {columns.map((column) => {
           return (
             <vaadin-grid-sort-column

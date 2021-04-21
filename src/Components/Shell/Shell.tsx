@@ -313,19 +313,21 @@ export const Shell = () => {
       document.head.appendChild(link);
     }
 
-    // if (window.matchMedia != undefined) {
-    //     window.matchMedia('(prefers-color-scheme: dark)')?.addEventListener('change', (e) => {
-    //         const newTheme = e.matches ? 'dark' : 'light';
-    //         setTheme(newTheme);
-    //         const styles = document.querySelectorAll('style');
-    //         const styleArray = Array.from(styles);
-    //         styleArray.forEach((style: any) => {
-    //             if (style.innerHTML.includes(`--esri-calcite-theme-name: "${newTheme}"`)) {
-    //                 document.head.appendChild(style);
-    //             }
-    //         });
-    //     });
-    // }
+    if (window.matchMedia != undefined) {
+      window.matchMedia('(prefers-color-scheme: dark)')?.addEventListener('change', (e) => {
+        const newTheme = e.matches ? 'dark' : 'light';
+        setTheme(newTheme);
+        window.localStorage.setItem('imaps_theme', newTheme);
+        document.body.classList.remove(newTheme === 'light' ? 'dark' : 'light');
+        document.body.classList.add(newTheme === 'light' ? 'light' : 'dark');
+        const link = Array.from(document.head.querySelectorAll('link')).find((link: HTMLLinkElement) => {
+          return link.href.includes(`${newTheme}/main.css`);
+        });
+        if (link) {
+          document.head.appendChild(link);
+        }
+      });
+    }
   };
 
   useEffect(() => {
