@@ -11,6 +11,7 @@ calcite-shell-panel[slot=contextual-panel] calcite-panel {
     height: 100%;
 }
 
+
 calcite-shell-panel {
     max-width: 400px
 }
@@ -37,10 +38,8 @@ overflow: visible;
   z-index: 100000;
   }
   @media only screen and (max-width: 500px) {
-    calcite-panel {
+    .action-panel, .panel-header  {
         max-width: calc(100vw - 50px);
-        position: absolute;
-
     }
     .action-group--bottom {
         display: none;

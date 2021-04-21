@@ -39,18 +39,10 @@ export const actionClicked = (e: any, action: any, actions: any[]): any[] => {
   deactivateActions(actions, action.isTool);
   action.isActive = true;
   const shellPanel = (e.target as HTMLElement)?.parentElement?.parentElement;
-  const panel = shellPanel?.querySelector('calcite-panel');
-  const panel2 = shellPanel?.querySelector('.action-panel');
-
   if (!action.isActive) {
     shellPanel?.setAttribute('collapsed', '');
-    panel?.setAttribute('dismissed', '');
-    panel2?.setAttribute('hidden', '');
   } else {
     shellPanel?.removeAttribute('collapsed');
-    panel?.removeAttribute('dismissed');
-    panel2?.removeAttribute('hidden');
   }
-
   return actions;
 };

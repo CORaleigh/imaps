@@ -66,13 +66,6 @@ calcite-input input, textarea {
   overflow-y: auto;
 }
 
-@media only screen and (max-width: 500px) {
-  .action-panel {
-
-      max-width: calc(100vw - 50px);
-
-  }
-}
 
 .panel-title {
   display: block;
