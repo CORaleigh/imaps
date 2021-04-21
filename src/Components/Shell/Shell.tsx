@@ -273,7 +273,7 @@ export const Shell = () => {
 
   const geometryChanged = (geometry: __esri.Geometry) => {
     const container = document.getElementById('propertySearch');
-
+    debugger;
     ReactDOM.render(
       <PropertyPanel
         geometry={geometry}
@@ -503,7 +503,7 @@ export const Shell = () => {
             }
           })}
           {actions.map((action: any) => {
-            if ((!action.isTool || width < 1000) && action.isActive) {
+            if (!action.isTool || width < 1000) {
               return (
                 <div className="action-panel">
                   <div className="panel-content">
