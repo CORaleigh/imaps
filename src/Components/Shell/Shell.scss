@@ -20,9 +20,11 @@ calcite-action-bar {
     min-width: 50px;
     overflow-y: auto;
 }
-.property-panel {
+.property-panel, .panel-content, .action-panel {
     height: 100%;
   }
+
+
 
   .esri-search__suggestions-menu {
     z-index: 10000 !important;
