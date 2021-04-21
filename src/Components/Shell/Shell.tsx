@@ -389,32 +389,36 @@ export const Shell = () => {
             {actions.map((action: any) => {
               if (action.isTool && action.isActive) {
                 return (
-                  <div key={action.icon}>
-                    <div className="panel-header">
-                      <div className="panel-title">{action.title}</div>
-                      <div className="header-actions">
-                        {showTips()}
-                        <calcite-action
-                          aria-label="Close"
-                          appearance="solid"
-                          scale="m"
-                          calcite-hydrated=""
-                          icon="x"
-                          onClick={() => {
-                            document
-                              ?.querySelector('calcite-shell-panel[slot=primary-panel]')
-                              ?.setAttribute('collapsed', '');
-                            action.isActive = false;
+                  <div className="panel-header" key={`${action.icon}_header`}>
+                    <div className="panel-title">{action.title}</div>
+                    <div className="header-actions">
+                      {showTips()}
+                      <calcite-action
+                        aria-label="Close"
+                        appearance="solid"
+                        scale="m"
+                        calcite-hydrated=""
+                        icon="x"
+                        onClick={() => {
+                          document
+                            ?.querySelector('calcite-shell-panel[slot=primary-panel]')
+                            ?.setAttribute('collapsed', '');
+                          action.isActive = false;
 
-                            setActions([...actions]);
-                          }}
-                        ></calcite-action>
-                      </div>
+                          setActions([...actions]);
+                        }}
+                      ></calcite-action>
                     </div>
-                    <div className="action-panel">
-                      <div className="panel-content">
-                        <div id={action.container} key={action.container} hidden={!action.isActive}></div>
-                      </div>
+                  </div>
+                );
+              }
+            })}
+            {actions.map((action: any) => {
+              if (action.isTool && action.isActive) {
+                return (
+                  <div className="action-panel">
+                    <div className="panel-content">
+                      <div id={action.container} key={action.container} hidden={!action.isActive}></div>
                     </div>
                   </div>
                 );
@@ -474,32 +478,36 @@ export const Shell = () => {
           {actions.map((action: any) => {
             if ((!action.isTool || width < 1000) && action.isActive) {
               return (
-                <div key={action.icon}>
-                  <div className="panel-header">
-                    <div className="panel-title">{action.title}</div>
-                    <div className="header-actions">
-                      {showTips()}
-                      <calcite-action
-                        aria-label="Close"
-                        appearance="solid"
-                        scale="m"
-                        calcite-hydrated=""
-                        icon="x"
-                        onClick={() => {
-                          document
-                            ?.querySelector('calcite-shell-panel[slot=contextual-panel]')
-                            ?.setAttribute('collapsed', '');
-                          action.isActive = false;
+                <div className="panel-header" key={`${action.icon}_header`}>
+                  <div className="panel-title">{action.title}</div>
+                  <div className="header-actions">
+                    {showTips()}
+                    <calcite-action
+                      aria-label="Close"
+                      appearance="solid"
+                      scale="m"
+                      calcite-hydrated=""
+                      icon="x"
+                      onClick={() => {
+                        document
+                          ?.querySelector('calcite-shell-panel[slot=contextual-panel]')
+                          ?.setAttribute('collapsed', '');
+                        action.isActive = false;
 
-                          setActions([...actions]);
-                        }}
-                      ></calcite-action>
-                    </div>
+                        setActions([...actions]);
+                      }}
+                    ></calcite-action>
                   </div>
-                  <div className="action-panel">
-                    <div className="panel-content">
-                      <div id={action.container} key={action.container} hidden={!action.isActive}></div>
-                    </div>
+                </div>
+              );
+            }
+          })}
+          {actions.map((action: any) => {
+            if ((!action.isTool || width < 1000) && action.isActive) {
+              return (
+                <div className="action-panel">
+                  <div className="panel-content">
+                    <div id={action.container} key={action.container} hidden={!action.isActive}></div>
                   </div>
                 </div>
               );
