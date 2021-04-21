@@ -65,9 +65,9 @@ export const MapView = (props: any) => {
       });
     }
 
-    window.addEventListener('beforeunload', saveMap);
+    window.addEventListener('pagehide', saveMap);
     return () => {
-      window.removeEventListener('beforeunload', saveMap);
+      window.removeEventListener('pagehide', saveMap);
       // view && view.destroy();
       // widgets.current.forEach((widget) => {
       //   widget && widget.destroy();
