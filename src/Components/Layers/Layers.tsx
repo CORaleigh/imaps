@@ -13,6 +13,7 @@ export const Layers = (props: any) => {
       view: props.view,
       listItemCreatedFunction: layerListItemCreated,
     });
+
     input.current?.addEventListener('calciteInputInput', (event: any) => {
       filterLayers(event.target.value, layerList as LayerList);
     });

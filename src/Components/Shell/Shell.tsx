@@ -416,11 +416,12 @@ export const Shell = () => {
             {actions.map((action: any) => {
               if (action.isTool && action.isActive) {
                 return (
-                  <div className="action-panel">
-                    <div className="panel-content">
-                      <div id={action.container} key={action.container} hidden={!action.isActive}></div>
-                    </div>
-                  </div>
+                  <div
+                    id={action.container}
+                    className="action-panel"
+                    key={action.container}
+                    hidden={!action.isActive}
+                  ></div>
                 );
               }
             })}
@@ -505,11 +506,12 @@ export const Shell = () => {
           {actions.map((action: any) => {
             if (!action.isTool || width < 1000) {
               return (
-                <div className="action-panel">
-                  <div className="panel-content">
-                    <div id={action.container} key={action.container} hidden={!action.isActive}></div>
-                  </div>
-                </div>
+                <div
+                  className="action-panel"
+                  id={action.container}
+                  key={action.container}
+                  hidden={!action.isActive}
+                ></div>
               );
             }
           })}

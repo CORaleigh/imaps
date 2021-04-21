@@ -12,3 +12,10 @@
     background-color: var(--calcite-ui-foreground-2);
     color: var(--calcite-ui-background-1);
 }
+
+.esri-icon-non-visible::before {
+    content: "\e610";
+    }
+ .esri-icon-visible::before {
+    content: "\e611";
+    }

@@ -12,6 +12,7 @@ export const Basemaps = (props: any) => {
       container: ref.current as HTMLDivElement,
       view: props.view,
     });
+
     createAlert();
     document?.querySelector('calcite-combobox')?.addEventListener('calciteComboboxItemChange', (event: any) => {
       const tab = (event as any).detail.value;

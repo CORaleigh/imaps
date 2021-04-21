@@ -37,48 +37,6 @@ calcite-input input, textarea {
 @import '@esri/calcite-components/dist/calcite/calcite.css';
 
 
-.panel-header {
-  margin: 0px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: var(--calcite-ui-text-2);
-  fill: var(--calcite-ui-text-2);
-  border-bottom-width: 1px;
-    border-bottom-style: solid;
-    align-items: stretch;
-    background-color: var(--calcite-ui-foreground-1);
-    justify-content: flex-start;
-    position: sticky;
-    top: 0px;
-    border-bottom-color: var(--calcite-ui-border-3);
-    flex: 0 0 auto;
-    min-height: 3rem;
-    z-index: 2;
-    width: 100%;
-}
-
-.action-panel {
-  box-sizing: border-box;
-  background-color: var(--calcite-ui-foreground-1);
-  color: var(--calcite-ui-text-2);
-  font-size: var(--calcite-font-size--1);
-  overflow-y: auto;
-}
-
-
-.panel-title {
-  display: block;
-  overflow: hidden;
-  margin-right: auto;
-  padding: 1rem 0.75rem;
-}
-
-.header-actions {
-  display: flex;
-  flex-direction: row;
-}
-
 calcite-tab, calcite-tab-nav {
   right: 50px !important;
 }
