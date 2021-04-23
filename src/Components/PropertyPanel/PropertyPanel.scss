@@ -20,6 +20,10 @@ calcite-tab {
     overflow: auto;
 }
 
+calcite-tab-title {
+    cursor: pointer;
+}
+
 .calcite-tab-title {
     -webkit-overflow-scrolling: touch;
 }

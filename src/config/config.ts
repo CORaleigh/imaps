@@ -8,7 +8,6 @@ export const Actions = [
     component: 'PropertyPanel',
     path: '../PropertyPanel/PropertyPanel',
     widget: null,
-    content: null,
     tips: [
       { title: 'Search Categories', text: 'Select a search category to get more results as you type' },
       { title: 'Search Categories', text: 'Select a search category to get more results as you type' },

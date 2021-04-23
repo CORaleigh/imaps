@@ -21,7 +21,7 @@ export const layerListItemCreated = (event: any): void => {
     );
     item.panel = {
       content: [slider, 'legend'],
-      open: item.layer.visible,
+      open: false,
     };
   }
 };

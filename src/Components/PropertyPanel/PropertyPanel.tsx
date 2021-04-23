@@ -9,6 +9,9 @@ import { geometryChanged, setSearchParams } from './utils/property';
 import './PropertyPanel.scss';
 export const PropertyPanel = (props: any) => {
   const state = useRef({ pins: '' });
+  const infoTab = useRef<HTMLCalciteTabTitleElement>(null);
+  const listTab = useRef<HTMLCalciteTabTitleElement>(null);
+
   const [loaded, setLoaded] = useState(false);
   const [view, setView] = useState<__esri.MapView>();
   const [feature, setFeature] = useState<__esri.Graphic>();
@@ -50,20 +53,26 @@ export const PropertyPanel = (props: any) => {
     //new FeatureTable({ container: panelRef.current as HTMLDivElement, layer: layer, view: mapView });
   };
   const toggleTabs = (tabTitle: string) => {
-    setSelectedTab(tabTitle);
-    setTimeout(() => {
-      const tab: HTMLElement = document.querySelector(
-        `calcite-tab-title:${tabTitle === 'list' ? 'first' : 'last'}-child`,
-      ) as HTMLElement;
-      const indicator: HTMLCalciteTabNavElement = document
-        ?.querySelector('calcite-tab-nav')
-        ?.shadowRoot?.querySelector('.tab-nav-active-indicator') as HTMLCalciteTabNavElement;
-      tab.focus();
-      indicator.setAttribute(
-        'style',
-        `transition-duration: 0.3s; width: ${tab.clientWidth}px; left: ${tab.offsetLeft}px;`,
-      );
-    }, 1000);
+    //setSelectedTab(tabTitle);
+    // const tabnav: HTMLCalciteTabNavElement = document.querySelector('calcite-tab-nav') as HTMLCalciteTabNavElement;
+    // tabnav?.dispatchEvent(new CustomEvent('calciteTabChange', { detail: { tab: 1 } }));
+    const title: HTMLCalciteTabTitleElement = document.querySelector(
+      `calcite-tab-title[tab=${tabTitle}]`,
+    ) as HTMLCalciteTabTitleElement;
+    title.click();
+    // setTimeout(() => {
+    //   const tab: HTMLElement = document.querySelector(
+    //     `calcite-tab-title:${tabTitle === 'list' ? 'first' : 'last'}-child`,
+    //   ) as HTMLElement;
+    //   const indicator: HTMLCalciteTabNavElement = document
+    //     ?.querySelector('calcite-tab-nav')
+    //     ?.shadowRoot?.querySelector('.tab-nav-active-indicator') as HTMLCalciteTabNavElement;
+    //   tab.focus();
+    //   indicator.setAttribute(
+    //     'style',
+    //     `transition-duration: 0.3s; width: ${tab.clientWidth}px; left: ${tab.offsetLeft}px;`,
+    //   );
+    // }, 1000);
 
     setReloadTable(true);
   };
@@ -127,7 +136,7 @@ export const PropertyPanel = (props: any) => {
       mapViewLoaded(mapView);
       document.querySelectorAll('calcite-tab-nav').forEach((tab) => {
         tab.addEventListener('calciteTabChange', (event) => {
-          setSelectedTab((event as any).detail.tab === 0 ? 'list' : 'info');
+          //setSelectedTab((event as any).detail.tab === 0 ? 'list' : 'info');
         });
       });
       window.addEventListener('popstate', (e) => {
@@ -198,13 +207,15 @@ export const PropertyPanel = (props: any) => {
 
       <calcite-tabs position="below" layout="center">
         <calcite-tab-nav slot="tab-nav">
-          <calcite-tab-title active={selectedTab === 'list'}>List</calcite-tab-title>
-          <calcite-tab-title active={selectedTab === 'info'} disabled={feature ? null : ''}>
+          <calcite-tab-title tab="list" active ref={listTab}>
+            List
+          </calcite-tab-title>
+          <calcite-tab-title tab="info" ref={{ infoTab }}>
             Info
           </calcite-tab-title>
         </calcite-tab-nav>
 
-        <calcite-tab active={selectedTab === 'list' ? '' : null}>
+        <calcite-tab tab="list">
           {loaded && (
             // <Suspense fallback={''}>
             //   <PropertyList
@@ -228,7 +239,7 @@ export const PropertyPanel = (props: any) => {
           )}
         </calcite-tab>
 
-        <calcite-tab active={selectedTab === 'info' ? '' : null}>
+        <calcite-tab tab="info">
           {loaded && (
             <Suspense fallback={''}>
               <PropertyInfo view={view} feature={feature} />

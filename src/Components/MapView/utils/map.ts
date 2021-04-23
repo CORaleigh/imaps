@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { lazy, Suspense } from 'react';
 import WebMap from '@arcgis/core/WebMap';
 import MapView from '@arcgis/core/views/MapView';
 import Compass from '@arcgis/core/widgets/Compass';
@@ -9,12 +8,9 @@ import Home from '@arcgis/core/widgets/Home';
 import ScaleBar from '@arcgis/core/widgets/ScaleBar';
 import Expand from '@arcgis/core/widgets/Expand';
 
-import { whenTrueOnce } from '@arcgis/core/core/watchUtils';
-
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import UniqueValueRenderer from '@arcgis/core/renderers/UniqueValueRenderer';
 import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
-import ReactDOM from 'react-dom';
 
 export const createSelectionLayer = (view: __esri.MapView) => {
   const layer = new FeatureLayer({

@@ -8,10 +8,28 @@ export const Layers = (props: any) => {
   const ref = useRef<HTMLDivElement>(null);
   const input = useRef<HTMLCalciteInputElement>(null);
   useEffect(() => {
+    console.log(props.active);
+  }, [props.active]);
+  useEffect(() => {
     const layerList = new LayerList({
       container: ref.current as HTMLDivElement,
       view: props.view,
       listItemCreatedFunction: layerListItemCreated,
+    });
+
+    layerList.when(() => {
+      const groups = layerList.view.map.allLayers.filter((layer) => {
+        return layer.type === 'group';
+      });
+      groups.forEach((group) => {
+        (group as __esri.GroupLayer).layers.forEach((layer) => {
+          layer.watch('visible', (visible) => {
+            if (visible) {
+              group.visible = visible;
+            }
+          });
+        });
+      });
     });
 
     input.current?.addEventListener('calciteInputInput', (event: any) => {
