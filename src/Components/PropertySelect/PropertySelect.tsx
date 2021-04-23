@@ -24,6 +24,9 @@ export const PropertySelect = (props: any) => {
         undoRedoMenu: false,
       },
       layer: new GraphicsLayer({ listMode: 'hide' }),
+      snappingOptions: {
+        enabled: false,
+      },
     });
     sketch.on('create', (e) => {
       if (e.state === 'complete') {
