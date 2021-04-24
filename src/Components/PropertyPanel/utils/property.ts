@@ -1,5 +1,4 @@
 import * as promiseUtils from '@arcgis/core/core/promiseUtils';
-import { reject } from '@arcgis/core/core/promiseUtils';
 export const geometryChanged = (
   view: __esri.MapView,
   layer: __esri.FeatureLayer,

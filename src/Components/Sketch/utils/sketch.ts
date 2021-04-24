@@ -7,6 +7,7 @@ import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import LabelClass from '@arcgis/core/layers/support/LabelClass';
 export const sketchHandles: any[] = [];
+
 const labelClass = new LabelClass({
   labelExpressionInfo: { expression: '$feature.label' },
   symbol: {

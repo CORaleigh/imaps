@@ -84,7 +84,6 @@ export const Shell = () => {
     setActions([...[], ...actions]);
   };
   const windowResize = () => {
-    setWidth(window.innerWidth);
     // if (window.innerWidth <= 500) {
     //   document
     //     .querySelector('calcite-shell-panel')
@@ -96,7 +95,7 @@ export const Shell = () => {
       const action = actions.find((action) => {
         return action.title === button.getAttribute('text');
       });
-      if (window.innerWidth >= 1000 && action?.isActive) {
+      if (window.innerWidth >= 1000 && action?.isActive && width < 1000) {
         if (action.isTool) {
           // (document.getElementById(action.container)?.closest('.action-panel') as HTMLElement).hidden = true;
           (document.querySelector('calcite-shell-panel[slot=contextual-panel]') as HTMLElement)?.setAttribute(
@@ -106,11 +105,12 @@ export const Shell = () => {
           action.isActive = false;
         }
       }
-      if (window.innerWidth < 1000 && action?.isActive) {
+      if (window.innerWidth < 1000 && action?.isActive && width >= 1000) {
         if (action.isTool) {
           (document.querySelector('calcite-shell-panel[slot=primary-panel]') as HTMLElement)?.removeAttribute(
             'collapsed',
           );
+          action.isActive = false;
         } else {
           (document.querySelector('calcite-shell-panel[slot=contextual-panel]') as HTMLElement)?.removeAttribute(
             'collapsed',
@@ -118,6 +118,8 @@ export const Shell = () => {
         }
       }
     });
+    setWidth(window.innerWidth);
+
     setActions([...actions]);
   };
   const setWidget = (action: any) => {
@@ -273,7 +275,6 @@ export const Shell = () => {
 
   const geometryChanged = (geometry: __esri.Geometry) => {
     const container = document.getElementById('propertySearch');
-    debugger;
     ReactDOM.render(
       <PropertyPanel
         geometry={geometry}

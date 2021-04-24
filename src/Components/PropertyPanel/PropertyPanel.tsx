@@ -22,7 +22,7 @@ export const PropertyPanel = (props: any) => {
 
   const [table, setTable] = useState<__esri.FeatureLayer>();
 
-  const [selectedTab, setSelectedTab] = useState('list');
+  const [selectedTab] = useState('list');
   const [reloadTable, setReloadTable] = useState(false);
 
   const [addressTable, setAddressTable] = useState<__esri.FeatureLayer>();
@@ -134,11 +134,11 @@ export const PropertyPanel = (props: any) => {
     if (!loaded) {
       const mapView = props.view as __esri.MapView;
       mapViewLoaded(mapView);
-      document.querySelectorAll('calcite-tab-nav').forEach((tab) => {
-        tab.addEventListener('calciteTabChange', (event) => {
-          //setSelectedTab((event as any).detail.tab === 0 ? 'list' : 'info');
-        });
-      });
+      // document.querySelectorAll('calcite-tab-nav').forEach((tab) => {
+      //   tab.addEventListener('calciteTabChange', (event) => {
+      //     //setSelectedTab((event as any).detail.tab === 0 ? 'list' : 'info');
+      //   });
+      // });
       window.addEventListener('popstate', (e) => {
         if (e.state?.pins === state.current?.pins) {
           history.back();
