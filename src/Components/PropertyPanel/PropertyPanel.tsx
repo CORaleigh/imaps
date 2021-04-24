@@ -210,7 +210,7 @@ export const PropertyPanel = (props: any) => {
           <calcite-tab-title tab="list" active ref={listTab}>
             List
           </calcite-tab-title>
-          <calcite-tab-title tab="info" ref={{ infoTab }}>
+          <calcite-tab-title tab="info" ref={infoTab}>
             Info
           </calcite-tab-title>
         </calcite-tab-nav>
