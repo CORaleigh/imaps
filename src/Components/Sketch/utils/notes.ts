@@ -179,6 +179,9 @@ const createSketchViewModels = (layer: __esri.GraphicsLayer, view: __esri.MapVie
     view,
     layer,
     updateOnGraphicClick: true,
+    defaultCreateOptions: {
+      mode: 'hybrid',
+    },
   });
   sketchVM.on('create', addGraphic);
   return sketchVM;
