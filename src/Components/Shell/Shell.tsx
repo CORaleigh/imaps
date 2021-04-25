@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useContext, useEffect, useState, lazy, Suspense } from 'react';
+import React, { useContext, useEffect, useState, lazy, Suspense, useRef } from 'react';
 //import { MapView } from '../MapView/MapView';
 
 const MapView = lazy(() => {
@@ -36,6 +36,10 @@ export const Shell = () => {
   const [selectedFeature, setSelectedFeature] = useState<any>();
 
   const { theme, setTheme } = useContext(ThemeContext);
+
+  const sketchVM = useRef<__esri.SketchViewModel>();
+  const measurement = useRef<__esri.Measurement>();
+
   const { actions, setActions } = useContext(ActionContext);
   const featureSelected = (feature: __esri.Graphic | undefined) => {
     setSelectedFeature({ ...selectedFeature, ...{ attributes: feature?.attributes } });
@@ -122,6 +126,12 @@ export const Shell = () => {
 
     setActions([...actions]);
   };
+  const sketchToolActivated = (sketchViewModel: __esri.SketchViewModel) => {
+    sketchVM.current = sketchViewModel;
+  };
+  const measurementActivated = (measurementTool: __esri.Measurement) => {
+    measurement.current = measurementTool;
+  };
   const setWidget = (action: any) => {
     console.log('setWidget', action.title);
     if (action) {
@@ -191,7 +201,7 @@ export const Shell = () => {
           const Measure = lazy(() => import('../Measure/Measure'));
           ReactDOM.render(
             <Suspense fallback={''}>
-              <Measure view={view} />{' '}
+              <Measure view={view} measurementActivated={measurementActivated} />
             </Suspense>,
             container,
           );
@@ -200,7 +210,7 @@ export const Shell = () => {
           const Sketch = lazy(() => import('../Sketch/Sketch'));
           ReactDOM.render(
             <Suspense fallback={''}>
-              <Sketch view={view} />{' '}
+              <Sketch view={view} toolActivated={sketchToolActivated} />{' '}
             </Suspense>,
             container,
           );

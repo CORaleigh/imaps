@@ -3,6 +3,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { SketchSettings } from './SketchSettings';
+
 import './Sketch.scss';
 import {
   pointSketchViewModel,
@@ -25,6 +26,7 @@ export const Sketch = (props: any) => {
   const [selectedGraphics, setSelectedGraphics] = useState<__esri.Graphic[]>([]);
   const graphicsRef = useRef<any[]>([]);
   const handles = useRef<any[]>([]);
+
   //const sketchRef = useRef<__esri.Sketch>();
   const [geometryType, setGeometryType] = useState<string | null>(null);
   // const activeToolChanged = (activeTool: string) => {
@@ -37,6 +39,15 @@ export const Sketch = (props: any) => {
   const sketchCreated = (e: any) => {
     if (e.state === 'complete') {
       setGeometryType(null);
+      [pointAction, lineAction, polygonAction, textAction].forEach((action) => {
+        if (action.current) {
+          action.current.active = false;
+        }
+      });
+    }
+  };
+  const stateChanged = (state: string) => {
+    if (state === 'ready') {
       [pointAction, lineAction, polygonAction, textAction].forEach((action) => {
         if (action.current) {
           action.current.active = false;
@@ -76,6 +87,7 @@ export const Sketch = (props: any) => {
         }),
       );
     });
+
     // const sketch: __esri.Sketch = createSketchWidget(ref, props.view);
     // sketchHandles.push(sketch.watch('activeTool', activeToolChanged));
     // sketchRef.current = sketch;
@@ -126,6 +138,8 @@ export const Sketch = (props: any) => {
                 }
               });
               pointSketchViewModel?.create('point');
+              props.toolActivated(pointSketchViewModel);
+              handles.current.push(pointSketchViewModel?.watch('state', stateChanged));
             }}
           ></calcite-action>
           <calcite-action
@@ -145,6 +159,8 @@ export const Sketch = (props: any) => {
                 }
               });
               polylineSketchViewModel?.create('polyline');
+              props.toolActivated(polylineSketchViewModel);
+              handles.current.push(polylineSketchViewModel?.watch('state', stateChanged));
             }}
           ></calcite-action>
           <calcite-action
@@ -163,6 +179,8 @@ export const Sketch = (props: any) => {
                 }
               });
               polygonSketchViewModel?.create('polygon');
+              props.toolActivated(polygonSketchViewModel);
+              handles.current.push(polygonSketchViewModel?.watch('state', stateChanged));
             }}
           ></calcite-action>
           <calcite-action
@@ -182,6 +200,8 @@ export const Sketch = (props: any) => {
                 }
               });
               textSketchViewModel?.create('point');
+              props.toolActivated(textSketchViewModel);
+              handles.current.push(textSketchViewModel?.watch('state', stateChanged));
               textClicked();
             }}
           ></calcite-action>

@@ -7,53 +7,91 @@ import './Measure.scss';
 export const Measure = (props: any) => {
   const measureRef = useRef<HTMLDivElement>(null);
   const coordRef = useRef<HTMLDivElement>(null);
-
+  const measurement = useRef<Measurement>();
   const [widget, setWidget] = useState<string>();
+  const actionClicked = (e: any) => {
+    document.querySelectorAll('.measureTools calcite-action').forEach((element) => {
+      (element as HTMLCalciteActionElement).active = element === e.target;
+      if (measurement.current) {
+        if (e.target.getAttribute('value') === 'distance') {
+          measurement.current.activeTool = 'distance';
+          setWidget('measurement');
+          props.measurementActivated(measurement.current);
+        }
+        if (e.target.getAttribute('value') === 'area') {
+          measurement.current.activeTool = 'area';
+          setWidget('measurement');
+          props.measurementActivated(measurement.current);
+        }
+        if (e.target.getAttribute('value') === 'coordinates') {
+          setWidget('coordinates');
+        }
+        if (e.target.getAttribute('value') === 'clear') {
+          measurement.current.clear();
+        }
+      }
+    });
+  };
   useEffect(() => {
-    const measurement = new Measurement({
+    measurement.current = new Measurement({
       container: measureRef.current as HTMLDivElement,
       view: props.view,
+    });
+    measurement.current.viewModel.watch('state', (state) => {
+      if (state === 'ready') {
+        document.querySelectorAll('#measureTools calcite-action').forEach((action) => {
+          (action as HTMLCalciteActionElement).active = false;
+        });
+      }
     });
     new CoordinateConversion({
       container: coordRef.current as HTMLDivElement,
       view: props.view,
     });
-    document.querySelector('calcite-radio-group')?.addEventListener('calciteRadioGroupChange', (e: any) => {
-      if (e.detail === 'distance') {
-        measurement.activeTool = 'distance';
-        setWidget('measurement');
-      }
-      if (e.detail === 'area') {
-        measurement.activeTool = 'area';
-        setWidget('measurement');
-      }
-      if (e.detail === 'coordinates') {
-        setWidget('coordinates');
-      }
-      if (e.detail === 'clear') {
-        measurement.clear();
-      }
-    });
     return () => {
-      measurement && measurement.destroy();
+      measurement && measurement.current?.destroy();
     };
   }, [props.view]); // only after initial render
   return (
     <div className="panel">
-      <calcite-radio-group layout="horizontal" appearance="solid" scale="m" width="auto">
-        <calcite-radio-group-item value="distance" icon="measure-line">
-          Distance
-        </calcite-radio-group-item>
-        <calcite-radio-group-item value="area" icon="measure-area">
-          Area
-        </calcite-radio-group-item>
-        <calcite-radio-group-item value="coordinates" icon="pin">
-          Coordinates
-        </calcite-radio-group-item>
-        <calcite-radio-group-item value="clear" icon="trash">
-          Clear
-        </calcite-radio-group-item>
-      </calcite-radio-group>
+      <div className="measureTools">
+        <calcite-action
+          text="Distance"
+          appearance="outline"
+          icon="measure-line"
+          id="lineMeasure"
+          value="distance"
+          text-enabled
+          onClick={actionClicked}
+        ></calcite-action>
+        <calcite-action
+          text="Area"
+          appearance="outline"
+          icon="measure-area"
+          id="areaMeasure"
+          value="area"
+          text-enabled
+          onClick={actionClicked}
+        ></calcite-action>
+        <calcite-action
+          text="Coordinates"
+          appearance="outline"
+          icon="pins"
+          id="coordinates"
+          value="coordinates"
+          text-enabled
+          onClick={actionClicked}
+        ></calcite-action>
+        <calcite-action
+          text="Clear"
+          appearance="outline"
+          icon="trash"
+          id="clearMeasure"
+          value="clear"
+          text-enabled
+          onClick={actionClicked}
+        ></calcite-action>
+      </div>
       <div ref={measureRef} hidden={widget != 'measurement'}></div>
       <div ref={coordRef} hidden={widget != 'coordinates'}></div>
     </div>
