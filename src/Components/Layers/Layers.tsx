@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import LayerList from '@arcgis/core/widgets/LayerList';
 import { filterLayers, layerListItemCreated } from './utils/layers';
 import './Layers.scss';
 export const Layers = (props: any) => {
   const ref = useRef<HTMLDivElement>(null);
   const input = useRef<HTMLCalciteInputElement>(null);
+  const [hidden, setHidden] = useState(true);
   useEffect(() => {
     console.log(props.active);
   }, [props.active]);
@@ -43,7 +44,7 @@ export const Layers = (props: any) => {
     };
   }, [props.view]); // only after initial render
   return (
-    <div className="panel">
+    <div className={`panel ${props.show ? '' : 'esri-hidden'}`}>
       <div className="row sticky">
         <calcite-input
           ref={input}

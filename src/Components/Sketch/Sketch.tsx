@@ -64,7 +64,7 @@ export const Sketch = (props: any) => {
     [pointSketchViewModel, polylineSketchViewModel, polygonSketchViewModel, textSketchViewModel].forEach((sketchVM) => {
       handles.current.push(sketchVM?.on('create', sketchCreated));
       // sketchVM?.watch('updateGraphics', (updateGraphics) => {
-      //   debugger;
+      //
       //   setSelectedGraphics(updateGraphics);
       // });s
       handles.current.push(
@@ -104,7 +104,7 @@ export const Sketch = (props: any) => {
   }, []);
 
   return (
-    <div className="panel">
+    <div className={`panel ${props.show ? '' : 'esri-hidden'}`}>
       <calcite-tooltip-manager>
         <calcite-tooltip label="Tooltip label" reference-element="pointAction" placement="bottom">
           Sketch a point
@@ -238,7 +238,7 @@ export const Sketch = (props: any) => {
                 //   const deleteGraphics = sketchVM?.updateGraphics.filter((updateGraphic: __esri.Graphic) => {
                 //     return updateGraphic === graphic;
                 //   });
-                //   debugger;
+                //
                 //   if (deleteGraphics) {
                 sketchVM?.delete();
                 //}

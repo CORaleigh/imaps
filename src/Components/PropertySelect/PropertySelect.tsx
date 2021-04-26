@@ -24,7 +24,7 @@ export const PropertySelect = (props: any) => {
   const addGraphic = (e: any) => {
     if (e.state === 'complete') {
       let geometry = e.graphic.geometry;
-      debugger;
+
       if (distanceInput.current) {
         if (parseInt(distanceInput.current.value as string) > 0) {
           geometry = geometryEngine.geodesicBuffer(
@@ -92,8 +92,9 @@ export const PropertySelect = (props: any) => {
       console.log('cleanup');
     };
   }, [props.view, props.geometrySet]); // only after initial render
+
   return (
-    <div className="panel">
+    <div className={`panel ${props.show ? '' : 'esri-hidden'}`}>
       {/* <div ref={ref}></div> */}
 
       <div className="selectTools">

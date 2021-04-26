@@ -191,7 +191,7 @@ export const PropertyPanel = (props: any) => {
     });
   }, [props.geometry, props.propertiesSelected, props.featureSelected, props.selectedProperties]);
   return (
-    <div className="panel">
+    <div className={`panel ${props.show ? '' : 'esri-hidden'}`}>
       {loaded && (
         <Suspense fallback={''}>
           <PropertySearch

@@ -13,6 +13,6 @@ export const Print = (props: any) => {
       console.log('cleanup');
     };
   }, [props.view]); // only after initial render
-  return <div ref={ref}></div>;
+  return <div ref={ref} className={`${props.show ? '' : 'esri-hidden'}`}></div>;
 };
 export default Print;

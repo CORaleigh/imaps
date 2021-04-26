@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useContext, useEffect, useState, lazy, Suspense, useRef } from 'react';
+import React, { useContext, useEffect, useState, lazy, Suspense, useRef, useCallback } from 'react';
 //import { MapView } from '../MapView/MapView';
 
 const MapView = lazy(() => {
@@ -15,6 +15,16 @@ const TipManager = lazy(() => {
 
 import { PropertyPanel } from '../PropertyPanel/PropertyPanel';
 
+//const PropertyPanel = lazy(() => import('../PropertyPanel/PropertyPanel'));
+const LocationSearch = lazy(() => import('../LocationSearch/LocationSearch'));
+const Layers = lazy(() => import('../Layers/Layers'));
+const Basemaps = lazy(() => import('../Basemaps/Basemaps'));
+const Legend = lazy(() => import('../Legend/Legend'));
+const PropertySelect = lazy(() => import('../PropertySelect/PropertySelect'));
+const Measure = lazy(() => import('../Measure/Measure'));
+const Sketch = lazy(() => import('../Sketch/Sketch'));
+const Bookmarks = lazy(() => import('../Bookmarks/Bookmarks'));
+const Print = lazy(() => import('../Print/Print'));
 import './Shell.scss';
 import { actionClicked, deactivate, initialized } from './utils/shell';
 
@@ -33,30 +43,59 @@ export const Shell = () => {
   const [view, setView] = useState<__esri.MapView | null>(null);
   const [viewCreated, setViewCreated] = useState(false);
   const [selectedProperties, setSelectedProperties] = useState<__esri.Graphic[]>([]);
+  //const selectedProperties = useRef<__esri.Graphic[]>([]);
+  //const selectedFeature = useRef<__esri.Graphic>();
+  //let selectedProperties: __esri.Graphic[] = [];
   const [selectedFeature, setSelectedFeature] = useState<any>();
-
+  //let selectedFeature: __esri.Graphic | null = null;
+  const [geometry, setGeometry] = useState<__esri.Geometry>();
   const { theme, setTheme } = useContext(ThemeContext);
 
+  // const updateSelectedFeature = useCallback(() => {
+  //   setSelectedFeature((selectedFeature, feature) => { ...selectedFeature, ...{ attributes: feature.attributes } });
+  // }, [ selectedFeature, feature]);
   const sketchVM = useRef<__esri.SketchViewModel>();
   const measurement = useRef<__esri.Measurement>();
 
   const { actions, setActions } = useContext(ActionContext);
+  const updateSelectedProperties = useCallback((properties) => {
+    setSelectedProperties([...properties]);
+  }, []);
+  const updateSelectedFeature = useCallback(
+    (attributes) => {
+      setSelectedFeature({ ...selectedFeature, ...{ attributes: attributes } } as __esri.Graphic);
+    },
+    [selectedFeature],
+  );
+  const loadedWidgets = useRef<string[]>([]);
   const featureSelected = (feature: __esri.Graphic | undefined) => {
-    setSelectedFeature({ ...selectedFeature, ...{ attributes: feature?.attributes } });
+    //setSelectedFeature({ ...selectedFeature, ...{ attributes: feature?.attributes } });
+    //selectedFeature = { ...selectedFeature, ...{ attributes: feature?.attributes } } as __esri.Graphic;
+    updateSelectedFeature(feature?.attributes);
+    updateSelectedFeature(feature?.attributes);
   };
   const propertiesSelected = (properties: __esri.Graphic[]) => {
-    setSelectedProperties([...selectedProperties, ...properties]);
-    setSelectedFeature({ ...selectedFeature, ...{ attributes: null } });
+    //updateSelectedProperties(properties);
+    //selectedProperties = [...properties];
+    //selectedFeature = { ...selectedFeature, ...{ attributes: null } } as __esri.Graphic;
+    updateSelectedProperties(properties);
+    updateSelectedProperties(properties);
 
-    const active = actions.find((action) => {
-      return action.isActive;
-    });
-    if (active) {
-      active.isActive = false;
-    }
-    const search = actions.find((action) => {
-      return action.title === 'Property Search';
-    });
+    updateSelectedFeature(null);
+    updateSelectedFeature(null);
+
+    //setSelectedProperties([...selectedProperties, ...properties]);
+    //setSelectedFeature({ ...selectedFeature, ...{ attributes: null } });
+
+    // const active = actions.find((action) => {
+    //   return action.isActive;
+    // });
+    // if (active) {
+    //   active.isActive = false;
+    // }
+    // const search = actions.find((action) => {
+    //   return action.title === 'Property Search';
+    // });
 
     // const panel = document.querySelector(
     //   'calcite-shell-panel[slot=contextual-panel] calcite-panel',
@@ -65,9 +104,9 @@ export const Shell = () => {
     //   panel.dismissed = false;
     // }
 
-    if (search) {
-      search.isActive = true;
-    }
+    // if (search) {
+    //   search.isActive = true;
+    // }
     const container = document.getElementById('propertySearch');
     if (container) {
       const panel: HTMLDivElement = container?.closest('.action-panel') as HTMLDivElement;
@@ -76,16 +115,16 @@ export const Shell = () => {
       shell?.removeAttribute('collapsed');
     }
 
-    ReactDOM.render(
-      <PropertyPanel
-        propertiesSelected={propertiesSelected}
-        featureSelected={featureSelected}
-        selectedProperties={properties}
-      />,
-      container,
-    );
-
-    setActions([...[], ...actions]);
+    // ReactDOM.render(
+    //   <PropertyPanel
+    //     propertiesSelected={propertiesSelected}
+    //     featureSelected={featureSelected}
+    //     selectedProperties={properties}
+    //   />,
+    //   container,
+    // );
+    //debugger;
+    //setActions([...[], ...actions]);
   };
   const windowResize = () => {
     // if (window.innerWidth <= 500) {
@@ -123,7 +162,7 @@ export const Shell = () => {
       }
     });
     setWidth(window.innerWidth);
-
+    debugger;
     setActions([...actions]);
   };
   const sketchToolActivated = (sketchViewModel: __esri.SketchViewModel) => {
@@ -132,110 +171,104 @@ export const Shell = () => {
   const measurementActivated = (measurementTool: __esri.Measurement) => {
     measurement.current = measurementTool;
   };
-  const setWidget = (action: any) => {
-    console.log('setWidget', action.title);
-    if (action) {
-      const container = document.getElementById(action.container);
 
-      if (!container?.hasChildNodes()) {
-        if (action.title === 'Property Search') {
-          const PropertyPanel = lazy(() => import('../PropertyPanel/PropertyPanel'));
-          ReactDOM.render(
-            <Suspense fallback={''}>
-              <PropertyPanel
-                view={view}
-                propertiesSelected={propertiesSelected}
-                featureSelected={featureSelected}
-                selectedProperties={selectedProperties}
-              />
-            </Suspense>,
-            container,
-          );
-        }
-        if (action.title === 'Location Search') {
-          const LocationSearch = lazy(() => import('../LocationSearch/LocationSearch'));
-          ReactDOM.render(
-            <Suspense fallback={''}>
-              <LocationSearch view={view} />
-            </Suspense>,
-            container,
-          );
-        }
-        if (action.title === 'Layers') {
-          const Layers = lazy(() => import('../Layers/Layers'));
-          ReactDOM.render(
-            <Suspense fallback={''}>
-              <Layers view={view} />
-            </Suspense>,
-            container,
-          );
-        }
-        if (action.title === 'Basemaps') {
-          const Basemaps = lazy(() => import('../Basemaps/Basemaps'));
-          ReactDOM.render(
-            <Suspense fallback={''}>
-              <Basemaps view={view} />
-            </Suspense>,
-            container,
-          );
-        }
-        if (action.title === 'Legend') {
-          const Legend = lazy(() => import('../Legend/Legend'));
-          ReactDOM.render(
-            <Suspense fallback={''}>
-              <Legend view={view} />
-            </Suspense>,
-            container,
-          );
-        }
-        if (action.title === 'Property Select') {
-          const PropertySelect = lazy(() => import('../PropertySelect/PropertySelect'));
-          ReactDOM.render(
-            <Suspense fallback={''}>
-              <PropertySelect view={view} geometrySet={geometryChanged} />
-            </Suspense>,
-            container,
-          );
-        }
-        if (action.title === 'Measure') {
-          const Measure = lazy(() => import('../Measure/Measure'));
-          ReactDOM.render(
-            <Suspense fallback={''}>
-              <Measure view={view} measurementActivated={measurementActivated} />
-            </Suspense>,
-            container,
-          );
-        }
-        if (action.title === 'Sketch') {
-          const Sketch = lazy(() => import('../Sketch/Sketch'));
-          ReactDOM.render(
-            <Suspense fallback={''}>
-              <Sketch view={view} toolActivated={sketchToolActivated} />{' '}
-            </Suspense>,
-            container,
-          );
-        }
-        if (action.title === 'Bookmarks') {
-          const Bookmarks = lazy(() => import('../Bookmarks/Bookmarks'));
-          ReactDOM.render(
-            <Suspense fallback={''}>
-              <Bookmarks view={view} />{' '}
-            </Suspense>,
-            container,
-          );
-        }
-        if (action.title === 'Print') {
-          const Print = lazy(() => import('../Print/Print'));
-          ReactDOM.render(
-            <Suspense fallback={''}>
-              <Print view={view} />{' '}
-            </Suspense>,
-            container,
-          );
-        }
+  const renderWidgets = (action: any) => {
+    if (view && action.title === 'Property Search' && action.isLoaded) {
+      return (
+        <Suspense fallback={''} key={action.title}>
+          <PropertyPanel
+            show={action.isActive}
+            view={view}
+            propertiesSelected={propertiesSelected}
+            featureSelected={featureSelected}
+            geometry={geometry}
+          />
+        </Suspense>
+      );
+    }
+    {
+      if (view && action.title === 'Location Search' && action.isLoaded) {
+        return (
+          <Suspense fallback={''} key={action.title}>
+            <LocationSearch show={action.isActive} view={view} />
+          </Suspense>
+        );
+      }
+    }
+    {
+      if (view && action.title === 'Layers' && action.isLoaded) {
+        return (
+          <Suspense fallback={''} key={action.title}>
+            <Layers show={action.isActive} view={view} />
+          </Suspense>
+        );
+      }
+    }
+    {
+      if (action.title === 'Basemaps' && action.isLoaded) {
+        return (
+          <Suspense fallback={''} key={action.title}>
+            <Basemaps show={action.isActive} view={view} />
+          </Suspense>
+        );
+      }
+    }
+    {
+      if (action.title === 'Legend' && action.isLoaded) {
+        return (
+          <Suspense fallback={''} key={action.title}>
+            <Legend show={action.isActive} view={view} />
+          </Suspense>
+        );
+      }
+    }
+    {
+      if (action.title === 'Property Select' && action.isLoaded) {
+        return (
+          <Suspense fallback={''} key={action.title}>
+            <PropertySelect show={action.isActive} view={view} geometrySet={geometryChanged} />
+          </Suspense>
+        );
+      }
+    }
+    {
+      if (action.title === 'Measure' && action.isLoaded) {
+        return (
+          <Suspense fallback={''} key={action.title}>
+            <Measure show={action.isActive} view={view} measurementActivated={measurementActivated} />
+          </Suspense>
+        );
+      }
+    }
+    {
+      if (action.title === 'Sketch' && action.isLoaded) {
+        return (
+          <Suspense fallback={''} key={action.title}>
+            <Sketch show={action.isActive} view={view} toolActivated={sketchToolActivated} />{' '}
+          </Suspense>
+        );
+      }
+    }
+    {
+      if (action.title === 'Bookmarks' && action.isLoaded) {
+        return (
+          <Suspense fallback={''} key={action.title}>
+            <Bookmarks show={action.isActive} view={view} />{' '}
+          </Suspense>
+        );
+      }
+    }
+    {
+      if (action.title === 'Print' && action.isLoaded) {
+        return (
+          <Suspense fallback={''} key={action.title}>
+            <Print show={action.isActive} view={view} />{' '}
+          </Suspense>
+        );
       }
     }
   };
+
   const tipsDismissed = () => {
     setTips([]);
     setTipsTitle('');
@@ -270,31 +303,32 @@ export const Shell = () => {
 
       const container = document.getElementById('propertySearch');
       if (mapView.map) {
-        ReactDOM.render(
-          <PropertyPanel
-            view={mapView}
-            propertiesSelected={propertiesSelected}
-            featureSelected={featureSelected}
-            selectedProperties={selectedProperties}
-          />,
-          container,
-        );
+        // ReactDOM.render(
+        //   <PropertyPanel
+        //     view={mapView}
+        //     propertiesSelected={propertiesSelected}
+        //     featureSelected={featureSelected}
+        //     selectedProperties={selectedProperties}
+        //   />,
+        //   container,
+        // );
       }
     }
   };
 
   const geometryChanged = (geometry: __esri.Geometry) => {
     const container = document.getElementById('propertySearch');
-    ReactDOM.render(
-      <PropertyPanel
-        geometry={geometry}
-        propertiesSelected={propertiesSelected}
-        selectedProperties={selectedProperties}
-        featureSelected={featureSelected}
-        selectedFeature={selectedFeature}
-      />,
-      container,
-    );
+    setGeometry(geometry);
+    // ReactDOM.render(
+    //   <PropertyPanel
+    //     geometry={geometry}
+    //     propertiesSelected={propertiesSelected}
+    //     selectedProperties={selectedProperties}
+    //     featureSelected={featureSelected}
+    //     selectedFeature={selectedFeature}
+    //   />,
+    //   container,
+    // );
   };
 
   const updateTheme = (theme: string) => {
@@ -343,7 +377,7 @@ export const Shell = () => {
 
   useEffect(() => {
     initialized();
-
+    debugger;
     const theme = window.localStorage.getItem('imaps_theme') as string;
 
     updateTheme(theme);
@@ -369,13 +403,14 @@ export const Shell = () => {
       window.removeEventListener('resize', windowResize);
       deactivate();
     };
-  }, [actions]);
+  }, []);
   return (
     <div>
       <calcite-shell theme={theme} className="shell">
         {width >= 1000 ? (
           <calcite-shell-panel slot="primary-panel" position="start" width-scale="l" collapsed>
             <calcite-action-bar slot="action-bar">
+              {console.log(actions)}
               {actions.map((action: any) => {
                 if (action.isTool) {
                   return (
@@ -386,9 +421,10 @@ export const Shell = () => {
                       icon={action.icon}
                       disabled={!viewCreated ? '' : null}
                       onClick={(e: any) => {
+                        debugger;
                         setActions([...actionClicked(e, action, actions)]);
                         requestAnimationFrame(() => {
-                          setWidget(action);
+                          // setWidget(action);
                         });
                       }}
                       active={action.isActive === true ? '' : null}
@@ -415,7 +451,7 @@ export const Shell = () => {
                             ?.querySelector('calcite-shell-panel[slot=primary-panel]')
                             ?.setAttribute('collapsed', '');
                           action.isActive = false;
-
+                          debugger;
                           setActions([...actions]);
                         }}
                       ></calcite-action>
@@ -426,14 +462,15 @@ export const Shell = () => {
             })}
             {actions.map((action: any) => {
               if (action.isTool && action.isActive) {
-                return (
-                  <div
-                    id={action.container}
-                    className="action-panel"
-                    key={action.container}
-                    hidden={!action.isActive}
-                  ></div>
-                );
+                return renderWidgets(action);
+                // return (
+                //   <div
+                //     id={action.container}
+                //     className="action-panel"
+                //     key={action.container}
+                //     hidden={!action.isActive}
+                //   ></div>
+                // );
               }
             })}
             ;
@@ -476,10 +513,17 @@ export const Shell = () => {
                     icon={action.icon}
                     disabled={!viewCreated ? '' : null}
                     onClick={async (e: any) => {
+                      debugger;
                       setActions([...actionClicked(e, action, actions)]);
-                      requestAnimationFrame(() => {
-                        setWidget(action);
-                      });
+                      //requestAnimationFrame(() => {
+                      //setWidget(action);
+                      //debugger;
+                      //if (!action.isLoaded) {
+                      //action.isLoaded = true;
+                      //loadedWidgets.current.push(action.title);
+                      //setActions([...actions]);
+                      // }
+                      // });
                     }}
                     active={action.isActive === true ? '' : null}
                   ></calcite-action>
@@ -505,7 +549,7 @@ export const Shell = () => {
                           ?.querySelector('calcite-shell-panel[slot=contextual-panel]')
                           ?.setAttribute('collapsed', '');
                         action.isActive = false;
-
+                        debugger;
                         setActions([...actions]);
                       }}
                     ></calcite-action>
@@ -516,14 +560,7 @@ export const Shell = () => {
           })}
           {actions.map((action: any) => {
             if (!action.isTool || width < 1000) {
-              return (
-                <div
-                  className="action-panel"
-                  id={action.container}
-                  key={action.container}
-                  hidden={!action.isActive}
-                ></div>
-              );
+              return renderWidgets(action);
             }
           })}
 

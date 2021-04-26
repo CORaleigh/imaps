@@ -31,6 +31,6 @@ export const Bookmarks = (props: any) => {
       bookmarks && bookmarks.destroy();
     };
   }, [props.id]); // only after initial render
-  return <div ref={ref}></div>;
+  return <div ref={ref} className={`${props.show ? '' : 'esri-hidden'}`}></div>;
 };
 export default Bookmarks;

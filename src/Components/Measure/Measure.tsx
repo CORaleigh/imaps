@@ -53,7 +53,7 @@ export const Measure = (props: any) => {
     };
   }, [props.view]); // only after initial render
   return (
-    <div className="panel">
+    <div className={`panel ${props.show ? '' : 'esri-hidden'}`}>
       <div className="measureTools">
         <calcite-action
           text="Distance"

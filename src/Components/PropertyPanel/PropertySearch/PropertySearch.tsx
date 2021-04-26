@@ -39,7 +39,7 @@ export const PropertySearch = (props: any) => {
     return () => {
       console.log('cleanup');
     };
-  }, [props.view, props.addressTable, props.condosTable, props.propertyLayer, props.searchComplete]); // only after initial render
+  }, []); // only after initial render
   useEffect(() => {
     if (props.where != 'OBJECTID IS NULL') {
       searchCondos(props.where, [])

@@ -45,7 +45,7 @@ export const LocationSearch = (props: any) => {
     };
   }, [props.view]); // only after initial render
   return (
-    <div className="panel">
+    <div className={`panel ${props.show ? '' : 'esri-hidden'}`}>
       <div ref={ref}></div>
       <div ref={featureRef}></div>
     </div>

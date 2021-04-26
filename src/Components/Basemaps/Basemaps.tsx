@@ -29,7 +29,7 @@ export const Basemaps = (props: any) => {
     };
   }); // only after initial render
   return (
-    <div className="panel">
+    <div className={`panel ${props.show ? '' : 'esri-hidden'}`}>
       <calcite-combobox
         label="demo combobox"
         selection-mode="single"

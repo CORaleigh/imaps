@@ -76,6 +76,7 @@ export const MapView = (props: any) => {
     };
   }, []); // only after initial render
   useEffect(() => {
+    debugger;
     if (props.selectedProperties) {
       props.selectedProperties.forEach((feature: __esri.Graphic) => {
         feature.setAttribute('selected', 0);
@@ -98,7 +99,7 @@ export const MapView = (props: any) => {
         });
       });
     }
-  }, [props.selectedProperties]);
+  }, [props.selectedProperties, props.selectedFeature]);
 
   return <div ref={mapRef} />;
 };

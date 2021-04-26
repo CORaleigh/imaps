@@ -14,6 +14,6 @@ export const Legend = (props: any) => {
       legend && legend.destroy();
     };
   }, [props.view]); // only after initial render
-  return <div ref={ref}></div>;
+  return <div ref={ref} className={`${props.show ? '' : 'esri-hidden'}`}></div>;
 };
 export default Legend;

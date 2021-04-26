@@ -22,7 +22,7 @@ export const PropertyInfo = (props: any) => {
     return () => {
       console.log('cleanup');
     };
-  }); // only after initial render
+  }, []); // only after initial render
   useEffect(() => {
     if (featureWidget.current) {
       if (props.feature) {
