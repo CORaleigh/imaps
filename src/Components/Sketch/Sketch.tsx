@@ -15,9 +15,7 @@ import {
   textSketchViewModel,
   textSymbol,
 } from './utils/notes';
-// import { createSketchWidget, settingsChanged, sketchHandles } from './utils/sketch';
 export const Sketch = (props: any) => {
-  // const ref = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLCalciteInputElement>(null);
   const pointAction = useRef<HTMLCalciteActionElement>(null);
   const lineAction = useRef<HTMLCalciteActionElement>(null);
@@ -27,15 +25,8 @@ export const Sketch = (props: any) => {
   const graphicsRef = useRef<any[]>([]);
   const handles = useRef<any[]>([]);
 
-  //const sketchRef = useRef<__esri.Sketch>();
   const [geometryType, setGeometryType] = useState<string | null>(null);
-  // const activeToolChanged = (activeTool: string) => {
-  //   if (['rectangle', 'circle'].includes(activeTool)) {
-  //     setGeometryType('polygon');
-  //   } else if (activeTool) {
-  //     setGeometryType(activeTool);
-  //   }
-  // };
+
   const sketchCreated = (e: any) => {
     if (e.state === 'complete') {
       setGeometryType(null);
@@ -63,10 +54,6 @@ export const Sketch = (props: any) => {
     handles.current.push(textSketchViewModel?.on('create', sketchCreated));
     [pointSketchViewModel, polylineSketchViewModel, polygonSketchViewModel, textSketchViewModel].forEach((sketchVM) => {
       handles.current.push(sketchVM?.on('create', sketchCreated));
-      // sketchVM?.watch('updateGraphics', (updateGraphics) => {
-      //   debugger;
-      //   setSelectedGraphics(updateGraphics);
-      // });s
       handles.current.push(
         sketchVM?.on('update', (e) => {
           console.log(e.state, graphicsRef.current.length);
@@ -87,15 +74,6 @@ export const Sketch = (props: any) => {
         }),
       );
     });
-
-    // const sketch: __esri.Sketch = createSketchWidget(ref, props.view);
-    // sketchHandles.push(sketch.watch('activeTool', activeToolChanged));
-    // sketchRef.current = sketch;
-    // return () => {
-    //   sketchHandles.forEach((handle) => {
-    //     handle.remove();
-    //   });
-    // };
     return () => {
       handles.current.forEach((handle) => {
         handle.remove();
@@ -234,22 +212,13 @@ export const Sketch = (props: any) => {
           onClick={() => {
             [pointSketchViewModel, polylineSketchViewModel, polygonSketchViewModel, textSketchViewModel].forEach(
               (sketchVM) => {
-                // selectedGraphics.forEach((graphic: __esri.Graphic) => {
-                //   const deleteGraphics = sketchVM?.updateGraphics.filter((updateGraphic: __esri.Graphic) => {
-                //     return updateGraphic === graphic;
-                //   });
-                //   debugger;
-                //   if (deleteGraphics) {
                 sketchVM?.delete();
-                //}
-                //});
                 setSelectedGraphics([...[]]);
               },
             );
           }}
         ></calcite-action>
       )}
-      {/* <div ref={ref}></div> */}
 
       {geometryType === 'text' && (
         <calcite-label>

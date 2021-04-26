@@ -1,46 +1,46 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React, { useEffect, useRef } from 'react';
-//import SketchWidget from '@arcgis/core/widgets/Sketch';
+import React, { useEffect, useRef, useState } from 'react';
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 import * as geometryEngine from '@arcgis/core/geometry/geometryEngine';
 import SketchViewModel from '@arcgis/core/widgets/Sketch/SketchViewModel';
 import './PropertySelect.scss';
 export const PropertySelect = (props: any) => {
-  //const ref = useRef<HTMLDivElement>(null);
-  const distanceInput = useRef<HTMLCalciteInputElement>(null);
-
   const pointAction = useRef<HTMLCalciteActionElement>(null);
   const lineAction = useRef<HTMLCalciteActionElement>(null);
   const polygonAction = useRef<HTMLCalciteActionElement>(null);
   const rectangleAction = useRef<HTMLCalciteActionElement>(null);
   const circleAction = useRef<HTMLCalciteActionElement>(null);
-  let pointSketchViewModel: SketchViewModel | null = null;
+  const multipointAction = useRef<HTMLCalciteActionElement>(null);
 
-  let polylineSketchViewModel: SketchViewModel | null = null;
+  const [selectedFeature, setSelectedFeature] = useState<__esri.Graphic>();
+  const [pointSketchViewModel, setPointSketchViewModel] = useState<SketchViewModel>();
+  const [polylineSketchViewModel, setPolylineSketchViewModel] = useState<SketchViewModel>();
+  const [polygonSketchViewModel, setPolygonSketchViewModel] = useState<SketchViewModel>();
+  const [geometryType, setGeometryType] = useState<string>();
+  const [distance, setDistance] = useState(0);
 
-  let polygonSketchViewModel: SketchViewModel | null = null;
-  //const [distance, setDistance] = useState(0);
+  const bufferGraphic = (geometry: __esri.Geometry) => {
+    geometry = geometryEngine.geodesicBuffer(geometry, distance, 'feet') as __esri.Geometry;
+    props.geometrySet(geometry);
+  };
+
+  const disableAllActions = () => {
+    [pointAction, lineAction, polygonAction, circleAction, rectangleAction, multipointAction].forEach((action) => {
+      if (action.current) {
+        action.current.active = false;
+      }
+    });
+  };
   const addGraphic = (e: any) => {
     if (e.state === 'complete') {
-      let geometry = e.graphic.geometry;
-      debugger;
-      if (distanceInput.current) {
-        if (parseInt(distanceInput.current.value as string) > 0) {
-          geometry = geometryEngine.geodesicBuffer(
-            e.graphic.geometry,
-            parseInt(distanceInput.current.value as string),
-            'feet',
-          ) as __esri.Geometry;
-        }
+      const geometry = e.graphic.geometry;
+      if (distance > 0) {
+        bufferGraphic(geometry);
+      } else {
+        props.geometrySet(geometry);
       }
-
-      props.geometrySet(geometry);
-      [pointAction, lineAction, polygonAction, circleAction, rectangleAction].forEach((action) => {
-        if (action.current) {
-          action.current.active = false;
-        }
-      });
+      disableAllActions();
     }
   };
   const createSketchViewModels = (layer: __esri.GraphicsLayer, view: __esri.MapView): SketchViewModel => {
@@ -55,47 +55,48 @@ export const PropertySelect = (props: any) => {
     sketchVM.on('create', addGraphic);
     return sketchVM;
   };
-  useEffect(() => {
-    pointSketchViewModel = createSketchViewModels(new GraphicsLayer({ listMode: 'hide' }), props.view);
-    polylineSketchViewModel = createSketchViewModels(new GraphicsLayer({ listMode: 'hide' }), props.view);
-    polygonSketchViewModel = createSketchViewModels(new GraphicsLayer({ listMode: 'hide' }), props.view);
 
-    // const sketch = new SketchWidget({
-    //   container: ref.current as HTMLDivElement,
-    //   view: props.view,
-    //   creationMode: 'single',
-    //   defaultCreateOptions: {
-    //     mode: 'hybrid',
-    //   },
-    //   visibleElements: {
-    //     selectionTools: {
-    //       'lasso-selection': false,
-    //       'rectangle-selection': false,
-    //     },
-    //     undoRedoMenu: false,
-    //   },
-    //   layer: new GraphicsLayer({ listMode: 'hide' }),
-    //   snappingOptions: {
-    //     enabled: false,
-    //   },
-    // });
-    // sketch.on('create', (e) => {
-    //   if (e.state === 'complete') {
-    //     let geometry = e.graphic.geometry;
-    //     if (distance > 0) {
-    //       geometry = geometryEngine.geodesicBuffer(e.graphic.geometry, distance, 'feet') as __esri.Geometry;
-    //     }
-    //     props.geometrySet(geometry);
-    //   }
-    // });
+  const changeSketchViewModel = (
+    geometryType: 'point' | 'multipoint' | 'polyline' | 'polygon' | 'rectangle' | 'circle',
+    activeViewModel: SketchViewModel,
+    inactiveViewModels: SketchViewModel[],
+    activeSketchAction: HTMLCalciteActionElement,
+    inactiveSketchActions: HTMLCalciteActionElement[],
+  ) => {
+    if (activeSketchAction) {
+      activeSketchAction.active = true;
+    }
+    inactiveSketchActions.forEach((action) => {
+      if (action) {
+        action.active = false;
+      }
+    });
+    if (activeViewModel) {
+      setGeometryType(geometryType);
+      activeViewModel.create(geometryType);
+      props.toolActivated(activeViewModel);
+      inactiveViewModels.forEach((vm) => {
+        vm?.cancel();
+        vm?.cancel();
+      });
+    }
+  };
+  useEffect(() => {
+    setPointSketchViewModel(createSketchViewModels(new GraphicsLayer({ listMode: 'hide' }), props.view));
+    setPolylineSketchViewModel(createSketchViewModels(new GraphicsLayer({ listMode: 'hide' }), props.view));
+    setPolygonSketchViewModel(createSketchViewModels(new GraphicsLayer({ listMode: 'hide' }), props.view));
+
     return () => {
       console.log('cleanup');
     };
-  }, [props.view, props.geometrySet]); // only after initial render
+  }, []);
+  useEffect(() => {
+    if (props.selectedFeature?.geometry) {
+      setSelectedFeature(props.selectedFeature);
+    }
+  }, [props.selectedFeature]);
   return (
     <div className="panel">
-      {/* <div ref={ref}></div> */}
-
       <div className="selectTools">
         <calcite-action
           ref={pointAction}
@@ -103,17 +104,19 @@ export const PropertySelect = (props: any) => {
           icon="pin"
           id="pointAction"
           onClick={() => {
-            if (pointAction.current) {
-              pointAction.current.active = true;
-            }
-            [lineAction, polygonAction, circleAction, rectangleAction].forEach((action) => {
-              if (action.current) {
-                action.current.active = false;
-              }
-            });
-            if (pointSketchViewModel) {
-              pointSketchViewModel.create('point');
-            }
+            changeSketchViewModel(
+              'point',
+              pointSketchViewModel as SketchViewModel,
+              [polygonSketchViewModel, polylineSketchViewModel] as SketchViewModel[],
+              pointAction.current as HTMLCalciteActionElement,
+              [
+                lineAction.current,
+                polygonAction.current,
+                circleAction.current,
+                rectangleAction.current,
+                multipointAction.current,
+              ] as HTMLCalciteActionElement[],
+            );
           }}
         ></calcite-action>
         <calcite-action
@@ -122,15 +125,19 @@ export const PropertySelect = (props: any) => {
           icon="line"
           id="lineAction"
           onClick={() => {
-            if (lineAction.current) {
-              lineAction.current.active = true;
-            }
-            [pointAction, polygonAction, rectangleAction, circleAction].forEach((action) => {
-              if (action.current) {
-                action.current.active = false;
-              }
-            });
-            polylineSketchViewModel?.create('polyline');
+            changeSketchViewModel(
+              'polyline',
+              polylineSketchViewModel as SketchViewModel,
+              [polygonSketchViewModel, pointSketchViewModel] as SketchViewModel[],
+              lineAction.current as HTMLCalciteActionElement,
+              [
+                pointAction.current,
+                polygonAction.current,
+                circleAction.current,
+                rectangleAction.current,
+                multipointAction.current,
+              ] as HTMLCalciteActionElement[],
+            );
           }}
         ></calcite-action>
         <calcite-action
@@ -139,15 +146,19 @@ export const PropertySelect = (props: any) => {
           icon="polygon-area"
           id="polygonAction"
           onClick={() => {
-            if (polygonAction.current) {
-              polygonAction.current.active = true;
-            }
-            [pointAction, lineAction, circleAction, rectangleAction].forEach((action) => {
-              if (action.current) {
-                action.current.active = false;
-              }
-            });
-            polygonSketchViewModel?.create('polygon');
+            changeSketchViewModel(
+              'polygon',
+              polygonSketchViewModel as SketchViewModel,
+              [polylineSketchViewModel, pointSketchViewModel] as SketchViewModel[],
+              polygonAction.current as HTMLCalciteActionElement,
+              [
+                pointAction.current,
+                lineAction.current,
+                circleAction.current,
+                rectangleAction.current,
+                multipointAction.current,
+              ] as HTMLCalciteActionElement[],
+            );
           }}
         ></calcite-action>
         <calcite-action
@@ -156,15 +167,19 @@ export const PropertySelect = (props: any) => {
           icon="rectangle-area"
           id="rectangleAction"
           onClick={() => {
-            if (rectangleAction.current) {
-              rectangleAction.current.active = true;
-            }
-            [pointAction, lineAction, polygonAction, circleAction].forEach((action) => {
-              if (action.current) {
-                action.current.active = false;
-              }
-            });
-            polylineSketchViewModel?.create('rectangle');
+            changeSketchViewModel(
+              'rectangle',
+              polygonSketchViewModel as SketchViewModel,
+              [polylineSketchViewModel, pointSketchViewModel] as SketchViewModel[],
+              rectangleAction.current as HTMLCalciteActionElement,
+              [
+                pointAction.current,
+                lineAction.current,
+                circleAction.current,
+                polygonAction.current,
+                multipointAction.current,
+              ] as HTMLCalciteActionElement[],
+            );
           }}
         ></calcite-action>
         <calcite-action
@@ -173,17 +188,54 @@ export const PropertySelect = (props: any) => {
           icon="circle-area"
           id="circleAction"
           onClick={() => {
-            if (circleAction.current) {
-              circleAction.current.active = true;
-            }
-            [pointAction, lineAction, polygonAction, rectangleAction].forEach((action) => {
-              if (action.current) {
-                action.current.active = false;
-              }
-            });
-            polylineSketchViewModel?.create('circle');
+            changeSketchViewModel(
+              'circle',
+              polygonSketchViewModel as SketchViewModel,
+              [polylineSketchViewModel, pointSketchViewModel] as SketchViewModel[],
+              circleAction.current as HTMLCalciteActionElement,
+              [
+                pointAction.current,
+                lineAction.current,
+                rectangleAction.current,
+                polygonAction.current,
+                multipointAction.current,
+              ] as HTMLCalciteActionElement[],
+            );
           }}
         ></calcite-action>
+        <calcite-action
+          ref={multipointAction}
+          text="Mulit-point"
+          icon="pins"
+          id="multipointAction"
+          onClick={() => {
+            changeSketchViewModel(
+              'multipoint',
+              pointSketchViewModel as SketchViewModel,
+              [polygonSketchViewModel, polylineSketchViewModel] as SketchViewModel[],
+              pointAction.current as HTMLCalciteActionElement,
+              [
+                lineAction.current,
+                polygonAction.current,
+                circleAction.current,
+                rectangleAction.current,
+                pointAction.current,
+              ] as HTMLCalciteActionElement[],
+            );
+          }}
+        ></calcite-action>
+      </div>
+      <div className="instructions esri-widget">
+        {geometryType === 'point' ? 'Single click on the map' : ''}
+        {geometryType === 'polyline'
+          ? 'Draw a polygon on the map by clicking each point and double clicking to finish'
+          : ''}
+        {geometryType === 'polygon'
+          ? 'Draw a polygon on the map by clicking each point and double clicking to finish'
+          : ''}
+        {geometryType === 'rectangle' ? 'Draw a rectangle on the map by right clicking and dragging' : ''}
+        {geometryType === 'circle' ? 'Draw a circle on the map by right clicking and dragging' : ''}
+        {geometryType === 'multipoint' ? 'Single click each point on the map, double click to finish' : ''}
       </div>
       <calcite-label>
         Buffer distance
@@ -195,9 +247,26 @@ export const PropertySelect = (props: any) => {
           placeholder="Distance"
           suffix-text="ft"
           value="0"
-          ref={distanceInput}
+          onBlur={(e: any) => {
+            setDistance(parseInt(e.target.value));
+          }}
         ></calcite-input>
       </calcite-label>
+      {selectedFeature && distance > 0 && (
+        <calcite-button
+          onClick={() => {
+            const geometry = geometryEngine.geodesicBuffer(
+              selectedFeature?.geometry,
+              distance,
+              'feet',
+            ) as __esri.Geometry;
+            props.geometrySet(geometry);
+            disableAllActions();
+          }}
+        >
+          Buffer Selected
+        </calcite-button>
+      )}
     </div>
   );
 };

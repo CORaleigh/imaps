@@ -2,3 +2,9 @@
     display: flex;
 
 }
+
+.instructions {
+    margin: 12px 0;
+    padding: 0 15px;
+    animation: esri-fade-in 250ms ease-in-out;
+}

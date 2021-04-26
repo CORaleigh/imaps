@@ -2,7 +2,6 @@
   "name": "imaps",
   "version": "4.0.1",
   "private": true,
-  "homepage": "https://coraleigh.github.io/imaps",
   "dependencies": {
     "@arcgis/core": "^4.19.0",
     "@esri/calcite-components": "^1.0.0-beta.52",
@@ -34,9 +33,10 @@
     "web-vitals": "^1.1.1"
   },
   "scripts": {
-    "start": "npm run copyIcons && react-scripts start",
+    "start": "npm run copyIcons && npm run copyTheme && react-scripts start",
     "build": "react-scripts build",
     "copyIcons": "find node_modules/@esri/calcite-components/dist/calcite/assets/ -iname \\*.json -exec cp {} ./public/assets/calcite-icon/ \\;",
+    "copyTheme": "cp -r node_modules/@arcgis/core/assets/esri/themes/dark ./public/assets/dark/ && cp -r node_modules/@arcgis/core/assets/esri/themes/light ./public/assets/light/ && cp -r node_modules/@arcgis/core/assets/esri/themes/base ./public/assets/base/ ",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",

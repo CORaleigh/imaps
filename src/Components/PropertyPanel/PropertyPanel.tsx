@@ -4,7 +4,6 @@ import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
 const PropertySearch = lazy(() => import('./PropertySearch/PropertySearch'));
 const PropertyInfo = lazy(() => import('./PropertyInfo/PropertyInfo'));
 const PropertyTable = lazy(() => import('./PropertyTable/PropertyTable'));
-// const PropertyList = lazy(() => import('./PropertyList/PropertyList'));
 import { geometryChanged, setSearchParams } from './utils/property';
 import './PropertyPanel.scss';
 export const PropertyPanel = (props: any) => {
@@ -16,7 +15,6 @@ export const PropertyPanel = (props: any) => {
   const [view, setView] = useState<__esri.MapView>();
   const [feature, setFeature] = useState<__esri.Graphic>();
 
-  //const featureRef = useRef<__esri.Graphic>();
   const [filter, setFilter] = useState('OBJECTID IS NULL');
   const [where, setWhere] = useState('OBJECTID IS NULL');
 
@@ -26,7 +24,6 @@ export const PropertyPanel = (props: any) => {
   const [reloadTable, setReloadTable] = useState(false);
 
   const [addressTable, setAddressTable] = useState<__esri.FeatureLayer>();
-  //let properties: __esri.Graphic[] = [];
   const properties = useRef<__esri.Graphic[]>();
   const [layer, setLayer] = useState<__esri.FeatureLayer>();
   const [loading, setLoading] = useState(false);
@@ -158,7 +155,8 @@ export const PropertyPanel = (props: any) => {
     return () => {
       console.log('cleanup');
     };
-  }, []); // only after initial render
+  }, []);
+
   useEffect(() => {
     geometryChanged(view as __esri.MapView, layer as __esri.FeatureLayer, props.geometry).then((data) => {
       if (props.geometry != undefined) {
@@ -176,7 +174,6 @@ export const PropertyPanel = (props: any) => {
           setFeature(feature);
           props.featureSelected(feature);
 
-          //featureRef.current = feature;
           setSearchParams([feature]);
 
           toggleTabs('info');
@@ -217,14 +214,6 @@ export const PropertyPanel = (props: any) => {
 
         <calcite-tab tab="list">
           {loaded && (
-            // <Suspense fallback={''}>
-            //   <PropertyList
-            //     layer={table}
-            //     view={view}
-            //     filter={filter}
-            //     featureSelected={tableFeatureSelected}
-            //   ></PropertyList>
-            // </Suspense>
             <Suspense fallback={''}>
               <PropertyTable
                 view={view}
