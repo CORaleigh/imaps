@@ -167,6 +167,9 @@ export const getInitialSettings = (): any => {
     polygonOutlineWidth: 2,
     polygonOutlineColor: '#000000',
     polygonFillColor: '#FF0000',
+    fontSize: 12,
+    fontColor: '#000000',
+    haloColor: '#FFFFFF',
   };
 };
 

@@ -41,9 +41,9 @@ const fillSymbol = new SimpleFillSymbol({
 });
 
 export const textSymbol = new TextSymbol({
-  text: 'new text alert',
-  color: [255, 255, 255],
-  haloColor: [1, 68, 33],
+  text: '',
+  color: [0, 0, 0],
+  haloColor: [255, 255, 255],
   haloSize: 2,
   font: {
     family: 'Arial Unicode MS',
@@ -91,6 +91,12 @@ const updateLineRenderer = (settings: any) => {
   lineSymbol.width = settings.lineWidth;
 };
 
+const updateTextRenderer = (settings: any) => {
+  textSymbol.color = Color.fromHex(settings.fontColor);
+  textSymbol.haloColor = Color.fromHex(settings.haloColor);
+  textSymbol.font.size = settings.fontSize;
+};
+
 export const settingsChanged = (settings: any, geometryType: string): void => {
   if (geometryType === 'point') {
     updatePointRenderer(settings);
@@ -100,6 +106,9 @@ export const settingsChanged = (settings: any, geometryType: string): void => {
   }
   if (geometryType === 'line') {
     updateLineRenderer(settings);
+  }
+  if (geometryType === 'text') {
+    updateTextRenderer(settings);
   }
 };
 
@@ -124,7 +133,7 @@ const addGraphic = (event: any) => {
           textLayer.remove(event.graphic);
           const newTextGraphic = new Graphic({
             geometry: event.graphic.geometry,
-            symbol: textSymbol,
+            symbol: textSymbol.clone(),
             attributes: {
               title: 'text map note #' + count,
             },

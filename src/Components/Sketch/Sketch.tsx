@@ -228,6 +228,7 @@ export const Sketch = (props: any) => {
             id="labelInput"
             placeholder="Label"
             type="textarea"
+            value={textSymbol.text}
             onInput={(e: any) => {
               textSymbol.text = e.target.value;
             }}

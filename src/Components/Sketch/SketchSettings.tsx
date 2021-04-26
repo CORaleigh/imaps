@@ -353,6 +353,61 @@ export const SketchSettings = (props: any) => {
       ) : (
         ''
       )}
+      {geometryType === 'text' ? (
+        <div>
+          <calcite-block key="symbol" heading="Symbol" open collapsible>
+            <calcite-block-section text="Font Size" open>
+              <calcite-slider
+                min="6"
+                max="30"
+                value={settings.current.fontSize}
+                step="1"
+                label="Size"
+                label-handles=""
+                ticks="0"
+                page-step="5"
+                name="fontSize"
+                snap=""
+              ></calcite-slider>
+            </calcite-block-section>
+
+            <calcite-block-section key="color" text="Font Color" open>
+              <calcite-label>
+                Font Color
+                <calcite-color-picker
+                  dir="ltr"
+                  hide-channels=""
+                  hide-saved=""
+                  scale="m"
+                  value={settings.current.fontColor}
+                  appearance="default"
+                  name="fontColor"
+                  calcite-hydrated=""
+                  id="fontColor"
+                ></calcite-color-picker>
+              </calcite-label>
+            </calcite-block-section>
+            <calcite-block-section key="color" text="Halo Color">
+              <calcite-label>
+                Halo Color
+                <calcite-color-picker
+                  dir="ltr"
+                  hide-channels=""
+                  hide-saved=""
+                  scale="m"
+                  value={settings.current.haloColor}
+                  appearance="default"
+                  name="haloColor"
+                  calcite-hydrated=""
+                  id="haloColor"
+                ></calcite-color-picker>
+              </calcite-label>
+            </calcite-block-section>
+          </calcite-block>
+        </div>
+      ) : (
+        ''
+      )}
     </div>
   );
 };
