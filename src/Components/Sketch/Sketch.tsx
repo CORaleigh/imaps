@@ -48,12 +48,18 @@ export const Sketch = (props: any) => {
   };
   useEffect(() => {
     setupViewModels(props.view);
-    handles.current.push(pointSketchViewModel?.on('create', sketchCreated));
-    handles.current.push(polylineSketchViewModel?.on('create', sketchCreated));
-    handles.current.push(polygonSketchViewModel?.on('create', sketchCreated));
-    handles.current.push(textSketchViewModel?.on('create', sketchCreated));
+    debugger;
     [pointSketchViewModel, polylineSketchViewModel, polygonSketchViewModel, textSketchViewModel].forEach((sketchVM) => {
       handles.current.push(sketchVM?.on('create', sketchCreated));
+      handles.current.push(sketchVM?.on('create', sketchCreated));
+      handles.current.push(
+        sketchVM?.watch('activeTool', (activeTool) => {
+          if (!activeTool) {
+            setGeometryType(null);
+          }
+        }),
+      );
+
       handles.current.push(
         sketchVM?.on('update', (e) => {
           console.log(e.state, graphicsRef.current.length);

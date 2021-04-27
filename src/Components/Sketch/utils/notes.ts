@@ -52,7 +52,7 @@ export const textSymbol = new TextSymbol({
 });
 // use this counter for new map notes title purposes
 
-const sketchLayer = new MapNotesLayer();
+const sketchLayer = new MapNotesLayer({ listMode: 'hide' });
 
 const pointLayer = sketchLayer.pointLayer;
 const polylineLayer = sketchLayer.polylineLayer;
