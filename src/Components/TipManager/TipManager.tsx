@@ -42,7 +42,12 @@ export const TipManager = (props: any) => {
       {tips?.map((tip, i) => {
         return (
           <calcite-tip heading={tip.title} key={tip.title + i}>
-            {tip.text}
+            <p>{tip.text}</p>
+            {tip.video && (
+              <a href={tip.video} target="_blank" rel="noreferrer">
+                Watch video tutorial
+              </a>
+            )}
           </calcite-tip>
         );
       })}

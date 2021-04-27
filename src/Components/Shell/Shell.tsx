@@ -53,7 +53,6 @@ export const Shell = () => {
     if (action && view) {
       const container = document.getElementById(action?.container);
       if (container) {
-        debugger;
         ReactDOM.render(
           <Suspense fallback={''}>
             <PropertySelect
@@ -111,6 +110,7 @@ export const Shell = () => {
       container,
     );
 
+    console.log('setActions');
     setActions([...[], ...actions]);
   };
 
@@ -299,6 +299,7 @@ export const Shell = () => {
       }
     }
   };
+
   useEffect(() => {
     initialized();
     const theme = window.localStorage.getItem('imaps_theme') as string;
@@ -330,11 +331,12 @@ export const Shell = () => {
                   return (
                     <calcite-action
                       key={action.icon}
-                      name={action.container}
                       text={action.title}
+                      name={action.container}
                       icon={action.icon}
                       disabled={!viewCreated ? '' : null}
-                      onClick={(e: any) => {
+                      onClick={async (e: any) => {
+                        console.log('setActions');
                         setActions([...actionClicked(e, action, actions)]);
                         requestAnimationFrame(() => {
                           renderWidget(action);
@@ -348,8 +350,9 @@ export const Shell = () => {
             </calcite-action-bar>
             {actions.map((action: any) => {
               if (action.isTool && action.isActive) {
+                console.log(action);
                 return (
-                  <div className="panel-header" key={`${action.icon}_header`}>
+                  <div className="panel-header" key={`${action.icon}_header_primary`}>
                     <div className="panel-title">{action.title}</div>
                     <div className="header-actions">
                       {showTips()}
@@ -365,6 +368,7 @@ export const Shell = () => {
                             ?.setAttribute('collapsed', '');
                           action.isActive = false;
 
+                          console.log('setActions');
                           setActions([...actions]);
                         }}
                       ></calcite-action>
@@ -374,12 +378,12 @@ export const Shell = () => {
               }
             })}
             {actions.map((action: any) => {
-              if (action.isTool && action.isActive) {
+              if (action.isTool) {
                 return (
                   <div
                     id={action.container}
                     className="action-panel"
-                    key={action.container}
+                    key={`${action.container}_primary`}
                     hidden={!action.isActive}
                   ></div>
                 );
@@ -402,6 +406,7 @@ export const Shell = () => {
                     icon={action.icon}
                     disabled={!viewCreated ? '' : null}
                     onClick={async (e: any) => {
+                      console.log('setActions');
                       setActions([...actionClicked(e, action, actions)]);
                       requestAnimationFrame(() => {
                         renderWidget(action);
@@ -416,7 +421,7 @@ export const Shell = () => {
           {actions.map((action: any) => {
             if ((!action.isTool || width < 1000) && action.isActive) {
               return (
-                <div className="panel-header" key={`${action.icon}_header`}>
+                <div className="panel-header" key={`${action.icon}_header_contextual`}>
                   <div className="panel-title">{action.title}</div>
                   <div className="header-actions">
                     {showTips()}
@@ -432,6 +437,7 @@ export const Shell = () => {
                           ?.setAttribute('collapsed', '');
                         action.isActive = false;
 
+                        console.log('setActions');
                         setActions([...actions]);
                       }}
                     ></calcite-action>
@@ -446,7 +452,7 @@ export const Shell = () => {
                 <div
                   className="action-panel"
                   id={action.container}
-                  key={action.container}
+                  key={`${action.container}_contextual`}
                   hidden={!action.isActive}
                 ></div>
               );
