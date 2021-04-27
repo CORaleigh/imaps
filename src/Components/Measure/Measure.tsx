@@ -36,6 +36,8 @@ export const Measure = (props: any) => {
     measurement.current = new Measurement({
       container: measureRef.current as HTMLDivElement,
       view: props.view,
+      areaUnit: 'imperial',
+      linearUnit: 'imperial',
     });
     measurement.current.viewModel.watch('state', (state) => {
       if (state === 'ready') {
