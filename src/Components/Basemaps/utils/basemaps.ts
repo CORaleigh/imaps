@@ -93,6 +93,9 @@ export const basemapSelected = (value: string, view: __esri.MapView, basemapGall
         }
       });
     }, 1000);
+  } else if (value === 'basemaps') {
+    document.querySelector('.basemaps-base .esri-button-menu')?.removeAttribute('hidden');
+    query.id = 'f6329364e80c438a958ce74aadc3a89f';
   } else {
     document.querySelector('.basemaps-base .esri-button-menu')?.setAttribute('hidden', '');
 

@@ -11,6 +11,7 @@ export const Basemaps = (props: any) => {
     const basemapGallery = new BasemapGallery({
       container: ref.current as HTMLDivElement,
       view: props.view,
+      source: { query: { id: 'f6329364e80c438a958ce74aadc3a89f' } },
     });
 
     createAlert();
@@ -50,6 +51,17 @@ export const Basemaps = (props: any) => {
           calcite-hydrated=""
           key="basemaps"
           selected
+        ></calcite-combobox-item>
+        <calcite-combobox-item
+          icon="layer-basemap"
+          value="esri"
+          text-label="Esri Basemaps"
+          aria-hidden=""
+          dir="ltr"
+          scale="m"
+          tabindex="-1"
+          calcite-hydrated=""
+          key="esri"
         ></calcite-combobox-item>
         <calcite-combobox-item
           icon="image-layer"
