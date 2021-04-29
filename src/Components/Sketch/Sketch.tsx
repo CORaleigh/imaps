@@ -59,11 +59,12 @@ export const Sketch = (props: any) => {
   };
   const stateChanged = (state: string) => {
     if (state === 'ready') {
-      // [pointAction, lineAction, polygonAction, textAction].forEach((action) => {
-      //   if (action.current) {
-      //     action.current.active = false;
-      //   }
-      // });
+      [pointAction, lineAction, polygonAction, textAction].forEach((action) => {
+        if (action.current) {
+          action.current.active = false;
+          setGeometryType(null);
+        }
+      });
     }
   };
   const activateViewModel = (
