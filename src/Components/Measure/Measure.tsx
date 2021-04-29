@@ -3,6 +3,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Measurement from '@arcgis/core/widgets/Measurement';
 import CoordinateConversion from '@arcgis/core/widgets/CoordinateConversion';
+import Format from '@arcgis/core/widgets/CoordinateConversion/support/Format';
+import Conversion from '@arcgis/core/widgets/CoordinateConversion/support/Conversion';
+
+import Point from '@arcgis/core/geometry/Point';
+import SpatialReference from '@arcgis/core/geometry/SpatialReference';
+
 import './Measure.scss';
 export const Measure = (props: any) => {
   const measureRef = useRef<HTMLDivElement>(null);
@@ -46,10 +52,52 @@ export const Measure = (props: any) => {
         });
       }
     });
-    new CoordinateConversion({
+    const conversion = new CoordinateConversion({
       container: coordRef.current as HTMLDivElement,
       view: props.view,
     });
+    const numberSearchPattern = /-?\d+[\.]?\d*/;
+
+    const stateplane = new Format({
+      name: 'Stateplane Feet',
+      conversionInfo: {
+        spatialReference: new SpatialReference({ wkid: 2264 }),
+        reverseConvert: function (string: string) {
+          const parts = string.split(',');
+          return new Point({
+            x: parseFloat(parts[0]),
+            y: parseFloat(parts[1]),
+            spatialReference: { wkid: 2264 },
+          });
+        },
+      } as any,
+      coordinateSegments: [
+        {
+          alias: 'X',
+          description: 'easting',
+          searchPattern: numberSearchPattern,
+        },
+        {
+          alias: 'Y',
+          description: 'northing',
+          searchPattern: numberSearchPattern,
+        },
+      ],
+      defaultPattern: 'X, Y',
+    });
+
+    // Add our new format to the widget's dropdown
+    conversion.formats.add(stateplane);
+
+    // Add the two custom formats to the top of the widget's display
+    conversion.conversions.splice(
+      0,
+      0,
+      new Conversion({
+        format: stateplane,
+      }),
+    );
+
     return () => {
       measurement && measurement.current?.destroy();
     };
