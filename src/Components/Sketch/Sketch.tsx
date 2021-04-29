@@ -15,6 +15,7 @@ import {
   textSketchViewModel,
   textSymbol,
 } from './utils/notes';
+import SketchViewModel from '@arcgis/core/widgets/Sketch/SketchViewModel';
 export const Sketch = (props: any) => {
   const inputRef = useRef<HTMLCalciteInputElement>(null);
   const pointAction = useRef<HTMLCalciteActionElement>(null);
@@ -29,22 +30,89 @@ export const Sketch = (props: any) => {
 
   const sketchCreated = (e: any) => {
     if (e.state === 'complete') {
-      setGeometryType(null);
-      [pointAction, lineAction, polygonAction, textAction].forEach((action) => {
-        if (action.current) {
-          action.current.active = false;
-        }
+      const action = [pointAction, lineAction, polygonAction, textAction].find((action) => {
+        return action.current?.active;
       });
+      if (action?.current === pointAction.current) {
+        toolSelected('point');
+      }
+      if (action?.current === lineAction.current) {
+        toolSelected('polyline');
+      }
+      if (action?.current === polygonAction.current) {
+        toolSelected('polygon');
+      }
+      if (action?.current === textAction.current) {
+        toolSelected('text');
+      }
+      //setGeometryType(null);
+      // [pointAction, lineAction, polygonAction, textAction].forEach((action) => {
+      //   if (action.current) {
+      //     action.current.active = false;
+      //   }
+      // });
+      // const action = [pointAction, lineAction, polygonAction, textAction].find((action) => {
+      //   return action.current?.active;
+      // });
+      // if (action === pointAction.current)
     }
   };
   const stateChanged = (state: string) => {
     if (state === 'ready') {
-      [pointAction, lineAction, polygonAction, textAction].forEach((action) => {
-        if (action.current) {
-          action.current.active = false;
-        }
-      });
+      // [pointAction, lineAction, polygonAction, textAction].forEach((action) => {
+      //   if (action.current) {
+      //     action.current.active = false;
+      //   }
+      // });
     }
+  };
+  const activateViewModel = (
+    geometryType: 'circle' | 'polygon' | 'polyline' | 'point' | 'multipoint' | 'rectangle',
+    vm: SketchViewModel,
+  ) => {
+    vm.create(geometryType);
+    props.toolActivated(vm);
+    handles.current.push(vm?.watch('state', stateChanged));
+  };
+  const toolSelected = (geometryType: string) => {
+    setGeometryType(geometryType);
+    let deactivateActions: React.RefObject<HTMLCalciteActionElement>[] = [];
+    if (geometryType === 'point') {
+      activateViewModel(geometryType, pointSketchViewModel);
+      deactivateActions = [polygonAction, lineAction, textAction];
+      if (pointAction.current) {
+        pointAction.current.active = true;
+      }
+    }
+    if (geometryType === 'polyline') {
+      activateViewModel(geometryType, polylineSketchViewModel);
+
+      deactivateActions = [pointAction, polygonAction, textAction];
+      if (lineAction.current) {
+        lineAction.current.active = true;
+      }
+    }
+    if (geometryType === 'polygon') {
+      activateViewModel(geometryType, polygonSketchViewModel);
+
+      deactivateActions = [pointAction, lineAction, textAction];
+      if (polygonAction.current) {
+        polygonAction.current.active = true;
+      }
+    }
+    if (geometryType === 'text') {
+      activateViewModel('point', textSketchViewModel);
+
+      if (textAction.current) {
+        textAction.current.active = true;
+      }
+    }
+
+    deactivateActions.forEach((action) => {
+      if (action.current) {
+        action.current.active = false;
+      }
+    });
   };
   useEffect(() => {
     setupViewModels(props.view);
@@ -55,7 +123,7 @@ export const Sketch = (props: any) => {
       handles.current.push(
         sketchVM?.watch('activeTool', (activeTool) => {
           if (!activeTool) {
-            setGeometryType(null);
+            //setGeometryType(null);
           }
         }),
       );
@@ -91,6 +159,9 @@ export const Sketch = (props: any) => {
     <div className="panel">
       <calcite-tooltip-manager>
         <calcite-tooltip label="Tooltip label" reference-element="pointAction" placement="bottom">
+          Select graphics
+        </calcite-tooltip>
+        <calcite-tooltip label="Tooltip label" reference-element="pointAction" placement="bottom">
           Sketch a point
         </calcite-tooltip>
         <calcite-tooltip label="Tooltip label" reference-element="lineAction" placement="bottom">
@@ -107,23 +178,30 @@ export const Sketch = (props: any) => {
         </calcite-tooltip>
         <div className="sketchTools">
           <calcite-action
+            text="Select"
+            icon="cursor"
+            id="selectAction"
+            onClick={() => {
+              setGeometryType(null);
+              [pointAction, lineAction, polygonAction, textAction].forEach((action) => {
+                setGeometryType(null);
+                if (action.current) {
+                  action.current.active = false;
+                }
+              });
+              pointSketchViewModel?.cancel();
+              polylineSketchViewModel?.cancel();
+              polygonSketchViewModel?.cancel();
+              textSketchViewModel?.cancel();
+            }}
+          ></calcite-action>
+          <calcite-action
             ref={pointAction}
             text="Point"
             icon="pins"
             id="pointAction"
             onClick={() => {
-              setGeometryType('point');
-              if (pointAction.current) {
-                pointAction.current.active = true;
-              }
-              [lineAction, polygonAction, textAction].forEach((action) => {
-                if (action.current) {
-                  action.current.active = false;
-                }
-              });
-              pointSketchViewModel?.create('point');
-              props.toolActivated(pointSketchViewModel);
-              handles.current.push(pointSketchViewModel?.watch('state', stateChanged));
+              toolSelected('point');
             }}
           ></calcite-action>
           <calcite-action
@@ -132,19 +210,7 @@ export const Sketch = (props: any) => {
             icon="line"
             id="lineAction"
             onClick={() => {
-              setGeometryType('polyline');
-
-              if (lineAction.current) {
-                lineAction.current.active = true;
-              }
-              [pointAction, polygonAction, textAction].forEach((action) => {
-                if (action.current) {
-                  action.current.active = false;
-                }
-              });
-              polylineSketchViewModel?.create('polyline');
-              props.toolActivated(polylineSketchViewModel);
-              handles.current.push(polylineSketchViewModel?.watch('state', stateChanged));
+              toolSelected('polyline');
             }}
           ></calcite-action>
           <calcite-action
@@ -153,18 +219,7 @@ export const Sketch = (props: any) => {
             icon="freehand-area"
             id="polygonAction"
             onClick={() => {
-              setGeometryType('polygon');
-              if (polygonAction.current) {
-                polygonAction.current.active = true;
-              }
-              [pointAction, lineAction, textAction].forEach((action) => {
-                if (action.current) {
-                  action.current.active = false;
-                }
-              });
-              polygonSketchViewModel?.create('polygon');
-              props.toolActivated(polygonSketchViewModel);
-              handles.current.push(polygonSketchViewModel?.watch('state', stateChanged));
+              toolSelected('polygon');
             }}
           ></calcite-action>
           <calcite-action
@@ -173,20 +228,7 @@ export const Sketch = (props: any) => {
             icon="speech-bubble"
             id="textAction"
             onClick={() => {
-              setGeometryType('text');
-
-              if (textAction.current) {
-                textAction.current.active = true;
-              }
-              [pointAction, lineAction, polygonAction].forEach((action) => {
-                if (action.current) {
-                  action.current.active = false;
-                }
-              });
-              textSketchViewModel?.create('point');
-              props.toolActivated(textSketchViewModel);
-              handles.current.push(textSketchViewModel?.watch('state', stateChanged));
-              textClicked();
+              toolSelected('text');
             }}
           ></calcite-action>
           <calcite-action

@@ -9,13 +9,13 @@ import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 import SimpleLineSymbol from '@arcgis/core/symbols/SimpleLineSymbol';
 
 import Color from '@arcgis/core/Color';
-export let pointSketchViewModel: SketchViewModel | null = null;
+export let pointSketchViewModel: SketchViewModel;
 
-export let polylineSketchViewModel: SketchViewModel | null = null;
+export let polylineSketchViewModel: SketchViewModel;
 
-export let polygonSketchViewModel: SketchViewModel | null = null;
+export let polygonSketchViewModel: SketchViewModel;
 
-export let textSketchViewModel: SketchViewModel | null = null;
+export let textSketchViewModel: SketchViewModel;
 let count = 0;
 const pointSymbol = new SimpleMarkerSymbol({
   size: 10,
