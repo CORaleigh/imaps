@@ -11,7 +11,6 @@ import {
   polylineSketchViewModel,
   settingsChanged,
   setupViewModels,
-  textClicked,
   textSketchViewModel,
   textSymbol,
 } from './utils/notes';
