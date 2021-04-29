@@ -123,3 +123,12 @@ export const links = [
     ],
   },
 ];
+
+export const basemaps = {
+  default: {
+    id: 'f6329364e80c438a958ce74aadc3a89f',
+  },
+  imagery: {
+    id: '492386759d264d49948bf7f83957ddb9',
+  },
+};

@@ -47,7 +47,13 @@ export const basemapChanged = (activeBasemap: __esri.Basemap, view: __esri.MapVi
   propertyLayer.renderer = renderer;
   propertyLayer.refresh();
 };
-export const basemapSelected = (value: string, view: __esri.MapView, basemapGallery: __esri.BasemapGallery): void => {
+export const basemapSelected = (
+  value: string,
+  view: __esri.MapView,
+  basemapGallery: __esri.BasemapGallery,
+  defaultId: string,
+  imageryId: string,
+): void => {
   const query: any = {};
   if (!boundary) {
     getBoundary(view).then((result) => {
@@ -67,7 +73,7 @@ export const basemapSelected = (value: string, view: __esri.MapView, basemapGall
   //selected = value;
   if (value === 'imagery') {
     document.querySelector('.basemaps-base .esri-button-menu')?.removeAttribute('hidden');
-    query.id = '492386759d264d49948bf7f83957ddb9';
+    query.id = imageryId;
     (basemapGallery.source as __esri.PortalBasemapsSource).filterFunction = filterBasemaps;
     (basemapGallery.source as __esri.PortalBasemapsSource).updateBasemapsCallback = (items: __esri.Basemap[]) => {
       return items.reverse();
@@ -95,7 +101,7 @@ export const basemapSelected = (value: string, view: __esri.MapView, basemapGall
     }, 1000);
   } else if (value === 'basemaps') {
     document.querySelector('.basemaps-base .esri-button-menu')?.removeAttribute('hidden');
-    query.id = 'f6329364e80c438a958ce74aadc3a89f';
+    query.id = defaultId;
   } else {
     document.querySelector('.basemaps-base .esri-button-menu')?.setAttribute('hidden', '');
 

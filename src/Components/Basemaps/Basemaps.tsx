@@ -19,7 +19,7 @@ export const Basemaps = (props: any) => {
       const tab = (event as any).detail.value;
       //setSelectedTab(tab);
       selectedTab = tab;
-      basemapSelected(tab, props.view, basemapGallery);
+      basemapSelected(tab, props.view, basemapGallery, props.default, props.imagery);
     });
     basemapGallery.watch('activeBasemap', (activeBasemap: __esri.Basemap) => {
       basemapChanged(activeBasemap, props.view, selectedTab);

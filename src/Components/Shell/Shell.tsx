@@ -24,7 +24,7 @@ const Print = lazy(() => import('../Print/Print'));
 import './Shell.scss';
 import { actionClicked, deactivate, initialized, updateTheme, windowResize } from './utils/shell';
 import ThemeContext from '../ThemeContext';
-import { links } from '../../config/config';
+import { basemaps, links } from '../../config/config';
 import ActionContext from '../ActionContext';
 
 export const Shell = () => {
@@ -238,7 +238,7 @@ export const Shell = () => {
         if (action.title === 'Basemaps') {
           ReactDOM.render(
             <Suspense fallback={''}>
-              <Basemaps view={view} />
+              <Basemaps view={view} default={basemaps.default.id} imagery={basemaps.imagery.id} />
             </Suspense>,
             container,
           );
