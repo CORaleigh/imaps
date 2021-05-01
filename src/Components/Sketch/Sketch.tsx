@@ -16,6 +16,7 @@ import {
 } from './utils/notes';
 import SketchViewModel from '@arcgis/core/widgets/Sketch/SketchViewModel';
 export const Sketch = (props: any) => {
+  const ref = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLCalciteInputElement>(null);
   const pointAction = useRef<HTMLCalciteActionElement>(null);
   const lineAction = useRef<HTMLCalciteActionElement>(null);
@@ -57,7 +58,8 @@ export const Sketch = (props: any) => {
     }
   };
   const stateChanged = (state: string) => {
-    if (state === 'ready') {
+    debugger;
+    if (state === 'ready' && ref.current?.parentElement?.hidden) {
       [pointAction, lineAction, polygonAction, textAction].forEach((action) => {
         if (action.current) {
           action.current.active = false;
@@ -116,7 +118,7 @@ export const Sketch = (props: any) => {
   };
   useEffect(() => {
     setupViewModels(props.view);
-    debugger;
+
     [pointSketchViewModel, polylineSketchViewModel, polygonSketchViewModel, textSketchViewModel].forEach((sketchVM) => {
       handles.current.push(sketchVM?.on('create', sketchCreated));
       handles.current.push(sketchVM?.on('create', sketchCreated));
@@ -156,7 +158,7 @@ export const Sketch = (props: any) => {
   }, []);
 
   return (
-    <div className="panel">
+    <div className="panel" ref={ref}>
       <calcite-tooltip-manager>
         <calcite-tooltip label="Tooltip label" reference-element="pointAction" placement="bottom">
           Select graphics

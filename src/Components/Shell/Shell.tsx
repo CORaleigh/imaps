@@ -329,17 +329,12 @@ export const Shell = () => {
               {actions.map((action: any) => {
                 if (action.isTool) {
                   return (
-                    <div>
-                      <calcite-tooltip
-                        key={`${action.container}_tooltip`}
-                        label={action.title}
-                        reference-element={`${action.container}_action`}
-                      >
+                    <div key={`${action.container}_action_primary`}>
+                      <calcite-tooltip label={action.title} reference-element={`${action.container}_action`}>
                         {action.title}
                       </calcite-tooltip>
                       <calcite-tooltip-manager>
                         <calcite-action
-                          key={action.icon}
                           text={action.title}
                           name={action.container}
                           icon={action.icon}
@@ -411,17 +406,12 @@ export const Shell = () => {
             {actions.map((action: any) => {
               if (!action.isTool || width < 1000) {
                 return (
-                  <div>
-                    <calcite-tooltip
-                      key={`${action.container}_tooltip`}
-                      label={action.title}
-                      reference-element={`${action.container}_action`}
-                    >
+                  <div key={`${action.container}_action_contextual`}>
+                    <calcite-tooltip label={action.title} reference-element={`${action.container}_action`}>
                       {action.title}
                     </calcite-tooltip>
                     <calcite-tooltip-manager>
                       <calcite-action
-                        key={action.icon}
                         text={action.title}
                         name={action.container}
                         icon={action.icon}
