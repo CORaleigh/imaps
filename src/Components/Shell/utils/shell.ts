@@ -45,7 +45,8 @@ export const actionClicked = (e: any, action: any, actions: any[]): any[] => {
     deactivateActions(actions, action.isTool);
     action.isActive = true;
   }
-  const shellPanel = e.target?.parentElement?.parentElement;
+  const shellPanel = e.target.closest('calcite-shell-panel');
+
   if (!action.isActive) {
     shellPanel?.setAttribute('collapsed', '');
   } else {

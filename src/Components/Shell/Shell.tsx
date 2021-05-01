@@ -329,21 +329,33 @@ export const Shell = () => {
               {actions.map((action: any) => {
                 if (action.isTool) {
                   return (
-                    <calcite-action
-                      key={action.icon}
-                      text={action.title}
-                      name={action.container}
-                      icon={action.icon}
-                      disabled={!viewCreated ? '' : null}
-                      onClick={async (e: any) => {
-                        console.log('setActions');
-                        setActions([...actionClicked(e, action, actions)]);
-                        requestAnimationFrame(() => {
-                          renderWidget(action);
-                        });
-                      }}
-                      active={action.isActive === true ? '' : null}
-                    ></calcite-action>
+                    <div>
+                      <calcite-tooltip
+                        key={`${action.container}_tooltip`}
+                        label={action.title}
+                        reference-element={`${action.container}_action`}
+                      >
+                        {action.title}
+                      </calcite-tooltip>
+                      <calcite-tooltip-manager>
+                        <calcite-action
+                          key={action.icon}
+                          text={action.title}
+                          name={action.container}
+                          icon={action.icon}
+                          id={`${action.container}_action`}
+                          disabled={!viewCreated ? '' : null}
+                          onClick={async (e: any) => {
+                            console.log('setActions');
+                            setActions([...actionClicked(e, action, actions)]);
+                            requestAnimationFrame(() => {
+                              renderWidget(action);
+                            });
+                          }}
+                          active={action.isActive === true ? '' : null}
+                        ></calcite-action>
+                      </calcite-tooltip-manager>
+                    </div>
                   );
                 }
               })}
@@ -399,25 +411,38 @@ export const Shell = () => {
             {actions.map((action: any) => {
               if (!action.isTool || width < 1000) {
                 return (
-                  <calcite-action
-                    key={action.icon}
-                    text={action.title}
-                    name={action.container}
-                    icon={action.icon}
-                    disabled={!viewCreated ? '' : null}
-                    onClick={async (e: any) => {
-                      console.log('setActions');
-                      setActions([...actionClicked(e, action, actions)]);
-                      requestAnimationFrame(() => {
-                        renderWidget(action);
-                      });
-                    }}
-                    active={action.isActive === true ? '' : null}
-                  ></calcite-action>
+                  <div>
+                    <calcite-tooltip
+                      key={`${action.container}_tooltip`}
+                      label={action.title}
+                      reference-element={`${action.container}_action`}
+                    >
+                      {action.title}
+                    </calcite-tooltip>
+                    <calcite-tooltip-manager>
+                      <calcite-action
+                        key={action.icon}
+                        text={action.title}
+                        name={action.container}
+                        icon={action.icon}
+                        id={`${action.container}_action`}
+                        disabled={!viewCreated ? '' : null}
+                        onClick={async (e: any) => {
+                          console.log('setActions');
+                          setActions([...actionClicked(e, action, actions)]);
+                          requestAnimationFrame(() => {
+                            renderWidget(action);
+                          });
+                        }}
+                        active={action.isActive === true ? '' : null}
+                      ></calcite-action>
+                    </calcite-tooltip-manager>
+                  </div>
                 );
               }
             })}
           </calcite-action-bar>
+
           {actions.map((action: any) => {
             if ((!action.isTool || width < 1000) && action.isActive) {
               return (

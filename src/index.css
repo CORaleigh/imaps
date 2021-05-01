@@ -41,3 +41,6 @@ calcite-tab, calcite-tab-nav {
   right: 50px !important;
 }
 
+calcite-tooltip {
+  z-index: 10000;
+}
