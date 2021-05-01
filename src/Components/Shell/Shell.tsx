@@ -325,7 +325,7 @@ export const Shell = () => {
       <calcite-shell theme={theme} className="shell">
         {width >= 1000 ? (
           <calcite-shell-panel slot="primary-panel" position="start" width-scale="l" collapsed>
-            <calcite-action-bar slot="action-bar">
+            <calcite-action-bar expand-disabled slot="action-bar">
               {actions.map((action: any) => {
                 if (action.isTool) {
                   return (
@@ -395,7 +395,7 @@ export const Shell = () => {
         )}
 
         <calcite-shell-panel slot="contextual-panel" position="end" width-scale="l">
-          <calcite-action-bar slot="action-bar">
+          <calcite-action-bar expand-disabled slot="action-bar">
             {actions.map((action: any) => {
               if (!action.isTool || width < 1000) {
                 return (

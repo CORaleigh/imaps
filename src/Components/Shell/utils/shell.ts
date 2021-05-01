@@ -43,10 +43,9 @@ export const actionClicked = (e: any, action: any, actions: any[]): any[] => {
     action.isActive = false;
   } else {
     deactivateActions(actions, action.isTool);
-
     action.isActive = true;
   }
-  const shellPanel = (e.target as HTMLElement)?.parentElement?.parentElement;
+  const shellPanel = e.target?.parentElement?.parentElement;
   if (!action.isActive) {
     shellPanel?.setAttribute('collapsed', '');
   } else {
