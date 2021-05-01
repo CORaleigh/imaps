@@ -137,10 +137,18 @@ export const Shell = () => {
     setTipsTitle('');
   };
   //render Tips action
-  const showTips = () => {
-    const action = actions.find((action: any) => {
-      return action.isActive;
-    });
+  const showTips = (isTool: boolean) => {
+    let action: any;
+    if (isTool) {
+      action = actions.find((action: any) => {
+        return action.isActive && action.isTool;
+      });
+    } else {
+      action = actions.find((action: any) => {
+        return action.isActive;
+      });
+    }
+
     return action?.tips?.length ? (
       <calcite-action
         text="Action"
@@ -366,7 +374,7 @@ export const Shell = () => {
                   <div className="panel-header" key={`${action.icon}_header_primary`}>
                     <div className="panel-title">{action.title}</div>
                     <div className="header-actions">
-                      {showTips()}
+                      {showTips(true)}
                       <calcite-action
                         aria-label="Close"
                         appearance="solid"
@@ -447,7 +455,7 @@ export const Shell = () => {
                 <div className="panel-header" key={`${action.icon}_header_contextual`}>
                   <div className="panel-title">{action.title}</div>
                   <div className="header-actions">
-                    {showTips()}
+                    {showTips(false)}
                     <calcite-action
                       aria-label="Close"
                       appearance="solid"
