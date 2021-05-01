@@ -67,7 +67,7 @@ export const Basemaps = (props: any) => {
           icon="image-layer"
           value="imagery"
           key="imagery"
-          text-label="Imagery"
+          text-label="Historic Imagery"
           aria-hidden=""
           dir="ltr"
           scale="m"

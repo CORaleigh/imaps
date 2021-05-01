@@ -39,8 +39,13 @@ const deactivateActions = (actions: any[], isTool: boolean): void => {
   }
 };
 export const actionClicked = (e: any, action: any, actions: any[]): any[] => {
-  deactivateActions(actions, action.isTool);
-  action.isActive = true;
+  if (action.isActive) {
+    action.isActive = false;
+  } else {
+    deactivateActions(actions, action.isTool);
+
+    action.isActive = true;
+  }
   const shellPanel = (e.target as HTMLElement)?.parentElement?.parentElement;
   if (!action.isActive) {
     shellPanel?.setAttribute('collapsed', '');
