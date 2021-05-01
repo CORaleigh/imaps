@@ -191,7 +191,7 @@ export const Sketch = (props: any) => {
             text="Select"
             icon="cursor"
             id="selectAction"
-            onClick={(event: any) => {
+            onClick={() => {
               setGeometryType(null);
               [pointAction, lineAction, polygonAction, textAction].forEach((action) => {
                 setGeometryType(null);
