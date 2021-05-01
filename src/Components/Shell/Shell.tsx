@@ -330,7 +330,11 @@ export const Shell = () => {
                 if (action.isTool) {
                   return (
                     <div key={`${action.container}_action_primary`}>
-                      <calcite-tooltip label={action.title} reference-element={`${action.container}_action`}>
+                      <calcite-tooltip
+                        placement="trailing"
+                        label={action.title}
+                        reference-element={`${action.container}_action`}
+                      >
                         {action.title}
                       </calcite-tooltip>
                       <calcite-tooltip-manager>
@@ -407,7 +411,11 @@ export const Shell = () => {
               if (!action.isTool || width < 1000) {
                 return (
                   <div key={`${action.container}_action_contextual`}>
-                    <calcite-tooltip label={action.title} reference-element={`${action.container}_action`}>
+                    <calcite-tooltip
+                      placement="leading"
+                      label={action.title}
+                      reference-element={`${action.container}_action`}
+                    >
                       {action.title}
                     </calcite-tooltip>
                     <calcite-tooltip-manager>

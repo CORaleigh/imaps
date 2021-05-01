@@ -81,6 +81,14 @@ export const PropertySelect = (props: any) => {
       });
     }
   };
+
+  const disableTool = (vm: SketchViewModel, action: HTMLCalciteActionElement) => {
+    vm.cancel();
+    setGeometryType(undefined);
+    action.active = false;
+    action.blur();
+  };
+
   useEffect(() => {
     setPointSketchViewModel(createSketchViewModels(new GraphicsLayer({ listMode: 'hide' }), props.view));
     setPolylineSketchViewModel(createSketchViewModels(new GraphicsLayer({ listMode: 'hide' }), props.view));
@@ -103,41 +111,48 @@ export const PropertySelect = (props: any) => {
           text="Point"
           icon="pin"
           id="pointAction"
-          onClick={() => {
-            changeSketchViewModel(
-              'point',
-              pointSketchViewModel as SketchViewModel,
-              [polygonSketchViewModel, polylineSketchViewModel] as SketchViewModel[],
-              pointAction.current as HTMLCalciteActionElement,
-              [
-                lineAction.current,
-                polygonAction.current,
-                circleAction.current,
-                rectangleAction.current,
-                multipointAction.current,
-              ] as HTMLCalciteActionElement[],
-            );
+          onClick={(event: any) => {
+            if (event.target.active) {
+              disableTool(pointSketchViewModel as SketchViewModel, event.target);
+            } else {
+              changeSketchViewModel(
+                'point',
+                pointSketchViewModel as SketchViewModel,
+                [polygonSketchViewModel, polylineSketchViewModel] as SketchViewModel[],
+                pointAction.current as HTMLCalciteActionElement,
+                [
+                  lineAction.current,
+                  polygonAction.current,
+                  circleAction.current,
+                  rectangleAction.current,
+                  multipointAction.current,
+                ] as HTMLCalciteActionElement[],
+              );
+            }
           }}
         ></calcite-action>
         <calcite-action
           ref={lineAction}
           text="Line"
           icon="line"
-          id="lineAction"
-          onClick={() => {
-            changeSketchViewModel(
-              'polyline',
-              polylineSketchViewModel as SketchViewModel,
-              [polygonSketchViewModel, pointSketchViewModel] as SketchViewModel[],
-              lineAction.current as HTMLCalciteActionElement,
-              [
-                pointAction.current,
-                polygonAction.current,
-                circleAction.current,
-                rectangleAction.current,
-                multipointAction.current,
-              ] as HTMLCalciteActionElement[],
-            );
+          onClick={(event: any) => {
+            if (event.target.active) {
+              disableTool(polylineSketchViewModel as SketchViewModel, event.target);
+            } else {
+              changeSketchViewModel(
+                'polyline',
+                polylineSketchViewModel as SketchViewModel,
+                [polygonSketchViewModel, pointSketchViewModel] as SketchViewModel[],
+                lineAction.current as HTMLCalciteActionElement,
+                [
+                  pointAction.current,
+                  polygonAction.current,
+                  circleAction.current,
+                  rectangleAction.current,
+                  multipointAction.current,
+                ] as HTMLCalciteActionElement[],
+              );
+            }
           }}
         ></calcite-action>
         <calcite-action
@@ -145,20 +160,24 @@ export const PropertySelect = (props: any) => {
           text="Polygon"
           icon="polygon-area"
           id="polygonAction"
-          onClick={() => {
-            changeSketchViewModel(
-              'polygon',
-              polygonSketchViewModel as SketchViewModel,
-              [polylineSketchViewModel, pointSketchViewModel] as SketchViewModel[],
-              polygonAction.current as HTMLCalciteActionElement,
-              [
-                pointAction.current,
-                lineAction.current,
-                circleAction.current,
-                rectangleAction.current,
-                multipointAction.current,
-              ] as HTMLCalciteActionElement[],
-            );
+          onClick={(event: any) => {
+            if (event.target.active) {
+              disableTool(polygonSketchViewModel as SketchViewModel, event.target);
+            } else {
+              changeSketchViewModel(
+                'polygon',
+                polygonSketchViewModel as SketchViewModel,
+                [polylineSketchViewModel, pointSketchViewModel] as SketchViewModel[],
+                polygonAction.current as HTMLCalciteActionElement,
+                [
+                  pointAction.current,
+                  lineAction.current,
+                  circleAction.current,
+                  rectangleAction.current,
+                  multipointAction.current,
+                ] as HTMLCalciteActionElement[],
+              );
+            }
           }}
         ></calcite-action>
         <calcite-action
@@ -166,20 +185,24 @@ export const PropertySelect = (props: any) => {
           text="Text"
           icon="rectangle-area"
           id="rectangleAction"
-          onClick={() => {
-            changeSketchViewModel(
-              'rectangle',
-              polygonSketchViewModel as SketchViewModel,
-              [polylineSketchViewModel, pointSketchViewModel] as SketchViewModel[],
-              rectangleAction.current as HTMLCalciteActionElement,
-              [
-                pointAction.current,
-                lineAction.current,
-                circleAction.current,
-                polygonAction.current,
-                multipointAction.current,
-              ] as HTMLCalciteActionElement[],
-            );
+          onClick={(event: any) => {
+            if (event.target.active) {
+              disableTool(polygonSketchViewModel as SketchViewModel, event.target);
+            } else {
+              changeSketchViewModel(
+                'rectangle',
+                polygonSketchViewModel as SketchViewModel,
+                [polylineSketchViewModel, pointSketchViewModel] as SketchViewModel[],
+                rectangleAction.current as HTMLCalciteActionElement,
+                [
+                  pointAction.current,
+                  lineAction.current,
+                  circleAction.current,
+                  polygonAction.current,
+                  multipointAction.current,
+                ] as HTMLCalciteActionElement[],
+              );
+            }
           }}
         ></calcite-action>
         <calcite-action
@@ -187,20 +210,24 @@ export const PropertySelect = (props: any) => {
           text="Clear"
           icon="circle-area"
           id="circleAction"
-          onClick={() => {
-            changeSketchViewModel(
-              'circle',
-              polygonSketchViewModel as SketchViewModel,
-              [polylineSketchViewModel, pointSketchViewModel] as SketchViewModel[],
-              circleAction.current as HTMLCalciteActionElement,
-              [
-                pointAction.current,
-                lineAction.current,
-                rectangleAction.current,
-                polygonAction.current,
-                multipointAction.current,
-              ] as HTMLCalciteActionElement[],
-            );
+          onClick={(event: any) => {
+            if (event.target.active) {
+              disableTool(polygonSketchViewModel as SketchViewModel, event.target);
+            } else {
+              changeSketchViewModel(
+                'circle',
+                polygonSketchViewModel as SketchViewModel,
+                [polylineSketchViewModel, pointSketchViewModel] as SketchViewModel[],
+                circleAction.current as HTMLCalciteActionElement,
+                [
+                  pointAction.current,
+                  lineAction.current,
+                  rectangleAction.current,
+                  polygonAction.current,
+                  multipointAction.current,
+                ] as HTMLCalciteActionElement[],
+              );
+            }
           }}
         ></calcite-action>
         <calcite-action
@@ -208,20 +235,24 @@ export const PropertySelect = (props: any) => {
           text="Mulit-point"
           icon="pins"
           id="multipointAction"
-          onClick={() => {
-            changeSketchViewModel(
-              'multipoint',
-              pointSketchViewModel as SketchViewModel,
-              [polygonSketchViewModel, polylineSketchViewModel] as SketchViewModel[],
-              pointAction.current as HTMLCalciteActionElement,
-              [
-                lineAction.current,
-                polygonAction.current,
-                circleAction.current,
-                rectangleAction.current,
-                pointAction.current,
-              ] as HTMLCalciteActionElement[],
-            );
+          onClick={(event: any) => {
+            if (event.target.active) {
+              disableTool(pointSketchViewModel as SketchViewModel, event.target);
+            } else {
+              changeSketchViewModel(
+                'multipoint',
+                pointSketchViewModel as SketchViewModel,
+                [polygonSketchViewModel, polylineSketchViewModel] as SketchViewModel[],
+                pointAction.current as HTMLCalciteActionElement,
+                [
+                  lineAction.current,
+                  polygonAction.current,
+                  circleAction.current,
+                  rectangleAction.current,
+                  pointAction.current,
+                ] as HTMLCalciteActionElement[],
+              );
+            }
           }}
         ></calcite-action>
       </div>

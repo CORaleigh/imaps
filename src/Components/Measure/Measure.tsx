@@ -17,26 +17,49 @@ export const Measure = (props: any) => {
   const [widget, setWidget] = useState<string>();
   const actionClicked = (e: any) => {
     document.querySelectorAll('.measureTools calcite-action').forEach((element) => {
-      (element as HTMLCalciteActionElement).active = element === e.target;
-      if (measurement.current) {
-        if (e.target.getAttribute('value') === 'distance') {
+      if (element != e.target) {
+        (element as HTMLCalciteActionElement).active = false;
+      }
+    });
+    if (measurement.current) {
+      if (e.target.getAttribute('value') === 'distance') {
+        if (e.target.active) {
+          e.target.active = false;
+          setWidget(undefined);
+          measurement.current.clear();
+        } else {
+          e.target.active = true;
           measurement.current.activeTool = 'distance';
           setWidget('measurement');
           props.measurementActivated(measurement.current);
         }
-        if (e.target.getAttribute('value') === 'area') {
+      }
+      if (e.target.getAttribute('value') === 'area') {
+        if (e.target.active) {
+          e.target.active = false;
+          setWidget(undefined);
+          measurement.current.clear();
+        } else {
+          e.target.active = true;
           measurement.current.activeTool = 'area';
           setWidget('measurement');
           props.measurementActivated(measurement.current);
         }
-        if (e.target.getAttribute('value') === 'coordinates') {
+      }
+      if (e.target.getAttribute('value') === 'coordinates') {
+        if (e.target.active) {
+          e.target.active = false;
+          setWidget(undefined);
+        } else {
+          e.target.active = true;
           setWidget('coordinates');
         }
-        if (e.target.getAttribute('value') === 'clear') {
-          measurement.current.clear();
-        }
       }
-    });
+      if (e.target.getAttribute('value') === 'clear') {
+        measurement.current.clear();
+        setWidget(undefined);
+      }
+    }
   };
   useEffect(() => {
     measurement.current = new Measurement({

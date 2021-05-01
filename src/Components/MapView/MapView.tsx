@@ -62,6 +62,7 @@ export const MapView = (props: any) => {
         viewRef.current?.on('hold', (event: __esri.MapViewHoldEvent) => {
           props.geometryChanged(event.mapPoint);
         });
+
         checkLocalStorage(mapView);
       });
     }

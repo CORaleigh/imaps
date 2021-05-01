@@ -116,6 +116,14 @@ export const Sketch = (props: any) => {
       }
     });
   };
+
+  const disableTool = (vm: SketchViewModel, action: HTMLCalciteActionElement) => {
+    vm.cancel();
+    setGeometryType(null);
+    action.active = false;
+    action.blur();
+  };
+
   useEffect(() => {
     setupViewModels(props.view);
 
@@ -183,7 +191,7 @@ export const Sketch = (props: any) => {
             text="Select"
             icon="cursor"
             id="selectAction"
-            onClick={() => {
+            onClick={(event: any) => {
               setGeometryType(null);
               [pointAction, lineAction, polygonAction, textAction].forEach((action) => {
                 setGeometryType(null);
@@ -202,8 +210,12 @@ export const Sketch = (props: any) => {
             text="Point"
             icon="pins"
             id="pointAction"
-            onClick={() => {
-              toolSelected('point');
+            onClick={(event: any) => {
+              if (event.target.active) {
+                disableTool(pointSketchViewModel, event.target);
+              } else {
+                toolSelected('point');
+              }
             }}
           ></calcite-action>
           <calcite-action
@@ -211,8 +223,12 @@ export const Sketch = (props: any) => {
             text="Line"
             icon="line"
             id="lineAction"
-            onClick={() => {
-              toolSelected('polyline');
+            onClick={(event: any) => {
+              if (event.target.active) {
+                disableTool(polylineSketchViewModel, event.target);
+              } else {
+                toolSelected('polyline');
+              }
             }}
           ></calcite-action>
           <calcite-action
@@ -220,8 +236,12 @@ export const Sketch = (props: any) => {
             text="Polygon"
             icon="freehand-area"
             id="polygonAction"
-            onClick={() => {
-              toolSelected('polygon');
+            onClick={(event: any) => {
+              if (event.target.active) {
+                disableTool(polygonSketchViewModel, event.target);
+              } else {
+                toolSelected('polygon');
+              }
             }}
           ></calcite-action>
           <calcite-action
@@ -229,8 +249,12 @@ export const Sketch = (props: any) => {
             text="Text"
             icon="speech-bubble"
             id="textAction"
-            onClick={() => {
-              toolSelected('text');
+            onClick={(event: any) => {
+              if (event.target.active) {
+                disableTool(polygonSketchViewModel, event.target);
+              } else {
+                toolSelected('text');
+              }
             }}
           ></calcite-action>
           <calcite-action
