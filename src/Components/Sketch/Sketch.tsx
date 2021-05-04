@@ -15,6 +15,7 @@ import {
   textSymbol,
 } from './utils/notes';
 import SketchViewModel from '@arcgis/core/widgets/Sketch/SketchViewModel';
+import { getInitialSettings } from './utils/sketch';
 export const Sketch = (props: any) => {
   const ref = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLCalciteInputElement>(null);
@@ -22,6 +23,7 @@ export const Sketch = (props: any) => {
   const lineAction = useRef<HTMLCalciteActionElement>(null);
   const polygonAction = useRef<HTMLCalciteActionElement>(null);
   const textAction = useRef<HTMLCalciteActionElement>(null);
+  const settings = useRef();
   const [selectedGraphics, setSelectedGraphics] = useState<__esri.Graphic[]>([]);
   const graphicsRef = useRef<any[]>([]);
   const handles = useRef<any[]>([]);
@@ -35,15 +37,19 @@ export const Sketch = (props: any) => {
       });
       if (action?.current === pointAction.current) {
         toolSelected('point');
+        settingsChanged(settings.current, 'point');
       }
       if (action?.current === lineAction.current) {
         toolSelected('polyline');
+        settingsChanged(settings.current, 'polyline');
       }
       if (action?.current === polygonAction.current) {
         toolSelected('polygon');
+        settingsChanged(settings.current, 'polygon');
       }
       if (action?.current === textAction.current) {
         toolSelected('text');
+        settingsChanged(settings.current, 'text');
       }
       //setGeometryType(null);
       // [pointAction, lineAction, polygonAction, textAction].forEach((action) => {
@@ -58,7 +64,6 @@ export const Sketch = (props: any) => {
     }
   };
   const stateChanged = (state: string) => {
-    debugger;
     if (state === 'ready' && ref.current?.parentElement?.hidden) {
       [pointAction, lineAction, polygonAction, textAction].forEach((action) => {
         if (action.current) {
@@ -125,8 +130,9 @@ export const Sketch = (props: any) => {
   };
 
   useEffect(() => {
+    debugger;
     setupViewModels(props.view);
-
+    settings.current = { ...getInitialSettings() };
     [pointSketchViewModel, polylineSketchViewModel, polygonSketchViewModel, textSketchViewModel].forEach((sketchVM) => {
       handles.current.push(sketchVM?.on('create', sketchCreated));
       handles.current.push(sketchVM?.on('create', sketchCreated));
@@ -313,6 +319,7 @@ export const Sketch = (props: any) => {
         settingsChanged={(settings: any) => {
           if (geometryType) {
             settingsChanged(settings, geometryType);
+            settings.current = { ...settings };
           }
         }}
         geometryType={geometryType}

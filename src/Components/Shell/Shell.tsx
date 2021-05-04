@@ -118,7 +118,7 @@ export const Shell = () => {
   const sketchToolActivated = (sketchViewModel: __esri.SketchViewModel) => {
     sketchVM.current = sketchViewModel;
     selectVM.current?.cancel();
-    measurement.current?.viewModel.activeViewModel.clear();
+    measurement.current?.viewModel.activeViewModel?.clear();
   };
   const measurementActivated = (measurementTool: __esri.Measurement) => {
     measurement.current = measurementTool;
@@ -128,7 +128,7 @@ export const Shell = () => {
   const selectActivated = (sketchViewModel: __esri.SketchViewModel) => {
     selectVM.current = sketchViewModel;
     sketchVM.current?.cancel();
-    measurement.current?.viewModel.activeViewModel.clear();
+    measurement.current?.viewModel.activeViewModel?.clear();
   };
 
   //reset tips when dismissed
