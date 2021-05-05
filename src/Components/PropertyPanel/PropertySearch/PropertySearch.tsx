@@ -51,6 +51,11 @@ export const PropertySearch = (props: any) => {
         });
     }
   }, [props.where]);
-  return <div ref={searchRef}></div>;
+  return (
+    <div>
+      <div ref={searchRef}></div>
+      <calcite-button icon="trash" scale="s"></calcite-button>
+    </div>
+  );
 };
 export default PropertySearch;
