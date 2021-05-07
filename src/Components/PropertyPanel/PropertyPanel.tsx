@@ -127,6 +127,13 @@ export const PropertyPanel = (props: any) => {
     }
   };
 
+  const clear = () => {
+    setFeature(undefined);
+    setFilter('OBJECTID IS NULL');
+    toggleTabs('list');
+    props.propertiesSelected([]);
+  };
+
   useEffect(() => {
     if (!loaded) {
       const mapView = props.view as __esri.MapView;
@@ -197,6 +204,7 @@ export const PropertyPanel = (props: any) => {
             addressTable={addressTable}
             propertyLayer={layer}
             where={where}
+            clear={clear}
             searchComplete={searchComplete}
           ></PropertySearch>
         </Suspense>
@@ -207,7 +215,7 @@ export const PropertyPanel = (props: any) => {
           <calcite-tab-title tab="list" active ref={listTab}>
             List
           </calcite-tab-title>
-          <calcite-tab-title tab="info" ref={infoTab}>
+          <calcite-tab-title tab="info" ref={infoTab} disabled={!feature}>
             Info
           </calcite-tab-title>
         </calcite-tab-nav>

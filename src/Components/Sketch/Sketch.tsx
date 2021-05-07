@@ -130,7 +130,6 @@ export const Sketch = (props: any) => {
   };
 
   useEffect(() => {
-    debugger;
     setupViewModels(props.view);
     settings.current = { ...getInitialSettings() };
     [pointSketchViewModel, polylineSketchViewModel, polygonSketchViewModel, textSketchViewModel].forEach((sketchVM) => {

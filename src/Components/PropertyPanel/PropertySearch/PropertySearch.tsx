@@ -52,9 +52,16 @@ export const PropertySearch = (props: any) => {
     }
   }, [props.where]);
   return (
-    <div>
+    <div className="flex">
       <div ref={searchRef}></div>
-      <calcite-button icon="trash" scale="s"></calcite-button>
+      <calcite-action
+        icon="trash"
+        scale="s"
+        onClick={() => {
+          widgetRef.current?.clear();
+          props.clear();
+        }}
+      ></calcite-action>
     </div>
   );
 };
