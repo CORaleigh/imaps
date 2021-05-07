@@ -69,6 +69,16 @@ export const createMapView = (mapRef: any, mapProperties: any, viewProperties: a
   const map = new WebMap({ portalItem: mapProperties });
   viewProperties.map = map;
   viewProperties.container = mapRef;
+  viewProperties.constraints = {
+    minZoom: 9,
+    geometry: {
+      type: 'extent',
+      xmin: -78.995,
+      ymin: 35.519,
+      xmax: -78.253,
+      ymax: 36.077,
+    } as any,
+  };
   const view = new MapView(viewProperties);
 
   return view;
