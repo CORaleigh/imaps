@@ -4,10 +4,22 @@ import React, { useEffect, useRef, useState } from 'react';
 import SearchWidget from '@arcgis/core/widgets/Search';
 import Feature from '@arcgis/core/widgets/Feature';
 import './LocationSearch.scss';
-import { addIntersectionSource, getIntersectingStreets, intersectionSelected } from './utils/location';
+import {
+  addGraphics,
+  addIntersectionSource,
+  addLocationSearch,
+  getIntersectingStreets,
+  intersectionSelected,
+  removeGraphics,
+} from './utils/location';
 import Graphic from '@arcgis/core/Graphic';
+import CIMSymbol from '@arcgis/core/symbols/CIMSymbol';
+import { pinSymbol } from '../../config/config';
 export const LocationSearch = (props: any) => {
   const ref = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<SearchWidget>();
+  const featureWidgetRef = useRef<Feature>();
+
   const combobox = useRef<HTMLCalciteComboboxElement>(null);
 
   const [intersections, setIntersections] = useState<__esri.Graphic[]>([]);
@@ -25,14 +37,21 @@ export const LocationSearch = (props: any) => {
       popupEnabled: false,
       container: ref.current as HTMLDivElement,
     });
+    searchRef.current = search;
 
     addIntersectionSource().then((source) => {
       search.sources.add(source);
     });
+
+    addLocationSearch(props.view).then((source) => {
+      search.sources.add(source);
+    });
     const feature = new Feature({ view: props.view, container: featureRef.current as HTMLDivElement });
+    featureWidgetRef.current = feature;
     handles.push(
       search.on('search-complete', (results) => {
         setIntersections([]);
+        removeGraphics(props.view);
         feature.graphic = new Graphic();
         if (results.results[0].source.name === 'Intersection') {
           selectedStreet.current = results?.results[0]?.results[0]?.feature;
@@ -46,6 +65,7 @@ export const LocationSearch = (props: any) => {
         } else {
           results.results[0].results.forEach((result) => {
             feature.graphic = result.feature;
+            addGraphics(props.view, result.feature.geometry);
           });
         }
       }),
@@ -53,10 +73,11 @@ export const LocationSearch = (props: any) => {
     handles.push(
       search.allSources.on('after-add', (event: any) => {
         if ((event.item as any).layer) {
-          event.item.name = (event.item as any).layer.title;
-          event.item.placeholder = (event.item as any).layer.title;
+          const item: __esri.LayerSearchSource = event.item as __esri.LayerSearchSource;
+          item.name = (event.item as any).layer.title;
+          item.placeholder = (event.item as any).layer.title;
         }
-        if ((event.item as any).locator) {
+        if ((event.item as any).locator && event.item.name.includes('World Geocoding')) {
           search.allSources.remove(event.item);
         }
       }),
@@ -81,7 +102,21 @@ export const LocationSearch = (props: any) => {
   }, [props.view]); // only after initial render
   return (
     <div className="panel">
-      <div ref={ref}></div>
+      <div className="flex">
+        <div ref={ref}></div>
+        <calcite-action
+          icon="trash"
+          scale="s"
+          onClick={() => {
+            searchRef.current?.clear();
+            removeGraphics(props.view);
+            if (featureWidgetRef.current) {
+              featureWidgetRef.current.graphic = new Graphic();
+            }
+          }}
+        ></calcite-action>
+      </div>
+
       <calcite-combobox
         id="intersections"
         ref={combobox}

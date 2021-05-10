@@ -9,6 +9,22 @@ let condos: FeatureLayer;
 let addresses: FeatureLayer;
 let search: widgetsSearch;
 let properties: FeatureLayer;
+
+//put suggestions that start with text first, contains last
+const sortSuggestions = (input: string, field: string, data: __esri.Graphic[]): __esri.Graphic[] => {
+  const first = [];
+  const others = [];
+  for (let i = 0; i < data.length; i++) {
+    if (data[i].attributes[field].indexOf(input) === 0) {
+      first.push(data[i]);
+    } else {
+      others.push(data[i]);
+    }
+  }
+  first.sort();
+  others.sort();
+  return first.concat(others);
+};
 const getSuggestions = (
   params: any,
   name: string,
@@ -32,12 +48,13 @@ const getSuggestions = (
       returnDistinctValues: true,
       outFields: outFields,
       returnGeometry: false,
-      orderByFields: orderByFields,
+      // orderByFields: orderByFields,
       num: searchWidget.activeSource ? 50 : 6,
       where: whereArray.join(' OR '),
     })
     .then((results) => {
-      return results.features.map((feature) => {
+      const features = sortSuggestions(params.suggestTerm.toUpperCase(), searchFields[0], results.features);
+      return features.map((feature) => {
         return {
           key: name,
           text: feature.getAttribute(outFields[0]),
@@ -46,6 +63,7 @@ const getSuggestions = (
       });
     });
 };
+
 const getLayerSource = (
   placeholder: string,
   name: string,
@@ -71,7 +89,7 @@ const getLayerSource = (
           outFields: resultFields,
         })
         .then((results) => {
-          return results.features.map((feature) => {
+          return results.features.map((feature: __esri.Graphic) => {
             return {
               feature: feature,
               name: name,

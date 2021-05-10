@@ -47,6 +47,6 @@ export const PropertyInfo = (props: any) => {
       }
     }
   }, [props.feature]);
-  return <div ref={listRef}></div>;
+  return <div id="featureWidget" ref={listRef}></div>;
 };
 export default PropertyInfo;

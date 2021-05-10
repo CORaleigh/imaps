@@ -117,11 +117,43 @@ const services: any[] = [
   {
     group: {
       title: 'Environmental',
+      layers: ['Floodplain', 'Soils', 'Critical Watersheds', 'Water Supply Watersheds'],
+    },
+  },
+  {
+    group: {
+      title: 'Planning',
       layers: [
-        'Special Flood Hazard Areas - FloodPlain - Floodplain',
-        'Soils',
-        'Critical Watersheds',
-        'Water Supply Watersheds',
+        'Angier Zoning',
+        'Apex Zoning',
+        'Cary Zoning',
+        'County Zoning',
+        'Fuquay-Varina Zoning',
+        'Garner Zoning',
+        'Holly Springs Zoning',
+        'Morrisville Zoning',
+        'Knightdale Zoning',
+        'Rolesville Zoning',
+        'Wake Forest Zoning',
+        'Wendell Zoning',
+        'Zebulon Zoning',
+        'Corporate Limits',
+        'Planning Jurisdictions',
+        'Subdivisions',
+      ],
+    },
+  },
+  {
+    group: {
+      title: 'Public Safety',
+      layers: [
+        'Raleigh Police Districts',
+        'Sheriff Zones',
+        'Fire Insurance Districts',
+        'Fire Response Zones',
+        'EMS Franchise Districts',
+        'EMS Response Zones',
+        'Garner Police Beats',
       ],
     },
   },
@@ -132,7 +164,7 @@ const scrollToService = (e: any) => {
   const div = document.querySelector('#featureWidget')?.parentElement;
   setTimeout(() => {
     div?.scrollTo({ top: rect.top + div.scrollTop - 155, behavior: 'smooth' });
-  });
+  }, 100);
 };
 const serviceChanged = (graphic: __esri.Graphic, view: __esri.MapView | __esri.SceneView, e: any) => {
   if (
@@ -611,7 +643,7 @@ export const createTemplate = (view: __esri.MapView | __esri.SceneView, condoTab
           },
           {
             fieldName: 'PROPDESC',
-            label: 'Legal Description',
+            label: 'Property Description',
           },
         ],
       },
