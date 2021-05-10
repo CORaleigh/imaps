@@ -13,8 +13,7 @@ import {
   removeGraphics,
 } from './utils/location';
 import Graphic from '@arcgis/core/Graphic';
-import CIMSymbol from '@arcgis/core/symbols/CIMSymbol';
-import { pinSymbol } from '../../config/config';
+
 export const LocationSearch = (props: any) => {
   const ref = useRef<HTMLDivElement>(null);
   const searchRef = useRef<SearchWidget>();
