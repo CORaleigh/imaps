@@ -32,7 +32,7 @@ export const Shell = () => {
   const [tipsTitle, setTipsTitle] = useState<string>();
 
   const [width, setWidth] = useState(window.innerWidth);
-  const [view, setView] = useState<__esri.MapView | null>(null);
+  const view = useRef<__esri.MapView>();
   const [viewCreated, setViewCreated] = useState(false);
   const [selectedProperties, setSelectedProperties] = useState<__esri.Graphic[]>([]);
   const [selectedFeature, setSelectedFeature] = useState<any>();
@@ -49,6 +49,7 @@ export const Shell = () => {
   //when feature is selected update featureSelected state and render PropertySelect
   const featureSelected = (feature: __esri.Graphic | undefined) => {
     setSelectedFeature({ ...selectedFeature, ...{ attributes: feature?.attributes, geometry: feature?.geometry } });
+    debugger;
     const action = actions.find((action) => {
       return action.title === 'Property Select';
     });
@@ -58,7 +59,7 @@ export const Shell = () => {
         ReactDOM.render(
           <Suspense fallback={''}>
             <PropertySelect
-              view={view}
+              view={view.current}
               selectedFeature={feature}
               geometrySet={geometryChanged}
               toolActivated={selectActivated}
@@ -183,7 +184,8 @@ export const Shell = () => {
   //after map has initiliazed
   const mapInitialized = async (mapView: __esri.MapView) => {
     if (!viewCreated) {
-      setView(mapView);
+      //setView(mapView);
+      view.current = mapView;
       setViewCreated(true);
       const container = document.getElementById('propertySearch');
       if (mapView.map) {
@@ -230,7 +232,7 @@ export const Shell = () => {
           ReactDOM.render(
             <Suspense fallback={''}>
               <PropertyPanel
-                view={view}
+                view={view.current}
                 propertiesSelected={propertiesSelected}
                 featureSelected={featureSelected}
                 selectedProperties={selectedProperties}
@@ -242,7 +244,7 @@ export const Shell = () => {
         if (action.title === 'Location Search') {
           ReactDOM.render(
             <Suspense fallback={''}>
-              <LocationSearch view={view} />
+              <LocationSearch view={view.current} />
             </Suspense>,
             container,
           );
@@ -250,7 +252,7 @@ export const Shell = () => {
         if (action.title === 'Layers') {
           ReactDOM.render(
             <Suspense fallback={''}>
-              <Layers view={view} />
+              <Layers view={view.current} />
             </Suspense>,
             container,
           );
@@ -258,7 +260,7 @@ export const Shell = () => {
         if (action.title === 'Basemaps') {
           ReactDOM.render(
             <Suspense fallback={''}>
-              <Basemaps view={view} default={basemaps.default.id} imagery={basemaps.imagery.id} />
+              <Basemaps view={view.current} default={basemaps.default.id} imagery={basemaps.imagery.id} />
             </Suspense>,
             container,
           );
@@ -266,7 +268,7 @@ export const Shell = () => {
         if (action.title === 'Legend') {
           ReactDOM.render(
             <Suspense fallback={''}>
-              <Legend view={view} />
+              <Legend view={view.current} />
             </Suspense>,
             container,
           );
@@ -275,7 +277,7 @@ export const Shell = () => {
           ReactDOM.render(
             <Suspense fallback={''}>
               <PropertySelect
-                view={view}
+                view={view.current}
                 geometrySet={geometryChanged}
                 selectedFeature={selectedFeature}
                 toolActivated={selectActivated}
@@ -288,7 +290,7 @@ export const Shell = () => {
         if (action.title === 'Measure') {
           ReactDOM.render(
             <Suspense fallback={''}>
-              <Measure view={view} measurementActivated={measurementActivated} activeTool={activeTool} />
+              <Measure view={view.current} measurementActivated={measurementActivated} activeTool={activeTool} />
             </Suspense>,
             container,
           );
@@ -296,7 +298,7 @@ export const Shell = () => {
         if (action.title === 'Sketch') {
           ReactDOM.render(
             <Suspense fallback={''}>
-              <Sketch view={view} toolActivated={sketchToolActivated} activeTool={activeTool} />{' '}
+              <Sketch view={view.current} toolActivated={sketchToolActivated} activeTool={activeTool} />{' '}
             </Suspense>,
             container,
           );
@@ -304,7 +306,7 @@ export const Shell = () => {
         if (action.title === 'Bookmarks') {
           ReactDOM.render(
             <Suspense fallback={''}>
-              <Bookmarks view={view} />{' '}
+              <Bookmarks view={view.current} />{' '}
             </Suspense>,
             container,
           );
@@ -312,7 +314,7 @@ export const Shell = () => {
         if (action.title === 'Print') {
           ReactDOM.render(
             <Suspense fallback={''}>
-              <Print view={view} />{' '}
+              <Print view={view.current} />{' '}
             </Suspense>,
             container,
           );

@@ -2,6 +2,8 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React, { useEffect, useRef, useState } from 'react';
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
+import Graphic from '@arcgis/core/Graphic';
+
 import * as geometryEngine from '@arcgis/core/geometry/geometryEngine';
 import SketchViewModel from '@arcgis/core/widgets/Sketch/SketchViewModel';
 import './PropertySelect.scss';
@@ -20,6 +22,23 @@ export const PropertySelect = (props: any) => {
   const [geometryType, setGeometryType] = useState<string>();
   const [distance, setDistance] = useState(0);
 
+  const addBufferGraphic = (geometry: __esri.Geometry): void => {
+    removeBufferGraphic();
+    const graphic: Graphic = new Graphic({
+      attributes: { type: 'buffer' },
+      geometry: geometry,
+      symbol: {
+        type: 'simple-fill',
+        style: 'none',
+        outline: {
+          color: [0, 0, 0, 0.5],
+          width: 3,
+          style: 'short-dash',
+        },
+      } as any,
+    });
+    (props.view as __esri.MapView).graphics.add(graphic);
+  };
   const bufferGraphic = (geometry: __esri.Geometry) => {
     geometry = geometryEngine.geodesicBuffer(geometry, distance, 'feet') as __esri.Geometry;
     props.geometrySet(geometry);
@@ -32,8 +51,15 @@ export const PropertySelect = (props: any) => {
       }
     });
   };
+  const removeBufferGraphic = (): void => {
+    const graphics = (props.view as __esri.MapView).graphics.filter((graphic) => {
+      return graphic.getAttribute('type') === 'buffer';
+    });
+    props.view.graphics.removeMany(graphics);
+  };
   const addGraphic = (e: any) => {
     if (e.state === 'complete') {
+      removeBufferGraphic();
       const geometry = e.graphic.geometry;
       if (distance > 0) {
         bufferGraphic(geometry);
@@ -52,6 +78,7 @@ export const PropertySelect = (props: any) => {
         mode: 'hybrid',
       },
     });
+    debugger;
     sketchVM.on('create', addGraphic);
     return sketchVM;
   };
@@ -99,6 +126,7 @@ export const PropertySelect = (props: any) => {
     };
   }, []);
   useEffect(() => {
+    debugger;
     if (props.selectedFeature?.geometry) {
       setSelectedFeature(props.selectedFeature);
     }
@@ -291,6 +319,7 @@ export const PropertySelect = (props: any) => {
               distance,
               'feet',
             ) as __esri.Geometry;
+            addBufferGraphic(geometry);
             props.geometrySet(geometry);
             disableAllActions();
           }}
