@@ -78,6 +78,7 @@ export const MapView = (props: any) => {
   }, []); // only after initial render
   useEffect(() => {
     if (props.selectedProperties) {
+      debugger;
       props.selectedProperties.forEach((feature: __esri.Graphic) => {
         feature.setAttribute('selected', 0);
       });

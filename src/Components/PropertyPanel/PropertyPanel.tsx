@@ -97,10 +97,10 @@ export const PropertyPanel = (props: any) => {
     });
 
     props.propertiesSelected(properties.current);
-    // const graphics = (props.view as __esri.MapView).graphics.filter((graphic) => {
-    //   return graphic.getAttribute('type') === 'buffer';
-    // });
-    // props.view.graphics.removeMany(graphics);
+    const graphics = (props.view as __esri.MapView).graphics.filter((graphic) => {
+      return graphic.getAttribute('type') === 'buffer';
+    });
+    props.view.graphics.removeMany(graphics);
   };
   const tableFeatureSelected = (feature: __esri.Graphic) => {
     if (feature) {
@@ -136,6 +136,12 @@ export const PropertyPanel = (props: any) => {
     setFilter('OBJECTID IS NULL');
     toggleTabs('list');
     props.propertiesSelected([]);
+    const graphics = view?.graphics.filter((graphic) => {
+      return graphic.getAttribute('type') === 'buffer';
+    });
+    if (graphics?.length) {
+      view?.graphics.removeMany(graphics);
+    }
   };
 
   useEffect(() => {

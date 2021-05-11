@@ -49,11 +49,11 @@ export const Shell = () => {
   //when feature is selected update featureSelected state and render PropertySelect
   const featureSelected = (feature: __esri.Graphic | undefined) => {
     setSelectedFeature({ ...selectedFeature, ...{ attributes: feature?.attributes, geometry: feature?.geometry } });
-    debugger;
+
     const action = actions.find((action) => {
       return action.title === 'Property Select';
     });
-    if (action && view) {
+    if (action && view.current) {
       const container = document.getElementById(action?.container);
       if (container) {
         ReactDOM.render(

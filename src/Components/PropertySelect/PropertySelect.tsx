@@ -8,6 +8,7 @@ import * as geometryEngine from '@arcgis/core/geometry/geometryEngine';
 import SketchViewModel from '@arcgis/core/widgets/Sketch/SketchViewModel';
 import './PropertySelect.scss';
 export const PropertySelect = (props: any) => {
+  const distanceRef = useRef<HTMLCalciteInputElement>(null);
   const pointAction = useRef<HTMLCalciteActionElement>(null);
   const lineAction = useRef<HTMLCalciteActionElement>(null);
   const polygonAction = useRef<HTMLCalciteActionElement>(null);
@@ -15,12 +16,13 @@ export const PropertySelect = (props: any) => {
   const circleAction = useRef<HTMLCalciteActionElement>(null);
   const multipointAction = useRef<HTMLCalciteActionElement>(null);
 
-  const [selectedFeature, setSelectedFeature] = useState<__esri.Graphic>();
+  //const [selectedFeature, setSelectedFeature] = useState<__esri.Graphic>();
   const [pointSketchViewModel, setPointSketchViewModel] = useState<SketchViewModel>();
   const [polylineSketchViewModel, setPolylineSketchViewModel] = useState<SketchViewModel>();
   const [polygonSketchViewModel, setPolygonSketchViewModel] = useState<SketchViewModel>();
   const [geometryType, setGeometryType] = useState<string>();
   const [distance, setDistance] = useState(0);
+  //const distance = useRef<number>(0);
 
   const addBufferGraphic = (geometry: __esri.Geometry): void => {
     removeBufferGraphic();
@@ -39,9 +41,10 @@ export const PropertySelect = (props: any) => {
     });
     (props.view as __esri.MapView).graphics.add(graphic);
   };
-  const bufferGraphic = (geometry: __esri.Geometry) => {
-    geometry = geometryEngine.geodesicBuffer(geometry, distance, 'feet') as __esri.Geometry;
+  const bufferGraphic = (geometry: __esri.Geometry, bufferDistance: number) => {
+    geometry = geometryEngine.geodesicBuffer(geometry, bufferDistance, 'feet') as __esri.Geometry;
     props.geometrySet(geometry);
+    addBufferGraphic(geometry);
   };
 
   const disableAllActions = () => {
@@ -61,8 +64,8 @@ export const PropertySelect = (props: any) => {
     if (e.state === 'complete') {
       removeBufferGraphic();
       const geometry = e.graphic.geometry;
-      if (distance > 0) {
-        bufferGraphic(geometry);
+      if (parseInt(distanceRef.current?.value as string) > 0) {
+        bufferGraphic(geometry, parseInt(distanceRef.current?.value as string));
       } else {
         props.geometrySet(geometry);
       }
@@ -125,12 +128,12 @@ export const PropertySelect = (props: any) => {
       console.log('cleanup');
     };
   }, []);
-  useEffect(() => {
-    debugger;
-    if (props.selectedFeature?.geometry) {
-      setSelectedFeature(props.selectedFeature);
-    }
-  }, [props.selectedFeature]);
+  // useEffect(() => {
+  //   debugger;
+  //   if (props.selectedFeature?.geometry) {
+  //     setSelectedFeature(props.selectedFeature);
+  //   }
+  // }, [props.selectedFeature]);
   return (
     <div className="panel">
       <div className="selectTools">
@@ -299,6 +302,7 @@ export const PropertySelect = (props: any) => {
       <calcite-label>
         Buffer distance
         <calcite-input
+          ref={distanceRef}
           type="number"
           max="3000"
           min="0"
@@ -308,14 +312,18 @@ export const PropertySelect = (props: any) => {
           value="0"
           onBlur={(e: any) => {
             setDistance(parseInt(e.target.value));
+            // debugger;
+            // if (distanceRef.current) {
+            //   distanceRef.current.value = e.target.value;
+            // }
           }}
         ></calcite-input>
       </calcite-label>
-      {selectedFeature && distance > 0 && (
+      {props.selectedFeature && distance > 0 && (
         <calcite-button
           onClick={() => {
             const geometry = geometryEngine.geodesicBuffer(
-              selectedFeature?.geometry,
+              props.selectedFeature?.geometry,
               distance,
               'feet',
             ) as __esri.Geometry;
