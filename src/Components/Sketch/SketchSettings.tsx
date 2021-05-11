@@ -69,7 +69,7 @@ export const SketchSettings = (props: any) => {
     <div ref={ref} className="panel">
       {geometryType === 'point' ? (
         <div>
-          <calcite-block key="symbol" heading="Symbol" open collapsible>
+          <calcite-block key="point-symbol" heading="Symbol" open collapsible>
             <calcite-block-section text="Size">
               <calcite-slider
                 min="0"
@@ -85,7 +85,7 @@ export const SketchSettings = (props: any) => {
               ></calcite-slider>
             </calcite-block-section>
           </calcite-block>
-          <calcite-block key="fill" heading="Fill" open collapsible>
+          <calcite-block key="point-fill" heading="Fill" open collapsible>
             <calcite-label
               layout="inline-space-between"
               class="sc-calcite-label-h sc-calcite-label-s"
@@ -112,7 +112,7 @@ export const SketchSettings = (props: any) => {
             </calcite-label>
             {settings.current.pointFillEnabled ? (
               <div>
-                <calcite-block-section key="color" text="Color">
+                <calcite-block-section key="point-fill-color" text="Color">
                   <calcite-color-picker
                     dir="ltr"
                     hide-channels=""
@@ -125,7 +125,7 @@ export const SketchSettings = (props: any) => {
                     id="pointFill"
                   ></calcite-color-picker>
                 </calcite-block-section>
-                <calcite-block-section key="transparency" text="Fill transparency">
+                <calcite-block-section key="point-fill-transparency" text="Fill transparency">
                   <calcite-slider
                     min="0"
                     max="1"
@@ -246,7 +246,7 @@ export const SketchSettings = (props: any) => {
       )}
       {geometryType === 'polygon' ? (
         <div>
-          <calcite-block key="fill" heading="Fill" open collapsible>
+          <calcite-block key="polygon-fill" heading="Fill" open collapsible>
             <calcite-label
               layout="inline-space-between"
               class="sc-calcite-label-h sc-calcite-label-s"
@@ -273,7 +273,7 @@ export const SketchSettings = (props: any) => {
             </calcite-label>
             {settings.current.polygonFillEnabled ? (
               <div>
-                <calcite-block-section key="color" text="Color">
+                <calcite-block-section key="polygon-fill-color" text="Color">
                   <calcite-color-picker
                     dir="ltr"
                     hide-channels=""
@@ -285,7 +285,7 @@ export const SketchSettings = (props: any) => {
                     calcite-hydrated=""
                   ></calcite-color-picker>
                 </calcite-block-section>
-                <calcite-block-section key="transparency" text="Fill transparency">
+                <calcite-block-section key="polygon-fill-transparency" text="Fill transparency">
                   <calcite-slider
                     min="0"
                     max="1"
@@ -355,7 +355,7 @@ export const SketchSettings = (props: any) => {
       )}
       {geometryType === 'text' ? (
         <div>
-          <calcite-block key="symbol" heading="Symbol" open collapsible>
+          <calcite-block key="text-symbol" heading="Symbol" open collapsible>
             <calcite-block-section text="Font Size" open>
               <calcite-slider
                 min="6"
@@ -371,7 +371,7 @@ export const SketchSettings = (props: any) => {
               ></calcite-slider>
             </calcite-block-section>
 
-            <calcite-block-section key="color" text="Font Color" open>
+            <calcite-block-section key="font-color" text="Font Color" open>
               <calcite-label>
                 Font Color
                 <calcite-color-picker
@@ -387,7 +387,7 @@ export const SketchSettings = (props: any) => {
                 ></calcite-color-picker>
               </calcite-label>
             </calcite-block-section>
-            <calcite-block-section key="color" text="Halo Color">
+            <calcite-block-section key="font-halo-color" text="Halo Color">
               <calcite-label>
                 Halo Color
                 <calcite-color-picker

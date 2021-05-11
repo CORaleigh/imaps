@@ -10,10 +10,14 @@ import Point from '@arcgis/core/geometry/Point';
 import SpatialReference from '@arcgis/core/geometry/SpatialReference';
 
 import './Measure.scss';
+import CIMSymbol from '@arcgis/core/symbols/CIMSymbol';
+import { pinSymbol } from '../../config/config';
 export const Measure = (props: any) => {
   const measureRef = useRef<HTMLDivElement>(null);
   const coordRef = useRef<HTMLDivElement>(null);
   const measurement = useRef<Measurement>();
+  const coordinates = useRef<CoordinateConversion>();
+
   const [widget, setWidget] = useState<string>();
   const actionClicked = (e: any) => {
     document.querySelectorAll('.measureTools calcite-action').forEach((element) => {
@@ -31,7 +35,7 @@ export const Measure = (props: any) => {
           e.target.active = true;
           measurement.current.activeTool = 'distance';
           setWidget('measurement');
-          props.measurementActivated(measurement.current);
+          props.measurementActivated(measurement.current, coordinates.current);
         }
       }
       if (e.target.getAttribute('value') === 'area') {
@@ -52,6 +56,7 @@ export const Measure = (props: any) => {
           setWidget(undefined);
         } else {
           e.target.active = true;
+          props.measurementActivated(measurement.current, coordinates.current);
           setWidget('coordinates');
         }
       }
@@ -61,6 +66,7 @@ export const Measure = (props: any) => {
       }
     }
   };
+
   useEffect(() => {
     measurement.current = new Measurement({
       container: measureRef.current as HTMLDivElement,
@@ -78,6 +84,11 @@ export const Measure = (props: any) => {
     const conversion = new CoordinateConversion({
       container: coordRef.current as HTMLDivElement,
       view: props.view,
+    });
+    conversion.viewModel.locationSymbol = new CIMSymbol(pinSymbol as any) as any;
+    coordinates.current = conversion;
+    conversion.viewModel.watch('mode', (mode) => {
+      (props.view as __esri.MapView).popup.autoOpenEnabled = mode === 'live';
     });
     const numberSearchPattern = /-?\d+[\.]?\d*/;
 

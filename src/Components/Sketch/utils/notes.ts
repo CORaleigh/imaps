@@ -19,7 +19,7 @@ export let textSketchViewModel: SketchViewModel;
 let count = 0;
 const pointSymbol = new SimpleMarkerSymbol({
   size: 10,
-  color: new Color([255, 255, 255, 1]),
+  color: new Color([255, 0, 0, 1]),
   style: 'circle',
   outline: new SimpleLineSymbol({
     color: new Color([0, 0, 0, 1]),
@@ -104,7 +104,7 @@ export const settingsChanged = (settings: any, geometryType: string): void => {
   if (geometryType === 'polygon') {
     updatePolygonRenderer(settings);
   }
-  if (geometryType === 'line') {
+  if (geometryType === 'polyline') {
     updateLineRenderer(settings);
   }
   if (geometryType === 'text') {

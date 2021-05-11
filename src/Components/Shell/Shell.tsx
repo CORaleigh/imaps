@@ -41,7 +41,9 @@ export const Shell = () => {
   const sketchVM = useRef<__esri.SketchViewModel>();
   const selectVM = useRef<__esri.SketchViewModel>();
   const measurement = useRef<__esri.Measurement>();
+  const coordinates = useRef<__esri.CoordinateConversion>();
 
+  const [activeTool, setActiveTool] = useState<string>();
   const { actions, setActions } = useContext(ActionContext);
 
   //when feature is selected update featureSelected state and render PropertySelect
@@ -119,16 +121,26 @@ export const Shell = () => {
     sketchVM.current = sketchViewModel;
     selectVM.current?.cancel();
     measurement.current?.viewModel.activeViewModel?.clear();
+    if (coordinates.current) {
+      coordinates.current.viewModel.mode = 'live';
+    }
+    setActiveTool('sketch');
   };
-  const measurementActivated = (measurementTool: __esri.Measurement) => {
+  const measurementActivated = (measurementTool: __esri.Measurement, coordinatesTool: __esri.CoordinateConversion) => {
     measurement.current = measurementTool;
+    coordinates.current = coordinatesTool;
     sketchVM.current?.cancel();
     selectVM.current?.cancel();
+    setActiveTool('measure');
   };
   const selectActivated = (sketchViewModel: __esri.SketchViewModel) => {
     selectVM.current = sketchViewModel;
     sketchVM.current?.cancel();
     measurement.current?.viewModel.activeViewModel?.clear();
+    if (coordinates.current) {
+      coordinates.current.viewModel.mode = 'live';
+    }
+    setActiveTool('select');
   };
 
   //reset tips when dismissed
@@ -267,6 +279,7 @@ export const Shell = () => {
                 geometrySet={geometryChanged}
                 selectedFeature={selectedFeature}
                 toolActivated={selectActivated}
+                activeTool={activeTool}
               />
             </Suspense>,
             container,
@@ -275,7 +288,7 @@ export const Shell = () => {
         if (action.title === 'Measure') {
           ReactDOM.render(
             <Suspense fallback={''}>
-              <Measure view={view} measurementActivated={measurementActivated} />
+              <Measure view={view} measurementActivated={measurementActivated} activeTool={activeTool} />
             </Suspense>,
             container,
           );
@@ -283,7 +296,7 @@ export const Shell = () => {
         if (action.title === 'Sketch') {
           ReactDOM.render(
             <Suspense fallback={''}>
-              <Sketch view={view} toolActivated={sketchToolActivated} />{' '}
+              <Sketch view={view} toolActivated={sketchToolActivated} activeTool={activeTool} />{' '}
             </Suspense>,
             container,
           );

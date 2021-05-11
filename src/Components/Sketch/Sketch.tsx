@@ -37,19 +37,19 @@ export const Sketch = (props: any) => {
       });
       if (action?.current === pointAction.current) {
         toolSelected('point');
-        settingsChanged(settings.current, 'point');
+        //settingsChanged(settings.current, 'point');
       }
       if (action?.current === lineAction.current) {
         toolSelected('polyline');
-        settingsChanged(settings.current, 'polyline');
+        //settingsChanged(settings.current, 'polyline');
       }
       if (action?.current === polygonAction.current) {
         toolSelected('polygon');
-        settingsChanged(settings.current, 'polygon');
+        //settingsChanged(settings.current, 'polygon');
       }
       if (action?.current === textAction.current) {
         toolSelected('text');
-        settingsChanged(settings.current, 'text');
+        //settingsChanged(settings.current, 'text');
       }
       //setGeometryType(null);
       // [pointAction, lineAction, polygonAction, textAction].forEach((action) => {
@@ -77,6 +77,9 @@ export const Sketch = (props: any) => {
     geometryType: 'circle' | 'polygon' | 'polyline' | 'point' | 'multipoint' | 'rectangle',
     vm: SketchViewModel,
   ) => {
+    [textSketchViewModel, pointSketchViewModel, polylineSketchViewModel, polygonSketchViewModel].forEach((vm) => {
+      vm.cancel();
+    });
     vm.create(geometryType);
     props.toolActivated(vm);
     handles.current.push(vm?.watch('state', stateChanged));
@@ -109,7 +112,7 @@ export const Sketch = (props: any) => {
     }
     if (geometryType === 'text') {
       activateViewModel('point', textSketchViewModel);
-
+      deactivateActions = [pointAction, lineAction, polygonAction];
       if (textAction.current) {
         textAction.current.active = true;
       }
