@@ -1,2 +1,0 @@
-.dark ::part(content){background-color:#353535;color:#fff}.dark ::part(cell){background-color:#353535;border-color:hsla(0,0%,67.8%,.3);color:#d1d1d1}.dark ::part(checkbox){background-color:#d1d1d1}.dark ::part(indicators):before{opacity:.8}.dark .esri-grid__grid,.dark vaadin-grid{background-color:#242424}.esri-feature-table__loader{display:none}.esri-feature-table__loader.loading{display:block}vaadin-grid{font-size:14px}vaadin-grid-cell-content{font-weight:400}
-/*# sourceMappingURL=172.8288b72a.chunk.css.map */

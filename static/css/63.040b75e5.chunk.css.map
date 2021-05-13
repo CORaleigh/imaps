@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/Components/PropertyPanel/PropertyList/PropertyList.scss"],"names":[],"mappings":"AAAA,aACI,WAAA,CAGJ,yBACI,kBAAA","file":"63.040b75e5.chunk.css","sourcesContent":["PropertyList {\n    height: 100%;\n}\n\nvaadin-grid-cell-content {\n    white-space: normal;\n}"]}
