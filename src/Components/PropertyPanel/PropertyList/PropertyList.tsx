@@ -44,20 +44,22 @@ export const PropertyList = (props: any) => {
           }
         });
         setTimeout(() => {
+          table.menu.items.reverse();
           const grid = (table.container as HTMLElement).querySelector('vaadin-grid');
           const title = (table.container as HTMLElement).querySelector('.esri-feature-table__title');
           if (title) {
-            title.textContent = 'Features: ' + grid?.items?.length;
+            title.textContent = 'Selected Properties: ' + grid?.items?.length;
           }
+          title?.setAttribute('style', 'visibility: visible');
           table.viewModel.watch('state', (state) => {
             if (state === 'ready') {
               requestAnimationFrame(() => {
                 const title = (table.container as HTMLElement).querySelector('.esri-feature-table__title');
                 if (title) {
                   if (grid?.items) {
-                    title.textContent = 'Features: ' + grid?.items?.length;
+                    title.textContent = 'Selected Properties: ' + grid?.items?.length;
                   } else {
-                    title.textContent = 'Features: 0';
+                    title.textContent = 'Selected Properties: 0';
                   }
                 }
               });
@@ -74,7 +76,7 @@ export const PropertyList = (props: any) => {
               requestAnimationFrame(() => {
                 const title = (table.container as HTMLElement).querySelector('.esri-feature-table__title');
                 if (title) {
-                  title.textContent = 'Features: ' + grid?.items?.length;
+                  title.textContent = 'Selected Properties: ' + grid?.items?.length;
                 }
               });
               //grid.selectedItems = [(grid.getEventContext(e) as any)?.item];
