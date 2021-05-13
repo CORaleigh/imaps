@@ -45,6 +45,7 @@ export const PropertyList = (props: any) => {
         });
         setTimeout(() => {
           table.menu.items.reverse();
+          table.editingEnabled = false;
           const grid = (table.container as HTMLElement).querySelector('vaadin-grid');
           const title = (table.container as HTMLElement).querySelector('.esri-feature-table__title');
           if (title) {
@@ -68,11 +69,13 @@ export const PropertyList = (props: any) => {
           grid?.addEventListener('click', (e) => {
             if ((e.target as HTMLElement).nodeName === 'VAADIN-GRID-CELL-CONTENT') {
               //grid.selectItem((grid.getEventContext(e) as any)?.item);
+              debugger;
               table.clearSelection();
               const item = (grid.getEventContext(e) as any)?.item;
               const feature = item.feature;
               table.selectRows(feature);
               grid.scrollToIndex(item.index);
+              props.featureSelected(feature);
               requestAnimationFrame(() => {
                 const title = (table.container as HTMLElement).querySelector('.esri-feature-table__title');
                 if (title) {
@@ -96,13 +99,13 @@ export const PropertyList = (props: any) => {
         //   }
         // });
 
-        table.on('selection-change', (event: __esri.FeatureTableSelectionChangeEvent) => {
-          if (event.added.length) {
-            //table.clearSelection();
-            //
-            props.featureSelected(event.added[0].feature);
-          }
-        });
+        // table.on('selection-change', (event: __esri.FeatureTableSelectionChangeEvent) => {
+        //   if (event.added.length) {
+        //     //table.clearSelection();
+        //     //
+        //     props.featureSelected(event.added[0].feature);
+        //   }
+        // });
       });
     }
 

@@ -22,10 +22,12 @@ export const setColumnRenderer = (
       const field = layer.fields.find((f) => {
         return f.alias === column.header;
       }) as __esri.Field;
+
       if (!root.firstElementChild) {
         root.innerHTML = '<div style="white-space: normal"></div>';
       }
       if (field) {
+        field.editable = false;
         root.firstElementChild.textContent = rowData.item.attributes[field.name];
         if (field.name.includes('DATE')) {
           if (rowData.item.attributes[field.name]) {

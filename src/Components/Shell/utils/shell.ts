@@ -81,21 +81,24 @@ export const updateTheme = (theme: string, setTheme: React.Dispatch<string>) => 
   if (link) {
     document.head.appendChild(link);
   }
-
+  debugger;
   if (window.matchMedia != undefined) {
-    window.matchMedia('(prefers-color-scheme: dark)')?.addEventListener('change', (e) => {
-      const newTheme = e.matches ? 'dark' : 'light';
-      setTheme(newTheme);
-      window.localStorage.setItem('imaps_theme', newTheme);
-      document.body.classList.remove(newTheme === 'light' ? 'dark' : 'light');
-      document.body.classList.add(newTheme === 'light' ? 'light' : 'dark');
-      const link = Array.from(document.head.querySelectorAll('link')).find((link: HTMLLinkElement) => {
-        return link.href.includes(`${newTheme}/main.css`);
+    const media = window.matchMedia('(prefers-color-scheme: dark)');
+    if (media.addEventListener != undefined) {
+      window.matchMedia('(prefers-color-scheme: dark)')?.addEventListener('change', (e) => {
+        const newTheme = e.matches ? 'dark' : 'light';
+        setTheme(newTheme);
+        window.localStorage.setItem('imaps_theme', newTheme);
+        document.body.classList.remove(newTheme === 'light' ? 'dark' : 'light');
+        document.body.classList.add(newTheme === 'light' ? 'light' : 'dark');
+        const link = Array.from(document.head.querySelectorAll('link')).find((link: HTMLLinkElement) => {
+          return link.href.includes(`${newTheme}/main.css`);
+        });
+        if (link) {
+          document.head.appendChild(link);
+        }
       });
-      if (link) {
-        document.head.appendChild(link);
-      }
-    });
+    }
   }
 };
 

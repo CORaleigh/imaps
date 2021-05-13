@@ -19,6 +19,7 @@ const getColumns = (layer: __esri.FeatureLayer): FieldColumnConfig[] => {
       field: field,
       layer: layer,
       visible: showColumns.includes(field.name),
+      editable: false,
     } as any);
     columns.push(config);
   });
