@@ -26,6 +26,7 @@ export const PropertySearch = (props: any) => {
       search.sources = setSearchSources(props.addressTable, props.condosTable, props.propertyLayer, search);
       search.on('search-complete', (event) => {
         searchComplete(event).then((result: any) => {
+          debugger;
           props.searchComplete(result);
         });
       });
@@ -36,9 +37,6 @@ export const PropertySearch = (props: any) => {
       });
       setLoaded(true);
     }
-    return () => {
-      console.log('cleanup');
-    };
   }, [props.view, props.addressTable, props.condosTable, props.propertyLayer, props.searchComplete]); // only after initial render
   useEffect(() => {
     if (props.where != 'OBJECTID IS NULL') {

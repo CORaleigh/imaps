@@ -127,7 +127,7 @@ const getProperty = (oids: number[]): Promise<__esri.Graphic[]> => {
             outSpatialReference: { wkid: 102100 },
           })
           .then((result) => {
-            search.view.goTo(result.features);
+            search.view.goTo({ target: result.features });
             resolve(result.features);
           });
       });

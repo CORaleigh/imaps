@@ -81,7 +81,7 @@ export const PropertySelect = (props: any) => {
         mode: 'hybrid',
       },
     });
-    debugger;
+
     sketchVM.on('create', addGraphic);
     return sketchVM;
   };
@@ -123,13 +123,9 @@ export const PropertySelect = (props: any) => {
     setPointSketchViewModel(createSketchViewModels(new GraphicsLayer({ listMode: 'hide' }), props.view));
     setPolylineSketchViewModel(createSketchViewModels(new GraphicsLayer({ listMode: 'hide' }), props.view));
     setPolygonSketchViewModel(createSketchViewModels(new GraphicsLayer({ listMode: 'hide' }), props.view));
-
-    return () => {
-      console.log('cleanup');
-    };
   }, []);
   // useEffect(() => {
-  //   debugger;
+  //
   //   if (props.selectedFeature?.geometry) {
   //     setSelectedFeature(props.selectedFeature);
   //   }
@@ -312,7 +308,7 @@ export const PropertySelect = (props: any) => {
           value="0"
           onBlur={(e: any) => {
             setDistance(parseInt(e.target.value));
-            // debugger;
+            //
             // if (distanceRef.current) {
             //   distanceRef.current.value = e.target.value;
             // }

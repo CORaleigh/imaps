@@ -15,7 +15,7 @@ export const geometryChanged = (
           outSpatialReference: view?.spatialReference,
         })
         .then((featureSet) => {
-          view?.goTo(featureSet.features);
+          view?.goTo(featureSet.features, { duration: 1000, easing: 'ease' });
           const oids = featureSet.features.map((feature) => {
             return feature.getObjectId();
           });

@@ -78,9 +78,8 @@ export const MapView = (props: any) => {
   }, []); // only after initial render
   useEffect(() => {
     if (props.selectedProperties) {
-      debugger;
       props.selectedProperties.forEach((feature: __esri.Graphic) => {
-        feature.setAttribute('selected', 0);
+        feature?.setAttribute('selected', 0);
       });
       if (props.selectedFeature?.attributes) {
         props.selectedProperties
@@ -91,8 +90,6 @@ export const MapView = (props: any) => {
       }
       selectionLayer?.queryFeatures({ where: '1=1', returnGeometry: true }).then((featureSet) => {
         selectionLayer?.applyEdits({ deleteFeatures: featureSet.features }).then((result) => {
-          console.log(result);
-
           selectionLayer?.applyEdits({ addFeatures: props.selectedProperties }).then((result) => {
             console.log(result);
           });

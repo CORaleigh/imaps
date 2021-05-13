@@ -9,9 +9,6 @@ export const Print = (props: any) => {
       container: ref.current as HTMLDivElement,
       view: props.view,
     });
-    return () => {
-      console.log('cleanup');
-    };
   }, [props.view]); // only after initial render
   return <div ref={ref}></div>;
 };

@@ -18,10 +18,6 @@ export const PropertyInfo = (props: any) => {
       });
       setLoaded(true);
     }
-
-    return () => {
-      console.log('cleanup');
-    };
   }); // only after initial render
   useEffect(() => {
     if (featureWidget.current) {

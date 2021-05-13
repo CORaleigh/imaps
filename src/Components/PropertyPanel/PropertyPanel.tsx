@@ -3,7 +3,7 @@
 import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
 const PropertySearch = lazy(() => import('./PropertySearch/PropertySearch'));
 const PropertyInfo = lazy(() => import('./PropertyInfo/PropertyInfo'));
-const PropertyTable = lazy(() => import('./PropertyTable/PropertyTable'));
+const PropertyList = lazy(() => import('./PropertyList/PropertyList'));
 import { geometryChanged, setSearchParams } from './utils/property';
 import './PropertyPanel.scss';
 export const PropertyPanel = (props: any) => {
@@ -13,8 +13,8 @@ export const PropertyPanel = (props: any) => {
 
   const [loaded, setLoaded] = useState(false);
   const [view, setView] = useState<__esri.MapView>();
-  const [feature, setFeature] = useState<__esri.Graphic>();
-
+  // const [feature, setFeature] = useState<__esri.Graphic>();
+  const featureRef = useRef<__esri.Graphic>();
   const [filter, setFilter] = useState('OBJECTID IS NULL');
   const [where, setWhere] = useState('OBJECTID IS NULL');
 
@@ -70,12 +70,11 @@ export const PropertyPanel = (props: any) => {
     //     `transition-duration: 0.3s; width: ${tab.clientWidth}px; left: ${tab.offsetLeft}px;`,
     //   );
     // }, 1000);
-
     setReloadTable(true);
   };
   const searchComplete = (result: any) => {
     if (result.feature) {
-      setFeature(result.features[0]);
+      featureRef.current = result.features[0];
       props.featureSelected(result.features[0]);
       //featureRef.current = result.features[0];
       setSearchParams([result.features[0]]);
@@ -83,7 +82,7 @@ export const PropertyPanel = (props: any) => {
     } else {
       setSearchParams([]);
 
-      setFeature(undefined);
+      featureRef.current = undefined;
       toggleTabs('list');
     }
 
@@ -118,8 +117,8 @@ export const PropertyPanel = (props: any) => {
 
       feature.geometry = match?.geometry as __esri.Geometry;
 
-      view?.goTo(feature.geometry);
-      setFeature(feature);
+      view?.goTo(feature.geometry, { duration: 1000, easing: 'ease' });
+      featureRef.current = feature;
 
       props.featureSelected(feature);
       props.propertiesSelected(properties.current);
@@ -132,7 +131,7 @@ export const PropertyPanel = (props: any) => {
   };
 
   const clear = () => {
-    setFeature(undefined);
+    featureRef.current = undefined;
     setFilter('OBJECTID IS NULL');
     toggleTabs('list');
     props.propertiesSelected([]);
@@ -148,17 +147,19 @@ export const PropertyPanel = (props: any) => {
     if (!loaded) {
       const mapView = props.view as __esri.MapView;
       mapViewLoaded(mapView);
-      // document.querySelectorAll('calcite-tab-nav').forEach((tab) => {
-      //   tab.addEventListener('calciteTabChange', (event) => {
-      //     //setSelectedTab((event as any).detail.tab === 0 ? 'list' : 'info');
-      //   });
-      // });
+      document.querySelectorAll('calcite-tab-nav').forEach((tab) => {
+        tab.addEventListener('calciteTabChange', (event) => {
+          setReloadTable((event as any).detail.tab === 0);
+          console.log(featureRef.current);
+        });
+      });
       window.addEventListener('popstate', (e) => {
         if (e.state?.pins === state.current?.pins) {
           history.back();
         } else {
           if (e.state?.pins) {
             setWhere(`PIN_NUM in ('${decodeURIComponent(history.state?.pins.split(',').join(`','`))}')`);
+            setFilter(`PIN_NUM in ('${decodeURIComponent(history.state?.pins.split(',').join(`','`))}')`);
           }
         }
         state.current = e.state;
@@ -167,11 +168,9 @@ export const PropertyPanel = (props: any) => {
       const pins = url.searchParams.get('pins');
       if (pins) {
         setWhere(`PIN_NUM in ('${decodeURIComponent(pins.split(',').join(`','`))}')`);
+        setFilter(`PIN_NUM in ('${decodeURIComponent(pins.split(',').join(`','`))}')`);
       }
     }
-    return () => {
-      console.log('cleanup');
-    };
   }, []);
 
   useEffect(() => {
@@ -188,7 +187,7 @@ export const PropertyPanel = (props: any) => {
           feature.geometry = data.properties?.find((prop: __esri.Graphic) => {
             return prop.getAttribute('PIN_NUM') === feature.getAttribute('PIN_NUM');
           })?.geometry;
-          setFeature(feature);
+          featureRef.current = feature;
           props.featureSelected(feature);
 
           setSearchParams([feature]);
@@ -197,7 +196,7 @@ export const PropertyPanel = (props: any) => {
         } else {
           setSearchParams([]);
 
-          setFeature(undefined);
+          featureRef.current = undefined;
           toggleTabs('list');
         }
         props.propertiesSelected(data.properties);
@@ -225,7 +224,7 @@ export const PropertyPanel = (props: any) => {
           <calcite-tab-title tab="list" active ref={listTab}>
             List
           </calcite-tab-title>
-          <calcite-tab-title tab="info" ref={infoTab} disabled={!feature}>
+          <calcite-tab-title tab="info" ref={infoTab}>
             Info
           </calcite-tab-title>
         </calcite-tab-nav>
@@ -233,7 +232,7 @@ export const PropertyPanel = (props: any) => {
         <calcite-tab tab="list">
           {loaded && (
             <Suspense fallback={''}>
-              <PropertyTable
+              <PropertyList
                 view={view}
                 layer={table}
                 filter={filter}
@@ -241,7 +240,7 @@ export const PropertyPanel = (props: any) => {
                 reloadTable={reloadTable}
                 selectedTab={selectedTab}
                 featureSelected={tableFeatureSelected}
-              ></PropertyTable>
+              ></PropertyList>
             </Suspense>
           )}
         </calcite-tab>
@@ -249,7 +248,7 @@ export const PropertyPanel = (props: any) => {
         <calcite-tab tab="info">
           {loaded && (
             <Suspense fallback={''}>
-              <PropertyInfo view={view} feature={feature} />
+              <PropertyInfo view={view} feature={featureRef.current} />
             </Suspense>
           )}
         </calcite-tab>

@@ -8,6 +8,10 @@ import * as geodesicUtils from '@arcgis/core/geometry/support/geodesicUtils';
 import Feature from '@arcgis/core/widgets/Feature';
 import FieldInfo from '@arcgis/core/popup/FieldInfo';
 import * as promiseUtils from '@arcgis/core/core/promiseUtils';
+import React, { lazy, Suspense } from 'react';
+import ReactDOM from 'react-dom';
+
+const AddressTable = lazy(() => import('../AddressTable/AddressTable'));
 
 const arcadeExpressionInfos = [
   {
@@ -90,12 +94,12 @@ const arcadeExpressionInfos = [
       'Proper($feature.CITY_DECODE)+TextFormatting.NewLine+"Jurisdiction"+TextFormatting.NewLine+' +
       '$feature.PLANNING_JURISDICTION+TextFormatting.NewLine+"Township"+TextFormatting.NewLine+Proper($feature.TOWNSHIP_DECODE)',
   },
-  // {
-  // 	name: 'addresses',
-  // 	title: 'Addresses',
-  // 	expression:
-  // 		"var rel = FeatureSetByRelationshipName($feature, 'CONDO_PROPERTY', ['*'], true);var test = Array(Count(rel));var cnt = 0;var f = First(rel);var fs = FeatureSetByPortalItem(Portal('https://ral.maps.arcgis.com/'), '318be24592ea4dcba042511b3125fd53', 2, ['ADDRESS','FEATURETYPE']);var containfs = Contains(f, fs);var addresses = Array(Count(containfs));var cnt = 0;for (var i in containfs){        addresses[cnt] = {'ADDRESS': i['ADDRESS'], 'FEATURETYPE': i['FEATURETYPE']};    cnt+=1;}function sortAddresses(a,b) {    return  a['ADDRESS'] > b['ADDRESS'];}var sorted =  Sort(addresses, sortAddresses);var list = '';for (var i in sorted) {    list += sorted[i]['ADDRESS'] + ' (' + sorted[i]['FEATURETYPE'] + ')' + TextFormatting.NewLine;}return list;",
-  // },
+  {
+    name: 'addresses',
+    title: 'Addresses',
+    expression:
+      "var rel = FeatureSetByRelationshipName($feature, 'CONDO_PROPERTY', ['*'], true);var test = Array(Count(rel));var cnt = 0;var f = First(rel);var fs = FeatureSetByPortalItem(Portal('https://ral.maps.arcgis.com/'), '318be24592ea4dcba042511b3125fd53', 2, ['ADDRESS','FEATURETYPE']);var containfs = Contains(f, fs);var addresses = Array(Count(containfs));var cnt = 0;for (var i in containfs){        addresses[cnt] = {'ADDRESS': i['ADDRESS'], 'FEATURETYPE': i['FEATURETYPE']};    cnt+=1;}function sortAddresses(a,b) {    return  a['ADDRESS'] > b['ADDRESS'];}var sorted =  Sort(addresses, sortAddresses);var list = '';for (var i in sorted) {    list += sorted[i]['ADDRESS'] + ' (' + sorted[i]['FEATURETYPE'] + ')' + TextFormatting.NewLine;}return list;",
+  },
 ] as ExpressionInfo[];
 const services: any[] = [
   {
@@ -273,6 +277,8 @@ const wellCreator = (e: any, view: __esri.MapView) => {
     })
     .then((featureSet) => {
       const div = document.createElement('div');
+      div.setAttribute('style', 'display: flex;flex-direction: row;justify-content: space-around;');
+
       if (featureSet.features.length) {
         const pin = featureSet.features[0].getAttribute('PIN_NUM');
         const btn = document.createElement('calcite-button');
@@ -486,7 +492,7 @@ export const createTemplate = (view: __esri.MapView | __esri.SceneView, condoTab
                       btn.setAttribute('scale', 's');
                       btn.setAttribute('target', '_blank');
                       btn.setAttribute('round', '');
-                      btn.setAttribute('icon-start', 'person');
+                      btn.setAttribute('icon-start', '360-view');
                       btn.setAttribute('rel', 'noreferrer');
                       btn.setAttribute(
                         'href',
@@ -719,13 +725,55 @@ export const createTemplate = (view: __esri.MapView | __esri.SceneView, condoTab
           return accordion;
         },
       }),
+      {
+        type: 'text',
+        text: '<h2>Addresses</h1>',
+      },
+      new CustomContent({
+        outFields: ['*'],
+        creator: (e: any) => {
+          const container = document.createElement('div');
+          container.setAttribute('style', 'max-height: 500px;min-height: 100px');
+
+          const graphic: __esri.Graphic = e.graphic;
+          (view as __esri.MapView).graphics.removeMany(
+            (view as __esri.MapView).graphics.filter((graphic) => {
+              return graphic.getAttribute('type') === 'address';
+            }),
+          );
+          const addresses = new FeatureLayer({
+            portalItem: {
+              id: '318be24592ea4dcba042511b3125fd53',
+            },
+            outFields: ['ADDRESS', 'FEATURETYPE'],
+            customParameters: {
+              outSR: view.spatialReference,
+              orderByFields: 'ADDRESS',
+            },
+          });
+
+          const suspense = (
+            <Suspense fallback={''}>
+              <AddressTable
+                layer={addresses}
+                view={view}
+                geometry={graphic.geometry}
+                pin={graphic.getAttribute('PIN_NUM')}
+              />
+            </Suspense>
+          );
+          ReactDOM.render(suspense, container);
+
+          return container;
+        },
+      }),
       // {
-      // 	type: 'text',
-      // 	text: '<h2>Addresses</h1>',
+      //   type: 'text',
+      //   text: '<h2>Addresses</h1>',
       // },
       // {
-      // 	type: 'text',
-      // 	text: '{expression/addresses}',
+      //   type: 'text',
+      //   text: '{expression/addresses}',
       // },
     ],
   });

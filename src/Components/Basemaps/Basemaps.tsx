@@ -24,10 +24,6 @@ export const Basemaps = (props: any) => {
     basemapGallery.watch('activeBasemap', (activeBasemap: __esri.Basemap) => {
       basemapChanged(activeBasemap, props.view, selectedTab);
     });
-
-    return () => {
-      console.log('cleanup');
-    };
   }); // only after initial render
   return (
     <div className="panel">

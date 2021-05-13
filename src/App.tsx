@@ -7,9 +7,9 @@ import './App.scss';
 import { Actions } from './config/config';
 import ThemeContext from './Components/ThemeContext';
 import ActionContext from './Components/ActionContext';
-import '@vaadin/vaadin-button';
-import '@vaadin/vaadin-grid';
-import '@vaadin/vaadin-text-field';
+// import '@vaadin/vaadin-button';
+// import '@vaadin/vaadin-grid';
+// import '@vaadin/vaadin-text-field';
 import '@arcgis/core/assets/esri/themes/light/main.css';
 function App() {
   const [theme, setTheme] = useState('dark');

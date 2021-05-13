@@ -41,7 +41,7 @@ export const configureOverview = (overview: __esri.MapView, mainView: __esri.Map
     graphicLayer.graphics.getItemAt(0).geometry = mainView.extent;
     extent = mainView.extent.clone();
     extent.expand(4);
-    overview.goTo({ target: extent });
+    overview.goTo({ target: extent }, { duration: 1000, easing: 'ease' });
   });
   mainView.map.watch('basemap', (basemap) => {
     overview.map.basemap = basemap;

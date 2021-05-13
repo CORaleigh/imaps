@@ -11,15 +11,15 @@ const getColumns = (layer: __esri.FeatureLayer): FieldColumnConfig[] => {
     const field = layer.fields.find((column) => {
       return column.name === columnName;
     }) as __esri.Field;
-    columns.push(
-      new FieldColumnConfig({
-        alias: field.alias,
-        name: field.name,
-        field: field,
-        layer: layer,
-        visible: showColumns.includes(field.name),
-      } as any),
-    );
+
+    const config = new FieldColumnConfig({
+      alias: field.alias,
+      name: field.name,
+      field: field,
+      layer: layer,
+      visible: showColumns.includes(field.name),
+    } as any);
+    columns.push(config);
   });
   layer.fields.forEach((field) => {
     if (!ignoreFields.includes(field.name) && !showColumns.includes(field.name)) {
@@ -49,6 +49,16 @@ export const createFeatureTable = async (
     fieldConfigs: getColumns(layer),
     view: view,
     editingEnabled: false,
+    visibleElements: {
+      header: true,
+      menu: true,
+      menuItems: {
+        clearSelection: false,
+        refreshData: false,
+        toggleColumns: true,
+      },
+      selectionColumn: false,
+    },
   });
   return table;
 };
