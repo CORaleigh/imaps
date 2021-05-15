@@ -10,6 +10,7 @@ import FieldInfo from '@arcgis/core/popup/FieldInfo';
 import * as promiseUtils from '@arcgis/core/core/promiseUtils';
 import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
+import { services } from '../../../config/config';
 
 const AddressTable = lazy(() => import('../AddressTable/AddressTable'));
 
@@ -101,67 +102,6 @@ const arcadeExpressionInfos = [
       "var rel = FeatureSetByRelationshipName($feature, 'CONDO_PROPERTY', ['*'], true);var test = Array(Count(rel));var cnt = 0;var f = First(rel);var fs = FeatureSetByPortalItem(Portal('https://ral.maps.arcgis.com/'), '318be24592ea4dcba042511b3125fd53', 2, ['ADDRESS','FEATURETYPE']);var containfs = Contains(f, fs);var addresses = Array(Count(containfs));var cnt = 0;for (var i in containfs){        addresses[cnt] = {'ADDRESS': i['ADDRESS'], 'FEATURETYPE': i['FEATURETYPE']};    cnt+=1;}function sortAddresses(a,b) {    return  a['ADDRESS'] > b['ADDRESS'];}var sorted =  Sort(addresses, sortAddresses);var list = '';for (var i in sorted) {    list += sorted[i]['ADDRESS'] + ' (' + sorted[i]['FEATURETYPE'] + ')' + TextFormatting.NewLine;}return list;",
   },
 ] as ExpressionInfo[];
-const services: any[] = [
-  {
-    group: {
-      title: 'Electoral',
-      layers: [
-        'Precincts',
-        'Congressional Districts',
-        'NC House of Representatives Districts',
-        'NC Senate Districts',
-        'School Board Districts',
-        'Board of Commissioners Districts',
-        'Superior Court Districts',
-        'Raleigh City Council',
-        'Morrisville Town Council Districts',
-      ],
-    },
-  },
-  {
-    group: {
-      title: 'Environmental',
-      layers: ['Floodplain', 'Soils', 'Critical Watersheds', 'Water Supply Watersheds'],
-    },
-  },
-  {
-    group: {
-      title: 'Planning',
-      layers: [
-        'Angier Zoning',
-        'Apex Zoning',
-        'Cary Zoning',
-        'County Zoning',
-        'Fuquay-Varina Zoning',
-        'Garner Zoning',
-        'Holly Springs Zoning',
-        'Morrisville Zoning',
-        'Knightdale Zoning',
-        'Rolesville Zoning',
-        'Wake Forest Zoning',
-        'Wendell Zoning',
-        'Zebulon Zoning',
-        'Corporate Limits',
-        'Planning Jurisdictions',
-        'Subdivisions',
-      ],
-    },
-  },
-  {
-    group: {
-      title: 'Public Safety',
-      layers: [
-        'Raleigh Police Districts',
-        'Sheriff Zones',
-        'Fire Insurance Districts',
-        'Fire Response Zones',
-        'EMS Franchise Districts',
-        'EMS Response Zones',
-        'Garner Police Beats',
-      ],
-    },
-  },
-];
 
 const scrollToService = (e: any) => {
   const rect = (e.detail.requestedAccordionItem as HTMLElement).getBoundingClientRect();
@@ -706,7 +646,7 @@ export const createTemplate = (view: __esri.MapView | __esri.SceneView, condoTab
         creator: (e: any) => {
           const accordion = document.createElement('calcite-accordion');
           accordion.setAttribute('selection-mode', 'single');
-
+          accordion.setAttribute('icon-type', 'chevron');
           services.forEach((service) => {
             const item = document.createElement('calcite-accordion-item');
             item.setAttribute('item-title', service.group.title);
@@ -725,16 +665,16 @@ export const createTemplate = (view: __esri.MapView | __esri.SceneView, condoTab
           return accordion;
         },
       }),
-      {
-        type: 'text',
-        text: '<h2>Addresses</h1>',
-      },
       new CustomContent({
         outFields: ['*'],
         creator: (e: any) => {
           const container = document.createElement('div');
           container.setAttribute('style', 'max-height: 500px;min-height: 100px');
-
+          const title = document.createElement('h2');
+          title.textContent = 'Addresses';
+          container.append(title);
+          const tablediv = document.createElement('div');
+          container.append(tablediv);
           const graphic: __esri.Graphic = e.graphic;
           (view as __esri.MapView).graphics.removeMany(
             (view as __esri.MapView).graphics.filter((graphic) => {
@@ -751,20 +691,25 @@ export const createTemplate = (view: __esri.MapView | __esri.SceneView, condoTab
               orderByFields: 'ADDRESS',
             },
           });
+          return addresses
+            .queryFeatureCount({ where: `NCPIN = '${graphic.getAttribute('PIN_NUM')}'` })
+            .then((count) => {
+              if (count > 0) {
+                const suspense = (
+                  <Suspense fallback={''}>
+                    <AddressTable
+                      layer={addresses}
+                      view={view}
+                      geometry={graphic.geometry}
+                      pin={graphic.getAttribute('PIN_NUM')}
+                    />
+                  </Suspense>
+                );
+                ReactDOM.render(suspense, tablediv);
 
-          const suspense = (
-            <Suspense fallback={''}>
-              <AddressTable
-                layer={addresses}
-                view={view}
-                geometry={graphic.geometry}
-                pin={graphic.getAttribute('PIN_NUM')}
-              />
-            </Suspense>
-          );
-          ReactDOM.render(suspense, container);
-
-          return container;
+                return container;
+              }
+            });
         },
       }),
       // {

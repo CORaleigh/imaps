@@ -10,22 +10,22 @@ export const PropertyList = (props: any) => {
   const [table, setTable] = useState<FeatureTable>();
   useEffect(() => {
     if (table) {
-      requestAnimationFrame(() => {
+      setTimeout(() => {
         const grid = (table?.container as HTMLElement).querySelector('vaadin-grid');
-        //grid?.render();
-        //grid?.recalculateColumnWidths();
-        console.log(grid?.scrollHeight);
+        grid?.render();
+        grid?.recalculateColumnWidths();
         grid?.notifyResize();
+
         grid?.focus();
         const items = grid?.selectedItems;
         if (items) {
           const item = items[0];
           if (item) {
-            const index = table.viewModel.getObjectIdIndex((item as any).objectId);
-            table.viewModel.scrollToIndex(index);
+            //const index = table.viewModel.getObjectIdIndex((item as any).objectId);
+            //table.viewModel.scrollToIndex(index);
           }
         }
-      });
+      }, 1000);
     }
   }, [props.reloadTable]);
   useEffect(() => {
@@ -69,12 +69,12 @@ export const PropertyList = (props: any) => {
           grid?.addEventListener('click', (e) => {
             if ((e.target as HTMLElement).nodeName === 'VAADIN-GRID-CELL-CONTENT') {
               //grid.selectItem((grid.getEventContext(e) as any)?.item);
-              debugger;
+
               table.clearSelection();
               const item = (grid.getEventContext(e) as any)?.item;
               const feature = item.feature;
               table.selectRows(feature);
-              grid.scrollToIndex(item.index);
+              //grid.scrollToIndex(item.index);
               props.featureSelected(feature);
               requestAnimationFrame(() => {
                 const title = (table.container as HTMLElement).querySelector('.esri-feature-table__title');

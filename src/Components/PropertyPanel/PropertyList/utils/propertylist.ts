@@ -98,7 +98,7 @@ export const createFeatureTable = async (
       menu: true,
       menuItems: {
         clearSelection: false,
-        refreshData: false,
+        refreshData: true,
         toggleColumns: true,
       },
       selectionColumn: false,

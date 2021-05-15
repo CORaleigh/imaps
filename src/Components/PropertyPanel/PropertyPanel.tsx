@@ -20,7 +20,7 @@ export const PropertyPanel = (props: any) => {
 
   const [table, setTable] = useState<__esri.FeatureLayer>();
 
-  const [selectedTab] = useState('list');
+  const [selectedTab, setSelectedTab] = useState('list');
   const [reloadTable, setReloadTable] = useState(false);
 
   const [addressTable, setAddressTable] = useState<__esri.FeatureLayer>();
@@ -51,12 +51,34 @@ export const PropertyPanel = (props: any) => {
   };
   const toggleTabs = (tabTitle: string) => {
     //setSelectedTab(tabTitle);
-    // const tabnav: HTMLCalciteTabNavElement = document.querySelector('calcite-tab-nav') as HTMLCalciteTabNavElement;
-    // tabnav?.dispatchEvent(new CustomEvent('calciteTabChange', { detail: { tab: 1 } }));
+    debugger;
+    //const tabnav: HTMLCalciteTabNavElement = document.querySelector('calcite-tab-nav') as HTMLCalciteTabNavElement;
+
+    //tabnav?.dispatchEvent(new CustomEvent('calciteTabChange', { detail: { tab: tabTitle } }));
     const title: HTMLCalciteTabTitleElement = document.querySelector(
       `calcite-tab-title[tab=${tabTitle}]`,
     ) as HTMLCalciteTabTitleElement;
-    title.click();
+    // title.focus();
+    //title.click();
+    const ev = new KeyboardEvent('keydown', {
+      altKey: false,
+      bubbles: true,
+      cancelable: true,
+      charCode: 0,
+      code: 'Enter',
+      composed: true,
+      ctrlKey: false,
+      detail: 0,
+      isComposing: false,
+      key: 'Enter',
+      keyCode: 13,
+      location: 0,
+      metaKey: false,
+      repeat: false,
+      shiftKey: false,
+    });
+
+    title.dispatchEvent(ev);
     // setTimeout(() => {
     //   const tab: HTMLElement = document.querySelector(
     //     `calcite-tab-title:${tabTitle === 'list' ? 'first' : 'last'}-child`,
@@ -69,7 +91,7 @@ export const PropertyPanel = (props: any) => {
     //     'style',
     //     `transition-duration: 0.3s; width: ${tab.clientWidth}px; left: ${tab.offsetLeft}px;`,
     //   );
-    // }, 1000);
+    // }, 500);
     setReloadTable(true);
   };
   const searchComplete = (result: any) => {
@@ -79,11 +101,13 @@ export const PropertyPanel = (props: any) => {
       //featureRef.current = result.features[0];
       setSearchParams([result.features[0]]);
       toggleTabs('info');
+      setSelectedTab('info');
     } else {
       setSearchParams([]);
 
       featureRef.current = undefined;
       toggleTabs('list');
+      setSelectedTab('list');
     }
 
     const oids = result?.features.map((feature: __esri.Graphic) => {
@@ -127,6 +151,7 @@ export const PropertyPanel = (props: any) => {
       setSearchParams([feature]);
 
       toggleTabs('info');
+      setSelectedTab('info');
     }
   };
 
@@ -134,6 +159,7 @@ export const PropertyPanel = (props: any) => {
     featureRef.current = undefined;
     setFilter('OBJECTID IS NULL');
     toggleTabs('list');
+    setSelectedTab('list');
     props.propertiesSelected([]);
     const graphics = view?.graphics.filter((graphic) => {
       return graphic.getAttribute('type') === 'buffer';
@@ -149,9 +175,29 @@ export const PropertyPanel = (props: any) => {
       mapViewLoaded(mapView);
       document.querySelectorAll('calcite-tab-nav').forEach((tab) => {
         tab.addEventListener('calciteTabChange', (event) => {
-          setReloadTable((event as any).detail.tab === 0);
+          setReloadTable((event as any).detail.tab === 0 || (event as any).detail.tab === 'list');
           console.log(featureRef.current);
         });
+      });
+
+      //workaround to make calcite-tab used visibility instead of display for hiding/unhiding to handle FeatureTable
+      document.querySelectorAll('calcite-tab').forEach((tab) => {
+        const observer: MutationObserver = new MutationObserver((mutations) => {
+          if (mutations.length) {
+            const shadow = (mutations[0].target as HTMLElement)?.shadowRoot;
+            if (shadow) {
+              shadow.innerHTML +=
+                '<style>:host([active]) section { display: block !important; visibility: visible !important;} section {display: block !important; visiblity: hidden !important;}</style>';
+            }
+
+            observer.disconnect();
+          } else {
+            observer.disconnect();
+          }
+        });
+        tab.innerHTML =
+          '<style>:host([active]) {display: block !important; visibility: visible !important;} :host { display: block; visibility: hidden !important;} calcite-tab {display: block !important; z-index: 1; visibility: hidden !important;} calcite-tab[active] { z-index: 100; visibility: visible !important;;} </style>';
+        observer.observe(tab as Node, { attributes: true });
       });
       window.addEventListener('popstate', (e) => {
         if (e.state?.pins === state.current?.pins) {
@@ -193,11 +239,13 @@ export const PropertyPanel = (props: any) => {
           setSearchParams([feature]);
 
           toggleTabs('info');
+          setSelectedTab('info');
         } else {
           setSearchParams([]);
 
           featureRef.current = undefined;
           toggleTabs('list');
+          setSelectedTab('list');
         }
         props.propertiesSelected(data.properties);
       }

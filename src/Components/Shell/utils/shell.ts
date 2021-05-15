@@ -81,7 +81,6 @@ export const updateTheme = (theme: string, setTheme: React.Dispatch<string>) => 
   if (link) {
     document.head.appendChild(link);
   }
-  debugger;
   if (window.matchMedia != undefined) {
     const media = window.matchMedia('(prefers-color-scheme: dark)');
     if (media.addEventListener != undefined) {

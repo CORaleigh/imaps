@@ -19,11 +19,12 @@ export const AddressTable = (props: any) => {
       },
       fieldConfigs: [
         {
-          alias: 'Address',
+          label: 'Address',
           name: 'ADDRESS',
+          width: '200px',
         } as any,
         {
-          alias: 'Feature Type',
+          label: 'Type',
           name: 'FEATURETYPE',
         } as any,
       ],
