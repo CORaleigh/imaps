@@ -186,6 +186,7 @@ export const Print = (props: any) => {
               });
             })
             .catch((reason) => {
+              console.log(reason);
               const index = jobRef.current.indexOf(job);
               jobRef.current[index] = { ...jobRef.current[index], ...{ error: true, loading: false } };
               setJobs([...jobRef.current]);
