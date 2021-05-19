@@ -1,3 +1,12 @@
+export const alert = {
+  show: true,
+  autoDismiss: true,
+  color: 'yellow',
+  icon: 'exclamation-mark-triangle',
+  title: 'Maintenance',
+  message: 'iMAPS will be unavailable due to scheduled maintenance on May 18th from 8PM to 12AM',
+};
+
 export const Actions = [
   {
     title: 'Property Search',

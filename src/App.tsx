@@ -11,6 +11,7 @@ import ActionContext from './Components/ActionContext';
 // import '@vaadin/vaadin-grid';
 // import '@vaadin/vaadin-text-field';
 import '@arcgis/core/assets/esri/themes/light/main.css';
+import Alert from './Components/Alert/Alert';
 function App() {
   const [theme, setTheme] = useState('dark');
   const [actions, setActions] = useState<any>(Actions);
@@ -21,6 +22,7 @@ function App() {
         <Suspense fallback={''}>
           <Shell />
         </Suspense>
+        <Alert></Alert>
       </ActionContext.Provider>
     </ThemeContext.Provider>
   );
