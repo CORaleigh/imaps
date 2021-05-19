@@ -269,9 +269,13 @@ export const Print = (props: any) => {
           {jobs.map((job: any) => {
             return (
               <div key={`printjob_${job.submitted}`}>
-                {job.loading && <calcite-loader scale="s" inline active>{`${job.title}.pdf`}</calcite-loader>}
+                {job.loading && (
+                  <calcite-loader scale="s" inline active>{`${job.title ? job.title : 'untitled'}.pdf`}</calcite-loader>
+                )}
                 {job.url && !job.loading && (
-                  <calcite-link target="_blank" icon-start="download" href={job.url}>{`${job.title}.pdf`}</calcite-link>
+                  <calcite-link target="_blank" icon-start="download" href={job.url}>{`${
+                    job.title ? job.title : 'untitled'
+                  }.pdf`}</calcite-link>
                 )}
               </div>
             );
