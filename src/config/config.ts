@@ -1,5 +1,5 @@
 export const alert = {
-  show: true,
+  show: false,
   autoDismiss: true,
   color: 'yellow',
   icon: 'exclamation-mark-triangle',
