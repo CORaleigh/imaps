@@ -157,6 +157,7 @@ export const PropertyPanel = (props: any) => {
 
   const clear = () => {
     featureRef.current = undefined;
+    props.featureSelected(undefined);
     setFilter('OBJECTID IS NULL');
     toggleTabs('list');
     setSelectedTab('list');
@@ -252,7 +253,7 @@ export const PropertyPanel = (props: any) => {
     });
   }, [props.geometry, props.propertiesSelected, props.featureSelected, props.selectedProperties]);
   return (
-    <div className="panel">
+    <div className="panel" id="propertyPanel">
       {loaded && (
         <Suspense fallback={''}>
           <PropertySearch

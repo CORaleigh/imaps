@@ -37,7 +37,7 @@ calcite-input input, textarea {
 @import '@esri/calcite-components/dist/calcite/calcite.css';
 
 
-calcite-tab, calcite-tab-nav {
+#propertyPanel calcite-tab, #propertyPanel calcite-tab-nav {
   right: 50px !important;
 }
 

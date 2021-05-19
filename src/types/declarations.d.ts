@@ -7,6 +7,8 @@ declare global {
     interface IntrinsicElements {
       'vaadin-grid';
       'vaadin-grid-sort-column';
+      'calcite-select';
+      'calcite-option';
       'calcite-accordion': Omit<JSX.CalciteAccordion, 'onCalciteAccordionChange'> &
         JSXInternal.HTMLAttributes<HTMLCalciteAccordionElement> & {
           oncalciteAccordionChange?: (event: CustomEvent<any>) => void;

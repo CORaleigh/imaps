@@ -69,6 +69,23 @@ export const Shell = () => {
         );
       }
     }
+
+    const printAction = actions.find((action) => {
+      return action.title === 'Print';
+    });
+    if (printAction) {
+      const container = document.getElementById(printAction?.container);
+      ReactDOM.render(
+        <Suspense fallback={''}>
+          <Print
+            view={view.current}
+            url="https://indoors.raleighnc.gov/arcgis/rest/services/ExportWebMap/GPServer/Export%20Web%20Map"
+            selectedFeature={feature}
+          />
+        </Suspense>,
+        container,
+      );
+    }
   };
   //activate PropertySearch on load and on geometry updates
   const activatePropertySearch = (): HTMLElement => {
@@ -314,7 +331,10 @@ export const Shell = () => {
         if (action.title === 'Print') {
           ReactDOM.render(
             <Suspense fallback={''}>
-              <Print view={view.current} />{' '}
+              <Print
+                view={view.current}
+                url="https://indoors.raleighnc.gov/arcgis/rest/services/ExportWebMap/GPServer/Export%20Web%20Map"
+              />
             </Suspense>,
             container,
           );
