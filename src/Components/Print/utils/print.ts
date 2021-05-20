@@ -8,6 +8,7 @@ import PrintTask from '@arcgis/core/tasks/PrintTask';
 import LegendLayer from '@arcgis/core/tasks/support/LegendLayer';
 import PrintParameters from '@arcgis/core/tasks/support/PrintParameters';
 import PrintTemplate from '@arcgis/core/tasks/support/PrintTemplate';
+import { printTemplates } from './templates';
 type Layout = {
   label: string;
   template: string;
@@ -36,39 +37,39 @@ export const getFormats = (url: string): Promise<string[]> => {
 
 export const getLayouts = (url: string): Promise<Layout[]> => {
   return promiseUtils.create((resolve, reject) => {
-    esriRequest(url, { query: { f: 'json' } })
-      .then((result) => {
-        const layouts: Layout[] = [];
-        const templates: string[] = [];
-        result.data.results[0].value.forEach((value: any) => {
-          const width = value.pageSize[0];
-          const height = value.pageSize[1];
-          let label = `${width}"x${height}"`;
-          let orient = 'Portrait';
-          let size: number = width;
-          let template = `${width}x${height}_${orient.toLowerCase()}`;
-          if (width > height) {
-            label = `${height}"x${width}"`;
-            orient = 'Landscape';
-            template = `${height}x${width}_${orient.toLowerCase()}`;
-            size = height;
-          }
-          label += ` ${orient}`;
+    //esriRequest(url, { query: { f: 'json' } })
+    //.then((result) => {
+    const layouts: Layout[] = [];
+    const templates: string[] = [];
+    printTemplates.results[0].value.forEach((value: any) => {
+      const width = value.pageSize[0];
+      const height = value.pageSize[1];
+      let label = `${width}"x${height}"`;
+      let orient = 'Portrait';
+      let size: number = width;
+      let template = `${width}x${height}_${orient.toLowerCase()}`;
+      if (width > height) {
+        label = `${height}"x${width}"`;
+        orient = 'Landscape';
+        template = `${height}x${width}_${orient.toLowerCase()}`;
+        size = height;
+      }
+      label += ` ${orient}`;
 
-          const layout = { label: label, template: template, size: size };
-          if (!templates.includes(layout.template)) {
-            layouts.push(layout);
-            templates.push(layout.template);
-          }
-        });
-        layouts.sort((a: Layout, b: Layout) => {
-          return a.size - b.size;
-        });
-        resolve(layouts);
-      })
-      .catch((reason) => {
-        reject(reason);
-      });
+      const layout = { label: label, template: template, size: size };
+      if (!templates.includes(layout.template)) {
+        layouts.push(layout);
+        templates.push(layout.template);
+      }
+    });
+    layouts.sort((a: Layout, b: Layout) => {
+      return a.size - b.size;
+    });
+    resolve(layouts);
+    //    })
+    //   .catch((reason) => {
+    //     reject(reason);
+    //    });
   });
 };
 export const roundScale = (mapScale: number): number => {
