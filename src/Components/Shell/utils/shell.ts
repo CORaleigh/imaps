@@ -133,13 +133,13 @@ export const windowResize = (
         );
       }
     }
+
     document.querySelectorAll('calcite-action-bar').forEach((bar) => {
       if (bar) {
-        bar.expandDisabled = window.innerWidth < 500;
+        bar.expandDisabled = window.innerWidth <= 500;
       }
     });
   });
   setWidth(window.innerWidth);
-
   setActions([...actions]);
 };

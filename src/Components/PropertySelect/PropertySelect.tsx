@@ -2,11 +2,9 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React, { useEffect, useRef, useState } from 'react';
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
-import Graphic from '@arcgis/core/Graphic';
-
-import * as geometryEngine from '@arcgis/core/geometry/geometryEngine';
 import SketchViewModel from '@arcgis/core/widgets/Sketch/SketchViewModel';
 import './PropertySelect.scss';
+import { addGraphic, bufferGraphic } from './utils/select';
 export const PropertySelect = (props: any) => {
   const distanceRef = useRef<HTMLCalciteInputElement>(null);
   const pointAction = useRef<HTMLCalciteActionElement>(null);
@@ -22,30 +20,6 @@ export const PropertySelect = (props: any) => {
   const [polygonSketchViewModel, setPolygonSketchViewModel] = useState<SketchViewModel>();
   const [geometryType, setGeometryType] = useState<string>();
   const [distance, setDistance] = useState(0);
-  //const distance = useRef<number>(0);
-
-  const addBufferGraphic = (geometry: __esri.Geometry): void => {
-    removeBufferGraphic();
-    const graphic: Graphic = new Graphic({
-      attributes: { type: 'buffer' },
-      geometry: geometry,
-      symbol: {
-        type: 'simple-fill',
-        style: 'none',
-        outline: {
-          color: [0, 0, 0, 0.5],
-          width: 3,
-          style: 'short-dash',
-        },
-      } as any,
-    });
-    (props.view as __esri.MapView).graphics.add(graphic);
-  };
-  const bufferGraphic = (geometry: __esri.Geometry, bufferDistance: number) => {
-    geometry = geometryEngine.geodesicBuffer(geometry, bufferDistance, 'feet') as __esri.Geometry;
-    props.geometrySet(geometry);
-    addBufferGraphic(geometry);
-  };
 
   const disableAllActions = () => {
     [pointAction, lineAction, polygonAction, circleAction, rectangleAction, multipointAction].forEach((action) => {
@@ -53,25 +27,9 @@ export const PropertySelect = (props: any) => {
         action.current.active = false;
       }
     });
+    setGeometryType(undefined);
   };
-  const removeBufferGraphic = (): void => {
-    const graphics = (props.view as __esri.MapView).graphics.filter((graphic) => {
-      return graphic.getAttribute('type') === 'buffer';
-    });
-    props.view.graphics.removeMany(graphics);
-  };
-  const addGraphic = (e: any) => {
-    if (e.state === 'complete') {
-      removeBufferGraphic();
-      const geometry = e.graphic.geometry;
-      if (parseInt(distanceRef.current?.value as string) > 0) {
-        bufferGraphic(geometry, parseInt(distanceRef.current?.value as string));
-      } else {
-        props.geometrySet(geometry);
-      }
-      disableAllActions();
-    }
-  };
+
   const createSketchViewModels = (layer: __esri.GraphicsLayer, view: __esri.MapView): SketchViewModel => {
     const sketchVM = new SketchViewModel({
       view,
@@ -82,7 +40,19 @@ export const PropertySelect = (props: any) => {
       },
     });
 
-    sketchVM.on('create', addGraphic);
+    sketchVM.on('create', (e: any) => {
+      addGraphic(e, view, parseInt(distanceRef.current?.value as string)).then((geometry) => {
+        props.geometrySet(geometry);
+        sketchVM.create(e.tool);
+        //disableAllActions();
+      });
+    });
+
+    sketchVM.watch('state', (state) => {
+      if (state === 'ready') {
+        disableAllActions();
+      }
+    });
     return sketchVM;
   };
 
@@ -124,12 +94,7 @@ export const PropertySelect = (props: any) => {
     setPolylineSketchViewModel(createSketchViewModels(new GraphicsLayer({ listMode: 'hide' }), props.view));
     setPolygonSketchViewModel(createSketchViewModels(new GraphicsLayer({ listMode: 'hide' }), props.view));
   }, []);
-  // useEffect(() => {
-  //
-  //   if (props.selectedFeature?.geometry) {
-  //     setSelectedFeature(props.selectedFeature);
-  //   }
-  // }, [props.selectedFeature]);
+
   return (
     <div className="panel">
       <div className="selectTools">
@@ -140,7 +105,7 @@ export const PropertySelect = (props: any) => {
           id="pointAction"
           onClick={(event: any) => {
             if (event.target.active) {
-              disableTool(pointSketchViewModel as SketchViewModel, event.target);
+              //disableTool(pointSketchViewModel as SketchViewModel, event.target);
             } else {
               changeSketchViewModel(
                 'point',
@@ -164,7 +129,7 @@ export const PropertySelect = (props: any) => {
           icon="line"
           onClick={(event: any) => {
             if (event.target.active) {
-              disableTool(polylineSketchViewModel as SketchViewModel, event.target);
+              //disableTool(polylineSketchViewModel as SketchViewModel, event.target);
             } else {
               changeSketchViewModel(
                 'polyline',
@@ -189,7 +154,7 @@ export const PropertySelect = (props: any) => {
           id="polygonAction"
           onClick={(event: any) => {
             if (event.target.active) {
-              disableTool(polygonSketchViewModel as SketchViewModel, event.target);
+              //disableTool(polygonSketchViewModel as SketchViewModel, event.target);
             } else {
               changeSketchViewModel(
                 'polygon',
@@ -214,7 +179,7 @@ export const PropertySelect = (props: any) => {
           id="rectangleAction"
           onClick={(event: any) => {
             if (event.target.active) {
-              disableTool(polygonSketchViewModel as SketchViewModel, event.target);
+              //disableTool(polygonSketchViewModel as SketchViewModel, event.target);
             } else {
               changeSketchViewModel(
                 'rectangle',
@@ -239,7 +204,7 @@ export const PropertySelect = (props: any) => {
           id="circleAction"
           onClick={(event: any) => {
             if (event.target.active) {
-              disableTool(polygonSketchViewModel as SketchViewModel, event.target);
+              //disableTool(polygonSketchViewModel as SketchViewModel, event.target);
             } else {
               changeSketchViewModel(
                 'circle',
@@ -259,12 +224,12 @@ export const PropertySelect = (props: any) => {
         ></calcite-action>
         <calcite-action
           ref={multipointAction}
-          text="Mulit-point"
+          text="Multi-point"
           icon="pins"
           id="multipointAction"
           onClick={(event: any) => {
             if (event.target.active) {
-              disableTool(pointSketchViewModel as SketchViewModel, event.target);
+              //disableTool(pointSketchViewModel as SketchViewModel, event.target);
             } else {
               changeSketchViewModel(
                 'multipoint',
@@ -308,24 +273,14 @@ export const PropertySelect = (props: any) => {
           value="0"
           onBlur={(e: any) => {
             setDistance(parseInt(e.target.value));
-            //
-            // if (distanceRef.current) {
-            //   distanceRef.current.value = e.target.value;
-            // }
           }}
         ></calcite-input>
       </calcite-label>
       {props.selectedFeature && distance > 0 && (
         <calcite-button
           onClick={() => {
-            const geometry = geometryEngine.geodesicBuffer(
-              props.selectedFeature?.geometry,
-              distance,
-              'feet',
-            ) as __esri.Geometry;
-            addBufferGraphic(geometry);
-            props.geometrySet(geometry);
-            disableAllActions();
+            props.geometrySet(bufferGraphic(props.selectedFeature?.geometry, distance, props.view));
+            //disableAllActions();
           }}
         >
           Buffer Selected

@@ -28,3 +28,12 @@
     -webkit-overflow-scrolling: touch;
 }
 
+@media only screen and (max-width: 500px) {
+    #propertyPanel calcite-tab-nav {
+        max-width: calc(100% - 50px);
+    }
+    #propertyPanel calcite-tab {
+        max-width: calc(100% - 50px);
+
+    }
+}

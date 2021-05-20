@@ -30,7 +30,7 @@ import ActionContext from '../ActionContext';
 export const Shell = () => {
   const [tips, setTips] = useState<any>([]);
   const [tipsTitle, setTipsTitle] = useState<string>();
-
+  console.log('render shell');
   const [width, setWidth] = useState(window.innerWidth);
   const view = useRef<__esri.MapView>();
   const [viewCreated, setViewCreated] = useState(false);
@@ -349,19 +349,43 @@ export const Shell = () => {
     initialized();
     const theme = window.localStorage.getItem('imaps_theme') as string;
     updateTheme(theme, setTheme);
-
+    let resizeTimer: NodeJS.Timeout;
     window.addEventListener('resize', () => {
-      windowResize(actions, width, setWidth, setActions);
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        windowResize(actions, width, setWidth, setActions);
+      }, 250);
+      document.querySelectorAll('calcite-shell-panel').forEach((panel) => {
+        let width = '350px';
+        if (window.innerWidth <= 500) {
+          width = 'calc(100vw - 50px)';
+        }
+        panel?.shadowRoot
+          ?.querySelector('.content')
+          ?.setAttribute(
+            'style',
+            `max-width: ${width}; width: calc(var(--calcite-panel-width-multiplier) * 100vw) !important;`,
+          );
+      });
     });
     document.querySelectorAll('calcite-shell-panel').forEach((panel) => {
       const observer: MutationObserver = new MutationObserver((mutations) => {
         if (mutations.length) {
+          let width = '350px';
+          if (window.innerWidth <= 500) {
+            width = 'calc(100vw - 50px)';
+          }
           panel?.shadowRoot
             ?.querySelector('.content')
             ?.setAttribute(
               'style',
-              'max-width: 350px; width: calc(var(--calcite-panel-width-multiplier) * 100vw) !important;',
+              `max-width: ${width}; width: calc(var(--calcite-panel-width-multiplier) * 100vw) !important;`,
             );
+          document.querySelectorAll('calcite-action-bar').forEach((bar) => {
+            if (bar) {
+              bar.expandDisabled = window.innerWidth <= 500;
+            }
+          });
           observer.disconnect();
         } else {
           observer.disconnect();
@@ -382,7 +406,7 @@ export const Shell = () => {
       <calcite-shell theme={theme} className="shell">
         {width >= 1000 ? (
           <calcite-shell-panel slot="primary-panel" position="start" width-scale="l" collapsed>
-            <calcite-action-bar slot="action-bar" expanded={!viewCreated ? '' : null}>
+            <calcite-action-bar slot="action-bar" expanded={!viewCreated && window.innerWidth > 500 ? '' : null}>
               {actions.map((action: any) => {
                 if (action.isTool) {
                   return (
@@ -463,7 +487,7 @@ export const Shell = () => {
         )}
 
         <calcite-shell-panel slot="contextual-panel" position="end" width-scale="l">
-          <calcite-action-bar slot="action-bar" expanded={!viewCreated ? '' : null}>
+          <calcite-action-bar slot="action-bar" expanded={!viewCreated && window.innerWidth > 500 ? '' : null}>
             {actions.map((action: any) => {
               if (!action.isTool || width < 1000) {
                 return (
