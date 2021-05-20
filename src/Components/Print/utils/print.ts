@@ -8,7 +8,16 @@ import PrintTask from '@arcgis/core/tasks/PrintTask';
 import LegendLayer from '@arcgis/core/tasks/support/LegendLayer';
 import PrintParameters from '@arcgis/core/tasks/support/PrintParameters';
 import PrintTemplate from '@arcgis/core/tasks/support/PrintTemplate';
+type Layout = {
+  label: string;
+  template: string;
+  size: number;
+};
 
+type MapScale = {
+  scale: number;
+  label: string;
+};
 export const getFormats = (url: string): Promise<string[]> => {
   return promiseUtils.create((resolve, reject) =>
     esriRequest(url, { query: { f: 'json' } })
@@ -23,17 +32,6 @@ export const getFormats = (url: string): Promise<string[]> => {
         reject(reason);
       }),
   );
-};
-
-type Layout = {
-  label: string;
-  template: string;
-  size: number;
-};
-
-type MapScale = {
-  scale: number;
-  label: string;
 };
 
 export const getLayouts = (url: string): Promise<Layout[]> => {
@@ -136,28 +134,6 @@ export const getScales = (view: __esri.MapView): MapScale[] => {
   return scales;
 };
 
-export const exportMap = (
-  url: string,
-  template: __esri.PrintTemplate,
-  view: __esri.MapView,
-): Promise<__esri.PrintResponse> => {
-  return promiseUtils.create((resolve, reject) => {
-    new PrintTask({ url: url })
-      .execute(
-        new PrintParameters({
-          template: template,
-          view: view,
-        }),
-      )
-      .then((result: __esri.PrintResponse) => {
-        resolve(result);
-      })
-      .catch((reason) => {
-        reject(reason);
-      });
-  });
-};
-
 export const getCustomElements = (size: number, mapScale: number): any[] => {
   const customElements = [];
   customElements.push({ Scale: (mapScale / 12).toString() });
@@ -216,5 +192,27 @@ export const getTemplate = (
         }) as any,
     },
     layout: selectedTemplate as any,
+  });
+};
+
+export const exportMap = (
+  url: string,
+  template: __esri.PrintTemplate,
+  view: __esri.MapView,
+): Promise<__esri.PrintResponse> => {
+  return promiseUtils.create((resolve, reject) => {
+    new PrintTask({ url: url })
+      .execute(
+        new PrintParameters({
+          template: template,
+          view: view,
+        }),
+      )
+      .then((result: __esri.PrintResponse) => {
+        resolve(result);
+      })
+      .catch((reason) => {
+        reject(reason);
+      });
   });
 };
