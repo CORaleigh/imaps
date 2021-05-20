@@ -41,6 +41,9 @@ export const PropertySelect = (props: any) => {
     });
 
     sketchVM.on('create', (e: any) => {
+      if (e.state === 'cancel') {
+        disableAllActions();
+      }
       addGraphic(e, view, parseInt(distanceRef.current?.value as string)).then((geometry) => {
         props.geometrySet(geometry);
         sketchVM.create(e.tool);
@@ -48,11 +51,6 @@ export const PropertySelect = (props: any) => {
       });
     });
 
-    sketchVM.watch('state', (state) => {
-      if (state === 'ready') {
-        disableAllActions();
-      }
-    });
     return sketchVM;
   };
 
