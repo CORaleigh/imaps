@@ -82,12 +82,12 @@ export const PropertySelect = (props: any) => {
     }
   };
 
-  const disableTool = (vm: SketchViewModel, action: HTMLCalciteActionElement) => {
-    vm.cancel();
-    setGeometryType(undefined);
-    action.active = false;
-    action.blur();
-  };
+  // const disableTool = (vm: SketchViewModel, action: HTMLCalciteActionElement) => {
+  //   vm.cancel();
+  //   setGeometryType(undefined);
+  //   action.active = false;
+  //   action.blur();
+  // };
 
   useEffect(() => {
     setPointSketchViewModel(createSketchViewModels(new GraphicsLayer({ listMode: 'hide' }), props.view));
