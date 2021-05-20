@@ -79,7 +79,8 @@ export const Shell = () => {
         <Suspense fallback={''}>
           <Print
             view={view.current}
-            url="https://indoors.raleighnc.gov/arcgis/rest/services/ExportWebMap/GPServer/Export%20Web%20Map"
+            exportUrl="https://indoors.raleighnc.gov/arcgis/rest/services/ExportWebMap/GPServer/Export%20Web%20Map"
+            templateUrl="https://indoors.raleighnc.gov/arcgis/rest/services/ExportWebMap/GPServer/Get%20Layout%20Templates%20Info/execute"
             selectedFeature={feature}
           />
         </Suspense>,
@@ -333,7 +334,8 @@ export const Shell = () => {
             <Suspense fallback={''}>
               <Print
                 view={view.current}
-                url="https://indoors.raleighnc.gov/arcgis/rest/services/ExportWebMap/GPServer/Export%20Web%20Map"
+                exportUrl="https://indoors.raleighnc.gov/arcgis/rest/services/ExportWebMap/GPServer/Export%20Web%20Map"
+                templateUrl="https://indoors.raleighnc.gov/arcgis/rest/services/ExportWebMap/GPServer/Get%20Layout%20Templates%20Info/execute"
               />
             </Suspense>,
             container,
@@ -351,10 +353,22 @@ export const Shell = () => {
     window.addEventListener('resize', () => {
       windowResize(actions, width, setWidth, setActions);
     });
-    document
-      .querySelector('calcite-shell-panel')
-      ?.shadowRoot?.querySelector('.content')
-      ?.setAttribute('style', 'width: calc(var(--calcite-panel-width-multiplier) * 100vw) !important;');
+    document.querySelectorAll('calcite-shell-panel').forEach((panel) => {
+      const observer: MutationObserver = new MutationObserver((mutations) => {
+        if (mutations.length) {
+          panel?.shadowRoot
+            ?.querySelector('.content')
+            ?.setAttribute(
+              'style',
+              'max-width: 350px; width: calc(var(--calcite-panel-width-multiplier) * 100vw) !important;',
+            );
+          observer.disconnect();
+        } else {
+          observer.disconnect();
+        }
+      });
+      observer.observe(panel?.shadowRoot as Node, { childList: true });
+    });
 
     return () => {
       window.removeEventListener('resize', () => {
@@ -368,7 +382,7 @@ export const Shell = () => {
       <calcite-shell theme={theme} className="shell">
         {width >= 1000 ? (
           <calcite-shell-panel slot="primary-panel" position="start" width-scale="l" collapsed>
-            <calcite-action-bar expand-disabled slot="action-bar">
+            <calcite-action-bar slot="action-bar" expanded={!viewCreated ? '' : null}>
               {actions.map((action: any) => {
                 if (action.isTool) {
                   return (
@@ -449,7 +463,7 @@ export const Shell = () => {
         )}
 
         <calcite-shell-panel slot="contextual-panel" position="end" width-scale="l">
-          <calcite-action-bar expand-disabled slot="action-bar">
+          <calcite-action-bar slot="action-bar" expanded={!viewCreated ? '' : null}>
             {actions.map((action: any) => {
               if (!action.isTool || width < 1000) {
                 return (

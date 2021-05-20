@@ -1,110 +1,43 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React, { useEffect, useRef, useState } from 'react';
-import esriRequest from '@arcgis/core/request';
-import PrintTask from '@arcgis/core/tasks/PrintTask';
-import PrintParameters from '@arcgis/core/tasks/support/PrintParameters';
-import PrintTemplate from '@arcgis/core/tasks/support/PrintTemplate';
-import LegendLayer from '@arcgis/core/tasks/support/LegendLayer';
+
 import './Print.scss';
+import {
+  exportMap,
+  formatAttributes,
+  getCustomElements,
+  getFormats,
+  getLayouts,
+  getScales,
+  getTemplate,
+  roundScale,
+} from './utils/print';
 export const Print = (props: any) => {
   const [layouts, setLayouts] = useState<any[]>([]);
   const [formats, setFormats] = useState<any[]>([]);
   const [scales, setScales] = useState<any[]>([]);
   const [scaleType, setScaleType] = useState('current');
   const [selectedFeature, setSelectedFeature] = useState<__esri.Graphic>();
+  const [currentScale, setCurrentScale] = useState(Math.round((props.view.scale * 600) / 564.248588));
+  const [jobs, setJobs] = useState<any>([]);
 
   const layout = useRef<HTMLCalciteSelectElement>(null);
   const scale = useRef<HTMLCalciteSelectElement>(null);
   const scaleRadio = useRef<HTMLCalciteRadioButtonGroupElement>(null);
-  const [currentScale, setCurrentScale] = useState(Math.round((props.view.scale * 600) / 564.248588));
   const format = useRef<HTMLCalciteSelectElement>(null);
   const title = useRef<HTMLCalciteInputElement>(null);
-  const [jobs, setJobs] = useState<any>([]);
+  const attributeCheck = useRef<HTMLCalciteCheckboxElement>(null);
+  const legendCheck = useRef<HTMLCalciteCheckboxElement>(null);
   const jobRef = useRef<any[]>([]);
 
-  const getTemplate = (url: string) => {
-    esriRequest(url, { query: { f: 'json' } }).then((result) => {
-      result.data.parameters.forEach((parameter: any) => {
-        if (parameter.name === 'Layout_Template') {
-          setLayouts(parameter.choiceList);
-        }
-      });
-      result.data.parameters.forEach((parameter: any) => {
-        if (parameter.name === 'Format') {
-          setFormats(parameter.choiceList);
-        }
-      });
-    });
-  };
-
-  const getScales = (view: __esri.MapView) => {
-    const scales = (view.constraints as any)._defaultLODs
-      .filter((lod: any) => {
-        return lod.scale >= 300 && lod.scale < 614400;
-      })
-      .map((lod: any) => {
-        const scale = roundScale(lod.scale);
-        return { scale: scale, label: `1" = ${(scale / 12).toLocaleString('en')}'` };
-      })
-      ?.reverse();
-    setScales(scales);
-  };
-  const roundScale = (mapScale: number): number => {
-    const newScale = Math.round((mapScale * 600) / 564.248588);
-    if (newScale <= 75) {
-      return 75;
-    }
-    if (newScale > 75 && newScale <= 150) {
-      return 150;
-    }
-    if (newScale > 150 && newScale <= 300) {
-      return 300;
-    }
-    if (newScale > 300 && newScale <= 600) {
-      return 600;
-    }
-    if (newScale > 600 && newScale <= 1200) {
-      return 1200;
-    }
-    if (newScale > 1200 && newScale <= 2400) {
-      return 2400;
-    }
-    if (newScale > 2400 && newScale <= 4800) {
-      return 4800;
-    }
-    if (newScale > 4800 && newScale <= 9600) {
-      return 9600;
-    }
-    if (newScale > 9600 && newScale <= 19200) {
-      return 19200;
-    }
-    if (newScale > 19200 && newScale <= 38400) {
-      return 38400;
-    }
-    if (newScale > 38400 && newScale <= 76800) {
-      return 76800;
-    }
-    if (newScale > 76800 && newScale <= 153600) {
-      return 153600;
-    }
-    if (newScale > 153600 && newScale <= 307200) {
-      return 307200;
-    }
-    if (newScale > 307200 && newScale <= 614400) {
-      return 614400;
-    }
-    if (newScale > 614400 && newScale <= 1228800) {
-      return 1228800;
-    }
-    return 0;
-  };
   useEffect(() => {
     setSelectedFeature(props.selectedFeature);
   }, [props.selectedFeature]); // only after initial render
   useEffect(() => {
-    getTemplate(props.url);
-    getScales(props.view);
+    getLayouts(props.templateUrl).then((layouts) => setLayouts(layouts));
+    getFormats(props.exportUrl).then((formats) => setFormats(formats));
+    setScales(getScales(props.view));
     const scale = roundScale(props.view.scale);
     setCurrentScale(scale);
     props.view.watch('stationary', () => {
@@ -130,12 +63,12 @@ export const Print = (props: any) => {
         <calcite-input ref={title} placeholder="Title of file"></calcite-input>
       </calcite-label>
       <calcite-label>
-        Page setup
+        Page size
         <calcite-select ref={layout}>
           {layouts.map((layout, i) => {
             return (
-              <calcite-option value={layout} key={layout} selected={i === 0 ? '' : null}>
-                {layout}
+              <calcite-option value={JSON.stringify(layout)} key={layout.template} selected={i === 0 ? '' : null}>
+                {layout.label}
               </calcite-option>
             );
           })}
@@ -174,59 +107,41 @@ export const Print = (props: any) => {
         </calcite-label>
       )}
       <calcite-label>
-        Include legend <calcite-checkbox checked></calcite-checkbox>
+        Include legend <calcite-checkbox checked ref={legendCheck}></calcite-checkbox>
       </calcite-label>
 
       {selectedFeature && (
         <calcite-label>
-          Include attributes <calcite-checkbox></calcite-checkbox>
+          Include attributes <calcite-checkbox ref={attributeCheck}></calcite-checkbox>
         </calcite-label>
       )}
       <calcite-button
         onClick={() => {
-          const printTask = new PrintTask({ url: props.url });
           const mapScale =
             scaleType === 'current'
               ? currentScale
               : parseInt((scale.current?.querySelector('calcite-option[selected]') as any)?.value);
-          const customElements: any[] = [];
-          if (selectedFeature != undefined) {
-            let text = '';
-            (selectedFeature.layer as __esri.FeatureLayer).fields.forEach((field) => {
-              if (!['OBJECTID'].includes(field.name) && selectedFeature.getAttribute(field.name)) {
-                if (field.type === 'date') {
-                  const date = new Date(selectedFeature.getAttribute(field.name));
-                  console.log(date);
-                  text += `${field.alias}: ${date.getUTCMonth() + 1}/${date.getUTCDate()}/${date.getUTCFullYear()}\n`;
-                } else {
-                  text += `${field.alias}: ${selectedFeature.getAttribute(field.name)}\n`;
-                }
-              }
-            });
-            // for (const [key, value] of Object.entries(selectedFeature.attributes)) {
-            //   console.log(`${key}: ${value}`);
-            //   text += `${key}: ${value}\n`;
-            // }
-            customElements.push({ PropertyInfo: text, HalfScale: mapScale / 2, DoubleScale: mapScale * 2 + ' Feet' });
+          const selectedLayout = layout.current?.querySelector('calcite-option[selected]') as any;
+          let selectedTemplate = JSON.parse(selectedLayout.value).template.replace('.', '');
+          const customElements: any[] = getCustomElements(JSON.parse(selectedLayout.value).size, mapScale);
+          const showAttributes =
+            selectedFeature != undefined && !attributeCheck.current?.disabled && attributeCheck.current?.checked;
+          if (showAttributes) {
+            const text = formatAttributes(selectedFeature as __esri.Graphic);
+            selectedTemplate += '_attributes';
+            customElements.push({ PropertyInfo: text });
           }
-
-          const template = new PrintTemplate({
-            outScale: mapScale,
-            format: (format.current?.querySelector('calcite-option[selected]') as any)?.value,
-            layoutOptions: {
-              titleText: title.current?.value,
-              scalebarUnit: 'Feet',
-              customTextElements: customElements,
-              legendLayers: (props.view as __esri.MapView).map.layers
-                .filter((layer) => {
-                  return layer.type != 'imagery' && layer.id != 'selection-layer';
-                })
-                .map((layer) => {
-                  return new LegendLayer({ layerId: layer.id, title: layer.title });
-                }) as any,
-            },
-            layout: (layout.current?.querySelector('calcite-option[selected]') as any)?.value,
-          });
+          if (legendCheck.current?.checked) {
+            selectedTemplate += '_legend';
+          }
+          const template = getTemplate(
+            mapScale,
+            (format.current?.querySelector('calcite-option[selected]') as any)?.value,
+            title.current?.value,
+            customElements,
+            props.view,
+            selectedTemplate,
+          );
           const job = {
             title: title.current?.value,
             loading: true,
@@ -235,14 +150,7 @@ export const Print = (props: any) => {
           };
           setJobs([...jobs, job]);
           jobRef.current = [...jobRef.current, job];
-          debugger;
-          printTask
-            .execute(
-              new PrintParameters({
-                template: template,
-                view: props.view,
-              }),
-            )
+          exportMap(props.exportUrl, template, props.view)
             .then((result) => {
               setTimeout(() => {
                 const index = jobRef.current.indexOf(job);

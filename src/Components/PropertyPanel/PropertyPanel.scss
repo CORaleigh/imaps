@@ -7,7 +7,7 @@
 #propertyPanel calcite-tab-nav {
     position: absolute;
     bottom: 0px;
-    right: 0px;
+    max-width: 350px;
     left: 0px;
 }
 
@@ -16,7 +16,7 @@
     bottom: 34px;
     top: 82px;
     left: 0px;
-    right: 0;
+    max-width: 350px;
     overflow: auto;
 }
 
