@@ -406,7 +406,10 @@ export const Shell = () => {
       <calcite-shell theme={theme} className="shell">
         {width >= 1000 ? (
           <calcite-shell-panel slot="primary-panel" position="start" width-scale="l" collapsed>
-            <calcite-action-bar slot="action-bar" expanded={!viewCreated && window.innerWidth > 500 ? '' : null}>
+            <calcite-action-bar
+              slot="action-bar"
+              expanded={/*!viewCreated && window.innerWidth > 500 ? '' : null*/ false}
+            >
               {actions.map((action: any) => {
                 if (action.isTool) {
                   return (
@@ -487,7 +490,10 @@ export const Shell = () => {
         )}
 
         <calcite-shell-panel slot="contextual-panel" position="end" width-scale="l">
-          <calcite-action-bar slot="action-bar" expanded={!viewCreated && window.innerWidth > 500 ? '' : null}>
+          <calcite-action-bar
+            slot="action-bar"
+            expanded={/*!viewCreated && window.innerWidth > 500 ? '' : null*/ false}
+          >
             {actions.map((action: any) => {
               if (!action.isTool || width < 1000) {
                 return (
@@ -528,6 +534,60 @@ export const Shell = () => {
                 <div className="panel-header" key={`${action.icon}_header_contextual`}>
                   <div className="panel-title">{action.title}</div>
                   <div className="header-actions">
+                    {action.title === 'Property Search' && width > 500 && (
+                      <calcite-action
+                        aria-label="Maximize"
+                        appearance="solid"
+                        scale="m"
+                        calcite-hydrated=""
+                        icon="left-edge"
+                        onClick={(e: any) => {
+                          let width = 'calc(100vw - 100px)';
+                          debugger;
+                          if (e.target.icon === 'right-edge') {
+                            e.target.icon = 'left-edge';
+                            width = '350px';
+                          } else {
+                            e.target.icon = 'right-edge';
+                          }
+                          const panel = e.target.closest('calcite-shell-panel');
+                          panel?.shadowRoot
+                            ?.querySelector('.content')
+                            ?.setAttribute(
+                              'style',
+                              `max-width: ${width}; width: calc(var(--calcite-panel-width-multiplier) * 100vw) !important;`,
+                            );
+
+                          const tab = document.querySelector('calcite-tab-title[active]') as HTMLCalciteTabTitleElement;
+                          const inactiveTab = document.querySelector(
+                            'calcite-tab-title:not([active])',
+                          ) as HTMLCalciteTabTitleElement;
+                          if (tab) {
+                            setTimeout(() => {
+                              const ev = new KeyboardEvent('keydown', {
+                                altKey: false,
+                                bubbles: true,
+                                cancelable: true,
+                                charCode: 0,
+                                code: 'Enter',
+                                composed: true,
+                                ctrlKey: false,
+                                detail: 0,
+                                isComposing: false,
+                                key: 'Enter',
+                                keyCode: 13,
+                                location: 0,
+                                metaKey: false,
+                                repeat: false,
+                                shiftKey: false,
+                              });
+                              inactiveTab?.dispatchEvent(ev);
+                              tab?.dispatchEvent(ev);
+                            }, 250);
+                          }
+                        }}
+                      ></calcite-action>
+                    )}
                     {showTips(false)}
                     <calcite-action
                       aria-label="Close"

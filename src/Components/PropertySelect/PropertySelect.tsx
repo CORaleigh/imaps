@@ -246,6 +246,7 @@ export const PropertySelect = (props: any) => {
           }}
         ></calcite-action>
       </div>
+
       <div className="instructions esri-widget">
         {geometryType === 'point' ? 'Single click on the map' : ''}
         {geometryType === 'polyline'
@@ -258,6 +259,19 @@ export const PropertySelect = (props: any) => {
         {geometryType === 'circle' ? 'Draw a circle on the map by right clicking and dragging' : ''}
         {geometryType === 'multipoint' ? 'Single click each point on the map, double click to finish' : ''}
       </div>
+      {geometryType && (
+        <calcite-button
+          appearance="clear"
+          onClick={() => {
+            disableAllActions();
+            [pointSketchViewModel, polylineSketchViewModel, polygonSketchViewModel].forEach((vm) => {
+              vm?.cancel();
+            });
+          }}
+        >
+          Cancel
+        </calcite-button>
+      )}
       <calcite-label>
         Buffer distance
         <calcite-input
