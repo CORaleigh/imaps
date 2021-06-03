@@ -233,7 +233,7 @@ export const PropertySelect = (props: any) => {
                 'multipoint',
                 pointSketchViewModel as SketchViewModel,
                 [polygonSketchViewModel, polylineSketchViewModel] as SketchViewModel[],
-                pointAction.current as HTMLCalciteActionElement,
+                multipointAction.current as HTMLCalciteActionElement,
                 [
                   lineAction.current,
                   polygonAction.current,
