@@ -120,7 +120,7 @@ export const Actions = [
       {
         title: 'Long Press to Select',
         text:
-          'You can how select a property by long pressing on a property on the map.  This can be done at any time, even without having the property select tool active.',
+          'You can now select a property by long pressing on a property on the map.  This can be done at any time, even without having the property select tool active.',
       },
     ],
   },
