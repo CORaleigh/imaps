@@ -62,6 +62,9 @@ export const Measure = (props: any) => {
       }
       if (e.target.getAttribute('value') === 'clear') {
         measurement.current.clear();
+        if (coordinates.current) {
+          coordinates.current.mode = 'live';
+        }
         setWidget(undefined);
       }
     }

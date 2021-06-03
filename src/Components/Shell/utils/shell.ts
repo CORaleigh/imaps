@@ -143,3 +143,123 @@ export const windowResize = (
   setWidth(window.innerWidth);
   setActions([...actions]);
 };
+
+export const maximizePropertySearch = (action: HTMLCalciteActionElement) => {
+  let offset = 0;
+  const primary: HTMLCalciteShellPanelElement = document.querySelector(
+    'calcite-shell-panel[slot=primary-panel]',
+  ) as HTMLCalciteShellPanelElement;
+  if (!primary?.collapsed) {
+    offset += primary.clientWidth;
+  }
+  const primaryBar = primary.querySelector('calcite-action-bar');
+  if (primaryBar) {
+    offset += primaryBar?.clientWidth;
+  }
+  const context: HTMLCalciteShellPanelElement = document.querySelector(
+    'calcite-shell-panel[slot=contextual-panel]',
+  ) as HTMLCalciteShellPanelElement;
+  const contextBar = context.querySelector('calcite-action-bar');
+  if (contextBar) {
+    offset += contextBar?.clientWidth;
+  }
+  let width = `calc(90vw - ${offset}px)`;
+
+  if (action.icon === 'right-edge') {
+    action.icon = 'left-edge';
+    width = '350px';
+  } else {
+    action.icon = 'right-edge';
+  }
+  const panel = action.closest('calcite-shell-panel');
+  panel?.shadowRoot
+    ?.querySelector('.content')
+    ?.setAttribute(
+      'style',
+      `max-width: ${width}; width: calc(var(--calcite-panel-width-multiplier) * 100vw) !important;`,
+    );
+  const tabnav = panel?.querySelector('calcite-tab-nav');
+  panel?.querySelectorAll('calcite-tab').forEach((tab: HTMLCalciteTabElement) => {
+    tab?.setAttribute('style', `max-width: ${width}`);
+  });
+  tabnav?.setAttribute('style', `max-width: ${width}`);
+
+  const tabTitle = document.querySelector('calcite-tab-title[active]') as HTMLCalciteTabTitleElement;
+  const inactiveTabTitle = document.querySelector('calcite-tab-title:not([active])') as HTMLCalciteTabTitleElement;
+  if (tabTitle) {
+    setTimeout(() => {
+      const ev = new KeyboardEvent('keydown', {
+        altKey: false,
+        bubbles: true,
+        cancelable: true,
+        charCode: 0,
+        code: 'Enter',
+        composed: true,
+        ctrlKey: false,
+        detail: 0,
+        isComposing: false,
+        key: 'Enter',
+        keyCode: 13,
+        location: 0,
+        metaKey: false,
+        repeat: false,
+        shiftKey: false,
+      });
+      inactiveTabTitle?.dispatchEvent(ev);
+      tabTitle?.dispatchEvent(ev);
+    }, 250);
+  }
+};
+
+//activate PropertySearch on load and on geometry updates
+export const activatePropertySearch = (actions: any[]): HTMLElement => {
+  const active = actions.find((action) => {
+    return action.isActive;
+  });
+  if (active) {
+    active.isActive = false;
+  }
+  const search = actions.find((action) => {
+    return action.title === 'Property Search';
+  });
+
+  if (search) {
+    search.isActive = true;
+  }
+  const container = document.getElementById(search?.container as string);
+  if (container) {
+    const panel: HTMLDivElement = container?.closest('.action-panel') as HTMLDivElement;
+    panel.hidden = false;
+    const shell = container?.closest('calcite-shell-panel');
+    shell?.removeAttribute('collapsed');
+  }
+  return container as HTMLElement;
+};
+
+export const formatShellPanelContent = () => {
+  document.querySelectorAll('calcite-shell-panel').forEach((panel) => {
+    const observer: MutationObserver = new MutationObserver((mutations) => {
+      if (mutations.length) {
+        let width = '350px';
+        if (window.innerWidth <= 500) {
+          width = 'calc(90vw - 50px)';
+        }
+        panel?.shadowRoot
+          ?.querySelector('.content')
+          ?.setAttribute(
+            'style',
+            `max-width: ${width}; width: calc(var(--calcite-panel-width-multiplier) * 100vw) !important;`,
+          );
+        document.querySelectorAll('calcite-action-bar').forEach((bar) => {
+          if (bar) {
+            bar.expandDisabled = window.innerWidth <= 500;
+          }
+        });
+        observer.disconnect();
+      } else {
+        observer.disconnect();
+      }
+    });
+    observer.observe(panel?.shadowRoot as Node, { childList: true });
+  });
+};

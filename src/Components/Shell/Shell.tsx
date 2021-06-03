@@ -22,7 +22,16 @@ const Sketch = lazy(() => import('../Sketch/Sketch'));
 const Bookmarks = lazy(() => import('../Bookmarks/Bookmarks'));
 const Print = lazy(() => import('../Print/Print'));
 import './Shell.scss';
-import { actionClicked, deactivate, initialized, updateTheme, windowResize } from './utils/shell';
+import {
+  actionClicked,
+  deactivate,
+  initialized,
+  maximizePropertySearch,
+  updateTheme,
+  windowResize,
+  activatePropertySearch,
+  formatShellPanelContent,
+} from './utils/shell';
 import ThemeContext from '../ThemeContext';
 import { basemaps, links } from '../../config/config';
 import ActionContext from '../ActionContext';
@@ -42,6 +51,7 @@ export const Shell = () => {
   const selectVM = useRef<__esri.SketchViewModel>();
   const measurement = useRef<__esri.Measurement>();
   const coordinates = useRef<__esri.CoordinateConversion>();
+  const maximize = useRef<HTMLCalciteActionElement>();
 
   const [activeTool, setActiveTool] = useState<string>();
   const { actions, setActions } = useContext(ActionContext);
@@ -79,8 +89,8 @@ export const Shell = () => {
         <Suspense fallback={''}>
           <Print
             view={view.current}
-            exportUrl="https://indoors.raleighnc.gov/arcgis/rest/services/ExportWebMap/GPServer/Export%20Web%20Map"
-            templateUrl="https://indoors.raleighnc.gov/arcgis/rest/services/ExportWebMap/GPServer/Get%20Layout%20Templates%20Info/execute"
+            exportUrl="https://gissndarclv1.ci.raleigh.nc.us:6443/arcgis/rest/services/ExportWebMap/GPServer/Export%20Web%20Map"
+            templateUrl="https://gissndarclv1.ci.raleigh.nc.us:6443/arcgis/rest/services/ExportWebMap/GPServer/Get%20Layout%20Templates%20Info/execute"
             selectedFeature={feature}
           />
         </Suspense>,
@@ -88,37 +98,13 @@ export const Shell = () => {
       );
     }
   };
-  //activate PropertySearch on load and on geometry updates
-  const activatePropertySearch = (): HTMLElement => {
-    const active = actions.find((action) => {
-      return action.isActive;
-    });
-    if (active) {
-      active.isActive = false;
-    }
-    const search = actions.find((action) => {
-      return action.title === 'Property Search';
-    });
-
-    if (search) {
-      search.isActive = true;
-    }
-    const container = document.getElementById(search?.container as string);
-    if (container) {
-      const panel: HTMLDivElement = container?.closest('.action-panel') as HTMLDivElement;
-      panel.hidden = false;
-      const shell = container?.closest('calcite-shell-panel');
-      shell?.removeAttribute('collapsed');
-    }
-    return container as HTMLElement;
-  };
 
   const propertiesSelected = (properties: __esri.Graphic[]) => {
     setSelectedProperties([...selectedProperties, ...properties]);
     if (properties.length > 1) {
       setSelectedFeature({ ...selectedFeature, ...{ attributes: null } });
     }
-    const container = activatePropertySearch();
+    const container = activatePropertySearch(actions);
 
     ReactDOM.render(
       <Suspense fallback={''}>
@@ -225,7 +211,7 @@ export const Shell = () => {
 
   //update PropertyPanel geometry when geometry is updated by MapView or PropertySelect
   const geometryChanged = (geometry: __esri.Geometry) => {
-    const container = activatePropertySearch();
+    const container = activatePropertySearch(actions);
     ReactDOM.render(
       <Suspense fallback={''}>
         <PropertyPanel
@@ -245,6 +231,16 @@ export const Shell = () => {
     if (action) {
       const container = document.getElementById(action.container);
 
+      document
+        .querySelector('calcite-shell-panel[slot=contextual-panel]')
+        ?.shadowRoot?.querySelector('.content')
+        ?.setAttribute(
+          'style',
+          `max-width: 350px; width: calc(var(--calcite-panel-width-multiplier) * 100vw) !important;`,
+        );
+      if (maximize.current) {
+        maximize.current.icon = 'left-edge';
+      }
       if (!container?.hasChildNodes()) {
         if (action.title === 'Property Search') {
           ReactDOM.render(
@@ -334,8 +330,8 @@ export const Shell = () => {
             <Suspense fallback={''}>
               <Print
                 view={view.current}
-                exportUrl="https://indoors.raleighnc.gov/arcgis/rest/services/ExportWebMap/GPServer/Export%20Web%20Map"
-                templateUrl="https://indoors.raleighnc.gov/arcgis/rest/services/ExportWebMap/GPServer/Get%20Layout%20Templates%20Info/execute"
+                exportUrl="https://gissndarclv1.ci.raleigh.nc.us:6443/arcgis/rest/services/ExportWebMap/GPServer/Export%20Web%20Map"
+                templateUrl="https://gissndarclv1.ci.raleigh.nc.us:6443/arcgis/rest/services/ExportWebMap/GPServer/Get%20Layout%20Templates%20Info/execute"
               />
             </Suspense>,
             container,
@@ -357,8 +353,12 @@ export const Shell = () => {
       }, 250);
       document.querySelectorAll('calcite-shell-panel').forEach((panel) => {
         let width = '350px';
+        if (maximize.current) {
+          maximize.current.icon = 'left-edge';
+        }
+        const bar = panel.querySelector('calcite-action-bar');
         if (window.innerWidth <= 500) {
-          width = 'calc(100vw - 50px)';
+          width = `calc(90vw - ${bar?.clientWidth}px)`;
         }
         panel?.shadowRoot
           ?.querySelector('.content')
@@ -368,31 +368,7 @@ export const Shell = () => {
           );
       });
     });
-    document.querySelectorAll('calcite-shell-panel').forEach((panel) => {
-      const observer: MutationObserver = new MutationObserver((mutations) => {
-        if (mutations.length) {
-          let width = '350px';
-          if (window.innerWidth <= 500) {
-            width = 'calc(100vw - 50px)';
-          }
-          panel?.shadowRoot
-            ?.querySelector('.content')
-            ?.setAttribute(
-              'style',
-              `max-width: ${width}; width: calc(var(--calcite-panel-width-multiplier) * 100vw) !important;`,
-            );
-          document.querySelectorAll('calcite-action-bar').forEach((bar) => {
-            if (bar) {
-              bar.expandDisabled = window.innerWidth <= 500;
-            }
-          });
-          observer.disconnect();
-        } else {
-          observer.disconnect();
-        }
-      });
-      observer.observe(panel?.shadowRoot as Node, { childList: true });
-    });
+    formatShellPanelContent();
 
     return () => {
       window.removeEventListener('resize', () => {
@@ -536,55 +512,14 @@ export const Shell = () => {
                   <div className="header-actions">
                     {action.title === 'Property Search' && width > 500 && (
                       <calcite-action
+                        ref={maximize}
                         aria-label="Maximize"
                         appearance="solid"
                         scale="m"
                         calcite-hydrated=""
                         icon="left-edge"
                         onClick={(e: any) => {
-                          let width = 'calc(100vw - 100px)';
-                          debugger;
-                          if (e.target.icon === 'right-edge') {
-                            e.target.icon = 'left-edge';
-                            width = '350px';
-                          } else {
-                            e.target.icon = 'right-edge';
-                          }
-                          const panel = e.target.closest('calcite-shell-panel');
-                          panel?.shadowRoot
-                            ?.querySelector('.content')
-                            ?.setAttribute(
-                              'style',
-                              `max-width: ${width}; width: calc(var(--calcite-panel-width-multiplier) * 100vw) !important;`,
-                            );
-
-                          const tab = document.querySelector('calcite-tab-title[active]') as HTMLCalciteTabTitleElement;
-                          const inactiveTab = document.querySelector(
-                            'calcite-tab-title:not([active])',
-                          ) as HTMLCalciteTabTitleElement;
-                          if (tab) {
-                            setTimeout(() => {
-                              const ev = new KeyboardEvent('keydown', {
-                                altKey: false,
-                                bubbles: true,
-                                cancelable: true,
-                                charCode: 0,
-                                code: 'Enter',
-                                composed: true,
-                                ctrlKey: false,
-                                detail: 0,
-                                isComposing: false,
-                                key: 'Enter',
-                                keyCode: 13,
-                                location: 0,
-                                metaKey: false,
-                                repeat: false,
-                                shiftKey: false,
-                              });
-                              inactiveTab?.dispatchEvent(ev);
-                              tab?.dispatchEvent(ev);
-                            }, 250);
-                          }
+                          maximizePropertySearch(e.target);
                         }}
                       ></calcite-action>
                     )}

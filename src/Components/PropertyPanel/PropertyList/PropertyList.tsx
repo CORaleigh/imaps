@@ -51,7 +51,7 @@ export const PropertyList = (props: any) => {
           if (title) {
             title.textContent = 'Selected Properties: ' + grid?.items?.length;
           }
-          title?.setAttribute('style', 'visibility: visible');
+          title?.setAttribute('style', 'display: block');
           table.viewModel.watch('state', (state) => {
             if (state === 'ready') {
               requestAnimationFrame(() => {
