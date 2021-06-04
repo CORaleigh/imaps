@@ -1,1 +1,0 @@
-/*!viewCreated && window.innerWidth > 500 ? '' : null*/
