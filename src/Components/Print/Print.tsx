@@ -20,7 +20,7 @@ export const Print = (props: any) => {
   const [scaleType, setScaleType] = useState('current');
   const [selectedFeature, setSelectedFeature] = useState<__esri.Graphic>();
   const [currentScale, setCurrentScale] = useState(Math.round((props.view.scale * 600) / 564.248588));
-  const [jobs, setJobs] = useState<any>([]);
+  const [jobs, setJobs] = useState<any[]>([]);
 
   const layout = useRef<HTMLCalciteSelectElement>(null);
   const scale = useRef<HTMLCalciteSelectElement>(null);
@@ -176,14 +176,28 @@ export const Print = (props: any) => {
         <div id="printJobs">
           {jobs.map((job: any) => {
             return (
-              <div key={`printjob_${job.submitted}`}>
+              <div key={`printjob_${job.submitted}`} className="print-job">
                 {job.loading && (
-                  <calcite-loader scale="s" inline active>{`${job.title ? job.title : 'untitled'}.pdf`}</calcite-loader>
+                  <div>
+                    <calcite-loader scale="s" inline active></calcite-loader>
+                    <span className="loader-text">{`${job.title != '' ? job.title : 'untitled'}.pdf`}</span>
+                  </div>
                 )}
                 {job.url && !job.loading && (
-                  <calcite-link target="_blank" icon-start="download" href={job.url}>{`${
-                    job.title ? job.title : 'untitled'
-                  }.pdf`}</calcite-link>
+                  <div>
+                    <calcite-link target="_blank" icon-start="download" href={job.url}>{`${
+                      job.title != '' ? job.title : 'untitled'
+                    }.pdf`}</calcite-link>
+                    <calcite-button
+                      appearance="transparent"
+                      icon-start="x"
+                      scale="s"
+                      onClick={() => {
+                        jobRef.current = jobs.filter((item) => item.title !== job.title);
+                        setJobs(jobs.filter((item) => item !== job));
+                      }}
+                    ></calcite-button>
+                  </div>
                 )}
               </div>
             );

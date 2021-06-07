@@ -17,6 +17,12 @@
     margin: 1em;
 }
 
-#printJobs {
-    margin-top: 0.5em;
+
+
+.print-job calcite-button {
+    margin: 0 !important;
+}
+
+.loader-text {
+    margin:0 10px;
 }
