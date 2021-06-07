@@ -250,7 +250,7 @@ export const PropertySelect = (props: any) => {
       <div className="instructions esri-widget">
         {geometryType === 'point' ? 'Single click on the map' : ''}
         {geometryType === 'polyline'
-          ? 'Draw a polygon on the map by clicking each point and double clicking to finish'
+          ? 'Draw a line on the map by clicking each point and double clicking to finish'
           : ''}
         {geometryType === 'polygon'
           ? 'Draw a polygon on the map by clicking each point and double clicking to finish'
