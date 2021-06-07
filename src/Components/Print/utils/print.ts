@@ -132,6 +132,7 @@ export const getScales = (view: __esri.MapView): MapScale[] => {
       return { scale: scale, label: `1" = ${(scale / 12).toLocaleString('en')}'` };
     })
     ?.reverse();
+  scales.push({ scale: 'custom', label: 'User Defined' });
   return scales;
 };
 

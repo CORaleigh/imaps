@@ -21,7 +21,7 @@ export const Print = (props: any) => {
   const [selectedFeature, setSelectedFeature] = useState<__esri.Graphic>();
   const [currentScale, setCurrentScale] = useState(Math.round((props.view.scale * 600) / 564.248588));
   const [jobs, setJobs] = useState<any[]>([]);
-
+  const [userDefined, setUserDefined] = useState<boolean>(false);
   const layout = useRef<HTMLCalciteSelectElement>(null);
   const scale = useRef<HTMLCalciteSelectElement>(null);
   const scaleRadio = useRef<HTMLCalciteRadioButtonGroupElement>(null);
@@ -30,6 +30,24 @@ export const Print = (props: any) => {
   const attributeCheck = useRef<HTMLCalciteCheckboxElement>(null);
   const legendCheck = useRef<HTMLCalciteCheckboxElement>(null);
   const jobRef = useRef<any[]>([]);
+  const [userScale, setUserScale] = useState<number>(NaN);
+  const userInput = useRef<HTMLCalciteInputElement>(null);
+
+  const customScaleChanged = (e: any) => {
+    setUserDefined(e.target.selectedOption.value === 'custom');
+    if (e.target.selectedOption.value === 'custom') {
+      if (userInput.current) {
+        userInput.current.addEventListener('change', userScaleChanged);
+      }
+    } else {
+      if (userInput.current) {
+        userInput.current.removeEventListener('change', userScaleChanged);
+      }
+    }
+  };
+  const userScaleChanged = (e: any) => {
+    setUserScale(parseInt(e.target.value));
+  };
 
   useEffect(() => {
     setSelectedFeature(props.selectedFeature);
@@ -38,15 +56,27 @@ export const Print = (props: any) => {
     getLayouts(props.templateUrl).then((layouts) => setLayouts(layouts));
     getFormats(props.exportUrl).then((formats) => setFormats(formats));
     setScales(getScales(props.view));
-    const scale = roundScale(props.view.scale);
-    setCurrentScale(scale);
+    const mapScale = roundScale(props.view.scale);
+    setCurrentScale(mapScale);
     props.view.watch('stationary', () => {
-      const scale = roundScale(props.view.scale);
-      setCurrentScale(scale);
+      const mapScale = roundScale(props.view.scale);
+      setCurrentScale(mapScale);
     });
+
     setTimeout(() => {
       scaleRadio.current?.addEventListener('calciteRadioButtonGroupChange', (e: any) => {
         setScaleType(e.detail);
+        if (scale.current) {
+          scale.current.removeEventListener('calciteSelectChange', customScaleChanged);
+        }
+        setUserDefined(false);
+        if (e.detail === 'custom' && scale.current) {
+          scale.current.addEventListener('calciteSelectChange', customScaleChanged);
+        } else if (scale.current) {
+          if (userInput.current) {
+            userInput.current.removeEventListener('change', userScaleChanged);
+          }
+        }
       });
     });
   }, []); // only after initial render
@@ -106,6 +136,17 @@ export const Print = (props: any) => {
           </calcite-select>
         </calcite-label>
       )}
+      {scaleType === 'custom' && userDefined && (
+        <calcite-input
+          ref={userInput}
+          placeholder="Placeholder"
+          prefix-text="1 in ="
+          required
+          suffix-text="ft"
+          type="number"
+          value={userScale}
+        ></calcite-input>
+      )}
       <calcite-label>
         Include legend <calcite-checkbox checked ref={legendCheck}></calcite-checkbox>
       </calcite-label>
@@ -116,11 +157,15 @@ export const Print = (props: any) => {
         </calcite-label>
       )}
       <calcite-button
+        disabled={userDefined && isNaN(userScale as number) ? '' : null}
         onClick={() => {
-          const mapScale =
+          let mapScale =
             scaleType === 'current'
               ? currentScale
               : parseInt((scale.current?.querySelector('calcite-option[selected]') as any)?.value);
+          if (userDefined && userScale) {
+            mapScale = userScale * 12;
+          }
           const selectedLayout = layout.current?.querySelector('calcite-option[selected]') as any;
           let selectedTemplate = JSON.parse(selectedLayout.value).template.replace('.', '');
           const customElements: any[] = getCustomElements(JSON.parse(selectedLayout.value).size, mapScale);
