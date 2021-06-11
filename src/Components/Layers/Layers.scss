@@ -14,8 +14,8 @@
 }
 
 .esri-icon-non-visible::before {
-    content: "\e610";
+    content: "\e610" !important;
     }
  .esri-icon-visible::before {
-    content: "\e611";
+    content: "\e611" !important;
     }
