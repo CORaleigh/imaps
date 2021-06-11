@@ -89,8 +89,8 @@ export const Shell = () => {
         <Suspense fallback={''}>
           <Print
             view={view.current}
-            exportUrl="https://indoors.raleighnc.gov/arcgis/rest/services/ExportWebMap/GPServer/Export%20Web%20Map"
-            templateUrl="https://indoors.raleighnc.gov/arcgis/rest/services/ExportWebMap/GPServer/Get%20Layout%20Templates%20Info/execute"
+            exportUrl="https://indd/arcgis/rest/services/ExportWebMap/GPServer/Export%20Web%20Map"
+            templateUrl="https://indd/arcgis/rest/services/ExportWebMap/GPServer/Get%20Layout%20Templates%20Info/execute"
             selectedFeature={feature}
           />
         </Suspense>,
@@ -330,8 +330,8 @@ export const Shell = () => {
             <Suspense fallback={''}>
               <Print
                 view={view.current}
-                exportUrl="https://indoors.raleighnc.gov/arcgis/rest/services/ExportWebMap/GPServer/Export%20Web%20Map"
-                templateUrl="https://indoors.raleighnc.gov/arcgis/rest/services/ExportWebMap/GPServer/Get%20Layout%20Templates%20Info/execute"
+                exportUrl="https://indd/arcgis/rest/services/ExportWebMap/GPServer/Export%20Web%20Map"
+                templateUrl="https://indd/arcgis/rest/services/ExportWebMap/GPServer/Get%20Layout%20Templates%20Info/execute"
               />
             </Suspense>,
             container,
@@ -349,7 +349,9 @@ export const Shell = () => {
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
-        windowResize(actions, width, setWidth, setActions);
+        if ((window.innerWidth < 1000 && width >= 1000) || (window.innerWidth >= 1000 && width < 1000)) {
+          windowResize(actions, width, setWidth, setActions);
+        }
       }, 250);
       document.querySelectorAll('calcite-shell-panel').forEach((panel) => {
         let width = '350px';

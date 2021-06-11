@@ -140,6 +140,7 @@ export const windowResize = (
       }
     });
   });
+  console.log(width, window.innerWidth);
   setWidth(window.innerWidth);
   setActions([...actions]);
 };

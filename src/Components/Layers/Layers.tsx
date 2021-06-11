@@ -2,11 +2,12 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React, { useEffect, useRef } from 'react';
 import LayerList from '@arcgis/core/widgets/LayerList';
-import { filterLayers, layerListItemCreated } from './utils/layers';
+import { filterLayers, layerListItemCreated, resetLayers } from './utils/layers';
 import './Layers.scss';
 export const Layers = (props: any) => {
   const ref = useRef<HTMLDivElement>(null);
   const input = useRef<HTMLCalciteInputElement>(null);
+  const list = useRef<__esri.LayerList>();
   useEffect(() => {
     console.log(props.active);
   }, [props.active]);
@@ -16,7 +17,7 @@ export const Layers = (props: any) => {
       view: props.view,
       listItemCreatedFunction: layerListItemCreated,
     });
-
+    list.current = layerList;
     layerList.when(() => {
       const groups = layerList.view.map.allLayers.filter((layer) => {
         return layer.type === 'group';
@@ -52,7 +53,13 @@ export const Layers = (props: any) => {
           scale="m"
           id="layerSearch"
         ></calcite-input>
-        <calcite-action icon="viewHide" scale="m"></calcite-action>
+        <calcite-action
+          icon="viewHide"
+          scale="m"
+          onClick={() => {
+            resetLayers(list.current as __esri.LayerList);
+          }}
+        ></calcite-action>
       </div>
       <div ref={ref}></div>
     </div>
