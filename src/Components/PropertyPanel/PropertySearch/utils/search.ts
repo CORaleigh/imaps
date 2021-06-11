@@ -217,7 +217,10 @@ const searchResultSelected = (layer: FeatureLayer, source: string, results: any,
 
     if (layer?.layerId === 4) {
       where = `${source === 'Street Name' ? 'FULL_STREET_NAME' : 'SITE_ADDRESS'} = '${term}'`;
-      searchRelatedCondos(oids, layer).then((result) => {
+      // searchRelatedCondos(oids, layer).then((result) => {
+      //   resolve(result);
+      // });
+      searchCondos(where, oids).then((result) => {
         resolve(result);
       });
     } else {
