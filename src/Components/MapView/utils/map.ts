@@ -11,6 +11,7 @@ import Expand from '@arcgis/core/widgets/Expand';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import UniqueValueRenderer from '@arcgis/core/renderers/UniqueValueRenderer';
 import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
+import * as type from '@arcgis/core/smartMapping/symbology/type';
 
 export const createSelectionLayer = (view: __esri.MapView) => {
   const layer = new FeatureLayer({
@@ -64,6 +65,35 @@ export const createSelectionLayer = (view: __esri.MapView) => {
   });
 
   return layer;
+};
+
+export const checkBasemapScheme = (activeBasemap: __esri.Basemap, view: __esri.MapView) => {
+  const handle = activeBasemap.watch('loaded', (loaded) => {
+    if (loaded) {
+      const scheme = type.getSchemes({ basemap: activeBasemap, geometryType: 'polygon' });
+      const propertyLayer = view.map.allLayers.find((layer) => {
+        return layer.type === 'feature' && layer.title.startsWith('Property');
+      }) as __esri.FeatureLayer;
+      const renderer = (propertyLayer.renderer as __esri.SimpleRenderer).clone();
+      if (scheme.basemapTheme === 'light') {
+        (renderer.symbol as __esri.SimpleFillSymbol).outline.color.r = 0;
+        (renderer.symbol as __esri.SimpleFillSymbol).outline.color.g = 0;
+        (renderer.symbol as __esri.SimpleFillSymbol).outline.color.b = 0;
+      }
+      const isImage =
+        activeBasemap.baseLayers.filter((layer: __esri.Layer) => {
+          return layer.type === 'imagery';
+        }).length > 0;
+      if (scheme.basemapTheme === 'dark' || isImage || activeBasemap.title.toLocaleLowerCase().includes('dark')) {
+        (renderer.symbol as __esri.SimpleFillSymbol).outline.color.r = 255;
+        (renderer.symbol as __esri.SimpleFillSymbol).outline.color.g = 255;
+        (renderer.symbol as __esri.SimpleFillSymbol).outline.color.b = 255;
+      }
+      propertyLayer.renderer = renderer;
+      propertyLayer.refresh();
+      handle.remove();
+    }
+  });
 };
 
 export const createMapView = (mapRef: any, mapProperties: any, viewProperties: any): MapView => {

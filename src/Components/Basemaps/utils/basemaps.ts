@@ -29,7 +29,6 @@ export const createAlert = () => {
 
 export const basemapChanged = (activeBasemap: __esri.Basemap, view: __esri.MapView, selectedTab: string) => {
   const scheme = type.getSchemes({ basemap: activeBasemap, geometryType: 'polygon' });
-
   const propertyLayer = view.map.allLayers.find((layer) => {
     return layer.type === 'feature' && layer.title.startsWith('Property');
   }) as __esri.FeatureLayer;
@@ -39,7 +38,11 @@ export const basemapChanged = (activeBasemap: __esri.Basemap, view: __esri.MapVi
     (renderer.symbol as __esri.SimpleFillSymbol).outline.color.g = 0;
     (renderer.symbol as __esri.SimpleFillSymbol).outline.color.b = 0;
   }
-  if (scheme.basemapTheme === 'dark' || selectedTab === 'imagery') {
+  if (
+    scheme.basemapTheme === 'dark' ||
+    selectedTab === 'imagery' ||
+    activeBasemap.title.toLocaleLowerCase().includes('dark')
+  ) {
     (renderer.symbol as __esri.SimpleFillSymbol).outline.color.r = 255;
     (renderer.symbol as __esri.SimpleFillSymbol).outline.color.g = 255;
     (renderer.symbol as __esri.SimpleFillSymbol).outline.color.b = 255;

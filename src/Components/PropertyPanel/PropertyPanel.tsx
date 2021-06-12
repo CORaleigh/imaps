@@ -51,7 +51,6 @@ export const PropertyPanel = (props: any) => {
   };
   const toggleTabs = (tabTitle: string) => {
     //setSelectedTab(tabTitle);
-    debugger;
     //const tabnav: HTMLCalciteTabNavElement = document.querySelector('calcite-tab-nav') as HTMLCalciteTabNavElement;
 
     //tabnav?.dispatchEvent(new CustomEvent('calciteTabChange', { detail: { tab: tabTitle } }));

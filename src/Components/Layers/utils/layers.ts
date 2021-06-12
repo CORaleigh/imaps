@@ -58,7 +58,6 @@ export const filterLayers = (value: string, layerList: __esri.LayerList): void =
 };
 
 export const resetLayers = (list: __esri.LayerList) => {
-  debugger;
   list?.operationalItems.forEach((item) => {
     item.visible = item.title === 'Property';
   });

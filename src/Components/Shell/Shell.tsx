@@ -89,8 +89,8 @@ export const Shell = () => {
         <Suspense fallback={''}>
           <Print
             view={view.current}
-            exportUrl="https://indd/arcgis/rest/services/ExportWebMap/GPServer/Export%20Web%20Map"
-            templateUrl="https://indd/arcgis/rest/services/ExportWebMap/GPServer/Get%20Layout%20Templates%20Info/execute"
+            exportUrl="https://indoors.raleighnc.gov/arcgis/rest/services/ExportWebMap/GPServer/Export%20Web%20Map"
+            templateUrl="https://indoors.raleighnc.gov/arcgis/rest/services/ExportWebMap/GPServer/Get%20Layout%20Templates%20Info/execute"
             selectedFeature={feature}
           />
         </Suspense>,
@@ -330,8 +330,8 @@ export const Shell = () => {
             <Suspense fallback={''}>
               <Print
                 view={view.current}
-                exportUrl="https://indd/arcgis/rest/services/ExportWebMap/GPServer/Export%20Web%20Map"
-                templateUrl="https://indd/arcgis/rest/services/ExportWebMap/GPServer/Get%20Layout%20Templates%20Info/execute"
+                exportUrl="https://indoors.raleighnc.gov/arcgis/rest/services/ExportWebMap/GPServer/Export%20Web%20Map"
+                templateUrl="https://indoors.raleighnc.gov/arcgis/rest/services/ExportWebMap/GPServer/Get%20Layout%20Templates%20Info/execute"
               />
             </Suspense>,
             container,

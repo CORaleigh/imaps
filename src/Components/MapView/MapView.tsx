@@ -3,7 +3,15 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
-import { checkLocalStorage, createMapView, createMapWidgets, createSelectionLayer, addOverviewMap } from './utils/map';
+import {
+  checkLocalStorage,
+  createMapView,
+  createMapWidgets,
+  createSelectionLayer,
+  addOverviewMap,
+  checkBasemapScheme,
+} from './utils/map';
+
 import './MapView.scss';
 import { whenTrueOnce } from '@arcgis/core/core/watchUtils';
 import ReactDOM from 'react-dom';
@@ -31,6 +39,7 @@ export const MapView = (props: any) => {
     window.localStorage.setItem('imaps', JSON.stringify(json));
     // }
   };
+
   useEffect(() => {
     // read map and view properties from props
     const mapProperties = { id: props.id };
@@ -39,7 +48,6 @@ export const MapView = (props: any) => {
     if (!loaded) {
       createMapView(mapRef.current, mapProperties, viewProperties).when((mapView: __esri.MapView) => {
         setLoaded(true);
-
         props.initialized(mapView);
         widgets.current.push(createMapWidgets(mapView));
         const expand: __esri.Expand = addOverviewMap(mapView);
@@ -64,6 +72,7 @@ export const MapView = (props: any) => {
         });
 
         checkLocalStorage(mapView);
+        checkBasemapScheme(mapView.map.basemap, mapView);
       });
     }
 
