@@ -27,6 +27,10 @@ export const Layers = (props: any) => {
           layer.watch('visible', (visible) => {
             if (visible) {
               group.visible = visible;
+              //handle second level group layers
+              if ((group as any).parent) {
+                (group as any).parent.visible = true;
+              }
             }
           });
         });

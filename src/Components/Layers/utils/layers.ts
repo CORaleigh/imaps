@@ -36,6 +36,18 @@ export const filterLayers = (value: string, layerList: __esri.LayerList): void =
         } else {
           layer.listMode = 'hide';
         }
+        //handle second level group layers
+        if (layer.type === 'group') {
+          (layer as __esri.GroupLayer).layers.forEach((sublayer) => {
+            if (sublayer.title.toLowerCase().includes(value.toLowerCase())) {
+              layer.listMode = 'show';
+              sublayer.listMode = 'show';
+              open = true;
+            } else {
+              sublayer.listMode = 'hide';
+            }
+          });
+        }
       });
       if (!value.length) {
         item.open = false;
