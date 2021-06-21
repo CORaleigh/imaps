@@ -109,9 +109,6 @@ export const basemapSelected = (
         }
       });
     }, 1000);
-  } else if (value === 'basemaps') {
-    document.querySelector('.basemaps-base .esri-button-menu')?.removeAttribute('hidden');
-    query.id = defaultId;
   } else {
     document.querySelector('.basemaps-base .esri-button-menu')?.setAttribute('hidden', '');
 
@@ -123,6 +120,10 @@ export const basemapSelected = (
     (basemapGallery.source as __esri.PortalBasemapsSource).updateBasemapsCallback = (items: __esri.Basemap[]) => {
       return items;
     };
+  }
+  if (value === 'basemaps') {
+    document.querySelector('.basemaps-base .esri-button-menu')?.removeAttribute('hidden');
+    query.id = defaultId;
   }
   (basemapGallery.source as __esri.PortalBasemapsSource).query = query;
 };
