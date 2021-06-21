@@ -57,10 +57,17 @@ export const basemapSelected = (
   defaultId: string,
   imageryId: string,
 ): void => {
+  debugger;
   const query: any = {};
   if (!boundary) {
     getBoundary(view).then((result) => {
       boundary = result;
+      const inRaleigh = geometryEngine.contains(boundary, view.center);
+      if (inRaleigh != lastInRaleigh) {
+        lastInRaleigh = inRaleigh;
+
+        (basemapGallery.source as __esri.PortalBasemapsSource).refresh();
+      }
     });
   }
   const handle = view.watch('stationary', (stationary: boolean) => {
