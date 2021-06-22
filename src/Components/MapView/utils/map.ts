@@ -7,7 +7,7 @@ import Track from '@arcgis/core/widgets/Track';
 import Home from '@arcgis/core/widgets/Home';
 import ScaleBar from '@arcgis/core/widgets/ScaleBar';
 import Expand from '@arcgis/core/widgets/Expand';
-
+import IdentifyManager from '@arcgis/core/identity/IdentityManager';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import UniqueValueRenderer from '@arcgis/core/renderers/UniqueValueRenderer';
 import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
@@ -98,6 +98,10 @@ export const checkBasemapScheme = (activeBasemap: __esri.Basemap, view: __esri.M
 
 export const createMapView = (mapRef: any, mapProperties: any, viewProperties: any): MapView => {
   const map = new WebMap({ portalItem: mapProperties });
+  //hide login window if map contains layer that is not shared publicly
+  IdentifyManager.on('dialog-create', () => {
+    (IdentifyManager.dialog as any).open = false;
+  });
   viewProperties.map = map;
   viewProperties.container = mapRef;
   viewProperties.constraints = {
