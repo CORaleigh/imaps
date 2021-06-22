@@ -259,6 +259,7 @@ export const services = [
         'Corporate Limits',
         'Planning Jurisdictions',
         'Subdivisions',
+        'Development Plans',
       ],
     },
   },

@@ -129,13 +129,15 @@ const serviceChanged = (graphic: __esri.Graphic, view: __esri.MapView | __esri.S
         return serviceGroup.group.layers.includes(layer.title);
       });
       layers.forEach((layer) => {
-        promises.push(
-          (layer as __esri.FeatureLayer).queryFeatures({
-            geometry: graphic.geometry,
-            outFields: ['*'],
-            returnGeometry: true,
-          }),
-        );
+        if (layer.type === 'feature') {
+          promises.push(
+            (layer as __esri.FeatureLayer).queryFeatures({
+              geometry: graphic.geometry,
+              outFields: ['*'],
+              returnGeometry: true,
+            }),
+          );
+        }
       });
     }
     if (promises.length) {
