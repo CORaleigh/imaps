@@ -11,6 +11,7 @@ import IdentifyManager from '@arcgis/core/identity/IdentityManager';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import UniqueValueRenderer from '@arcgis/core/renderers/UniqueValueRenderer';
 import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
+import Extent from '@arcgis/core/geometry/Extent';
 import * as type from '@arcgis/core/smartMapping/symbology/type';
 
 export const createSelectionLayer = (view: __esri.MapView) => {
@@ -175,7 +176,20 @@ export const addOverviewMap = (view: __esri.MapView): Expand => {
 
 export const createMapWidgets = (view: MapView): any[] => {
   const widgets = [];
-  const home = new Home({ view: view });
+  const home = new Home({
+    view: view,
+    goToOverride: (view: __esri.MapView | __esri.SceneView) => {
+      view.goTo(
+        new Extent({
+          xmin: -79.65669272952547,
+          xmax: -77.64619468265059,
+          ymin: 35.02761892388883,
+          ymax: 36.52937589457206,
+          spatialReference: { wkid: 4326 },
+        }),
+      );
+    },
+  });
   view.ui.add(home, 'top-left');
   widgets.push(home);
   const compass = new Compass({ view: view });
