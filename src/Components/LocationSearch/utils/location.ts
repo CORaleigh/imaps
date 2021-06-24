@@ -3,9 +3,10 @@ import * as promiseUtils from '@arcgis/core/core/promiseUtils';
 import Locator from '@arcgis/core/tasks/Locator';
 import LayerSearchSource from '@arcgis/core/widgets/Search/LayerSearchSource';
 import LocatorSearchSource from '@arcgis/core/widgets/Search/LocatorSearchSource';
-import CIMSymbol from '@arcgis/core/symbols/CIMSymbol';
+//import CIMSymbol from '@arcgis/core/symbols/CIMSymbol';
+import PictureMarkerSymbol from '@arcgis/core/symbols/PictureMarkerSymbol';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
-import { pinSymbol } from '../../../config/config';
+//import { pinSymbol } from '../../../config/config';
 import Graphic from '@arcgis/core/Graphic';
 export const addLocationSearch = (view: __esri.MapView): Promise<LayerSearchSource> => {
   return promiseUtils.create((resolve) => {
@@ -19,7 +20,7 @@ export const addLocationSearch = (view: __esri.MapView): Promise<LayerSearchSour
       placeholder: 'Enter an address',
       locator: locator,
       autoNavigate: true,
-      resultSymbol: new CIMSymbol(pinSymbol as any),
+      resultSymbol: new PictureMarkerSymbol({ url: 'assets/pin.svg', height: 36, width: 36 }), //new CIMSymbol(pinSymbol as any),
     });
     resolve(source);
   });
@@ -68,7 +69,7 @@ export const addGraphics = (view: __esri.MapView, geometry: __esri.Geometry): vo
     new Graphic({
       geometry: geometry,
       attributes: { type: 'location' },
-      symbol: new CIMSymbol(pinSymbol as any),
+      symbol: new PictureMarkerSymbol({ url: 'assets/pin.svg', height: 36, width: 36 }), //new CIMSymbol(pinSymbol as any),
     }),
   );
 };
