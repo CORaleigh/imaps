@@ -283,6 +283,25 @@ export const Sketch = (props: any) => {
               textSketchViewModel?.layer.graphics.removeAll();
             }}
           ></calcite-action>
+          <calcite-action
+            text="Undo"
+            icon="undo"
+            id="undoAction"
+            onClick={() => {
+              if (pointAction.current?.active) {
+                pointSketchViewModel.undo();
+              }
+              if (lineAction.current?.active) {
+                polylineSketchViewModel.undo();
+              }
+              if (polygonAction.current?.active) {
+                polygonSketchViewModel.undo();
+              }
+              if (textAction.current?.active) {
+                textSketchViewModel.undo();
+              }
+            }}
+          ></calcite-action>
         </div>
       </calcite-tooltip-manager>
 
