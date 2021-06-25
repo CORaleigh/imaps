@@ -255,8 +255,8 @@ export const PropertySelect = (props: any) => {
         {geometryType === 'polygon'
           ? 'Draw a polygon on the map by clicking each point and double clicking to finish'
           : ''}
-        {geometryType === 'rectangle' ? 'Draw a rectangle on the map by right clicking and dragging' : ''}
-        {geometryType === 'circle' ? 'Draw a circle on the map by right clicking and dragging' : ''}
+        {geometryType === 'rectangle' ? 'Draw a rectangle on the map by left clicking and dragging' : ''}
+        {geometryType === 'circle' ? 'Draw a circle on the map by left clicking and dragging' : ''}
         {geometryType === 'multipoint' ? 'Single click each point on the map, double click to finish' : ''}
       </div>
       {geometryType && (
