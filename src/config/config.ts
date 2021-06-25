@@ -194,7 +194,7 @@ export const links = [
   {
     title: 'Data Download',
     links: [
-      { title: 'Wake County Open Data', href: 'https://data-wake.opendata.arcgis.com/' },
+      { title: 'Wake County Open Data', href: 'https://data.wakegov.com/' },
       { title: 'Raleigh Open Data', href: 'https://data.raleighnc.gov/' },
     ],
   },
