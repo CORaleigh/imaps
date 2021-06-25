@@ -23,7 +23,7 @@ export const TipManager = (props: any) => {
   }, [props.tipsDimissed]);
   useEffect(() => {
     setTitle(props.title);
-    setTips(props.tips);
+    setTips([...[], ...props.tips]);
 
     setClosed(!props.tips.length);
   }, [props.tips]); // only after initial render
