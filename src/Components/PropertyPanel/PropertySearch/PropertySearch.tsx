@@ -51,14 +51,20 @@ export const PropertySearch = (props: any) => {
   return (
     <div className="flex">
       <div ref={searchRef}></div>
-      <calcite-action
-        icon="trash"
-        scale="s"
-        onClick={() => {
-          widgetRef.current?.clear();
-          props.clear();
-        }}
-      ></calcite-action>
+      <calcite-tooltip-manager>
+        <calcite-action
+          id="propertyClear"
+          icon="trash"
+          scale="s"
+          onClick={() => {
+            widgetRef.current?.clear();
+            props.clear();
+          }}
+        ></calcite-action>
+        <calcite-tooltip label="Tooltip label" reference-element="propertyClear" placement="bottom">
+          Clear selected properties
+        </calcite-tooltip>
+      </calcite-tooltip-manager>
     </div>
   );
 };

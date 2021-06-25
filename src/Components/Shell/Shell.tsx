@@ -167,19 +167,29 @@ export const Shell = () => {
     }
 
     return action?.tips?.length ? (
-      <calcite-action
-        text="Action"
-        label="Action"
-        slot="header-actions-end"
-        icon="lightbulb"
-        appearance="solid"
-        scale="m"
-        calcite-hydrated=""
-        onClick={() => {
-          setTips([...tips, ...action.tips]);
-          setTipsTitle(action.title);
-        }}
-      ></calcite-action>
+      <calcite-tooltip-manager>
+        <calcite-tooltip
+          label="Tooltip label"
+          reference-element={`tipAction${isTool ? '_tool' : ''}`}
+          placement="bottom-end"
+        >
+          Show tips
+        </calcite-tooltip>
+        <calcite-action
+          id={`tipAction${isTool ? '_tool' : ''}`}
+          text="Action"
+          label="Action"
+          slot="header-actions-end"
+          icon="lightbulb"
+          appearance="solid"
+          scale="m"
+          calcite-hydrated=""
+          onClick={() => {
+            setTips([...[], ...action.tips]);
+            setTipsTitle(action.title);
+          }}
+        ></calcite-action>
+      </calcite-tooltip-manager>
     ) : (
       ''
     );
@@ -429,22 +439,28 @@ export const Shell = () => {
                     <div className="panel-title">{action.title}</div>
                     <div className="header-actions">
                       {showTips(true)}
-                      <calcite-action
-                        aria-label="Close"
-                        appearance="solid"
-                        scale="m"
-                        calcite-hydrated=""
-                        icon="x"
-                        onClick={() => {
-                          document
-                            ?.querySelector('calcite-shell-panel[slot=primary-panel]')
-                            ?.setAttribute('collapsed', '');
-                          action.isActive = false;
+                      <calcite-tooltip-manager>
+                        <calcite-tooltip label="Tooltip label" reference-element="closeAction" placement="bottom-end">
+                          Close panel
+                        </calcite-tooltip>
+                        <calcite-action
+                          id="closeAction"
+                          aria-label="Close"
+                          appearance="solid"
+                          scale="m"
+                          calcite-hydrated=""
+                          icon="x"
+                          onClick={() => {
+                            document
+                              ?.querySelector('calcite-shell-panel[slot=primary-panel]')
+                              ?.setAttribute('collapsed', '');
+                            action.isActive = false;
 
-                          console.log('setActions');
-                          setActions([...actions]);
-                        }}
-                      ></calcite-action>
+                            console.log('setActions');
+                            setActions([...actions]);
+                          }}
+                        ></calcite-action>
+                      </calcite-tooltip-manager>
                     </div>
                   </div>
                 );
@@ -526,22 +542,28 @@ export const Shell = () => {
                       ></calcite-action>
                     )}
                     {showTips(false)}
-                    <calcite-action
-                      aria-label="Close"
-                      appearance="solid"
-                      scale="m"
-                      calcite-hydrated=""
-                      icon="x"
-                      onClick={() => {
-                        document
-                          ?.querySelector('calcite-shell-panel[slot=contextual-panel]')
-                          ?.setAttribute('collapsed', '');
-                        action.isActive = false;
+                    <calcite-tooltip-manager>
+                      <calcite-tooltip label="Tooltip label" reference-element="closeAction" placement="bottom-end">
+                        Close panel
+                      </calcite-tooltip>
+                      <calcite-action
+                        id="closeAction"
+                        aria-label="Close"
+                        appearance="solid"
+                        scale="m"
+                        calcite-hydrated=""
+                        icon="x"
+                        onClick={() => {
+                          document
+                            ?.querySelector('calcite-shell-panel[slot=contextual-panel]')
+                            ?.setAttribute('collapsed', '');
+                          action.isActive = false;
 
-                        console.log('setActions');
-                        setActions([...actions]);
-                      }}
-                    ></calcite-action>
+                          console.log('setActions');
+                          setActions([...actions]);
+                        }}
+                      ></calcite-action>
+                    </calcite-tooltip-manager>
                   </div>
                 </div>
               );

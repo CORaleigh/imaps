@@ -11,6 +11,10 @@ calcite-shell-panel[slot=contextual-panel] calcite-panel {
     height: 100%;
 }
 
+calcite-tooltip, calcite-tooltip-manager {
+  z-index: 100000 !important;
+}
+
 
 // calcite-shell-panel {
 //     max-width: 400px
