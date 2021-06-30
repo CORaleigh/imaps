@@ -133,40 +133,40 @@ const getProperty = (oids: number[]): Promise<__esri.Graphic[]> => {
       });
   });
 };
-// const searchRelatedCondos = (oids: number[], layer: __esri.FeatureLayer) => {
-//   return promiseUtils.create((resolve) => {
-//     const relationship = layer.relationships.find((r) => {
-//       return r.name === 'ADDRESSES_CONDO';
-//     });
-//     const params: any = { outFields: ['*'], objectIds: oids, relationshipId: relationship?.id };
+const searchRelatedCondos = (oids: number[], layer: __esri.FeatureLayer) => {
+  return promiseUtils.create((resolve) => {
+    const relationship = layer.relationships.find((r) => {
+      return r.name === 'ADDRESSES_CONDO';
+    });
+    const params: any = { outFields: ['*'], objectIds: oids, relationshipId: relationship?.id };
 
-//     layer.queryRelatedFeatures(params).then((result) => {
-//       const oids: number[] = [];
-//       const features: __esri.Graphic[] = [];
-//       for (const key in result) {
-//         result[key].features.forEach((feature: __esri.Graphic) => {
-//           oids.push(feature.getAttribute('OBJECTID'));
-//           features.push(feature);
-//         });
-//       }
-//       getProperty(oids).then((properties: __esri.Graphic[]) => {
-//         if (features.length > 1) {
-//           //this.emit('features-selected', result.features);
-//           resolve({ properties: properties, features: features });
-//         }
-//         if (features.length === 1) {
-//           const feature = features[0];
-//           feature.geometry = properties[0].geometry;
-//           feature.layer = condos;
-//           resolve({ properties: properties, features: features, feature: feature });
-//           //this.emit('feature-selected', feature);
-//         }
+    layer.queryRelatedFeatures(params).then((result) => {
+      const oids: number[] = [];
+      const features: __esri.Graphic[] = [];
+      for (const key in result) {
+        result[key].features.forEach((feature: __esri.Graphic) => {
+          oids.push(feature.getAttribute('OBJECTID'));
+          features.push(feature);
+        });
+      }
+      getProperty(oids).then((properties: __esri.Graphic[]) => {
+        if (features.length > 1) {
+          //this.emit('features-selected', result.features);
+          resolve({ properties: properties, features: features });
+        }
+        if (features.length === 1) {
+          const feature = features[0];
+          feature.geometry = properties[0].geometry;
+          feature.layer = condos;
+          resolve({ properties: properties, features: features, feature: feature });
+          //this.emit('feature-selected', feature);
+        }
 
-//         // this.emit('properties-selected', properties);
-//       });
-//     });
-//   });
-// };
+        // this.emit('properties-selected', properties);
+      });
+    });
+  });
+};
 // const whereDefined = (where: string) => {
 //     searchCondos(where, []);
 // };
@@ -217,11 +217,14 @@ const searchResultSelected = (layer: FeatureLayer, source: string, results: any,
 
     if (layer?.layerId === 4) {
       where = `${source === 'Street Name' ? 'FULL_STREET_NAME' : 'SITE_ADDRESS'} = '${term}'`;
-      // searchRelatedCondos(oids, layer).then((result) => {
-      //   resolve(result);
-      // });
-      searchCondos(where, oids).then((result) => {
-        resolve(result);
+      searchRelatedCondos(oids, layer).then((result) => {
+        if (result) {
+          resolve(result);
+        } else {
+          searchCondos(where, oids).then((result) => {
+            resolve(result);
+          });
+        }
       });
     } else {
       searchCondos(where, oids).then((result) => {
