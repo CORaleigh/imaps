@@ -184,8 +184,37 @@ export const addOverviewMap = (view: __esri.MapView): Expand => {
   return expand;
 };
 
+// export const createIdentifyButton = (view: MapView): any => {
+//   const infoButton = document.createElement('div');
+//   infoButton.classList.add('esri-component');
+//   infoButton.classList.add('esri-widget--button');
+//   infoButton.classList.add('esri-widget');
+//   infoButton.setAttribute('role', 'button');
+//   infoButton.setAttribute('aria-label', 'Identify features');
+//   infoButton.setAttribute('title', 'Identify features');
+//   const icon = document.createElement('span');
+//   icon.classList.add('esri-icon');
+//   icon.classList.add('esri-icon-description');
+//   icon.setAttribute('aria-hidden', 'true');
+
+//   const text = document.createElement('span');
+//   text.classList.add('esri-icon-font-fallback-text');
+//   text.textContent = 'Idenfity features';
+//   infoButton.appendChild(icon);
+//   infoButton.appendChild(text);
+//   infoButton.onclick = () => {
+//     console.log('identify');
+//   };
+//   return infoButton;
+// };
+
 export const createMapWidgets = (view: MapView): any[] => {
   const widgets = [];
+
+  // const identify = createIdentifyButton(view);
+  // widgets.push(identify);
+  // view.ui.add(identify, 'top-left');
+
   const home = new Home({
     view: view,
     goToOverride: (view: __esri.MapView | __esri.SceneView) => {
