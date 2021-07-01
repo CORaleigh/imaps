@@ -11,6 +11,7 @@ import * as promiseUtils from '@arcgis/core/core/promiseUtils';
 import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { services } from '../../../config/config';
+import * as geometryEngine from '@arcgis/core/geometry/geometryEngine';
 
 const AddressTable = lazy(() => import('../AddressTable/AddressTable'));
 
@@ -132,7 +133,7 @@ const serviceChanged = (graphic: __esri.Graphic, view: __esri.MapView | __esri.S
         if (layer.type === 'feature') {
           promises.push(
             (layer as __esri.FeatureLayer).queryFeatures({
-              geometry: graphic.geometry,
+              geometry: geometryEngine.geodesicBuffer(graphic.geometry, -5, 9002) as __esri.Geometry,
               outFields: ['*'],
               returnGeometry: true,
             }),
