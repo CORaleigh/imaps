@@ -18,24 +18,6 @@ export const Layers = (props: any) => {
       listItemCreatedFunction: layerListItemCreated,
     });
     list.current = layerList;
-    // layerList.when(() => {
-    //   const groups = layerList.view.map.allLayers.filter((layer) => {
-    //     return layer.type === 'group';
-    //   });
-    //   groups.forEach((group) => {
-    //     (group as __esri.GroupLayer).layers.forEach((layer) => {
-    //       layer.watch('visible', (visible) => {
-    //         if (visible) {
-    //           group.visible = visible;
-    //           //handle second level group layers
-    //           if ((group as any).parent) {
-    //             (group as any).parent.visible = true;
-    //           }
-    //         }
-    //       });
-    //     });
-    //   });
-    // });
 
     input.current?.addEventListener('calciteInputInput', (event: any) => {
       filterLayers(event.target.value, layerList as LayerList);
