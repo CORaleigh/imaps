@@ -16,6 +16,9 @@ export const Layers = (props: any) => {
       container: ref.current as HTMLDivElement,
       view: props.view,
       listItemCreatedFunction: layerListItemCreated,
+      visibleElements: {
+        statusIndicators: true,
+      },
     });
     list.current = layerList;
 
