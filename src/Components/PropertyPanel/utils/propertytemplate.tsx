@@ -94,7 +94,8 @@ const arcadeExpressionInfos = [
       '"PIN"+TextFormatting.NewLine+$feature.PIN_NUM+" "+$feature.PIN_EXT+TextFormatting.NewLine+' +
       '"REID"+TextFormatting.NewLine+$feature.REID+TextFormatting.NewLine+"City"+TextFormatting.NewLine+' +
       'Proper($feature.CITY_DECODE)+TextFormatting.NewLine+"Jurisdiction"+TextFormatting.NewLine+' +
-      '$feature.PLANNING_JURISDICTION+TextFormatting.NewLine+"Township"+TextFormatting.NewLine+Proper($feature.TOWNSHIP_DECODE)',
+      '$feature.PLANNING_JURISDICTION+TextFormatting.NewLine+"Township"+TextFormatting.NewLine+Proper($feature.TOWNSHIP_DECODE)+"Map Name"+TextFormatting.NewLine+' +
+      '$feature.MAP_NAME+TextFormatting.NewLine+"Land Class"+TextFormatting.NewLine+Proper($feature.LAND_CLASS_DECODE)',
   },
   {
     name: 'addresses',
@@ -141,10 +142,13 @@ const serviceChanged = (graphic: __esri.Graphic, view: __esri.MapView | __esri.S
         }
       });
     }
+
     if (promises.length) {
       return Promise.all(promises).then((results) => {
+        let hasFeatures = false;
         results.forEach((result) => {
           if (result.features.length) {
+            hasFeatures = true;
             result.features.forEach((feature: __esri.Graphic) => {
               const div = document.createElement('div');
               e.detail.requestedAccordionItem.append(div);
@@ -152,6 +156,12 @@ const serviceChanged = (graphic: __esri.Graphic, view: __esri.MapView | __esri.S
             });
           }
         });
+        if (!hasFeatures) {
+          const div = document.createElement('div');
+          div.textContent = 'No information available.';
+          div.style.margin = '0.5em';
+          e.detail.requestedAccordionItem.append(div);
+        }
         scrollToService(e);
         header.removeChild(loader);
       });
@@ -501,6 +511,14 @@ export const createTemplate = (view: __esri.MapView | __esri.SceneView, condoTab
           {
             fieldName: 'expression/township',
             label: 'Township',
+          },
+          {
+            fieldName: 'MAP_NAME',
+            label: 'Map Name',
+          },
+          {
+            fieldName: 'LAND_CLASS_DECODE',
+            label: 'Land Class',
           },
         ],
       },
