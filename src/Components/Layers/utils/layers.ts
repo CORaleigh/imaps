@@ -7,6 +7,8 @@ export const layerListItemCreated = (event: any): void => {
     const slider = document.createElement('calcite-slider');
     slider.setAttribute('min', '0');
     slider.setAttribute('max', '100');
+    slider.setAttribute('step', '1');
+    slider.setAttribute('snap', '');
     slider.setAttribute('min-label', '0%');
     slider.setAttribute('max-label', '100%');
     slider.setAttribute('label-handles', '');
@@ -21,8 +23,19 @@ export const layerListItemCreated = (event: any): void => {
     );
     item.panel = {
       content: [slider, 'legend'],
-      open: false,
+      open: item.layer.visible,
     };
+    item.layer.watch('visible', (visible: boolean) => {
+      item.panel.open = visible;
+      if (visible) {
+        if (item.layer.parent.type === 'group') {
+          item.layer.parent.visible = true;
+        }
+        if (item.layer.parent.parent.type === 'group') {
+          item.layer.parent.parent.visible = true;
+        }
+      }
+    });
   }
 };
 export const filterLayers = (value: string, layerList: __esri.LayerList): void => {
