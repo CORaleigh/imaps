@@ -41,7 +41,8 @@ export const Header = (props: any) => {
   return (
     <div>
       <header>
-        <h2>iMAPS</h2>
+        {/* <h2>iMAPS</h2> */}
+        <img className="logo" src={theme === 'light' ? 'logo.svg' : 'logo_dark.svg'} />
         <calcite-dropdown ref={ref} placement="bottom-trailing" scale="m" width="m" type="click">
           <calcite-button scale="s" slot="dropdown-trigger">
             <calcite-icon icon="hamburger"></calcite-icon>
