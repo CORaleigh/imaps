@@ -530,6 +530,18 @@ export const Shell = () => {
         ) : (
           ''
         )}
+        <Suspense fallback={''}>
+          <MapView
+            id="95092428774c4b1fb6a3b6f5fed9fbc4"
+            initialized={mapInitialized}
+            geometryChanged={geometryChanged}
+            selectedProperties={selectedProperties}
+            selectedFeature={selectedFeature}
+            identifyClicked={() => {
+              deactiveAllTools();
+            }}
+          />
+        </Suspense>
 
         <calcite-shell-panel slot="contextual-panel" position="end" width-scale="l">
           <calcite-action-bar
@@ -631,23 +643,11 @@ export const Shell = () => {
           })}
         </calcite-shell-panel>
 
-        <div slot="shell-header">
+        <div slot="header">
           <Suspense fallback={''}>
             <Header links={links} />
           </Suspense>
         </div>
-        <Suspense fallback={''}>
-          <MapView
-            id="95092428774c4b1fb6a3b6f5fed9fbc4"
-            initialized={mapInitialized}
-            geometryChanged={geometryChanged}
-            selectedProperties={selectedProperties}
-            selectedFeature={selectedFeature}
-            identifyClicked={() => {
-              deactiveAllTools();
-            }}
-          />
-        </Suspense>
       </calcite-shell>
       <Suspense fallback={''}>
         <TipManager tips={tips} title={tipsTitle} closed tipsDismissed={tipsDismissed} />

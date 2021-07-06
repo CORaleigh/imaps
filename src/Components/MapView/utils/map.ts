@@ -185,15 +185,15 @@ export const createMapView = (mapRef: any, mapProperties: any, viewProperties: a
   };
   const view = new MapView(viewProperties);
   //workaround for bug when popup has multiple features
-  view.popup.watch('features', (features) => {
-    console.log(features);
-    requestAnimationFrame(() => {
-      document.querySelector('.esri-popup__feature-menu-button')?.dispatchEvent(new MouseEvent('click'));
-      requestAnimationFrame(() => {
-        document.querySelector('.esri-popup__feature-menu-button')?.dispatchEvent(new MouseEvent('click'));
-      });
-    });
-  });
+  // view.popup.watch('features', (features) => {
+  //   console.log(features);
+  //   requestAnimationFrame(() => {
+  //     document.querySelector('.esri-popup__feature-menu-button')?.dispatchEvent(new MouseEvent('click'));
+  //     requestAnimationFrame(() => {
+  //       document.querySelector('.esri-popup__feature-menu-button')?.dispatchEvent(new MouseEvent('click'));
+  //     });
+  //   });
+  // });
 
   return view;
 };

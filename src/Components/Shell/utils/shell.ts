@@ -215,8 +215,9 @@ export const maximizePropertySearch = (action: HTMLCalciteActionElement) => {
 //activate PropertySearch on load and on geometry updates
 export const activatePropertySearch = (actions: any[]): HTMLElement => {
   const active = actions.find((action) => {
-    return action.isActive && window.innerWidth <= 1000;
+    return action.isActive; // && window.innerWidth <= 1000;
   });
+  debugger;
   if (active) {
     active.isActive = false;
   }

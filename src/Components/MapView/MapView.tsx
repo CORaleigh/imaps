@@ -68,7 +68,7 @@ export const MapView = (props: any) => {
 
         viewRef.current?.map.add(layer);
 
-        viewRef.current?.on('hold', (event: __esri.MapViewHoldEvent) => {
+        viewRef.current?.on('hold', (event: any) => {
           props.geometryChanged(event.mapPoint);
         });
 
