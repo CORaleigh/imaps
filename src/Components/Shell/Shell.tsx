@@ -52,6 +52,7 @@ export const Shell = () => {
   const measurement = useRef<__esri.Measurement>();
   const coordinates = useRef<__esri.CoordinateConversion>();
   const maximize = useRef<HTMLCalciteActionElement>();
+  const streetviewClick = useRef<IHandle>();
 
   const [activeTool, setActiveTool] = useState<string>();
   const { actions, setActions } = useContext(ActionContext);
@@ -120,7 +121,23 @@ export const Shell = () => {
     console.log('setActions');
     setActions([...[], ...actions]);
   };
+  const deactiveAllTools = () => {
+    selectVM.current?.cancel();
+    measurement.current?.viewModel.activeViewModel?.clear();
+    if (coordinates.current) {
+      coordinates.current.viewModel.mode = 'live';
+    }
+    sketchVM.current?.cancel();
 
+    setActiveTool('sketch');
+  };
+  const deactiveMapTools = () => {
+    document.querySelector('.map-tool.active')?.classList.remove('active');
+    if (view.current?.popup) {
+      view.current.popup.autoOpenEnabled = false;
+    }
+    streetviewClick.current?.remove();
+  };
   //deactivate other sketch tools
   const sketchToolActivated = (sketchViewModel: __esri.SketchViewModel) => {
     sketchVM.current = sketchViewModel;
@@ -130,6 +147,7 @@ export const Shell = () => {
       coordinates.current.viewModel.mode = 'live';
     }
     setActiveTool('sketch');
+    deactiveMapTools();
   };
   const measurementActivated = (measurementTool: __esri.Measurement, coordinatesTool: __esri.CoordinateConversion) => {
     measurement.current = measurementTool;
@@ -137,6 +155,7 @@ export const Shell = () => {
     sketchVM.current?.cancel();
     selectVM.current?.cancel();
     setActiveTool('measure');
+    deactiveMapTools();
   };
   const selectActivated = (sketchViewModel: __esri.SketchViewModel) => {
     selectVM.current = sketchViewModel;
@@ -146,6 +165,7 @@ export const Shell = () => {
       coordinates.current.viewModel.mode = 'live';
     }
     setActiveTool('select');
+    deactiveMapTools();
   };
 
   //reset tips when dismissed
@@ -195,6 +215,32 @@ export const Shell = () => {
     );
   };
 
+  const setMapTools = (mapView: __esri.MapView) => {
+    requestAnimationFrame(() => {
+      document.querySelector('.identify-widget')?.addEventListener('click', () => {
+        deactiveAllTools();
+        mapView.popup.autoOpenEnabled = true;
+        document.querySelector('.map-tool.active')?.classList.remove('active');
+        document.querySelector('.identify-widget')?.classList.add('active');
+        streetviewClick.current?.remove();
+      });
+      document.querySelector('.streetview-widget')?.addEventListener('click', () => {
+        deactiveAllTools();
+        mapView.popup.autoOpenEnabled = false;
+        document.querySelector('.map-tool.active')?.classList.remove('active');
+        document.querySelector('.streetview-widget')?.classList.add('active');
+        streetviewClick.current?.remove();
+        debugger;
+        streetviewClick.current = mapView.on('click', (e) => {
+          document.querySelector('.map-tool.active')?.classList.remove('active');
+          document.querySelector('.streetview-widget')?.classList.add('active');
+          const cbll = e.mapPoint.latitude + ',' + e.mapPoint.longitude;
+          'https://maps.google.com?layer=c&cbll=' + cbll + '&cbp=0,0,0,0,0';
+          window.open('https://maps.google.com?layer=c&cbll=' + cbll + '&cbp=0,0,0,0,0');
+        });
+      });
+    });
+  };
   //after map has initiliazed
   const mapInitialized = async (mapView: __esri.MapView) => {
     if (!viewCreated) {
@@ -203,6 +249,8 @@ export const Shell = () => {
       setViewCreated(true);
       const container = document.getElementById('propertySearch');
       if (mapView.map) {
+        setMapTools(mapView);
+
         ReactDOM.render(
           <Suspense fallback={''}>
             <PropertyPanel
@@ -595,6 +643,9 @@ export const Shell = () => {
             geometryChanged={geometryChanged}
             selectedProperties={selectedProperties}
             selectedFeature={selectedFeature}
+            identifyClicked={() => {
+              deactiveAllTools();
+            }}
           />
         </Suspense>
       </calcite-shell>

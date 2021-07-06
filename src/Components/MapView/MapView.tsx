@@ -50,6 +50,7 @@ export const MapView = (props: any) => {
         setLoaded(true);
         props.initialized(mapView);
         widgets.current.push(createMapWidgets(mapView));
+
         const expand: __esri.Expand = addOverviewMap(mapView);
         whenTrueOnce(expand, 'expanded', () => {
           const Overview = lazy(() => import('../Overview/Overview'));

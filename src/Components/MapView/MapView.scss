@@ -4,6 +4,26 @@
   height: 100%;
 }
 
+.identify-widget {
+  position: absolute;
+  left: 50px;
+}
+
+.streetview-widget {
+  position: absolute;
+  left: 50px;
+  top: 40px;
+}
+
+.map-tool.active{
+  background-color: var(--calcite-ui-brand);
+  color: white;
+}
+.map-tool.active:hover{
+  background-color: var(--calcite-ui-brand);
+  color: white;
+}
+
 
 @media only screen and (max-width: 500px) {
     .esri-view {

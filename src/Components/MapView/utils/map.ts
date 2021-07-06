@@ -13,6 +13,9 @@ import UniqueValueRenderer from '@arcgis/core/renderers/UniqueValueRenderer';
 import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 import Extent from '@arcgis/core/geometry/Extent';
 import * as type from '@arcgis/core/smartMapping/symbology/type';
+// import Graphic from '@arcgis/core/Graphic';
+// import * as geometryEngine from '@arcgis/core/geometry/geometryEngine';
+// import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 
 export const createSelectionLayer = (view: __esri.MapView) => {
   const layer = new FeatureLayer({
@@ -96,7 +99,47 @@ export const checkBasemapScheme = (activeBasemap: __esri.Basemap, view: __esri.M
     }
   });
 };
-
+// const handlePolygonLabels = (view: MapView) => {
+//   const labels = new GraphicsLayer({ id: 'polygon-labels', listMode: 'hide', title: 'labels' });
+//   view.map.add(labels);
+//   view.watch('stationary', (stationary) => {
+//     if (stationary) {
+//       labels.removeAll();
+//       view.map.allLayers.forEach((layer: __esri.Layer) => {
+//         if (layer.type === 'feature' && layer.visible && (layer as __esri.FeatureLayer).minScale >= view.scale) {
+//           if ((layer as __esri.FeatureLayer).geometryType === 'polygon') {
+//             (layer as __esri.FeatureLayer)
+//               .queryFeatures({ geometry: view.extent, returnGeometry: true, outFields: ['*'] })
+//               .then((featureSet) => {
+//                 featureSet.features.forEach((feature: __esri.Graphic) => {
+//                   if ((layer as __esri.FeatureLayer).labelingInfo) {
+//                     console.log((layer as __esri.FeatureLayer).labelingInfo[0]);
+//                     if ((layer as __esri.FeatureLayer).labelingInfo[0].labelExpression) {
+//                       const symbol = ((layer as __esri.FeatureLayer).labelingInfo[0]
+//                         .symbol as __esri.TextSymbol).clone();
+//                       symbol.text = feature.getAttribute(
+//                         (layer as __esri.FeatureLayer).labelingInfo[0].labelExpression
+//                           .replace('[', '')
+//                           .replace(']', ''),
+//                       );
+//                       console.log(feature);
+//                       console.log(symbol.text);
+//                       labels.graphics.add(
+//                         new Graphic({
+//                           symbol: symbol,
+//                           geometry: (geometryEngine.clip(feature.geometry, view.extent) as __esri.Polygon)?.centroid,
+//                         }),
+//                       );
+//                     }
+//                   }
+//                 });
+//               });
+//           }
+//         }
+//       });
+//     }
+//   });
+// };
 export const createMapView = (mapRef: any, mapProperties: any, viewProperties: any): MapView => {
   const map = new WebMap({ portalItem: mapProperties });
   //hide login window if map contains layer that is not shared publicly
@@ -183,37 +226,67 @@ export const addOverviewMap = (view: __esri.MapView): Expand => {
   view.ui.add(expand, 'bottom-right');
   return expand;
 };
+export const streetviewClick: IHandle | null = null;
 
-// export const createIdentifyButton = (view: MapView): any => {
-//   const infoButton = document.createElement('div');
-//   infoButton.classList.add('esri-component');
-//   infoButton.classList.add('esri-widget--button');
-//   infoButton.classList.add('esri-widget');
-//   infoButton.setAttribute('role', 'button');
-//   infoButton.setAttribute('aria-label', 'Identify features');
-//   infoButton.setAttribute('title', 'Identify features');
-//   const icon = document.createElement('span');
-//   icon.classList.add('esri-icon');
-//   icon.classList.add('esri-icon-description');
-//   icon.setAttribute('aria-hidden', 'true');
+export const createStreetviewButton = (): any => {
+  const button = document.createElement('div');
+  button.classList.add('streetview-widget');
+  button.classList.add('esri-component');
+  button.classList.add('esri-widget--button');
+  button.classList.add('esri-widget');
+  button.classList.add('map-tool');
+  button.setAttribute('role', 'button');
+  button.setAttribute('aria-label', 'Open streetview');
+  button.setAttribute('title', 'Open streetview');
+  const icon = document.createElement('calcite-icon');
 
-//   const text = document.createElement('span');
-//   text.classList.add('esri-icon-font-fallback-text');
-//   text.textContent = 'Idenfity features';
-//   infoButton.appendChild(icon);
-//   infoButton.appendChild(text);
-//   infoButton.onclick = () => {
-//     console.log('identify');
-//   };
-//   return infoButton;
-// };
+  //icon.classList.add('esri-icon');
+  icon.setAttribute('icon', '360-view');
+  //icon.setAttribute('aria-hidden', 'true');
+
+  const text = document.createElement('span');
+  text.classList.add('esri-icon-font-fallback-text');
+  text.textContent = 'Open streetview';
+  button.appendChild(icon);
+  button.appendChild(text);
+
+  return button;
+};
+export const createIdentifyButton = (view: MapView): any => {
+  const infoButton = document.createElement('div');
+  infoButton.classList.add('identify-widget');
+  infoButton.classList.add('esri-component');
+  infoButton.classList.add('esri-widget--button');
+  infoButton.classList.add('esri-widget');
+  infoButton.classList.add('active');
+  infoButton.classList.add('map-tool');
+
+  infoButton.setAttribute('role', 'button');
+  infoButton.setAttribute('aria-label', 'Identify features');
+  infoButton.setAttribute('title', 'Identify features');
+  const icon = document.createElement('span');
+  icon.classList.add('esri-icon');
+  icon.classList.add('esri-icon-description');
+  icon.setAttribute('aria-hidden', 'true');
+
+  const text = document.createElement('span');
+  text.classList.add('esri-icon-font-fallback-text');
+  text.textContent = 'Idenfity features';
+  infoButton.appendChild(icon);
+  infoButton.appendChild(text);
+  view.popup.autoOpenEnabled = true;
+  return infoButton;
+};
 
 export const createMapWidgets = (view: MapView): any[] => {
   const widgets = [];
+  const identify = createIdentifyButton(view);
+  widgets.push(identify);
+  view.ui.add(identify, 'top-left');
 
-  // const identify = createIdentifyButton(view);
-  // widgets.push(identify);
-  // view.ui.add(identify, 'top-left');
+  const streetview = createStreetviewButton();
+  widgets.push(streetview);
+  view.ui.add(streetview, 'top-left');
 
   const home = new Home({
     view: view,

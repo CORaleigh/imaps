@@ -31,6 +31,9 @@ export const Sketch = (props: any) => {
   const [geometryType, setGeometryType] = useState<string | null>(null);
 
   const sketchCreated = (e: any) => {
+    if (e.state === 'cancel') {
+      toolSelected('');
+    }
     if (e.state === 'complete') {
       const action = [pointAction, lineAction, polygonAction, textAction].find((action) => {
         return action.current?.active;
@@ -118,11 +121,15 @@ export const Sketch = (props: any) => {
       }
     }
 
-    deactivateActions.forEach((action) => {
-      if (action.current) {
-        action.current.active = false;
-      }
-    });
+    if (geometryType === '') {
+      deactivateActions = [pointAction, lineAction, polygonAction, textAction];
+
+      deactivateActions.forEach((action) => {
+        if (action.current) {
+          action.current.active = false;
+        }
+      });
+    }
   };
 
   const disableTool = (vm: SketchViewModel, action: HTMLCalciteActionElement) => {
