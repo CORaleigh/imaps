@@ -74,6 +74,7 @@ export const Shell = () => {
               selectedFeature={feature}
               geometrySet={geometryChanged}
               toolActivated={selectActivated}
+              clear={clearSelection}
             />
           </Suspense>,
           container,
@@ -284,6 +285,22 @@ export const Shell = () => {
     );
   };
 
+  const clearSelection = () => {
+    const container = activatePropertySearch(actions);
+    ReactDOM.render(
+      <Suspense fallback={''}>
+        <PropertyPanel
+          geometry={undefined}
+          propertiesSelected={propertiesSelected}
+          selectedProperties={selectedProperties}
+          featureSelected={featureSelected}
+          selectedFeature={selectedFeature}
+        />
+      </Suspense>,
+      container,
+    );
+  };
+
   //render widgets as they become active
   const renderWidget = (action: any) => {
     if (action) {
@@ -354,6 +371,7 @@ export const Shell = () => {
                 selectedFeature={selectedFeature}
                 toolActivated={selectActivated}
                 activeTool={activeTool}
+                clear={clearSelection}
               />
             </Suspense>,
             container,

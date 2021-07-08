@@ -13,7 +13,6 @@ export const PropertySelect = (props: any) => {
   const rectangleAction = useRef<HTMLCalciteActionElement>(null);
   const circleAction = useRef<HTMLCalciteActionElement>(null);
   const multipointAction = useRef<HTMLCalciteActionElement>(null);
-
   //const [selectedFeature, setSelectedFeature] = useState<__esri.Graphic>();
   const [pointSketchViewModel, setPointSketchViewModel] = useState<SketchViewModel>();
   const [polylineSketchViewModel, setPolylineSketchViewModel] = useState<SketchViewModel>();

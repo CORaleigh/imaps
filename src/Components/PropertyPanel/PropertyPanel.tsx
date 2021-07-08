@@ -248,6 +248,8 @@ export const PropertyPanel = (props: any) => {
           setSelectedTab('list');
         }
         props.propertiesSelected(data.properties);
+      } else {
+        clear();
       }
     });
   }, [props.geometry, props.propertiesSelected, props.featureSelected, props.selectedProperties]);

@@ -21,28 +21,28 @@ export const deactivate = (): void => {
     panel?.removeEventListener('calcitePanelDismissedChange', panelDismissedChange);
   });
 };
-const deactivateActions = (actions: any[], isTool: boolean): void => {
+const deactivateActions = (actions: any[]): void => {
   if (innerWidth < 1000) {
     actions.forEach((a) => {
       a.isActive = false;
     });
   } else {
-    if (isTool) {
-      actions.forEach((a) => {
-        a.isActive = a.isActive && !a.isTool;
-      });
-    } else {
-      actions.forEach((a) => {
-        a.isActive = a.isActive && a.isTool;
-      });
-    }
+    //  if (isTool) {
+    actions.forEach((a) => {
+      a.isActive = a.isActive && !a.isTool;
+    });
+    // } else {
+    //   actions.forEach((a) => {
+    //     a.isActive = a.isActive && a.isTool;
+    //   });
+    // }
   }
 };
 export const actionClicked = (e: any, action: any, actions: any[]): any[] => {
   if (action.isActive) {
     action.isActive = false;
   } else {
-    deactivateActions(actions, action.isTool);
+    deactivateActions(actions);
     action.isActive = true;
   }
   const shellPanel = e.target.closest('calcite-shell-panel');
