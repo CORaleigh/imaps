@@ -402,81 +402,114 @@ export const createTemplate = (view: __esri.MapView | __esri.SceneView, condoTab
       new CustomContent({
         outFields: ['*'],
         creator: (e: any) => {
-          (e.graphic.layer as FeatureLayer).relationships.find((r) => {
-            return r.name.includes('PROPERTY');
-          })?.relatedTableId;
+          debugger;
+          const div = document.createElement('div');
+          div.setAttribute('style', 'display: flex;flex-direction: row;justify-content: space-around;');
+          const btn = document.createElement('calcite-button');
+          btn.setAttribute('scale', 's');
+          btn.setAttribute('target', '_blank');
+          btn.setAttribute('round', '');
+          btn.setAttribute('icon-start', 'link');
+          btn.setAttribute('rel', 'noreferrer');
+          btn.setAttribute(
+            'href',
+            `https://maps.google.com?q=${e.graphic.getAttribute('SITE_ADDRESS')},${e.graphic.getAttribute(
+              'CITY_DECODE',
+            )},NC`,
+          );
 
-          return propertyLayer
-            ?.queryFeatures({
-              where: `REID = '${e.graphic.getAttribute('REID')}'`,
-              outFields: ['OBJECTID', 'PIN_NUM'],
-              returnGeometry: true,
-              returnCentroid: true,
-              outSpatialReference: { wkid: 4326 },
-            })
-            .then((result) => {
-              return new Locator({
-                url: 'https://maps.raleighnc.gov/arcgis/rest/services/Locators/Locator/GeocodeServer',
-                outSpatialReference: { wkid: 4326 },
-              })
-                .addressToLocations({
-                  address: { singleLine: e.graphic.getAttribute('SITE_ADDRESS') },
-                  outFields: ['*'],
-                })
-                .then((candidates: __esri.AddressCandidate[]) => {
-                  if (candidates.length) {
-                    // const candidate = candidates.find((candidate) => {
-                    // 	return candidate.attributes['Loc_name'] === 'WakeStreets';
-                    // });
-                    const candidate = candidates[0];
-                    if (candidate) {
-                      const dist = geodesicUtils.geodesicDistance(candidate.location, {
-                        x: (result.features[0]?.geometry as __esri.Polygon).centroid.longitude,
-                        y: (result.features[0]?.geometry as __esri.Polygon).centroid.latitude,
-                        spatialReference: { wkid: 4326 } as any,
-                      } as any);
-                      const cbll =
-                        (result.features[0]?.geometry as __esri.Polygon).centroid.latitude +
-                        ',' +
-                        (result.features[0]?.geometry as __esri.Polygon).centroid.longitude;
-                      const div = document.createElement('div');
-                      div.setAttribute('style', 'display: flex;flex-direction: row;justify-content: space-around;');
-                      const btn = document.createElement('calcite-button');
-                      btn.setAttribute('scale', 's');
-                      btn.setAttribute('target', '_blank');
-                      btn.setAttribute('round', '');
-                      btn.setAttribute('icon-start', '360-view');
-                      btn.setAttribute('rel', 'noreferrer');
-                      btn.setAttribute(
-                        'href',
-                        'https://maps.google.com?layer=c&cbll=' +
-                          cbll +
-                          '&cbp=0,' +
-                          dist.azimuth?.toString() +
-                          ',0,0,0',
-                      );
+          btn.textContent = 'Google Maps';
 
-                      btn.textContent = 'Street View';
+          div.append(btn);
+          const tax = document.createElement('calcite-button');
+          tax.setAttribute('scale', 's');
+          tax.setAttribute('target', '_blank');
+          tax.setAttribute(
+            'href',
+            'http://services.wakegov.com/realestate/Account.asp?id=' + e.graphic.getAttribute('REID'),
+          );
+          tax.setAttribute('rel', 'noreferrer');
 
-                      div.append(btn);
-                      const tax = document.createElement('calcite-button');
-                      tax.setAttribute('scale', 's');
-                      tax.setAttribute('target', '_blank');
-                      tax.setAttribute(
-                        'href',
-                        'http://services.wakegov.com/realestate/Account.asp?id=' + e.graphic.getAttribute('REID'),
-                      );
-                      tax.setAttribute('rel', 'noreferrer');
+          tax.setAttribute('round', '');
+          tax.setAttribute('icon-start', 'locator');
+          tax.textContent = 'Tax Page';
+          div.append(tax);
+          return div;
+          // (e.graphic.layer as FeatureLayer).relationships.find((r) => {
+          //   return r.name.includes('PROPERTY');
+          // })?.relatedTableId;
 
-                      tax.setAttribute('round', '');
-                      tax.setAttribute('icon-start', 'locator');
-                      tax.textContent = 'Tax Page';
-                      div.append(tax);
-                      return div;
-                    }
-                  }
-                });
-            });
+          // return propertyLayer
+          //   ?.queryFeatures({
+          //     where: `REID = '${e.graphic.getAttribute('REID')}'`,
+          //     outFields: ['OBJECTID', 'PIN_NUM'],
+          //     returnGeometry: true,
+          //     returnCentroid: true,
+          //     outSpatialReference: { wkid: 4326 },
+          //   })
+          //   .then((result) => {
+          //     return new Locator({
+          //       url: 'https://maps.raleighnc.gov/arcgis/rest/services/Locators/Locator/GeocodeServer',
+          //       outSpatialReference: { wkid: 4326 },
+          //     })
+          //       .addressToLocations({
+          //         address: { singleLine: e.graphic.getAttribute('SITE_ADDRESS') },
+          //         outFields: ['*'],
+          //       })
+          //       .then((candidates: __esri.AddressCandidate[]) => {
+          //         if (candidates.length) {
+          //           // const candidate = candidates.find((candidate) => {
+          //           // 	return candidate.attributes['Loc_name'] === 'WakeStreets';
+          //           // });
+          //           const candidate = candidates[0];
+          //           if (candidate) {
+          //             const dist = geodesicUtils.geodesicDistance(candidate.location, {
+          //               x: (result.features[0]?.geometry as __esri.Polygon).centroid.longitude,
+          //               y: (result.features[0]?.geometry as __esri.Polygon).centroid.latitude,
+          //               spatialReference: { wkid: 4326 } as any,
+          //             } as any);
+          //             const cbll =
+          //               (result.features[0]?.geometry as __esri.Polygon).centroid.latitude +
+          //               ',' +
+          //               (result.features[0]?.geometry as __esri.Polygon).centroid.longitude;
+          //             const div = document.createElement('div');
+          //             div.setAttribute('style', 'display: flex;flex-direction: row;justify-content: space-around;');
+          //             const btn = document.createElement('calcite-button');
+          //             btn.setAttribute('scale', 's');
+          //             btn.setAttribute('target', '_blank');
+          //             btn.setAttribute('round', '');
+          //             btn.setAttribute('icon-start', '360-view');
+          //             btn.setAttribute('rel', 'noreferrer');
+          //             btn.setAttribute(
+          //               'href',
+          //               'https://maps.google.com?layer=c&cbll=' +
+          //                 cbll +
+          //                 '&cbp=0,' +
+          //                 dist.azimuth?.toString() +
+          //                 ',0,0,0',
+          //             );
+
+          //             btn.textContent = 'Street View';
+
+          //             div.append(btn);
+          //             const tax = document.createElement('calcite-button');
+          //             tax.setAttribute('scale', 's');
+          //             tax.setAttribute('target', '_blank');
+          //             tax.setAttribute(
+          //               'href',
+          //               'http://services.wakegov.com/realestate/Account.asp?id=' + e.graphic.getAttribute('REID'),
+          //             );
+          //             tax.setAttribute('rel', 'noreferrer');
+
+          //             tax.setAttribute('round', '');
+          //             tax.setAttribute('icon-start', 'locator');
+          //             tax.textContent = 'Tax Page';
+          //             div.append(tax);
+          //             return div;
+          //           }
+          //         }
+          //       });
+          //   });
         },
       }),
       new CustomContent({
