@@ -59,6 +59,7 @@ export const Shell = () => {
 
   //when feature is selected update featureSelected state and render PropertySelect
   const featureSelected = (feature: __esri.Graphic | undefined) => {
+    debugger;
     setSelectedFeature({ ...selectedFeature, ...{ attributes: feature?.attributes, geometry: feature?.geometry } });
 
     const action = actions.find((action) => {
@@ -103,11 +104,11 @@ export const Shell = () => {
 
   const propertiesSelected = (properties: __esri.Graphic[]) => {
     setSelectedProperties([...selectedProperties, ...properties]);
+    debugger;
     if (properties.length > 1) {
       setSelectedFeature({ ...selectedFeature, ...{ attributes: null } });
     }
     const container = activatePropertySearch(actions);
-
     ReactDOM.render(
       <Suspense fallback={''}>
         <PropertyPanel

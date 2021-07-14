@@ -10,6 +10,7 @@ import {
   createSelectionLayer,
   addOverviewMap,
   checkBasemapScheme,
+  customizePopup,
 } from './utils/map';
 
 import './MapView.scss';
@@ -62,6 +63,12 @@ export const MapView = (props: any) => {
           );
         });
         setView(mapView);
+        customizePopup(mapView);
+        mapView.popup.on('trigger-action', (event) => {
+          if (event.action.title === 'Select') {
+            props.geometryChanged(mapView.popup.location);
+          }
+        });
         viewRef.current = mapView;
         const layer = createSelectionLayer(mapView);
         setSelectionLayer(layer);

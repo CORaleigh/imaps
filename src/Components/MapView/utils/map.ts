@@ -13,6 +13,7 @@ import UniqueValueRenderer from '@arcgis/core/renderers/UniqueValueRenderer';
 import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 import Extent from '@arcgis/core/geometry/Extent';
 import * as type from '@arcgis/core/smartMapping/symbology/type';
+import Collection from '@arcgis/core/core/Collection';
 // import Graphic from '@arcgis/core/Graphic';
 // import * as geometryEngine from '@arcgis/core/geometry/geometryEngine';
 // import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
@@ -69,6 +70,24 @@ export const createSelectionLayer = (view: __esri.MapView) => {
   });
 
   return layer;
+};
+export const customizePopup = (view: __esri.MapView) => {
+  const propertyLayer = view.map.allLayers.find((layer) => {
+    return layer.type === 'feature' && layer.title.startsWith('Property');
+  }) as __esri.FeatureLayer;
+  view.whenLayerView(propertyLayer).then(() => {
+    if (propertyLayer) {
+      if (propertyLayer.popupTemplate) {
+        propertyLayer.popupTemplate.actions = new Collection([
+          {
+            title: 'Select',
+            id: 'property-select',
+            className: 'esri-icon-search',
+          } as __esri.ActionButton,
+        ]);
+      }
+    }
+  });
 };
 
 export const checkBasemapScheme = (activeBasemap: __esri.Basemap, view: __esri.MapView) => {
