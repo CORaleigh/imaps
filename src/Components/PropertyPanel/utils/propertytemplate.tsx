@@ -3,8 +3,8 @@ import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import PopupTemplate from '@arcgis/core/PopupTemplate';
 import ExpressionInfo from '@arcgis/core/popup/ExpressionInfo';
 import CustomContent from '@arcgis/core/popup/content/CustomContent';
-import Locator from '@arcgis/core/tasks/Locator';
-import * as geodesicUtils from '@arcgis/core/geometry/support/geodesicUtils';
+//import Locator from '@arcgis/core/tasks/Locator';
+//import * as geodesicUtils from '@arcgis/core/geometry/support/geodesicUtils';
 import Feature from '@arcgis/core/widgets/Feature';
 import FieldInfo from '@arcgis/core/popup/FieldInfo';
 import * as promiseUtils from '@arcgis/core/core/promiseUtils';
@@ -382,9 +382,9 @@ function getFieldInfos(condoTable: FeatureLayer): FieldInfo[] {
   return fieldConfigs;
 }
 export const createTemplate = (view: __esri.MapView | __esri.SceneView, condoTable: FeatureLayer): PopupTemplate => {
-  const propertyLayer = view.map.allLayers.find((layer) => {
-    return layer.title.includes('Property') && layer.type === 'feature';
-  }) as FeatureLayer;
+  // const propertyLayer = view.map.allLayers.find((layer) => {
+  //   return layer.title.includes('Property') && layer.type === 'feature';
+  // }) as FeatureLayer;
   const popupTemplate = new PopupTemplate({
     expressionInfos: arcadeExpressionInfos,
     fieldInfos: getFieldInfos(condoTable).map((field) => {
