@@ -59,7 +59,6 @@ export const Shell = () => {
 
   //when feature is selected update featureSelected state and render PropertySelect
   const featureSelected = (feature: __esri.Graphic | undefined) => {
-    debugger;
     setSelectedFeature({ ...selectedFeature, ...{ attributes: feature?.attributes, geometry: feature?.geometry } });
 
     const action = actions.find((action) => {
@@ -104,7 +103,6 @@ export const Shell = () => {
 
   const propertiesSelected = (properties: __esri.Graphic[]) => {
     setSelectedProperties([...selectedProperties, ...properties]);
-    debugger;
     if (properties.length > 1) {
       setSelectedFeature({ ...selectedFeature, ...{ attributes: null } });
     }
@@ -232,7 +230,6 @@ export const Shell = () => {
         document.querySelector('.map-tool.active')?.classList.remove('active');
         document.querySelector('.streetview-widget')?.classList.add('active');
         streetviewClick.current?.remove();
-        debugger;
         streetviewClick.current = mapView.on('click', (e) => {
           document.querySelector('.map-tool.active')?.classList.remove('active');
           document.querySelector('.streetview-widget')?.classList.add('active');

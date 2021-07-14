@@ -21,28 +21,28 @@ export const deactivate = (): void => {
     panel?.removeEventListener('calcitePanelDismissedChange', panelDismissedChange);
   });
 };
-const deactivateActions = (actions: any[]): void => {
+const deactivateActions = (actions: any[], isTool: boolean): void => {
   if (innerWidth < 1000) {
     actions.forEach((a) => {
       a.isActive = false;
     });
   } else {
-    //  if (isTool) {
-    actions.forEach((a) => {
-      a.isActive = a.isActive && !a.isTool;
-    });
-    // } else {
-    //   actions.forEach((a) => {
-    //     a.isActive = a.isActive && a.isTool;
-    //   });
-    // }
+    if (isTool) {
+      actions.forEach((a) => {
+        a.isActive = a.isActive && !a.isTool;
+      });
+    } else {
+      actions.forEach((a) => {
+        a.isActive = a.isActive && a.isTool;
+      });
+    }
   }
 };
 export const actionClicked = (e: any, action: any, actions: any[]): any[] => {
   if (action.isActive) {
     action.isActive = false;
   } else {
-    deactivateActions(actions);
+    deactivateActions(actions, action.isTool);
     action.isActive = true;
   }
   const shellPanel = e.target.closest('calcite-shell-panel');
@@ -217,8 +217,7 @@ export const activatePropertySearch = (actions: any[]): HTMLElement => {
   const active = actions.find((action) => {
     return action.isActive; // && window.innerWidth <= 1000;
   });
-  debugger;
-  if (active) {
+  if (active && window.innerWidth < 1000) {
     active.isActive = false;
   }
   const search = actions.find((action) => {

@@ -402,7 +402,6 @@ export const createTemplate = (view: __esri.MapView | __esri.SceneView, condoTab
       new CustomContent({
         outFields: ['*'],
         creator: (e: any) => {
-          debugger;
           const div = document.createElement('div');
           div.setAttribute('style', 'display: flex;flex-direction: row;justify-content: space-around;');
           const btn = document.createElement('calcite-button');
