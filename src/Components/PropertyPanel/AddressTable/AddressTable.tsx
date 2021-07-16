@@ -3,8 +3,9 @@
 import React, { useEffect, useRef } from 'react';
 import FeatureTable from '@arcgis/core/widgets/FeatureTable';
 import './AddressTable.scss';
-import CIMSymbol from '@arcgis/core/symbols/CIMSymbol';
-import { pinSymbol } from '../../../config/config';
+//import CIMSymbol from '@arcgis/core/symbols/CIMSymbol';
+//import { pinSymbol } from '../../../config/config';
+import PictureMarkerSymbol from '@arcgis/core/symbols/PictureMarkerSymbol';
 export const AddressTable = (props: any) => {
   const tableRef = useRef<HTMLDivElement>(null);
 
@@ -41,7 +42,7 @@ export const AddressTable = (props: any) => {
           table.selectRows(feature);
           //grid.scrollToIndex(item.index);
           feature.setAttribute('type', 'address');
-          feature.symbol = new CIMSymbol(pinSymbol as any);
+          feature.symbol = new PictureMarkerSymbol({ url: 'assets/pin.svg', height: 36, width: 36 }); //new CIMSymbol(pinSymbol as any);
           (props.view as __esri.MapView).graphics.removeMany(
             (props.view as __esri.MapView).graphics.filter((graphic) => {
               return graphic.getAttribute('type') === 'address';
