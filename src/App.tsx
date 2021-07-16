@@ -10,6 +10,7 @@ import ActionContext from './Components/ActionContext';
 // import '@vaadin/vaadin-button';
 // import '@vaadin/vaadin-grid';
 // import '@vaadin/vaadin-text-field';
+import '@esri/calcite-components/dist/calcite/calcite.css';
 import '@arcgis/core/assets/esri/themes/light/main.css';
 import Alert from './Components/Alert/Alert';
 function App() {

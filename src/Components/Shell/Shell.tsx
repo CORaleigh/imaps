@@ -455,7 +455,7 @@ export const Shell = () => {
   }, [actions]);
   return (
     <div>
-      <calcite-shell theme={theme} className="shell">
+      <calcite-shell class={`shell calcite-theme-${theme}`}>
         {width >= 1000 ? (
           <calcite-shell-panel slot="primary-panel" position="start" width-scale="l" collapsed>
             <calcite-action-bar

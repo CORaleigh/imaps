@@ -34,7 +34,6 @@ calcite-input input, textarea {
   left: 0 !important;
   max-width: calc(100% - 50px);
 }*/
-@import '@esri/calcite-components/dist/calcite/calcite.css';
 
 
 #propertyPanel calcite-tab, #propertyPanel calcite-tab-nav {
