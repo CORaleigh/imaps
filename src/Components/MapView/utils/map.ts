@@ -14,9 +14,7 @@ import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 import Extent from '@arcgis/core/geometry/Extent';
 import * as type from '@arcgis/core/smartMapping/symbology/type';
 import Collection from '@arcgis/core/core/Collection';
-// import Graphic from '@arcgis/core/Graphic';
-// import * as geometryEngine from '@arcgis/core/geometry/geometryEngine';
-// import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
+import { handlePolygonLabels } from './labeling';
 
 export const createSelectionLayer = (view: __esri.MapView) => {
   const layer = new FeatureLayer({
@@ -118,47 +116,7 @@ export const checkBasemapScheme = (activeBasemap: __esri.Basemap, view: __esri.M
     }
   });
 };
-// const handlePolygonLabels = (view: MapView) => {
-//   const labels = new GraphicsLayer({ id: 'polygon-labels', listMode: 'hide', title: 'labels' });
-//   view.map.add(labels);
-//   view.watch('stationary', (stationary) => {
-//     if (stationary) {
-//       labels.removeAll();
-//       view.map.allLayers.forEach((layer: __esri.Layer) => {
-//         if (layer.type === 'feature' && layer.visible && (layer as __esri.FeatureLayer).minScale >= view.scale) {
-//           if ((layer as __esri.FeatureLayer).geometryType === 'polygon') {
-//             (layer as __esri.FeatureLayer)
-//               .queryFeatures({ geometry: view.extent, returnGeometry: true, outFields: ['*'] })
-//               .then((featureSet) => {
-//                 featureSet.features.forEach((feature: __esri.Graphic) => {
-//                   if ((layer as __esri.FeatureLayer).labelingInfo) {
-//                     console.log((layer as __esri.FeatureLayer).labelingInfo[0]);
-//                     if ((layer as __esri.FeatureLayer).labelingInfo[0].labelExpression) {
-//                       const symbol = ((layer as __esri.FeatureLayer).labelingInfo[0]
-//                         .symbol as __esri.TextSymbol).clone();
-//                       symbol.text = feature.getAttribute(
-//                         (layer as __esri.FeatureLayer).labelingInfo[0].labelExpression
-//                           .replace('[', '')
-//                           .replace(']', ''),
-//                       );
-//                       console.log(feature);
-//                       console.log(symbol.text);
-//                       labels.graphics.add(
-//                         new Graphic({
-//                           symbol: symbol,
-//                           geometry: (geometryEngine.clip(feature.geometry, view.extent) as __esri.Polygon)?.centroid,
-//                         }),
-//                       );
-//                     }
-//                   }
-//                 });
-//               });
-//           }
-//         }
-//       });
-//     }
-//   });
-// };
+
 export const createMapView = (mapRef: any, mapProperties: any, viewProperties: any): MapView => {
   const map = new WebMap({ portalItem: mapProperties });
   //hide login window if map contains layer that is not shared publicly
@@ -298,6 +256,7 @@ export const createIdentifyButton = (view: MapView): any => {
 };
 
 export const createMapWidgets = (view: MapView): any[] => {
+  handlePolygonLabels(view);
   const widgets = [];
   const identify = createIdentifyButton(view);
   widgets.push(identify);
