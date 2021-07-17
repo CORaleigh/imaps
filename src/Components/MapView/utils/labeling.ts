@@ -90,12 +90,17 @@ const updateLabels = (labels: GraphicsLayer, view: __esri.MapView) => {
   });
 };
 export const handlePolygonLabels = (view: __esri.MapView): void => {
+  const labels = new GraphicsLayer({ id: 'polygon-labels', listMode: 'hide', title: 'labels' });
+
   getAllPolyLayers(view).forEach((l) => {
     l.watch('visible', () => {
-      updateLabels(labels, view);
+      labels.removeAll();
+
+      setTimeout(() => {
+        updateLabels(labels, view);
+      }, 1000);
     });
   });
-  const labels = new GraphicsLayer({ id: 'polygon-labels', listMode: 'hide', title: 'labels' });
 
   view.map.add(labels);
   watchUtils.whenTrue(view, 'stationary', () => {

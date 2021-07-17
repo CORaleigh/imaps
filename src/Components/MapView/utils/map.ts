@@ -256,7 +256,9 @@ export const createIdentifyButton = (view: MapView): any => {
 };
 
 export const createMapWidgets = (view: MapView): any[] => {
-  handlePolygonLabels(view);
+  setTimeout(() => {
+    handlePolygonLabels(view);
+  }, 5000);
   const widgets = [];
   const identify = createIdentifyButton(view);
   widgets.push(identify);
