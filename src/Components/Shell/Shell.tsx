@@ -243,8 +243,6 @@ export const Shell = () => {
   //after map has initiliazed
   const mapInitialized = async (mapView: __esri.MapView) => {
     if (!viewCreated) {
-      const theme = window.localStorage.getItem('imaps_theme') as string;
-      updateTheme(theme, setTheme);
       //setView(mapView);
       view.current = mapView;
       setViewCreated(true);
@@ -416,7 +414,10 @@ export const Shell = () => {
       }
     }
   };
-
+  useEffect(() => {
+    const theme = window.localStorage.getItem('imaps_theme') as string;
+    updateTheme(theme, setTheme);
+  });
   useEffect(() => {
     initialized();
     // const theme = window.localStorage.getItem('imaps_theme') as string;
