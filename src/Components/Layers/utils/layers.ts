@@ -28,11 +28,15 @@ export const layerListItemCreated = (event: any): void => {
     item.layer.watch('visible', (visible: boolean) => {
       item.panel.open = visible;
       if (visible) {
-        if (item.layer.parent.type === 'group') {
-          item.layer.parent.visible = true;
+        if (item.layer.parent) {
+          if (item.layer.parent.type === 'group') {
+            item.layer.parent.visible = true;
+          }
         }
-        if (item.layer.parent.parent.type === 'group') {
-          item.layer.parent.parent.visible = true;
+        if (item.layer.parent.parent) {
+          if (item.layer.parent.parent.type === 'group') {
+            item.layer.parent.parent.visible = true;
+          }
         }
       }
     });

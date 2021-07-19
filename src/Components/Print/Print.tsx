@@ -116,7 +116,7 @@ export const Print = (props: any) => {
     setSelectedFeature(props.selectedFeature);
   }, [props.selectedFeature]); // only after initial render
   useEffect(() => {
-    const graphics = new GraphicsLayer({ id: 'print-graphic' });
+    const graphics = new GraphicsLayer({ id: 'print-graphic', listMode: 'hide' });
 
     (props.view as __esri.MapView).map.add(graphics);
     getLayouts(props.templateUrl).then((layouts) => setLayouts(layouts));

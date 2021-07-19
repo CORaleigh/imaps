@@ -78,7 +78,7 @@ const updateLabels = (labels: GraphicsLayer, view: __esri.MapView) => {
                   labels.graphics.add(
                     new Graphic({
                       symbol: symbol,
-                      geometry: clipGeom,
+                      geometry: clipGeom.centroid,
                     }),
                   );
                 }
