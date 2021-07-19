@@ -417,7 +417,7 @@ export const Shell = () => {
   useEffect(() => {
     const theme = window.localStorage.getItem('imaps_theme') as string;
     updateTheme(theme, setTheme);
-  });
+  }, []);
   useEffect(() => {
     initialized();
     // const theme = window.localStorage.getItem('imaps_theme') as string;
