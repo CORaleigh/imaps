@@ -82,6 +82,7 @@ export const Header = (props: any) => {
           </calcite-dropdown-group>
         </calcite-dropdown>
       </header>
+
       <calcite-modal ref={disclaimer} aria-labelledby="modal-title">
         <div slot="header" id="modal-title">
           Disclaimer

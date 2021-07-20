@@ -46,6 +46,7 @@ export const Shell = () => {
   const [selectedProperties, setSelectedProperties] = useState<__esri.Graphic[]>([]);
   const [selectedFeature, setSelectedFeature] = useState<any>();
   const { theme, setTheme } = useContext(ThemeContext);
+  const [updating, setUpdating] = useState(true);
   //define sketch tools to handle deactivating other sketch tools
   const sketchVM = useRef<__esri.SketchViewModel>();
   const selectVM = useRef<__esri.SketchViewModel>();
@@ -246,6 +247,9 @@ export const Shell = () => {
       //setView(mapView);
       view.current = mapView;
       setViewCreated(true);
+      mapView.watch('updating', (updating) => {
+        setUpdating(updating);
+      });
       const container = document.getElementById('propertySearch');
       if (mapView.map) {
         setMapTools(mapView);
@@ -458,6 +462,10 @@ export const Shell = () => {
   }, [actions]);
   return (
     <div>
+      {updating && (
+        <calcite-progress class={`shell calcite-theme-${theme}`} type="indeterminate" value="0.5"></calcite-progress>
+      )}
+
       <calcite-shell class={`shell calcite-theme-${theme}`}>
         {width >= 1000 ? (
           <calcite-shell-panel slot="primary-panel" position="start" width-scale="l" collapsed>
