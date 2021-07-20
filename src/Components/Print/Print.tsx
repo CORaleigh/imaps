@@ -85,7 +85,7 @@ export const Print = (props: any) => {
         mapScale = mapScale / 12;
         console.log(mapScale);
         const width = template[0]?.webMapFrameSize[0] * mapScale;
-        const height = template[0]?.webMapFrameSize[0] * mapScale;
+        const height = template[0]?.webMapFrameSize[1] * mapScale;
         const xmax = center.x + width / 2;
         const ymax = center.y + height / 2;
         const xmin = center.x - width / 2;
