@@ -3,6 +3,8 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
+import IdentityManager from '@arcgis/core/identity/IdentityManager';
+
 import {
   checkLocalStorage,
   createMapView,
@@ -46,6 +48,22 @@ export const MapView = (props: any) => {
     const mapProperties = { id: props.id };
     const viewProperties = {};
     // create map and view
+
+    IdentityManager.on('dialog-create', () => {
+      const observer: MutationObserver = new MutationObserver((mutations) => {
+        if (mutations.length) {
+          debugger;
+          ((mutations[0]?.target as HTMLElement)?.querySelector('.esri-button--secondary') as HTMLElement)?.click();
+          observer.disconnect();
+        } else {
+          observer.disconnect();
+        }
+      });
+
+      const container = IdentityManager.dialog.container;
+
+      observer.observe(container as Node, { childList: true });
+    });
     if (!loaded) {
       createMapView(mapRef.current, mapProperties, viewProperties).when((mapView: __esri.MapView) => {
         setLoaded(true);

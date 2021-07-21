@@ -242,16 +242,18 @@ const wildcardSearch = (where: string, condoTable: FeatureLayer): Promise<__esri
       result.features.forEach((f) => {
         oids.push(f.getAttribute('OBJECTID'));
       });
-      getProperty(oids).then((properties) => {
-        resolve({ features: result.features, properties: properties });
-      });
+      if (oids.length) {
+        getProperty(oids).then((properties) => {
+          resolve({ features: result.features, properties: properties });
+        });
+      }
     });
   });
 };
 const getWildcardSearchWhere = (searchFields: string[], term: string): string => {
   let where = '';
   if (!searchFields.length) {
-    where = `OWNER like '%${term.toUpperCase()}%' OR REID like '${term.toUpperCase()}%' OR PIN_NUM like '${term.toUpperCase()}%'`;
+    where = `SITE_ADDRESS like '%${term.toUpperCase()}%' OR FULL_STREET_NAME like '%${term.toUpperCase()}%' OR OWNER like '%${term.toUpperCase()}%' OR REID like '${term.toUpperCase()}%' OR PIN_NUM like '${term.toUpperCase()}%'`;
   } else {
     if (searchFields.includes('OWNER')) {
       where = `OWNER like '_%${term.toUpperCase()}%'`;
@@ -274,6 +276,7 @@ export const searchComplete = (event: __esri.SearchSearchCompleteEvent): Promise
         searchFields = (search.activeSource as LayerSearchSource)?.searchFields;
       }
       const where = getWildcardSearchWhere(searchFields, event.searchTerm);
+      debugger;
       resolve(wildcardSearch(where, condos));
     }
     if (event.numResults) {

@@ -243,13 +243,14 @@ export const Shell = () => {
   };
   //after map has initiliazed
   const mapInitialized = async (mapView: __esri.MapView) => {
+    mapView.watch('updating', (updating) => {
+      setUpdating(updating);
+    });
+
     if (!viewCreated) {
-      //setView(mapView);
       view.current = mapView;
       setViewCreated(true);
-      mapView.watch('updating', (updating) => {
-        setUpdating(updating);
-      });
+
       const container = document.getElementById('propertySearch');
       if (mapView.map) {
         setMapTools(mapView);
@@ -559,7 +560,7 @@ export const Shell = () => {
         )}
         <Suspense fallback={''}>
           <MapView
-            id="95092428774c4b1fb6a3b6f5fed9fbc4"
+            id="ec738cb78df041598e681e07a29962ce"
             initialized={mapInitialized}
             geometryChanged={geometryChanged}
             selectedProperties={selectedProperties}
