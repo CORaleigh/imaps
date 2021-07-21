@@ -105,7 +105,6 @@ export const MapView = (props: any) => {
           })
           ?.setAttribute('selected', 1);
       }
-      debugger;
       selectionLayer?.queryFeatures({ where: '1=1', returnGeometry: true }).then((featureSet) => {
         selectionLayer?.applyEdits({ deleteFeatures: featureSet.features }).then((result) => {
           selectionLayer?.applyEdits({ addFeatures: props.selectedProperties }).then((result) => {

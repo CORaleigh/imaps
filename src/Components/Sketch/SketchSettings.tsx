@@ -3,10 +3,12 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { getInitialSettings } from './utils/sketch';
-
+//import { fonts } from './utils/fonts';
 export const SketchSettings = (props: any) => {
   const [geometryType, setGeometryType] = useState(null);
   const ref = useRef<HTMLDivElement>(null);
+  //const family = useRef<HTMLDivElement>(null);
+  //const [selectedFont, setSelectedFont] = useState<any>();
   const settings = useRef(getInitialSettings());
   // const [settings, setSettings] = useState<any>(() => {
   //     const initialSettings = getInitialSettings();
@@ -39,9 +41,53 @@ export const SketchSettings = (props: any) => {
       });
     }
   };
+
   useEffect(() => {
     setGeometryType(props.geometryType);
+
     requestAnimationFrame(() => {
+      // if (props.geometryType === 'text') {
+      //   const font = fonts.find((font) => {
+      //     return font.active;
+      //   });
+      //   setSelectedFont(font);
+
+      //   family.current?.addEventListener('calciteDropdownSelect', (e) => {
+      //     requestAnimationFrame(() => {
+      //       const item = family.current?.querySelector('calcite-dropdown-item[active]');
+
+      //       if (item) {
+      //         const selected = fonts.find((font) => {
+      //           return font.name === item.innerHTML;
+      //         });
+      //         const active = fonts.find((font) => {
+      //           return font.active;
+      //         }) as any;
+      //         if (active) {
+      //           active.selected = false;
+      //         }
+      //         if (selected) {
+      //           selected.active = true;
+      //         }
+      //         console.log(selected);
+      //         setSelectedFont(selected);
+      //         settings.current = {
+      //           ...settings.current,
+      //           ...{
+      //             fontFamily: selected?.font.family,
+      //             fontStyle: selected?.font.style,
+      //             fontWeight: selected?.font.weight,
+      //           },
+      //         };
+      //         props.settingsChanged(settings.current);
+      //       }
+      //     });
+      //   });
+      // } else {
+      //   family.current?.removeEventListener('calciteDropdownSelect', (e) => {
+      //     console.log(e);
+      //   });
+      // }
       ref.current?.querySelectorAll('calcite-slider').forEach((element: Element) => {
         element.addEventListener('calciteSliderChange', sliderChanged);
       });
@@ -356,6 +402,18 @@ export const SketchSettings = (props: any) => {
       {geometryType === 'text' ? (
         <div>
           <calcite-block key="text-symbol" heading="Symbol" open collapsible>
+            {/* <calcite-block-section key="font-color" text="Font Family" open>
+              <calcite-dropdown ref={family} label="Dropdown label">
+                <calcite-button slot="dropdown-trigger" color="clear">
+                  {selectedFont?.name}
+                </calcite-button>
+                <calcite-dropdown-group>
+                  {fonts.map((font: any) => {
+                    return <calcite-dropdown-item key={font.name}>{font.name}</calcite-dropdown-item>;
+                  })}
+                </calcite-dropdown-group>
+              </calcite-dropdown>
+            </calcite-block-section> */}
             <calcite-block-section text="Font Size" open>
               <calcite-slider
                 min="6"
@@ -384,22 +442,6 @@ export const SketchSettings = (props: any) => {
                   name="fontColor"
                   calcite-hydrated=""
                   id="fontColor"
-                ></calcite-color-picker>
-              </calcite-label>
-            </calcite-block-section>
-            <calcite-block-section key="font-halo-color" text="Halo Color">
-              <calcite-label>
-                Halo Color
-                <calcite-color-picker
-                  dir="ltr"
-                  hide-channels=""
-                  hide-saved=""
-                  scale="m"
-                  value={settings.current.haloColor}
-                  appearance="default"
-                  name="haloColor"
-                  calcite-hydrated=""
-                  id="haloColor"
                 ></calcite-color-picker>
               </calcite-label>
             </calcite-block-section>

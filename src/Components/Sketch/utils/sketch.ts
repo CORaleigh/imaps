@@ -168,6 +168,9 @@ export const getInitialSettings = (): any => {
     polygonOutlineColor: '#000000',
     polygonFillColor: '#FF0000',
     fontSize: 12,
+    fontFamily: 'Arial',
+    fontWeight: 'normal',
+    fontStyle: 'normal',
     fontColor: '#000000',
     haloColor: '#FFFFFF',
   };

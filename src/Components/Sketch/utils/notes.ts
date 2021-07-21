@@ -95,6 +95,9 @@ const updateTextRenderer = (settings: any) => {
   textSymbol.color = Color.fromHex(settings.fontColor);
   textSymbol.haloColor = Color.fromHex(settings.haloColor);
   textSymbol.font.size = settings.fontSize;
+  // textSymbol.font.family = settings.fontFamily;
+  // textSymbol.font.weight = settings.fontWeight;
+  // textSymbol.font.style = settings.fontStyle;
 };
 
 export const settingsChanged = (settings: any, geometryType: string): void => {
@@ -108,6 +111,7 @@ export const settingsChanged = (settings: any, geometryType: string): void => {
     updateLineRenderer(settings);
   }
   if (geometryType === 'text') {
+    debugger;
     updateTextRenderer(settings);
   }
 };

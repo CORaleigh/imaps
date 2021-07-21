@@ -74,7 +74,6 @@ export const updateTheme = (theme: string, setTheme: React.Dispatch<string>) => 
   }
   document.body.classList.remove(theme === 'light' ? 'dark' : 'light');
   document.body.classList.add(theme === 'light' ? 'light' : 'dark');
-  debugger;
   const link = Array.from(document.head.querySelectorAll('link')).find((link: HTMLLinkElement) => {
     return link.href.includes(`${theme}/main.css`);
   });
