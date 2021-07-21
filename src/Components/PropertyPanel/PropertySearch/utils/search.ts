@@ -233,20 +233,19 @@ const searchResultSelected = (layer: FeatureLayer, source: string, results: any,
     }
   });
 };
-const wildcardSearch = (where: string, condoTable: FeatureLayer) => {
-  const oids: number[] = [];
-  condoTable.queryFeatures({ where: where, outFields: ['*'] }).then((result) => {
-    result.features.forEach((f) => {
-      oids.push(f.getAttribute('OBJECTID'));
+const wildcardSearch = (where: string, condoTable: FeatureLayer): Promise<__esri.FeatureSet> => {
+  return promiseUtils.create((resolve) => {
+    document.querySelector('.esri-search__warning-menu')?.setAttribute('style', 'visibility: hidden');
+
+    const oids: number[] = [];
+    condoTable.queryFeatures({ where: where, outFields: ['*'] }).then((result) => {
+      result.features.forEach((f) => {
+        oids.push(f.getAttribute('OBJECTID'));
+      });
+      getProperty(oids).then((properties) => {
+        resolve({ features: result.features, properties: properties });
+      });
     });
-    getProperty(oids);
-    if (result.features.length > 1) {
-      //this.emit('features-selected', result.features);
-    }
-    if (result.features.length === 1) {
-      //this.emit('feature-selected', result.features[0]);
-    }
-    document.querySelector('.esri-search--show-suggestions')?.classList.remove('esri-search--show-suggestions');
   });
 };
 const getWildcardSearchWhere = (searchFields: string[], term: string): string => {
@@ -275,7 +274,7 @@ export const searchComplete = (event: __esri.SearchSearchCompleteEvent): Promise
         searchFields = (search.activeSource as LayerSearchSource)?.searchFields;
       }
       const where = getWildcardSearchWhere(searchFields, event.searchTerm);
-      wildcardSearch(where, condos);
+      resolve(wildcardSearch(where, condos));
     }
     if (event.numResults) {
       searchResultSelected(

@@ -26,6 +26,7 @@ export const PropertySearch = (props: any) => {
       search.sources = setSearchSources(props.addressTable, props.condosTable, props.propertyLayer, search);
       search.on('search-complete', (event) => {
         searchComplete(event).then((result: any) => {
+          debugger;
           props.searchComplete(result);
         });
       });
