@@ -10,8 +10,6 @@ import Point from '@arcgis/core/geometry/Point';
 import SpatialReference from '@arcgis/core/geometry/SpatialReference';
 
 import './Measure.scss';
-//import CIMSymbol from '@arcgis/core/symbols/CIMSymbol';
-//import { pinSymbol } from '../../config/config';
 import PictureMarkerSymbol from '@arcgis/core/symbols/PictureMarkerSymbol';
 export const Measure = (props: any) => {
   const measureRef = useRef<HTMLDivElement>(null);
@@ -92,7 +90,7 @@ export const Measure = (props: any) => {
       container: coordRef.current as HTMLDivElement,
       view: props.view,
     });
-    conversion.viewModel.locationSymbol = new PictureMarkerSymbol({ url: 'assets/pin.svg', height: 36, width: 36 }); //new CIMSymbol(pinSymbol as any) as any;
+    conversion.viewModel.locationSymbol = new PictureMarkerSymbol({ url: 'assets/pin.svg', height: 36, width: 36 });
     coordinates.current = conversion;
     conversion.viewModel.watch('mode', (mode) => {
       (props.view as __esri.MapView).popup.autoOpenEnabled = mode === 'live';
