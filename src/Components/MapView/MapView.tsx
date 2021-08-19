@@ -13,6 +13,7 @@ import {
   addOverviewMap,
   checkBasemapScheme,
   customizePopup,
+  createAlert,
 } from './utils/map';
 
 import './MapView.scss';
@@ -42,7 +43,20 @@ export const MapView = (props: any) => {
     window.localStorage.setItem('imaps', JSON.stringify(json));
     // }
   };
+  const checkRequiredLayers = (mapView: __esri.MapView): boolean => {
+    const condos = mapView.map.allTables.filter((layer) => {
+      return layer.title.includes('Condo') && layer.type === 'feature';
+    });
 
+    const addresses = mapView.map.allTables.filter((layer) => {
+      return layer.title.includes('Address') && layer.type === 'feature';
+    });
+
+    const property = mapView.map.allLayers.filter((layer) => {
+      return layer.title.includes('Property') && layer.type === 'feature';
+    });
+    return property.length > 0 && condos.length > 0 && addresses.length > 0;
+  };
   useEffect(() => {
     // read map and view properties from props
     const mapProperties = { id: props.id };
@@ -66,39 +80,45 @@ export const MapView = (props: any) => {
     });
     if (!loaded) {
       createMapView(mapRef.current, mapProperties, viewProperties).when((mapView: __esri.MapView) => {
-        setLoaded(true);
-        props.initialized(mapView);
-        widgets.current.push(createMapWidgets(mapView));
+        if (checkRequiredLayers(mapView)) {
+          setLoaded(true);
+          props.initialized(mapView);
+          widgets.current.push(createMapWidgets(mapView));
 
-        const expand: __esri.Expand = addOverviewMap(mapView);
-        whenTrueOnce(expand, 'expanded', () => {
-          const Overview = lazy(() => import('../Overview/Overview'));
-          ReactDOM.render(
-            <Suspense fallback={''}>
-              <Overview view={mapView} expand={expand} />
-            </Suspense>,
-            document.createElement('div'),
-          );
-        });
-        setView(mapView);
-        customizePopup(mapView);
-        mapView.popup.on('trigger-action', (event) => {
-          if (event.action.title === 'Select') {
-            props.geometryChanged(mapView.popup.location);
-          }
-        });
-        viewRef.current = mapView;
-        const layer = createSelectionLayer(mapView);
-        setSelectionLayer(layer);
+          const expand: __esri.Expand = addOverviewMap(mapView);
+          whenTrueOnce(expand, 'expanded', () => {
+            const Overview = lazy(() => import('../Overview/Overview'));
+            ReactDOM.render(
+              <Suspense fallback={''}>
+                <Overview view={mapView} expand={expand} />
+              </Suspense>,
+              document.createElement('div'),
+            );
+          });
+          setView(mapView);
+          customizePopup(mapView);
+          mapView.popup.on('trigger-action', (event) => {
+            if (event.action.title === 'Select') {
+              props.geometryChanged(mapView.popup.location);
+            }
+          });
+          viewRef.current = mapView;
+          const layer = createSelectionLayer(mapView);
+          setSelectionLayer(layer);
 
-        viewRef.current?.map.add(layer);
+          viewRef.current?.map.add(layer);
 
-        viewRef.current?.on('hold', (event: any) => {
-          props.geometryChanged(event.mapPoint);
-        });
+          viewRef.current?.on('hold', (event: any) => {
+            props.geometryChanged(event.mapPoint);
+          });
 
-        checkLocalStorage(mapView);
-        checkBasemapScheme(mapView.map.basemap, mapView);
+          checkLocalStorage(mapView);
+          checkBasemapScheme(mapView.map.basemap, mapView);
+        } else {
+          createAlert();
+          setLoaded(true);
+          props.mapError();
+        }
       });
     }
 

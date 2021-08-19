@@ -8,19 +8,18 @@ import Polygon from '@arcgis/core/geometry/Polygon';
 import * as geometryEngine from '@arcgis/core/geometry/geometryEngine';
 import * as promiseUtils from '@arcgis/core/core/promiseUtils';
 import * as type from '@arcgis/core/smartMapping/symbology/type';
-
 export const createAlert = () => {
   const alert = document.createElement('calcite-alert');
   alert.setAttribute('auto-dismiss', '');
   alert.setAttribute('auto-dismiss-duration', 'fast');
   alert.setAttribute('scale', 'm');
   alert.setAttribute('color', 'yellow');
-  alert.setAttribute('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+  alert.classList.add(document.body.classList.contains('dark') ? 'calcite-theme-dark' : 'calcite-theme-light');
   const title = document.createElement('div');
-  title.slot = 'alert-title';
+  title.slot = 'title';
   title.textContent = 'Image basemap changed';
   const message = document.createElement('div');
-  message.slot = 'alert-message';
+  message.slot = 'message';
   message.textContent = 'Image basemap changed';
   alert.appendChild(title);
   alert.appendChild(message);

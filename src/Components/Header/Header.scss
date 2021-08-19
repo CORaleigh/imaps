@@ -17,6 +17,15 @@ header {
     height: 50px;
 }
 
+header calcite-dropdown {
+  max-width: 224px;
+
+}
+header calcite-button {
+  right: 0;
+  position: fixed;  
+}
+
 header h2 {
   margin: 0.5em;
 }

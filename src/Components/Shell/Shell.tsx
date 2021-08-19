@@ -35,8 +35,10 @@ import {
 import ThemeContext from '../ThemeContext';
 import { basemaps, links } from '../../config/config';
 import ActionContext from '../ActionContext';
+import * as config from '../../config/config';
 
 export const Shell = () => {
+  const [mapId, setMapId] = useState<string>();
   const [tips, setTips] = useState<any>([]);
   const [tipsTitle, setTipsTitle] = useState<string>();
   console.log('render shell');
@@ -304,6 +306,10 @@ export const Shell = () => {
     );
   };
 
+  const mapError = () => {
+    setUpdating(false);
+  };
+
   //render widgets as they become active
   const renderWidget = (action: any) => {
     if (action) {
@@ -421,6 +427,14 @@ export const Shell = () => {
   };
   useEffect(() => {
     const theme = window.localStorage.getItem('imaps_theme') as string;
+    const url = new URL(document.URL);
+    const id = url.searchParams.get('id');
+    if (id) {
+      setMapId(id);
+    } else {
+      setMapId(config.mapId);
+    }
+
     updateTheme(theme, setTheme);
   }, []);
   useEffect(() => {
@@ -560,11 +574,12 @@ export const Shell = () => {
         )}
         <Suspense fallback={''}>
           <MapView
-            id="ec738cb78df041598e681e07a29962ce"
+            id={mapId}
             initialized={mapInitialized}
             geometryChanged={geometryChanged}
             selectedProperties={selectedProperties}
             selectedFeature={selectedFeature}
+            mapError={mapError}
             identifyClicked={() => {
               deactiveAllTools();
             }}

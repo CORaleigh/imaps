@@ -1,5 +1,7 @@
+export const mapId = '95092428774c4b1fb6a3b6f5fed9fbc4';
+
 export const alert = {
-  show: false,
+  show: true,
   autoDismiss: true,
   color: 'yellow',
   icon: 'exclamation-mark-triangle',
@@ -21,8 +23,7 @@ export const Actions = [
       { title: 'Search Categories', text: 'Select a search category to get more results as you type' },
       {
         title: 'New Layout',
-        text:
-          'The property information is now displayed in an easier to read layout.  Deeds, photos and service have all been moved into a single display.',
+        text: 'The property information is now displayed in an easier to read layout.  Deeds, photos and service have all been moved into a single display.',
       },
       {
         title: 'Display Additional Columns',
@@ -41,8 +42,7 @@ export const Actions = [
     tips: [
       {
         title: 'Search By Place',
-        text:
-          'Search for places of interest such as schools and parks by typing the name of the school or park you are looking for.',
+        text: 'Search for places of interest such as schools and parks by typing the name of the school or park you are looking for.',
       },
     ],
   },
@@ -72,8 +72,7 @@ export const Actions = [
     tips: [
       {
         title: 'New Legend Widget',
-        text:
-          'In the previous version of iMAPS, the legend was only avaiable in the layer list.  New to this version is a dedicated legend widget that will show the symbols for all visible layers.',
+        text: 'In the previous version of iMAPS, the legend was only avaiable in the layer list.  New to this version is a dedicated legend widget that will show the symbols for all visible layers.',
       },
     ],
   },
@@ -88,23 +87,19 @@ export const Actions = [
     tips: [
       {
         title: 'Imagery Basemap',
-        text:
-          'The lastest years of imagery are available in the Imagery basemap under the base maps option.  We recommend using this base map for imagery, unless you need to access historic imagery.',
+        text: 'The lastest years of imagery are available in the Imagery basemap under the base maps option.  We recommend using this base map for imagery, unless you need to access historic imagery.',
       },
       {
         title: 'Esri Basemaps',
-        text:
-          'You now have access to all basemaps created by Esri by select the Esri Basemaps option from the dropdown.',
+        text: 'You now have access to all basemaps created by Esri by select the Esri Basemaps option from the dropdown.',
       },
       {
         title: 'Property Color',
-        text:
-          'If you switch to a dark themed basemap or an imagery basemap, the property lines will change to white for better visibility.  They will change back to black when on a light themed basemap.',
+        text: 'If you switch to a dark themed basemap or an imagery basemap, the property lines will change to white for better visibility.  They will change back to black when on a light themed basemap.',
       },
       {
         title: 'Available Imagery',
-        text:
-          'If you go to an area outside of Raleigh, the list of available imagery will change to show you what is available in your area.  Also it will switch to the latest year available and warn you the the imagery has changed.',
+        text: 'If you go to an area outside of Raleigh, the list of available imagery will change to show you what is available in your area.  Also it will switch to the latest year available and warn you the the imagery has changed.',
       },
     ],
   },
@@ -119,8 +114,7 @@ export const Actions = [
     tips: [
       {
         title: 'Long Press to Select',
-        text:
-          'You can now select a property by long pressing on a property on the map.  This can be done at any time, even without having the property select tool active.',
+        text: 'You can now select a property by long pressing on a property on the map.  This can be done at any time, even without having the property select tool active.',
       },
     ],
   },
@@ -135,8 +129,7 @@ export const Actions = [
     tips: [
       {
         title: 'Coordinate Search',
-        text:
-          'The coordinate search has been moved to the measure widget, previously this was available under location search.',
+        text: 'The coordinate search has been moved to the measure widget, previously this was available under location search.',
       },
     ],
   },
@@ -151,8 +144,7 @@ export const Actions = [
     tips: [
       {
         title: 'Custom Symbols',
-        text:
-          'You can now specify custom symbols in the sketch tool by changing the fill color, outline color, size, etc. of your graphics.',
+        text: 'You can now specify custom symbols in the sketch tool by changing the fill color, outline color, size, etc. of your graphics.',
       },
     ],
   },
@@ -167,8 +159,7 @@ export const Actions = [
     tips: [
       {
         title: 'Saving Bookmarks',
-        text:
-          'Bookmarks are automatically saved to your local storage in your browser.  Next time you open iMAPS in the same browser you will see the bookmarks from your last session.',
+        text: 'Bookmarks are automatically saved to your local storage in your browser.  Next time you open iMAPS in the same browser you will see the bookmarks from your last session.',
       },
     ],
   },

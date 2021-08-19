@@ -9,3 +9,7 @@ vaadin-grid-cell-content {
 .esri-feature-table__title {
     display: none;
 }
+
+.esri-grid__grid {
+    border-color: var(--calcite-ui-border-3);
+}

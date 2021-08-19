@@ -252,6 +252,29 @@ export const createIdentifyButton = (view: MapView): any => {
   return infoButton;
 };
 
+export const createAlert = () => {
+  const alert = document.createElement('calcite-alert');
+
+  alert.setAttribute('scale', 'm');
+  alert.setAttribute('color', 'red');
+  alert.setAttribute('icon', 'exclamation-mark-triangle');
+  alert.classList.add(document.body.classList.contains('dark') ? 'calcite-theme-dark' : 'calcite-theme-light');
+  const title = document.createElement('div');
+  title.slot = 'title';
+  title.textContent = 'Required layers missing from web map';
+  const message = document.createElement('div');
+  message.slot = 'message';
+  message.textContent = 'iMAPS cannot load, please contact';
+  const link = document.createElement('a');
+  link.slot = 'link';
+  link.href = 'mailto:gis@wakegov.com';
+  link.textContent = 'Wake County GIS';
+  alert.appendChild(title);
+  alert.appendChild(message);
+  alert.append(link);
+  document.body.appendChild(alert);
+  alert.setAttribute('active', '');
+};
 export const createMapWidgets = (view: MapView): any[] => {
   setTimeout(() => {
     handlePolygonLabels(view);

@@ -15,10 +15,10 @@ export const Alert = () => {
           auto-dismiss-duration="slow"
           color={alert.color}
           icon={alert.icon}
-          theme={theme}
+          class={`calcite-theme-${theme}`}
         >
-          <div slot="alert-title">{alert.title}</div>
-          <div slot="alert-message">{alert.message}</div>
+          <div slot="title">{alert.title}</div>
+          <div slot="message">{alert.message}</div>
         </calcite-alert>
       )}
     </div>
