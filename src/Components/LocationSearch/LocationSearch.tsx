@@ -36,6 +36,16 @@ export const LocationSearch = (props: any) => {
       popupEnabled: false,
       container: ref.current as HTMLDivElement,
     });
+    search.watch('activeSource', (source) => {
+      if (source) {
+        if (source.name != 'Intersection') {
+          if (combobox.current) {
+            combobox.current.hidden = true;
+          }
+        }
+        search.clear();
+      }
+    });
     searchRef.current = search;
 
     addIntersectionSource().then((source) => {
