@@ -8,6 +8,8 @@ import PictureMarkerSymbol from '@arcgis/core/symbols/PictureMarkerSymbol';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 //import { pinSymbol } from '../../../config/config';
 import Graphic from '@arcgis/core/Graphic';
+import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
+import Color from '@arcgis/core/Color';
 export const addLocationSearch = (view: __esri.MapView): Promise<LayerSearchSource> => {
   return promiseUtils.create((resolve) => {
     const locator = new Locator({
@@ -65,13 +67,29 @@ export const removeGraphics = (view: __esri.MapView): void => {
 };
 
 export const addGraphics = (view: __esri.MapView, geometry: __esri.Geometry): void => {
-  view.graphics.add(
-    new Graphic({
-      geometry: geometry,
-      attributes: { type: 'location' },
-      symbol: new PictureMarkerSymbol({ url: 'assets/pin.svg', height: 36, width: 36 }), //new CIMSymbol(pinSymbol as any),
-    }),
-  );
+  if (geometry.type === 'point') {
+    view.graphics.add(
+      new Graphic({
+        geometry: geometry,
+        attributes: { type: 'location' },
+        symbol: new PictureMarkerSymbol({ url: 'assets/pin.svg', height: 36, width: 36 }), //new CIMSymbol(pinSymbol as any),
+      }),
+    );
+  } else {
+    view.graphics.add(
+      new Graphic({
+        geometry: geometry,
+        attributes: { type: 'location' },
+        symbol: new SimpleFillSymbol({
+          color: new Color([0, 255, 255, 0.25]),
+          outline: {
+            color: new Color([0, 255, 255, 1]),
+            width: 2,
+          },
+        }),
+      }),
+    );
+  }
 };
 
 export const intersectionSelected = (
