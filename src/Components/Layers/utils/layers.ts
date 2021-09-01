@@ -43,6 +43,9 @@ export const layerListItemCreated = (event: any): void => {
   }
 };
 export const filterLayers = (value: string, layerList: __esri.LayerList): void => {
+  if (!value) {
+    value = '';
+  }
   layerList.operationalItems.forEach((item: __esri.ListItem) => {
     if (item.layer.type === 'group') {
       let open = false;

@@ -9,11 +9,13 @@ import * as geometryEngine from '@arcgis/core/geometry/geometryEngine';
 import * as promiseUtils from '@arcgis/core/core/promiseUtils';
 import * as type from '@arcgis/core/smartMapping/symbology/type';
 export const createAlert = () => {
+  debugger;
   const alert = document.createElement('calcite-alert');
   alert.setAttribute('auto-dismiss', '');
   alert.setAttribute('auto-dismiss-duration', 'fast');
   alert.setAttribute('scale', 'm');
   alert.setAttribute('color', 'yellow');
+  alert.id = 'basemapAlert';
   alert.classList.add(document.body.classList.contains('dark') ? 'calcite-theme-dark' : 'calcite-theme-light');
   const title = document.createElement('div');
   title.slot = 'title';
@@ -93,7 +95,8 @@ export const basemapSelected = (
           });
           if (!basemap && !lastInRaleigh && view.map.basemap.portalItem) {
             setTimeout(() => {
-              const message = document.querySelector('div[slot="alert-message"]') as any;
+              debugger;
+              const message = document.querySelector('#basemapAlert div[slot="message"]') as any;
               message.textContent = `${
                 view.map.basemap.portalItem.title
               } imagery not available outside Raleigh, switching to ${

@@ -201,6 +201,7 @@ export const exportMap = (
   url: string,
   template: __esri.PrintTemplate,
   view: __esri.MapView,
+  oldScale: number,
 ): Promise<__esri.PrintResponse> => {
   return promiseUtils.create((resolve, reject) => {
     new PrintTask({ url: url })
@@ -216,5 +217,8 @@ export const exportMap = (
       .catch((reason) => {
         reject(reason);
       });
+    setTimeout(() => {
+      view.scale = oldScale;
+    }, 1000);
   });
 };

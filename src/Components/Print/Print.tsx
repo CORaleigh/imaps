@@ -275,22 +275,28 @@ export const Print = (props: any) => {
           };
           setJobs([...jobs, job]);
           jobRef.current = [...jobRef.current, job];
-          exportMap(props.exportUrl, template, props.view)
-            .then((result) => {
-              setTimeout(() => {
+          const oldScale = props.view.scale;
+          if (template.outScale != props.view.scale) {
+            props.view.scale = template.outScale;
+          }
+          setTimeout(() => {
+            exportMap(props.exportUrl, template, props.view, oldScale)
+              .then((result) => {
+                setTimeout(() => {
+                  graphics.visible = true;
+                  const index = jobRef.current.indexOf(job);
+                  jobRef.current[index] = { ...jobRef.current[index], ...{ url: result.url, loading: false } };
+                  setJobs([...jobRef.current]);
+                });
+              })
+              .catch((reason) => {
+                console.log(reason);
                 graphics.visible = true;
                 const index = jobRef.current.indexOf(job);
-                jobRef.current[index] = { ...jobRef.current[index], ...{ url: result.url, loading: false } };
+                jobRef.current[index] = { ...jobRef.current[index], ...{ error: true, loading: false } };
                 setJobs([...jobRef.current]);
               });
-            })
-            .catch((reason) => {
-              console.log(reason);
-              graphics.visible = true;
-              const index = jobRef.current.indexOf(job);
-              jobRef.current[index] = { ...jobRef.current[index], ...{ error: true, loading: false } };
-              setJobs([...jobRef.current]);
-            });
+          }, 1000);
         }}
       >
         Export

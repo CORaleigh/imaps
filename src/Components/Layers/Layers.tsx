@@ -25,6 +25,9 @@ export const Layers = (props: any) => {
     input.current?.addEventListener('calciteInputInput', (event: any) => {
       filterLayers(event.target.value, layerList as LayerList);
     });
+    input.current?.addEventListener('focusout', (event: any) => {
+      filterLayers(event.target.value, layerList as LayerList);
+    });
     return () => {
       input.current?.removeEventListener('calciteInputInput', (event: any) => {
         filterLayers(event.target.value, layerList as LayerList);
