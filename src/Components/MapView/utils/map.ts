@@ -68,6 +68,21 @@ export const createSelectionLayer = (view: __esri.MapView) => {
 
   return layer;
 };
+
+export const enableStreetHitTest = (view: __esri.MapView, layer: __esri.FeatureLayer): __esri.Handle => {
+  return view.on('click', (e: __esri.ViewClickEvent) => {
+    const opacity = layer.opacity;
+    const visible = layer.visible;
+    layer.visible = true;
+    layer.opacity = 0.001;
+    view.hitTest(e.screenPoint, { include: [layer] }).then((result) => {
+      layer.opacity = opacity;
+      layer.visible = visible;
+      console.log(result.results);
+    });
+  });
+};
+
 export const customizePopup = (view: __esri.MapView) => {
   const propertyLayer = view.map.allLayers.find((layer) => {
     return layer.type === 'feature' && layer.title.startsWith('Property');
@@ -85,6 +100,20 @@ export const customizePopup = (view: __esri.MapView) => {
       }
     }
   });
+  //check for streets layer and display popup on hit test
+  const streetsLayer = view.map.allLayers.find((layer) => {
+    return layer.type === 'feature' && layer.title === 'Streets';
+  }) as __esri.FeatureLayer;
+  if (streetsLayer) {
+    let clickHandler: __esri.Handle = enableStreetHitTest(view, streetsLayer);
+    view.popup.watch('autoOpenEnabled', (autoOpenEnabled) => {
+      if (autoOpenEnabled) {
+        clickHandler = enableStreetHitTest(view, streetsLayer);
+      } else {
+        clickHandler.remove();
+      }
+    });
+  }
 };
 
 export const checkBasemapScheme = (activeBasemap: __esri.Basemap, view: __esri.MapView) => {
@@ -158,6 +187,7 @@ export const createMapView = (mapRef: any, mapProperties: any, viewProperties: a
     },
   };
   const view = new MapView(viewProperties);
+
   //workaround for bug when popup has multiple features
   // view.popup.watch('features', (features) => {
   //   console.log(features);
