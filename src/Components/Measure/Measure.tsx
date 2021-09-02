@@ -137,6 +137,25 @@ export const Measure = (props: any) => {
       }),
     );
 
+    conversion.when(() => {
+      conversion.formats = conversion.formats.filter((format) => {
+        return !['basemap', 'dd', 'ddm'].includes(format.name);
+      });
+      conversion.formats.find((format) => {
+        return format.name === 'xy';
+      }).name = 'Decimal Degrees';
+      conversion.storageEnabled = false;
+      // document.querySelectorAll('.esri-coordinate-conversion__select-row option').forEach((format) => {
+      //   format.removeAttribute('disabled');
+      // });
+      // document.querySelector('.esri-coordinate-conversion__select-row')?.addEventListener('change', (event) => {
+      //   console.log(event);
+      //   document.querySelectorAll('.esri-coordinate-conversion__select-row option').forEach((format) => {
+      //     format.removeAttribute('disabled');
+      //   });
+      // });
+    });
+
     return () => {
       measurement && measurement.current?.destroy();
     };
