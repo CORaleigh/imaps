@@ -164,14 +164,15 @@ export const maximizePropertySearch = (action: HTMLCalciteActionElement) => {
     offset += contextBar?.clientWidth;
   }
   let width = `calc(90vw - ${offset}px)`;
-
+  const panel = action.closest('calcite-shell-panel');
   if (action.icon === 'right-edge') {
     action.icon = 'left-edge';
     width = '350px';
   } else {
     action.icon = 'right-edge';
+    panel?.setAttribute('maximized', '');
   }
-  const panel = action.closest('calcite-shell-panel');
+
   panel?.shadowRoot
     ?.querySelector('.content')
     ?.setAttribute(
