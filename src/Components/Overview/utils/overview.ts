@@ -13,8 +13,15 @@ export const createOverview = (view: __esri.MapView): __esri.MapView => {
     navigation: {
       browserTouchPanEnabled: false,
       mouseWheelZoomEnabled: false,
+      gamepad: {
+        enabled: false,
+      },
     },
     container: 'overviewMap',
+  });
+
+  overview.on('drag', function (event) {
+    event.stopPropagation();
   });
   overview.ui.remove('zoom');
   overview.ui.remove('attribution');
@@ -31,6 +38,7 @@ const setGraphicSymbol = (overview: __esri.MapView): SimpleFillSymbol | undefine
 };
 export const configureOverview = (overview: __esri.MapView, mainView: __esri.MapView): void => {
   overview.map.basemap = mainView.map.basemap;
+  overview.constraints = mainView.constraints;
   let extent = mainView.extent.clone();
   extent.expand(4);
   overview.extent = extent;
