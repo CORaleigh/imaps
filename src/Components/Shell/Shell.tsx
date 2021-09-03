@@ -41,7 +41,7 @@ export const Shell = () => {
   const [mapId, setMapId] = useState<string>();
   const [tips, setTips] = useState<any>([]);
   const [tipsTitle, setTipsTitle] = useState<string>();
-  console.log('render shell');
+  //console.log('render shell');
   const [width, setWidth] = useState(window.innerWidth);
   const view = useRef<__esri.MapView>();
   const [viewCreated, setViewCreated] = useState(false);
@@ -523,7 +523,6 @@ export const Shell = () => {
             </calcite-action-bar>
             {actions.map((action: any) => {
               if (action.isTool && action.isActive) {
-                console.log(action);
                 return (
                   <div className="panel-header" key={`${action.icon}_header_primary`}>
                     <div className="panel-title">{action.title}</div>

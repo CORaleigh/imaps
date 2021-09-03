@@ -168,6 +168,7 @@ export const maximizePropertySearch = (action: HTMLCalciteActionElement) => {
   if (action.icon === 'right-edge') {
     action.icon = 'left-edge';
     width = '350px';
+    panel?.removeAttribute('maximized');
   } else {
     action.icon = 'right-edge';
     panel?.setAttribute('maximized', '');

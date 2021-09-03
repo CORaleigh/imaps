@@ -20,6 +20,10 @@ calcite-shell-panel:not([maximized]) {
     max-width: 400px;
 }
 
+calcite-shell-panel[maximized] {
+  max-width: 100%;
+}
+
 calcite-action-bar {
     min-width: 50px;
     overflow-y: auto;

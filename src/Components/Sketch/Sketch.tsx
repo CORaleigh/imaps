@@ -88,7 +88,6 @@ export const Sketch = (props: any) => {
     handles.current.push(vm?.watch('state', stateChanged));
   };
   const toolSelected = (geometryType: string) => {
-    setGeometryType(geometryType);
     let deactivateActions: React.RefObject<HTMLCalciteActionElement>[] = [];
     if (geometryType === 'point') {
       activateViewModel(geometryType, pointSketchViewModel);
@@ -130,6 +129,7 @@ export const Sketch = (props: any) => {
         }
       });
     }
+    setGeometryType(geometryType);
   };
 
   const disableTool = (vm: SketchViewModel, action: HTMLCalciteActionElement) => {
@@ -343,6 +343,7 @@ export const Sketch = (props: any) => {
           ></calcite-input>
         </calcite-label>
       )}
+      {geometryType}
       <SketchSettings
         settingsChanged={(settings: any) => {
           if (geometryType) {

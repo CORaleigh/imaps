@@ -110,7 +110,7 @@ export const SketchSettings = (props: any) => {
         element.addEventListener('calciteSwitchChange', switchChanged);
       });
     };
-  }, [props.geometryType]); // only after initial render
+  }, [props.geometryType]);
   return (
     <div ref={ref} className="panel">
       {geometryType === 'point' ? (
