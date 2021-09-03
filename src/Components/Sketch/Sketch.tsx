@@ -343,7 +343,6 @@ export const Sketch = (props: any) => {
           ></calcite-input>
         </calcite-label>
       )}
-      {geometryType}
       <SketchSettings
         settingsChanged={(settings: any) => {
           if (geometryType) {
