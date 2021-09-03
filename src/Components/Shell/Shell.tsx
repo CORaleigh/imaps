@@ -246,7 +246,9 @@ export const Shell = () => {
   //after map has initiliazed
   const mapInitialized = async (mapView: __esri.MapView) => {
     mapView.watch('updating', (updating) => {
-      setUpdating(updating);
+      if ((view.current as any).cursor === 'default') {
+        setUpdating(updating);
+      }
     });
 
     if (!viewCreated) {
