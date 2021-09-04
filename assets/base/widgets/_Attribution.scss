@@ -11,7 +11,6 @@
 
   .esri-attribution__link {
     color: currentColor;
-    text-decoration: none;
 
     &:hover,
     &:active,
@@ -51,7 +50,7 @@
     white-space: normal;
   }
 
-  [dir="rtl"] {
+  html[dir="rtl"] {
     .esri-attribution__powered-by {
       text-align: left;
     }
