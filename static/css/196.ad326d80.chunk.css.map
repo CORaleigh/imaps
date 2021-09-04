@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack://src/Components/PropertyPanel/AddressTable/AddressTable.scss"],"names":[],"mappings":"AAAA,yBACI,kBAAmB,CACtB,cAIG,YAAa","file":"196.ad326d80.chunk.css","sourcesContent":["vaadin-grid-cell-content {\n    white-space: normal;\n}\n\n#addressTable {\n\n    height: 300px;\n}"]}

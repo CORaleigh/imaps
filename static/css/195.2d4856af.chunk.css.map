@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack://src/Components/Overview/Overview.scss"],"names":[],"mappings":"AAAA,cACI,WAAY,CACZ,YAAa","file":"195.2d4856af.chunk.css","sourcesContent":[".overview-map {\n    width: 200px;\n    height: 200px;\n}\n"]}

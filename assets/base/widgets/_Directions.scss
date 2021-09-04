@@ -77,12 +77,11 @@
 
   .esri-directions__departure-time-controls {
     display: flex;
-    width: 100%;
   }
 
   .esri-directions__departure-time-controls .esri-date-picker,
   .esri-directions__departure-time-controls .esri-time-picker {
-    flex: 1 1 0%;
+    flex: 1 50% auto;
     border-top: 0;
   }
 
@@ -98,14 +97,10 @@
 
   .esri-directions__departure-time-controls .esri-time-picker__input {
     width: 100%;
-    padding: 0 0.5em;
-    margin: 0;
-    height: auto;
   }
 
   .esri-directions__departure-time-controls .esri-date-picker__calendar-toggle {
-    padding: 0 0.5em;
-    justify-content: flex-start;
+    padding: 0;
   }
 
   .esri-directions__directions-section {
@@ -458,15 +453,6 @@
       top: 100%;
       bottom: auto;
       margin: $cap-spacing--eighth 0 0 0;
-    }
-  }
-
-  html[dir="rtl"] {
-    .esri-directions__departure-time-controls .esri-time-picker {
-      border-right: none;
-    }
-    .esri-directions__departure-time-controls .esri-date-picker__calendar-toggle {
-      border-right: solid 1px $border-color;
     }
   }
 }
