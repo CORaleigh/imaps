@@ -27,8 +27,6 @@
 
     &__settings {
       ul {
-        display: flex;
-        flex-direction: column;
         padding: 0;
         margin: 0;
       }
@@ -42,22 +40,17 @@
     }
 
     &__layer-item {
-      display: flex;
-      align-items: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
       white-space: nowrap;
-      gap: $side-spacing--half;
-
-      &__title {
-        flex-grow: 1;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
+      padding-bottom: $cap-spacing--half;
     }
 
     &__cross {
+      margin-right: $side-spacing--half;
       color: inherit;
       position: relative;
+      top: 2px;
     }
 
     &__panel--error {
@@ -71,6 +64,13 @@
       flex-flow: column;
       justify-content: center;
       padding: 0 $side-spacing;
+    }
+  }
+
+  html[dir="rtl"] {
+    .esri-slice__cross {
+      margin-right: 0;
+      margin-left: $side-spacing--half;
     }
   }
 }

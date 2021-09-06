@@ -75,7 +75,8 @@ export const enableStreetHitTest = (view: __esri.MapView, layer: __esri.FeatureL
     const visible = layer.visible;
     layer.visible = true;
     layer.opacity = 0.001;
-    view.hitTest(e.screenPoint, { include: [layer] }).then((result) => {
+
+    view.hitTest(view.toScreen(e.mapPoint), { include: [layer] }).then((result) => {
       layer.opacity = opacity;
       layer.visible = visible;
       console.log(result.results);
@@ -108,8 +109,10 @@ export const customizePopup = (view: __esri.MapView) => {
     let clickHandler: __esri.Handle = enableStreetHitTest(view, streetsLayer);
     view.popup.watch('autoOpenEnabled', (autoOpenEnabled) => {
       if (autoOpenEnabled) {
+        document.querySelector('.identify-widget')?.classList.add('active');
         clickHandler = enableStreetHitTest(view, streetsLayer);
       } else {
+        document.querySelector('.identify-widget')?.classList.remove('active');
         clickHandler.remove();
       }
     });

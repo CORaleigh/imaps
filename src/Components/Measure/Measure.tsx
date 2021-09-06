@@ -80,10 +80,17 @@ export const Measure = (props: any) => {
       linearUnit: 'imperial',
     });
     measurement.current.viewModel.watch('state', (state) => {
+      debugger;
       if (state === 'ready') {
         document.querySelectorAll('#measureTools calcite-action').forEach((action) => {
           (action as HTMLCalciteActionElement).active = false;
         });
+      }
+      if (state === 'measured' && measurement.current) {
+        measurement.current.view.popup.autoOpenEnabled = true;
+      }
+      if ((state === 'ready' || state === 'measuring') && measurement.current) {
+        measurement.current.view.popup.autoOpenEnabled = false;
       }
     });
     const conversion = new CoordinateConversion({
@@ -144,7 +151,7 @@ export const Measure = (props: any) => {
       conversion.formats.find((format) => {
         return format.name === 'xy';
       }).name = 'Decimal Degrees';
-      conversion.storageEnabled = false;
+      //conversion.storageEnabled = false;
       // document.querySelectorAll('.esri-coordinate-conversion__select-row option').forEach((format) => {
       //   format.removeAttribute('disabled');
       // });

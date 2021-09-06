@@ -220,38 +220,42 @@ export const PropertyPanel = (props: any) => {
   }, []);
 
   useEffect(() => {
-    geometryChanged(view as __esri.MapView, layer as __esri.FeatureLayer, props.geometry).then((data) => {
-      if (props.geometry != undefined) {
-        setLoading(true);
-        setFilter(data.where);
-        properties.current = data.properties;
-        if (data.features.length === 1) {
-          const f = data.features[0] as __esri.Graphic;
-          f.layer = table as __esri.FeatureLayer;
-          f.popupTemplate = table?.popupTemplate as __esri.PopupTemplate;
-          const feature = data.features[0] as __esri.Graphic;
-          feature.geometry = data.properties?.find((prop: __esri.Graphic) => {
-            return prop.getAttribute('PIN_NUM') === feature.getAttribute('PIN_NUM');
-          })?.geometry;
-          featureRef.current = feature;
-          props.featureSelected(feature);
+    geometryChanged(view as __esri.MapView, layer as __esri.FeatureLayer, props.geometry)
+      .then((data) => {
+        if (props.geometry != undefined) {
+          setLoading(true);
+          setFilter(data.where);
+          properties.current = data.properties;
+          if (data.features.length === 1) {
+            const f = data.features[0] as __esri.Graphic;
+            f.layer = table as __esri.FeatureLayer;
+            f.popupTemplate = table?.popupTemplate as __esri.PopupTemplate;
+            const feature = data.features[0] as __esri.Graphic;
+            feature.geometry = data.properties?.find((prop: __esri.Graphic) => {
+              return prop.getAttribute('PIN_NUM') === feature.getAttribute('PIN_NUM');
+            })?.geometry;
+            featureRef.current = feature;
+            props.featureSelected(feature);
 
-          setSearchParams([feature]);
+            setSearchParams([feature]);
 
-          toggleTabs('info');
-          setSelectedTab('info');
+            toggleTabs('info');
+            setSelectedTab('info');
+          } else {
+            setSearchParams([]);
+
+            featureRef.current = undefined;
+            toggleTabs('list');
+            setSelectedTab('list');
+          }
+          props.propertiesSelected(data.properties);
         } else {
-          setSearchParams([]);
-
-          featureRef.current = undefined;
-          toggleTabs('list');
-          setSelectedTab('list');
+          clear();
         }
-        props.propertiesSelected(data.properties);
-      } else {
+      })
+      .catch(() => {
         clear();
-      }
-    });
+      });
   }, [props.geometry, props.propertiesSelected, props.featureSelected, props.selectedProperties]);
   return (
     <div className="panel" id="propertyPanel">

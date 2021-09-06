@@ -85,7 +85,7 @@ export const Sketch = (props: any) => {
     });
     vm.create(geometryType);
     props.toolActivated(vm);
-    handles.current.push(vm?.watch('state', stateChanged));
+    //handles.current.push(vm?.watch('state', stateChanged));
   };
   const toolSelected = (geometryType: string) => {
     let deactivateActions: React.RefObject<HTMLCalciteActionElement>[] = [];
@@ -137,6 +137,7 @@ export const Sketch = (props: any) => {
     setGeometryType(null);
     action.active = false;
     action.blur();
+    pointSketchViewModel.view.popup.autoOpenEnabled = true;
   };
 
   useEffect(() => {
@@ -174,6 +175,7 @@ export const Sketch = (props: any) => {
       );
     });
     return () => {
+      debugger;
       handles.current.forEach((handle) => {
         handle.remove();
       });
@@ -218,6 +220,7 @@ export const Sketch = (props: any) => {
               polylineSketchViewModel?.cancel();
               polygonSketchViewModel?.cancel();
               textSketchViewModel?.cancel();
+              pointSketchViewModel.view.popup.autoOpenEnabled = true;
             }}
           ></calcite-action>
           <calcite-action

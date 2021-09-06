@@ -31,61 +31,6 @@
   $color-indicator-spacing: $side-spacing--half;
 
   //----------------------------------------------------------------------------
-  // Checkbox
-  //----------------------------------------------------------------------------
-
-  .esri-elevation-profile,
-  .esri-elevation-profile-settings__popover-content {
-    input[type="checkbox"] {
-      font-size: $checkbox-icon-size;
-      line-height: $checkbox-icon-size;
-      display: inline-block;
-      width: $checkbox-size;
-      height: $checkbox-size;
-      margin: 0;
-      margin-inline-end: $side-spacing--half;
-      padding: ($checkbox-size - $checkbox-icon-size - $checkbox-border-size * 2) / 2;
-      transition: all 0.1s ease-in-out;
-      border: solid 1px $border-color;
-      background: none;
-      flex-shrink: 0;
-      appearance: none;
-
-      &:before {
-        // Copied from esri/themes/base/icons/style.scss
-        font-family: "#{$icomoon-font-family}" !important;
-        font-style: normal;
-        font-weight: normal;
-        font-variant: normal;
-        text-transform: none;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-
-        color: $interactive-font-color--inverse;
-      }
-
-      &:checked {
-        background: $border-color--active;
-        border-color: $border-color--active;
-
-        &:before {
-          @extend .esri-icon-check-mark;
-          color: $interactive-font-color--inverse;
-        }
-      }
-
-      // Only change the cursor when the checkbox is not disabled
-      &:not(:disabled) {
-        cursor: pointer;
-      }
-
-      &:focus:not(:focus-visible) {
-        outline: none;
-      }
-    }
-  }
-
-  //----------------------------------------------------------------------------
   // Widget
   //----------------------------------------------------------------------------
 
@@ -143,24 +88,14 @@
       position: relative;
       width: 100%;
       height: $chart-height;
+      margin-top: -$header-height; // Compensate for chart padding (used to show spinner)
     }
 
     &__chart-container {
       position: relative;
       width: 100%;
       height: 100%;
-
-      // Fix for situations where apps (cough cough... SV) set `pointer-events: all`
-      // breaking the tooltips and zooming in the chart.
-      .amcharts-ValueAxis-group,
-      .amcharts-axis-tooltip,
-      .amcharts-Tooltip-group,
-      .amcharts-series-tooltip {
-        &,
-        * {
-          pointer-events: none !important;
-        }
-      }
+      padding-top: $header-icon-height / 2; // Align top of the chart with icon of header buttons
     }
 
     &__prompt-container {
@@ -191,23 +126,19 @@
       position: absolute;
       left: 50%;
       top: 50%;
-
-      // center
-      margin-top: -$loading-spinner-size / 2;
-      margin-left: -$loading-spinner-size / 2;
+      margin-left: -$loading-spinner-size / 2; // center horizontally
 
       // We show a spinner with a delay so that it is only visible if a preview
       // takes too long to be generated.
       &--visible {
-        transition-delay: 500ms;
+        transition-delay: 1000ms;
         opacity: 1;
       }
 
       &--small {
         font-size: $loading-spinner-size-small;
-        top: -$loading-spinner-size-small - $header-icon-height / 2; // Align top of the chart with icon of header buttons;
+        top: 0;
         left: 0;
-        margin-top: 0;
         margin-left: 0;
       }
     }
@@ -241,30 +172,20 @@
   .esri-elevation-profile-settings {
     &__popover-content {
       font-family: $font-family;
-      font-size: $font-size__body;
-      display: flex;
-      flex-direction: column;
       padding: $popover-padding;
       color: $font-color;
       border: $popover-border;
       background-color: $popover-background-color;
-      gap: $cap-spacing;
     }
 
     &__select {
-      min-width: 150px; // Give some space for our labels to render properly
-      font-size: $font-size__body;
+      min-width: 150px;
     }
 
     &__select-label {
       display: block;
       margin-bottom: $cap-spacing--eighth;
-    }
-
-    &__checkbox-label {
-      display: flex;
-      align-items: center;
-      white-space: nowrap;
+      font-size: $font-size__body;
     }
   }
 
@@ -354,6 +275,43 @@
         overflow: hidden;
       }
     }
+
+    &__checkbox {
+      font-size: $checkbox-icon-size;
+      line-height: $checkbox-icon-size;
+      display: inline-block;
+      width: $checkbox-size;
+      height: $checkbox-size;
+      margin-inline-end: $side-spacing--half;
+      padding: ($checkbox-size - $checkbox-icon-size - $checkbox-border-size * 2) / 2;
+      transition: all 0.1s ease-in-out;
+      border: solid 1px $border-color;
+      background: none;
+      flex-shrink: 0;
+      appearance: none;
+
+      &:before {
+        color: $interactive-font-color--inverse;
+      }
+
+      &--checked {
+        background: $border-color--active;
+        border-color: $border-color--active;
+
+        &:before {
+          color: $interactive-font-color--inverse;
+        }
+      }
+
+      // Only change the cursor when the checkbox is not disabled
+      &:not(:disabled) {
+        cursor: pointer;
+      }
+
+      &:focus:not(:focus-visible) {
+        outline: none;
+      }
+    }
   }
 
   //----------------------------------------------------------------------------
@@ -383,7 +341,7 @@
       &__value {
         font-size: $font-size--tiny;
         font-weight: $font-weight--bold;
-        margin-top: -0.15em; // condense things slightly
+        line-height: 0.95em; // condense things slightly
       }
     }
 
