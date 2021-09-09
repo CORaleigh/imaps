@@ -7,6 +7,6 @@
         "color": "blue",
         "icon": "information",
         "title": "Maintenance",
-        "message": "This is the new version of iMAPS"
+        "message": "This is the new version of iMAPS<a>Test</a>"
       }
 }

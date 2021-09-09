@@ -105,8 +105,8 @@
     "static/js/51.640a7db3.chunk.js": "/imaps/static/js/51.640a7db3.chunk.js",
     "static/js/51.640a7db3.chunk.js.map": "/imaps/static/js/51.640a7db3.chunk.js.map",
     "main.css": "/imaps/static/css/main.6a2d49c9.chunk.css",
-    "main.js": "/imaps/static/js/main.f0d6c459.chunk.js",
-    "main.js.map": "/imaps/static/js/main.f0d6c459.chunk.js.map",
+    "main.js": "/imaps/static/js/main.fe88d91c.chunk.js",
+    "main.js.map": "/imaps/static/js/main.fe88d91c.chunk.js.map",
     "polyfills-dom.js": "/imaps/static/js/polyfills-dom.b647bf1b.chunk.js",
     "polyfills-dom.js.map": "/imaps/static/js/polyfills-dom.b647bf1b.chunk.js.map",
     "runtime-main.js": "/imaps/static/js/runtime-main.90373e9b.js",
@@ -874,6 +874,6 @@
     "static/css/106.91ac21d3.chunk.css",
     "static/js/106.f2327f13.chunk.js",
     "static/css/main.6a2d49c9.chunk.css",
-    "static/js/main.f0d6c459.chunk.js"
+    "static/js/main.fe88d91c.chunk.js"
   ]
 }
