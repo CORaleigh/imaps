@@ -179,7 +179,7 @@ export const links = [
     title: 'Help',
     links: [
       { title: 'Help Document', href: 'https://raleighnc.gov' },
-      { title: 'Feedback', href: 'https://arcg.is/1iPzKT' },
+      { title: 'Feedback', href: 'https://arcg.is/1GurDS' },
     ],
   },
   {

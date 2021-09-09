@@ -35,8 +35,8 @@ export const getFormats = (url: string): Promise<string[]> => {
   );
 };
 
-export const getLayouts = (url: string): Promise<Layout[]> => {
-  return promiseUtils.create((resolve, reject) => {
+export const getLayouts = (): Promise<Layout[]> => {
+  return promiseUtils.create((resolve) => {
     //esriRequest(url, { query: { f: 'json' } })
     //.then((result) => {
     const layouts: Layout[] = [];

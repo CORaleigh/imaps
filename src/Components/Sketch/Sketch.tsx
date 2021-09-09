@@ -66,16 +66,16 @@ export const Sketch = (props: any) => {
       // if (action === pointAction.current)
     }
   };
-  const stateChanged = (state: string) => {
-    if (state === 'ready' && ref.current?.parentElement?.hidden) {
-      [pointAction, lineAction, polygonAction, textAction].forEach((action) => {
-        if (action.current) {
-          action.current.active = false;
-          setGeometryType(null);
-        }
-      });
-    }
-  };
+  // const stateChanged = (state: string) => {
+  //   if (state === 'ready' && ref.current?.parentElement?.hidden) {
+  //     [pointAction, lineAction, polygonAction, textAction].forEach((action) => {
+  //       if (action.current) {
+  //         action.current.active = false;
+  //         setGeometryType(null);
+  //       }
+  //     });
+  //   }
+  // };
   const activateViewModel = (
     geometryType: 'circle' | 'polygon' | 'polyline' | 'point' | 'multipoint' | 'rectangle',
     vm: SketchViewModel,

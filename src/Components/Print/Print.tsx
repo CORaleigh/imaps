@@ -119,7 +119,7 @@ export const Print = (props: any) => {
     const graphics = new GraphicsLayer({ id: 'print-graphic', listMode: 'hide' });
 
     (props.view as __esri.MapView).map.add(graphics);
-    getLayouts(props.templateUrl).then((layouts) => setLayouts(layouts));
+    getLayouts().then((layouts) => setLayouts(layouts));
     getFormats(props.exportUrl).then((formats) => setFormats(formats));
     setScales(getScales(props.view));
     const mapScale = roundScale(props.view.scale);
