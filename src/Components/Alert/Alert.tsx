@@ -28,7 +28,14 @@ export const Alert = () => {
           class={`calcite-theme-${theme}`}
         >
           <div slot="title">{alert.title}</div>
-          <div slot="message">{alert.message}</div>
+          <div slot="message">
+            {alert.message + ' '}
+            {alert.link.show && (
+              <calcite-link href={alert.link.url} target="_blank" rel="noreferrer">
+                {alert.link.text}
+              </calcite-link>
+            )}
+          </div>
         </calcite-alert>
       )}
     </div>

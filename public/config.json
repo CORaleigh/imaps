@@ -1,12 +1,17 @@
 {
     "mapId": "95092428774c4b1fb6a3b6f5fed9fbc4",
     "alert": {
-        "show": false,
+        "show": true,
         "autoDismiss": true,
         "duration": "fast",
         "color": "blue",
         "icon": "information",
-        "title": "Maintenance",
-        "message": "This is the new version of iMAPS<a>Test</a>"
+        "title": "New Version",
+        "message": "This is the new version of iMAPS, the legacy version will be available for a limited time.",
+        "link": {
+          "text": "Legacy Version",
+          "url": "https://maps.raleighnc.gov/imaps",
+          "show": true
+        }
       }
 }
