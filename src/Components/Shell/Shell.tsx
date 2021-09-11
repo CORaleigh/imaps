@@ -238,7 +238,7 @@ export const Shell = () => {
           document.querySelector('.streetview-widget')?.classList.add('active');
           const cbll = e.mapPoint.latitude + ',' + e.mapPoint.longitude;
           'https://maps.google.com?layer=c&cbll=' + cbll + '&cbp=0,0,0,0,0';
-          window.open('https://maps.google.com?layer=c&cbll=' + cbll + '&cbp=0,0,0,0,0');
+          window.open('https://maps.google.com?layer=c&cbll=' + cbll + '&cbp=0,0,0,0,0', 'streetview');
         });
       });
     });

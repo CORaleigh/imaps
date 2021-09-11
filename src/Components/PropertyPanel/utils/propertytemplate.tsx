@@ -189,29 +189,33 @@ const deedCreator = (e: any) => {
       div.setAttribute('style', 'display: flex;flex-direction: row;justify-content: space-around;');
       if (deed) {
         const deedBtn = document.createElement('calcite-button');
-        deedBtn.setAttribute('scale', 's');
+        deedBtn.setAttribute('scale', 'm');
         deedBtn.setAttribute('target', '_blank');
-        deedBtn.setAttribute('round', '');
+        deedBtn.setAttribute('appearance', 'clear');
         deedBtn.setAttribute('icon-start', 'file-text');
-        deedBtn.setAttribute(
-          'href',
-          'http://services.wakegov.com/booksweb/pdfview.aspx?docid=' + deed + '&RecordDate=',
-        );
+        // deedBtn.setAttribute(
+        //   'href',
+        //   'http://services.wakegov.com/booksweb/pdfview.aspx?docid=' + deed + '&RecordDate=',
+        // );
         deedBtn.setAttribute('rel', 'noreferrer');
-
+        deedBtn.onclick = () => {
+          window.open('http://services.wakegov.com/booksweb/pdfview.aspx?docid=' + deed + '&RecordDate=', 'deedwindow');
+        };
         deedBtn.textContent = 'Deed';
         div.append(deedBtn);
       }
       if (bom) {
         const bombtn = document.createElement('calcite-button');
-        bombtn.setAttribute('scale', 's');
+        bombtn.setAttribute('scale', 'm');
         bombtn.setAttribute('target', '_blank');
-        bombtn.setAttribute('round', '');
+        bombtn.setAttribute('appearance', 'clear');
         bombtn.setAttribute('icon-start', 'map');
-        bombtn.setAttribute('href', 'http://services.wakegov.com/booksweb/pdfview.aspx?docid=' + bom + '&RecordDate=');
+        //bombtn.setAttribute('href', 'http://services.wakegov.com/booksweb/pdfview.aspx?docid=' + bom + '&RecordDate=');
         bombtn.setAttribute('rel', 'noreferrer');
         bombtn.textContent = 'Book of Maps';
-
+        bombtn.onclick = () => {
+          window.open('http://services.wakegov.com/booksweb/pdfview.aspx?docid=' + bom + '&RecordDate=', 'bomwindow');
+        };
         div.append(bombtn);
       }
 
@@ -235,14 +239,17 @@ const wellCreator = (e: any, view: __esri.MapView) => {
       if (featureSet.features.length) {
         const pin = featureSet.features[0].getAttribute('PIN_NUM');
         const btn = document.createElement('calcite-button');
-        btn.setAttribute('scale', 's');
+        btn.setAttribute('scale', 'm');
         btn.setAttribute('target', '_blank');
-        btn.setAttribute('round', '');
+        btn.setAttribute('appearance', 'clear');
         btn.setAttribute('icon-start', 'link');
-        btn.setAttribute('href', 'https://maps.wakegov.com/water-analysis/index.html#/?pin=' + pin);
+        // btn.setAttribute('href', 'https://maps.wakegov.com/water-analysis/index.html#/?pin=' + pin);
         btn.setAttribute('rel', 'noreferrer');
 
         btn.textContent = 'Wells';
+        btn.onclick = () => {
+          window.open('https://maps.wakegov.com/water-analysis/index.html#/?pin=' + pin, 'wells');
+        };
         div.append(btn);
       }
       const layer = view.map.allLayers.find((layer: __esri.Layer) => {
@@ -257,13 +264,16 @@ const wellCreator = (e: any, view: __esri.MapView) => {
           if (featureSet.features.length) {
             const pin = featureSet.features[0].getAttribute('PIN_NUM');
             const btn = document.createElement('calcite-button');
-            btn.setAttribute('scale', 's');
+            btn.setAttribute('scale', 'm');
             btn.setAttribute('target', '_blank');
-            btn.setAttribute('round', '');
+            btn.setAttribute('appearance', 'clear');
             btn.setAttribute('rel', 'noreferrer');
-            btn.setAttribute('href', 'https://maps.wakegov.com/septic/index.html#/?pin=' + pin);
+            //btn.setAttribute('href', 'https://maps.wakegov.com/septic/index.html#/?pin=' + pin);
             btn.setAttribute('icon-start', 'link');
             btn.textContent = 'Septic';
+            btn.onclick = () => {
+              window.open('https://maps.wakegov.com/septic/index.html#/?pin=' + pin, 'septic');
+            };
             div.append(btn);
           }
         });
@@ -405,32 +415,45 @@ export const createTemplate = (view: __esri.MapView | __esri.SceneView, condoTab
           const div = document.createElement('div');
           div.setAttribute('style', 'display: flex;flex-direction: row;justify-content: space-around;');
           const btn = document.createElement('calcite-button');
-          btn.setAttribute('scale', 's');
+          btn.setAttribute('scale', 'm');
           btn.setAttribute('target', '_blank');
-          btn.setAttribute('round', '');
+          btn.setAttribute('appearance', 'clear');
           btn.setAttribute('icon-start', 'link');
           btn.setAttribute('rel', 'noreferrer');
-          btn.setAttribute(
-            'href',
-            `https://maps.google.com?q=${e.graphic.getAttribute('SITE_ADDRESS')},${e.graphic.getAttribute(
-              'CITY_DECODE',
-            )},NC`,
-          );
+          // btn.setAttribute(
+          //   'href',
+          //   `https://maps.google.com?q=${e.graphic.getAttribute('SITE_ADDRESS')},${e.graphic.getAttribute(
+          //     'CITY_DECODE',
+          //   )},NC`,
+          // );
 
           btn.textContent = 'Google Maps';
-
+          btn.onclick = () => {
+            window.open(
+              `https://maps.google.com?q=${e.graphic.getAttribute('SITE_ADDRESS')},${e.graphic.getAttribute(
+                'CITY_DECODE',
+              )},NC`,
+              'googlewindow',
+            );
+          };
           div.append(btn);
           const tax = document.createElement('calcite-button');
-          tax.setAttribute('scale', 's');
+          tax.setAttribute('scale', 'm');
           tax.setAttribute('target', '_blank');
-          tax.setAttribute(
-            'href',
-            'http://services.wakegov.com/realestate/Account.asp?id=' + e.graphic.getAttribute('REID'),
-          );
+          // tax.setAttribute(
+          //   'href',
+          //   'http://services.wakegov.com/realestate/Account.asp?id=' + e.graphic.getAttribute('REID'),
+          // );
           tax.setAttribute('rel', 'noreferrer');
 
-          tax.setAttribute('round', '');
+          tax.setAttribute('appearance', 'clear');
           tax.setAttribute('icon-start', 'locator');
+          tax.onclick = () => {
+            window.open(
+              'http://services.wakegov.com/realestate/Account.asp?id=' + e.graphic.getAttribute('REID'),
+              'taxwindow',
+            );
+          };
           tax.textContent = 'Tax Page';
           div.append(tax);
           return div;
@@ -474,7 +497,7 @@ export const createTemplate = (view: __esri.MapView | __esri.SceneView, condoTab
           //             const div = document.createElement('div');
           //             div.setAttribute('style', 'display: flex;flex-direction: row;justify-content: space-around;');
           //             const btn = document.createElement('calcite-button');
-          //             btn.setAttribute('scale', 's');
+          //             btn.setAttribute('scale', 'm');
           //             btn.setAttribute('target', '_blank');
           //             btn.setAttribute('round', '');
           //             btn.setAttribute('icon-start', '360-view');
@@ -492,7 +515,7 @@ export const createTemplate = (view: __esri.MapView | __esri.SceneView, condoTab
 
           //             div.append(btn);
           //             const tax = document.createElement('calcite-button');
-          //             tax.setAttribute('scale', 's');
+          //             tax.setAttribute('scale', 'm');
           //             tax.setAttribute('target', '_blank');
           //             tax.setAttribute(
           //               'href',
