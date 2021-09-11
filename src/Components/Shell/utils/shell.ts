@@ -219,8 +219,9 @@ export const activatePropertySearch = (actions: any[]): HTMLElement => {
     return action.isActive; // && window.innerWidth <= 1000;
   });
   if (active) {
-    //&& window.innerWidth < 1000) {
-    active.isActive = false;
+    if (window.innerWidth < 1000 || !active.isTool) {
+      active.isActive = false;
+    }
   }
   const search = actions.find((action) => {
     return action.title === 'Property Search';
