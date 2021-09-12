@@ -149,12 +149,14 @@ export const maximizePropertySearch = (action: HTMLCalciteActionElement) => {
   const primary: HTMLCalciteShellPanelElement = document.querySelector(
     'calcite-shell-panel[slot=primary-panel]',
   ) as HTMLCalciteShellPanelElement;
-  if (!primary?.collapsed) {
-    offset += primary.clientWidth;
-  }
-  const primaryBar = primary.querySelector('calcite-action-bar');
-  if (primaryBar) {
-    offset += primaryBar?.clientWidth;
+  if (primary) {
+    if (!primary?.collapsed) {
+      offset += primary.clientWidth;
+    }
+    const primaryBar = primary.querySelector('calcite-action-bar');
+    if (primaryBar) {
+      offset += primaryBar?.clientWidth;
+    }
   }
   const context: HTMLCalciteShellPanelElement = document.querySelector(
     'calcite-shell-panel[slot=contextual-panel]',

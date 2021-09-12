@@ -188,31 +188,21 @@ export const Shell = () => {
         return action.isActive;
       });
     }
-
-    return action?.tips?.length ? (
-      <calcite-tooltip-manager>
-        <calcite-tooltip
-          label="Tooltip label"
-          reference-element={`tipAction${isTool ? '_tool' : ''}`}
-          placement="bottom-end"
-        >
-          Show tips
-        </calcite-tooltip>
-        <calcite-action
-          id={`tipAction${isTool ? '_tool' : ''}`}
-          text="Action"
-          label="Action"
-          slot="header-actions-end"
-          icon="lightbulb"
-          appearance="solid"
-          scale="m"
-          calcite-hydrated=""
-          onClick={() => {
-            setTips([...[], ...action.tips]);
-            setTipsTitle(action.title);
-          }}
-        ></calcite-action>
-      </calcite-tooltip-manager>
+    return action?.tips?.length > 0 ? (
+      <calcite-action
+        id={`tipAction${isTool ? '_tool' : ''}`}
+        text="Action"
+        label="Action"
+        slot="header-actions-end"
+        icon="lightbulb"
+        appearance="solid"
+        scale="m"
+        calcite-hydrated=""
+        onClick={() => {
+          setTips([...[], ...action.tips]);
+          setTipsTitle(action.title);
+        }}
+      ></calcite-action>
     ) : (
       ''
     );

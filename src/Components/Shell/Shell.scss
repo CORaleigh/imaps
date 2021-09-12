@@ -16,9 +16,9 @@ calcite-tooltip, calcite-tooltip-manager {
 }
 
 
-calcite-shell-panel:not([maximized]) {
-    max-width: 400px;
-}
+// calcite-shell-panel:not([maximized]) {
+//     max-width: 400px;
+// }
 
 calcite-shell-panel[maximized] {
   max-width: 100%;
