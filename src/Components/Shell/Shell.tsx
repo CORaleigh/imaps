@@ -33,7 +33,7 @@ import {
   formatShellPanelContent,
 } from './utils/shell';
 import ThemeContext from '../ThemeContext';
-import { basemaps, links } from '../../config/config';
+import { basemaps } from '../../config/config';
 import ActionContext from '../ActionContext';
 import * as config from '../../config/config';
 
