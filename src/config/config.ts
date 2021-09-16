@@ -20,6 +20,7 @@ export const Actions = [
     path: '../PropertyPanel/PropertyPanel',
     widget: null,
     tips: [
+      { title: 'Click and Hold to Select', text: 'Click and hold on a property to select it from the map.' },
       { title: 'Search Categories', text: 'Select a search category to get more results as you type' },
       {
         title: 'New Layout',

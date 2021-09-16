@@ -44,7 +44,7 @@ export const PropertySelect = (props: any) => {
         disableAllActions();
       }
       addGraphic(e, view, parseInt(distanceRef.current?.value as string)).then((geometry) => {
-        props.geometrySet(geometry);
+        props.geometrySet(bufferGraphic(geometry, parseInt(distanceRef.current?.value as string), props.view));
         sketchVM.create(e.tool);
         //disableAllActions();
       });

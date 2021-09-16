@@ -30,7 +30,7 @@ export const TipManager = (props: any) => {
   return (
     <calcite-tip-manager
       ref={ref}
-      theme={theme}
+      class={`shell calcite-theme-${theme}`}
       dir="ltr"
       intl-close="Close"
       intl-default-title={title}

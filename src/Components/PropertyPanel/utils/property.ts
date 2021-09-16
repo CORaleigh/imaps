@@ -6,6 +6,7 @@ export const geometryChanged = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> => {
   return promiseUtils.create((resolve, reject) => {
+    console.log(geometry);
     if (geometry != undefined) {
       layer
         ?.queryFeatures({
@@ -47,22 +48,21 @@ export const setSearchParams = (features: __esri.Graphic[]): void => {
   const pins: string[] = features.map((feature: __esri.Graphic) => {
     return feature.getAttribute('PIN_NUM');
   });
-  //	const url = new URL(document.URL);
-  const searchParams = new URLSearchParams();
+  const url = new URL(window.location.toString());
+  //const searchParams = new URLSearchParams();
   if (pins) {
-    searchParams.set('pins', pins.toString());
-
+    url.searchParams.set('pins', pins.toString());
     const state = { pins: pins.toString() };
     if (history.state) {
       if (history.state.pins != state.pins) {
-        history.pushState({ pins: pins.toString() }, '', `${location.pathname}?${searchParams.toString()}`);
+        history.pushState({ pins: pins.toString() }, '', url.href);
       }
     } else {
-      history.pushState({ pins: pins.toString() }, '', `${location.pathname}?${searchParams.toString()}`);
+      history.pushState({ pins: pins.toString() }, '', url.href);
     }
 
     //url.searchParams
   } else {
-    history.replaceState(history.state, '', location.pathname);
+    history.replaceState(history.state, '', url.href);
   }
 };

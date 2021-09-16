@@ -681,7 +681,7 @@ export const Shell = () => {
 
         <div slot="header">
           <Suspense fallback={''}>
-            <Header links={links} />
+            <Header />
           </Suspense>
         </div>
       </calcite-shell>

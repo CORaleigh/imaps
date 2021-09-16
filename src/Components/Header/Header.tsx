@@ -8,9 +8,14 @@ export const Header = (props: any) => {
   const ref = useRef<HTMLElement>();
   const disclaimer = useRef<HTMLCalciteModalElement>();
 
-  const [links, setLinks] = useState(props.links);
+  const [links, setLinks] = useState<any>();
   const { theme, setTheme } = useContext(ThemeContext);
   useEffect(() => {
+    fetch('./config.json').then((response) => {
+      response.json().then((config) => {
+        setLinks(config.links);
+      });
+    });
     ref.current?.addEventListener('calciteDropdownSelect', (event: any) => {
       requestAnimationFrame(() => {
         const theme = event.target.querySelector('calcite-dropdown-item[active]').getAttribute('value');
@@ -59,19 +64,20 @@ export const Header = (props: any) => {
           >
             Disclaimer
           </calcite-dropdown-item>
-          {links.map((group: any) => {
-            return (
-              <calcite-dropdown-group selection-mode="none" group-title={group.title} key={group.title}>
-                {group.links.map((link: any) => {
-                  return (
-                    <calcite-dropdown-item rel="noreferrer" href={link.href} target="_blank" key={link.title}>
-                      {link.title}
-                    </calcite-dropdown-item>
-                  );
-                })}
-              </calcite-dropdown-group>
-            );
-          })}
+          {links &&
+            links.map((group: any) => {
+              return (
+                <calcite-dropdown-group selection-mode="none" group-title={group.title} key={group.title}>
+                  {group.links.map((link: any) => {
+                    return (
+                      <calcite-dropdown-item rel="noreferrer" href={link.href} target="_blank" key={link.title}>
+                        {link.title}
+                      </calcite-dropdown-item>
+                    );
+                  })}
+                </calcite-dropdown-group>
+              );
+            })}
           <calcite-dropdown-group selection-mode="single" group-title="Theme">
             <calcite-dropdown-item value="light" active={theme === 'light' ? '' : null}>
               Light

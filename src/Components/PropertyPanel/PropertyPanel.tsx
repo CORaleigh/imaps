@@ -12,6 +12,7 @@ export const PropertyPanel = (props: any) => {
   const listTab = useRef<HTMLCalciteTabTitleElement>(null);
 
   const [loaded, setLoaded] = useState(false);
+  const [infoTabDisabled, setInfoTabDisabled] = useState(true);
   const [view, setView] = useState<__esri.MapView>();
   // const [feature, setFeature] = useState<__esri.Graphic>();
   const featureRef = useRef<__esri.Graphic>();
@@ -97,13 +98,14 @@ export const PropertyPanel = (props: any) => {
     if (result.feature) {
       featureRef.current = result.features[0];
       props.featureSelected(result.features[0]);
+      setInfoTabDisabled(false);
       //featureRef.current = result.features[0];
       setSearchParams([result.features[0]]);
       toggleTabs('info');
       setSelectedTab('info');
     } else {
       setSearchParams([]);
-
+      setInfoTabDisabled(true);
       featureRef.current = undefined;
       toggleTabs('list');
       setSelectedTab('list');
@@ -144,6 +146,7 @@ export const PropertyPanel = (props: any) => {
       featureRef.current = feature;
 
       props.featureSelected(feature);
+      setInfoTabDisabled(false);
       props.propertiesSelected(properties.current);
 
       //featureRef.current = feature;
@@ -155,6 +158,7 @@ export const PropertyPanel = (props: any) => {
   };
 
   const clear = () => {
+    setInfoTabDisabled(true);
     featureRef.current = undefined;
     props.featureSelected(undefined);
     setFilter('OBJECTID IS NULL');
@@ -224,7 +228,7 @@ export const PropertyPanel = (props: any) => {
       .then((data) => {
         if (props.geometry != undefined) {
           setLoading(true);
-          setFilter(data.where);
+          //setFilter(data.where);
           properties.current = data.properties;
           if (data.features.length === 1) {
             const f = data.features[0] as __esri.Graphic;
@@ -236,14 +240,14 @@ export const PropertyPanel = (props: any) => {
             })?.geometry;
             featureRef.current = feature;
             props.featureSelected(feature);
-
+            setInfoTabDisabled(false);
             setSearchParams([feature]);
 
             toggleTabs('info');
             setSelectedTab('info');
           } else {
             setSearchParams([]);
-
+            setInfoTabDisabled(true);
             featureRef.current = undefined;
             toggleTabs('list');
             setSelectedTab('list');
@@ -278,7 +282,7 @@ export const PropertyPanel = (props: any) => {
           <calcite-tab-title tab="list" active ref={listTab}>
             List
           </calcite-tab-title>
-          <calcite-tab-title tab="info" ref={infoTab}>
+          <calcite-tab-title tab="info" ref={infoTab} disabled={infoTabDisabled ? 'true' : null}>
             Info
           </calcite-tab-title>
         </calcite-tab-nav>
