@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 import SketchViewModel from '@arcgis/core/widgets/Sketch/SketchViewModel';
 import './PropertySelect.scss';
-import { addGraphic, bufferGraphic } from './utils/select';
+import { addGraphic, bufferGraphic, removeBufferGraphic } from './utils/select';
 export const PropertySelect = (props: any) => {
   const distanceRef = useRef<HTMLCalciteInputElement>(null);
   const pointAction = useRef<HTMLCalciteActionElement>(null);
@@ -44,7 +44,11 @@ export const PropertySelect = (props: any) => {
         disableAllActions();
       }
       addGraphic(e, view, parseInt(distanceRef.current?.value as string)).then((geometry) => {
-        props.geometrySet(bufferGraphic(geometry, parseInt(distanceRef.current?.value as string), props.view));
+        if (parseInt(distanceRef.current?.value as string) > 0) {
+          props.geometrySet(bufferGraphic(geometry, parseInt(distanceRef.current?.value as string), props.view));
+        } else {
+          props.geometrySet(geometry);
+        }
         sketchVM.create(e.tool);
         //disableAllActions();
       });
@@ -263,6 +267,7 @@ export const PropertySelect = (props: any) => {
           appearance="clear"
           onClick={() => {
             disableAllActions();
+            removeBufferGraphic(props.view);
             [pointSketchViewModel, polylineSketchViewModel, polygonSketchViewModel].forEach((vm) => {
               vm?.cancel();
             });

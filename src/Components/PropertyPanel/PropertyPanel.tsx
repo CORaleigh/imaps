@@ -207,7 +207,7 @@ export const PropertyPanel = (props: any) => {
         if (e.state?.pins === state.current?.pins) {
           history.back();
         } else {
-          if (e.state?.pins) {
+          if (e.state?.pins.length > 0) {
             setWhere(`PIN_NUM in ('${decodeURIComponent(history.state?.pins.split(',').join(`','`))}')`);
             setFilter(`PIN_NUM in ('${decodeURIComponent(history.state?.pins.split(',').join(`','`))}')`);
           }
@@ -217,8 +217,10 @@ export const PropertyPanel = (props: any) => {
       const url = new URL(document.URL);
       const pins = url.searchParams.get('pins');
       if (pins) {
-        setWhere(`PIN_NUM in ('${decodeURIComponent(pins.split(',').join(`','`))}')`);
-        setFilter(`PIN_NUM in ('${decodeURIComponent(pins.split(',').join(`','`))}')`);
+        if (pins.length > 0) {
+          setWhere(`PIN_NUM in ('${decodeURIComponent(pins.split(',').join(`','`))}')`);
+          setFilter(`PIN_NUM in ('${decodeURIComponent(pins.split(',').join(`','`))}')`);
+        }
       }
     }
   }, []);
@@ -228,7 +230,7 @@ export const PropertyPanel = (props: any) => {
       .then((data) => {
         if (props.geometry != undefined) {
           setLoading(true);
-          //setFilter(data.where);
+          setFilter(data.where);
           properties.current = data.properties;
           if (data.features.length === 1) {
             const f = data.features[0] as __esri.Graphic;

@@ -41,26 +41,26 @@ export const createSelectionLayer = (view: __esri.MapView) => {
       }),
       uniqueValueInfos: [
         {
-          value: 0,
-          symbol: new SimpleFillSymbol({
-            style: 'none',
-            outline: {
-              color: [0, 206, 209],
-              width: 2,
-            },
-          }),
-          label: 'multiple',
-        },
-        {
           value: 1,
           symbol: new SimpleFillSymbol({
             style: 'none',
             outline: {
-              color: [255, 255, 0],
-              width: 2,
+              color: '#da4246',
+              width: 3,
             },
           }),
           label: 'single',
+        },
+        {
+          value: 0,
+          symbol: new SimpleFillSymbol({
+            style: 'none',
+            outline: {
+              color: '#ffe44b',
+              width: 2,
+            },
+          }),
+          label: 'multiple',
         },
       ],
     }),

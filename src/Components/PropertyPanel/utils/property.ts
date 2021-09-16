@@ -6,7 +6,6 @@ export const geometryChanged = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> => {
   return promiseUtils.create((resolve, reject) => {
-    console.log(geometry);
     if (geometry != undefined) {
       layer
         ?.queryFeatures({
