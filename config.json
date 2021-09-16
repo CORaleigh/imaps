@@ -1,7 +1,7 @@
 {
     "mapId": "95092428774c4b1fb6a3b6f5fed9fbc4",
     "alert": {
-        "show": true,
+        "show": false,
         "autoDismiss": true,
         "duration": "fast",
         "color": "blue",
@@ -13,5 +13,28 @@
           "url": "https://maps.raleighnc.gov/imaps",
           "show": true
         }
-      }
+      },
+    "links": [
+      {
+        "title": "Help",
+        "links": [
+          { "title": "Help Document", "href": "https://maps.wakegov.com/imaps/iMAPShelpPDF.pdf" },
+          { "title": "Feedback", "href": "https://arcg.is/1GurDS" }
+        ]
+      },
+      {
+        "title": "Data Download",
+        "links": [
+          { "title": "Wake County Open Data", "href": "https://data.wakegov.com/" },
+          { "title": "Raleigh Open Data", "href": "https://data.raleighnc.gov/" }
+        ]
+      },
+      {
+        "title": "Links",
+        "links": [
+          { "title": "Wake County", "href": "https://wakegov.com" },
+          { "title": "City of Raleigh", "href": "https://raleighnc.gov/" }
+        ]
+      }      
+    ]
 }
