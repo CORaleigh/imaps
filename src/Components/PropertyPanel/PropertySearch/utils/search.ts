@@ -48,7 +48,7 @@ const getSuggestions = (
       returnDistinctValues: true,
       outFields: outFields,
       returnGeometry: false,
-      // orderByFields: orderByFields,
+      orderByFields: orderByFields,
       num: searchWidget.activeSource ? 50 : 6,
       where: whereArray.join(' OR '),
     })
