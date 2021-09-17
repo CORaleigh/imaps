@@ -178,6 +178,7 @@ export const getTemplate = (
   selectedTemplate: string,
 ): __esri.PrintTemplate => {
   return new PrintTemplate({
+    attributionVisible: false,
     outScale: mapScale,
     showLabels: true,
     format: format,
