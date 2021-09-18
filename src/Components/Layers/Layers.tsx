@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React, { useEffect, useRef } from 'react';
 import LayerList from '@arcgis/core/widgets/LayerList';
-import { filterLayers, layerListItemCreated, resetLayers } from './utils/layers';
+import { filterLayers, layerListItemCreated, resetLayers, togglePropertyLabels } from './utils/layers';
 import './Layers.scss';
 export const Layers = (props: any) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -12,6 +12,7 @@ export const Layers = (props: any) => {
     console.log(props.active);
   }, [props.active]);
   useEffect(() => {
+    console.log('test');
     const layerList = new LayerList({
       container: ref.current as HTMLDivElement,
       view: props.view,
@@ -21,7 +22,11 @@ export const Layers = (props: any) => {
       },
     });
     list.current = layerList;
-
+    layerList.on('trigger-action', (event: __esri.LayerListTriggerActionEvent) => {
+      if (event.item.layer.title === 'Property') {
+        togglePropertyLabels(event);
+      }
+    });
     input.current?.addEventListener('calciteInputInput', (event: any) => {
       filterLayers(event.target.value, layerList as LayerList);
     });

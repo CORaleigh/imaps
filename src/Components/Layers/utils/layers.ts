@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
+import Collection from '@arcgis/core/core/Collection';
+import ActionToggle from '@arcgis/core/support/actions/ActionToggle';
 export const layerListItemCreated = (event: any): void => {
   const item = event.item;
   if (item.layer.type != 'group' && item.layer.type != undefined) {
@@ -40,6 +41,99 @@ export const layerListItemCreated = (event: any): void => {
         }
       }
     });
+  }
+  addPropertyLabelToggles(item);
+};
+export const togglePropertyLabels = (event: __esri.LayerListTriggerActionEvent) => {
+  if (event.item.layer.title === 'Property') {
+    const selected = event.item.actionsSections.getItemAt(0).filter((section) => {
+      return (section as ActionToggle).value;
+    });
+
+    const selectedTitles = selected.map((section) => {
+      return (section as ActionToggle).title;
+    });
+
+    const selectedExpressions = propertyLabelExpressions.filter((expression) => {
+      return selectedTitles.includes(expression.title);
+    });
+    const expressions = selectedExpressions.map((expression) => {
+      return expression.expression;
+    });
+    console.log(expressions);
+    const expression = expressions.join('+ TextFormatting.NewLine+');
+    (event.item.layer as __esri.FeatureLayer).labelingInfo = [];
+
+    //if ((event.action as ActionToggle).value) {
+    (event.item.layer as __esri.FeatureLayer).labelingInfo = [
+      {
+        // autocasts as new LabelClass()
+        symbol: {
+          type: 'text', // autocasts as new TextSymbol()
+          color: 'black',
+          haloColor: 'white',
+          haloSize: 1,
+          font: {
+            family: 'AvenirNext LT Pro Regular',
+            style: 'normal',
+            weight: 'bold',
+          },
+        },
+        labelExpressionInfo: {
+          expression: expression,
+        },
+        maxScale: 0,
+        minScale: 5000,
+      } as any,
+    ];
+    // }
+    // } else {
+    //   (event.item.layer as __esri.FeatureLayer).labelingInfo = (
+    //     event.item.layer as __esri.FeatureLayer
+    //   ).labelingInfo.filter((info) => {
+    //     return info.labelExpressionInfo.expression != expression.expression;
+    //   });
+    // }
+  }
+};
+const propertyLabelExpressions: any[] = [
+  {
+    expression: `First(Split($feature['SITE_ADDRESS'], ' '))`,
+    title: 'Address Labels',
+  },
+  {
+    expression: `$feature['PIN_NUM']`,
+    title: 'PIN Labels',
+  },
+  {
+    expression: `$feature['REID']`,
+    title: 'REID Labels',
+  },
+  {
+    expression: `When(IsEmpty($feature["SALE_DATE"]),null, Concatenate(Month($feature["SALE_DATE"])+1, '/',Day($feature["SALE_DATE"]), '/',Year($feature["SALE_DATE"])))`,
+    title: 'Sale Date Labels',
+  },
+  {
+    expression: `Text($feature.TOTSALPRICE,'$#,###')`,
+    title: 'Sale Price Labels',
+  },
+];
+
+const addPropertyLabelToggles = (item: any) => {
+  if (item.layer.title === 'Property' && item.layer.type != 'group' && item.actionsSections.length === 0) {
+    console.log(item.layer.title);
+    const toggles: Collection = new Collection();
+    toggles.addMany(
+      propertyLabelExpressions.map((expression) => {
+        return new ActionToggle({
+          active: false,
+          title: expression.title,
+          visible: true,
+        });
+      }),
+    );
+    (item as __esri.ListItem).actionsSections.push(toggles);
+    (item as __esri.ListItem).actionsOpen = true;
   }
 };
 export const filterLayers = (value: string, layerList: __esri.LayerList): void => {
