@@ -99,23 +99,23 @@ export const togglePropertyLabels = (event: __esri.LayerListTriggerActionEvent) 
 const propertyLabelExpressions: any[] = [
   {
     expression: `First(Split($feature['SITE_ADDRESS'], ' '))`,
-    title: 'Address Labels',
+    title: 'Address',
   },
   {
     expression: `$feature['PIN_NUM']`,
-    title: 'PIN Labels',
+    title: 'PIN',
   },
   {
     expression: `$feature['REID']`,
-    title: 'REID Labels',
+    title: 'REID',
   },
   {
     expression: `When(IsEmpty($feature["SALE_DATE"]),null, Concatenate(Month($feature["SALE_DATE"])+1, '/',Day($feature["SALE_DATE"]), '/',Year($feature["SALE_DATE"])))`,
-    title: 'Sale Date Labels',
+    title: 'Sale Date',
   },
   {
     expression: `Text($feature.TOTSALPRICE,'$#,###')`,
-    title: 'Sale Price Labels',
+    title: 'Sale Price',
   },
 ];
 
@@ -134,6 +134,15 @@ const addPropertyLabelToggles = (item: any) => {
     );
     (item as __esri.ListItem).actionsSections.push(toggles);
     (item as __esri.ListItem).actionsOpen = true;
+    setTimeout(() => {
+      const title = document.createElement('h4');
+      title.textContent = 'Labels';
+      title.setAttribute('style', 'padding: 0.5em;margin: 0;');
+      const actions = document.querySelector('.esri-layer-list__item-actions');
+      if (actions?.parentElement) {
+        actions.prepend(title);
+      }
+    }, 500);
   }
 };
 export const filterLayers = (value: string, layerList: __esri.LayerList): void => {
