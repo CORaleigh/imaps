@@ -35,6 +35,7 @@
   .esri-feature__content-element:last-child {
     margin-bottom: 0;
   }
+
   // ATTACHMENTS
   .esri-feature-attachments {
     flex-flow: column wrap;
@@ -47,7 +48,7 @@
   }
 
   //  RTL
-  html[dir="rtl"] {
+  [dir="rtl"] {
     .esri-feature__attachments-title {
       margin: 0 0 0 auto;
     }
