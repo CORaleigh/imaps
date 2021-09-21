@@ -46,24 +46,29 @@ export const Header = (props: any) => {
   return (
     <div>
       <header>
-        {/* <h2>iMAPS</h2> */}
-        <img className="logo" src={theme === 'light' ? 'logo.svg' : 'logo_dark.svg'} />
+        <a
+          href="https://www.wakegov.com/departments-government/geographic-information-services-gis/maps-apps-data/imaps-information"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <img className="logo" src={theme === 'light' ? 'logo.svg' : 'logo_dark.svg'} />
+        </a>
         <calcite-dropdown ref={ref} alignment="end" scale="m" width="m" type="click">
           <calcite-button scale="s" slot="dropdown-trigger">
             <calcite-icon icon="hamburger"></calcite-icon>
           </calcite-button>
-          <calcite-dropdown-item
-            class="menu-action"
-            selection-mode="none"
-            rel="noreferrer"
-            onClick={() => {
-              if (disclaimer.current) {
-                disclaimer.current.active = true;
-              }
-            }}
-          >
-            Disclaimer
-          </calcite-dropdown-item>
+          <calcite-dropdown-group selection-mode="none" group-title="About" key="disclaimer">
+            <calcite-dropdown-item
+              rel="noreferrer"
+              onClick={() => {
+                if (disclaimer.current) {
+                  disclaimer.current.active = true;
+                }
+              }}
+            >
+              Disclaimer
+            </calcite-dropdown-item>
+          </calcite-dropdown-group>
           {links &&
             links.map((group: any) => {
               return (
