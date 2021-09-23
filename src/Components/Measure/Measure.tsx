@@ -36,6 +36,9 @@ export const Measure = (props: any) => {
           setWidget('measurement');
           props.measurementActivated(measurement.current, coordinates.current);
         }
+        if (coordinates.current) {
+          coordinates.current.viewModel.mode = 'live';
+        }
       }
       if (e.target.getAttribute('value') === 'area') {
         if (e.target.active) {
@@ -47,6 +50,9 @@ export const Measure = (props: any) => {
           measurement.current.activeTool = 'area';
           setWidget('measurement');
           props.measurementActivated(measurement.current);
+        }
+        if (coordinates.current) {
+          coordinates.current.viewModel.mode = 'live';
         }
       }
       if (e.target.getAttribute('value') === 'coordinates') {

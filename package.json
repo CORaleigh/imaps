@@ -2,7 +2,6 @@
   "name": "imaps",
   "version": "4.0.1",
   "private": true,
-  "homepage": "https://coraleigh.github.io/imaps",
   "dependencies": {
     "@arcgis/core": "^4.21.0",
     "@babel/core": "^7.15.0",
