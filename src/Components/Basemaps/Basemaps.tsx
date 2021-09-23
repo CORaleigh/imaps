@@ -65,6 +65,17 @@ export const Basemaps = (props: any) => {
           selected
         ></calcite-combobox-item>
         <calcite-combobox-item
+          icon="image-layer"
+          value="imagery"
+          key="imagery"
+          text-label="Imagery"
+          aria-hidden=""
+          dir="ltr"
+          scale="m"
+          tabindex="-1"
+          calcite-hydrated=""
+        ></calcite-combobox-item>
+        <calcite-combobox-item
           icon="layer-basemap"
           value="esri"
           text-label="Esri Basemaps"
@@ -74,17 +85,6 @@ export const Basemaps = (props: any) => {
           tabindex="-1"
           calcite-hydrated=""
           key="esri"
-        ></calcite-combobox-item>
-        <calcite-combobox-item
-          icon="image-layer"
-          value="imagery"
-          key="imagery"
-          text-label="Historic Imagery"
-          aria-hidden=""
-          dir="ltr"
-          scale="m"
-          tabindex="-1"
-          calcite-hydrated=""
         ></calcite-combobox-item>
       </calcite-combobox>
       <div ref={ref}></div>

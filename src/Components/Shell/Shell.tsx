@@ -239,6 +239,8 @@ export const Shell = () => {
       mapView.watch('updating', (updating) => {
         if ((view.current as any).cursor === 'default') {
           setUpdating(updating);
+        } else {
+          setUpdating(false);
         }
       });
     });

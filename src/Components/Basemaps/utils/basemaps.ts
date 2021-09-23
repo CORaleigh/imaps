@@ -50,7 +50,7 @@ export const basemapChanged = (activeBasemap: __esri.Basemap, view: __esri.MapVi
     (renderer.symbol as __esri.SimpleFillSymbol).outline.color.b = 255;
   }
   propertyLayer.renderer = renderer;
-  propertyLayer.refresh();
+  //propertyLayer.refresh();
 };
 export const addSnippet = (items: Collection<BasemapGalleryItem>) => {
   items.forEach((item, i) => {
@@ -113,7 +113,6 @@ export const basemapSelected = (
           });
           if (!basemap && !lastInRaleigh && view.map.basemap.portalItem) {
             setTimeout(() => {
-              debugger;
               const message = document.querySelector('#basemapAlert div[slot="message"]') as any;
               message.textContent = `${
                 view.map.basemap.portalItem.title

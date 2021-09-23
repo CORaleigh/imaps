@@ -111,7 +111,6 @@ export const settingsChanged = (settings: any, geometryType: string): void => {
     updateLineRenderer(settings);
   }
   if (geometryType === 'text') {
-    debugger;
     updateTextRenderer(settings);
   }
 };

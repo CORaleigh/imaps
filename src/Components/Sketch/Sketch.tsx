@@ -175,7 +175,6 @@ export const Sketch = (props: any) => {
       );
     });
     return () => {
-      debugger;
       handles.current.forEach((handle) => {
         handle.remove();
       });

@@ -80,7 +80,6 @@ export const Measure = (props: any) => {
       linearUnit: 'imperial',
     });
     measurement.current.viewModel.watch('state', (state) => {
-      debugger;
       if (state === 'ready') {
         document.querySelectorAll('#measureTools calcite-action').forEach((action) => {
           (action as HTMLCalciteActionElement).active = false;

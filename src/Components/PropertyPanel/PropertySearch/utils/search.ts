@@ -276,7 +276,6 @@ export const searchComplete = (event: __esri.SearchSearchCompleteEvent): Promise
         searchFields = (search.activeSource as LayerSearchSource)?.searchFields;
       }
       const where = getWildcardSearchWhere(searchFields, event.searchTerm);
-      debugger;
       resolve(wildcardSearch(where, condos));
     }
     if (event.numResults) {

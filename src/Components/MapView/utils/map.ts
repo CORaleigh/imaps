@@ -64,6 +64,12 @@ export const createSelectionLayer = (view: __esri.MapView) => {
         },
       ],
     }),
+    orderBy: [
+      {
+        order: 'descending',
+        field: 'selected',
+      },
+    ],
   });
 
   return layer;
@@ -142,7 +148,7 @@ export const checkBasemapScheme = (activeBasemap: __esri.Basemap, view: __esri.M
         (renderer.symbol as __esri.SimpleFillSymbol).outline.color.b = 255;
       }
       propertyLayer.renderer = renderer;
-      propertyLayer.refresh();
+      // propertyLayer.refresh();
       handle.remove();
     }
   });

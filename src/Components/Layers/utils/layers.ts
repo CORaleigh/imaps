@@ -46,6 +46,9 @@ export const layerListItemCreated = (event: any): void => {
 };
 export const togglePropertyLabels = (event: __esri.LayerListTriggerActionEvent) => {
   if (event.item.layer.title === 'Property') {
+    if (!(event.item.layer as __esri.FeatureLayer).labelsVisible) {
+      (event.item.layer as __esri.FeatureLayer).labelsVisible = true;
+    }
     const selected = event.item.actionsSections.getItemAt(0).filter((section) => {
       return (section as ActionToggle).value;
     });

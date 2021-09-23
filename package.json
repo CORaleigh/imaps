@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "https://coraleigh.github.io/imaps",
   "dependencies": {
-    "@arcgis/core": "^4.21.0-next.20210919",
+    "@arcgis/core": "^4.21.0",
     "@babel/core": "^7.15.0",
     "@esri/calcite-components": "^1.0.0-beta.59",
     "@testing-library/jest-dom": "^5.11.10",

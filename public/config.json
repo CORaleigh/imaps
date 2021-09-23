@@ -18,8 +18,11 @@
       {
         "title": "Help",
         "links": [
-          { "title": "Help Document", "href": "https://maps.wakegov.com/imaps/iMAPShelpPDF.pdf" },
-          { "title": "Feedback", "href": "https://arcg.is/1GurDS" }
+          { "title": "Feedback", "href": "https://arcg.is/1GurDS" },
+          { "title": "User Guide", "href": "https://maps.wakegov.com/imaps/iMAPShelpPDF.pdf" },
+          { "title": "Videos", "href": "https://www.wakegov.com/departments-government/geographic-information-services-gis/maps-apps-data/imaps-information#video" },
+          { "title": "FAQ", "href": "https://www.wakegov.com/departments-government/geographic-information-services-gis/maps-apps-data/imaps-information#faq" }
+
         ]
       },
       {
