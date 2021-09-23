@@ -220,16 +220,21 @@ export const Shell = () => {
       document.querySelector('.streetview-widget')?.addEventListener('click', () => {
         deactiveAllTools();
         mapView.popup.autoOpenEnabled = false;
-        document.querySelector('.map-tool.active')?.classList.remove('active');
-        document.querySelector('.streetview-widget')?.classList.add('active');
-        streetviewClick.current?.remove();
-        streetviewClick.current = mapView.on('click', (e) => {
+        if (document.querySelector('.streetview-widget')?.classList.contains('active')) {
+          document.querySelector('.streetview-widget')?.classList.remove('active');
+          streetviewClick.current?.remove();
+        } else {
           document.querySelector('.map-tool.active')?.classList.remove('active');
           document.querySelector('.streetview-widget')?.classList.add('active');
-          const cbll = e.mapPoint.latitude + ',' + e.mapPoint.longitude;
-          'https://maps.google.com?layer=c&cbll=' + cbll + '&cbp=0,0,0,0,0';
-          window.open('https://maps.google.com?layer=c&cbll=' + cbll + '&cbp=0,0,0,0,0', 'streetview');
-        });
+          streetviewClick.current?.remove();
+          streetviewClick.current = mapView.on('click', (e) => {
+            document.querySelector('.map-tool.active')?.classList.remove('active');
+            document.querySelector('.streetview-widget')?.classList.add('active');
+            const cbll = e.mapPoint.latitude + ',' + e.mapPoint.longitude;
+            'https://maps.google.com?layer=c&cbll=' + cbll + '&cbp=0,0,0,0,0';
+            window.open('https://maps.google.com?layer=c&cbll=' + cbll + '&cbp=0,0,0,0,0', 'streetview');
+          });
+        }
       });
     });
   };
