@@ -269,3 +269,9 @@ export const formatShellPanelContent = () => {
     observer.observe(panel?.shadowRoot as Node, { childList: true });
   });
 };
+
+export const stopMeasuring = (measure: __esri.Measurement) => {
+  if (measure.viewModel.activeViewModel.state === 'measuring' || measure.viewModel.activeViewModel.state === 'ready') {
+    measure.viewModel.activeViewModel?.clear();
+  }
+};

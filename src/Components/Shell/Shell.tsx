@@ -31,6 +31,7 @@ import {
   windowResize,
   activatePropertySearch,
   formatShellPanelContent,
+  stopMeasuring,
 } from './utils/shell';
 import ThemeContext from '../ThemeContext';
 import { basemaps } from '../../config/config';
@@ -126,7 +127,7 @@ export const Shell = () => {
   };
   const deactiveAllTools = () => {
     selectVM.current?.cancel();
-    measurement.current?.viewModel.activeViewModel?.clear();
+    stopMeasuring(measurement.current as __esri.Measurement);
     if (coordinates.current) {
       coordinates.current.viewModel.mode = 'live';
     }
@@ -145,7 +146,7 @@ export const Shell = () => {
   const sketchToolActivated = (sketchViewModel: __esri.SketchViewModel) => {
     sketchVM.current = sketchViewModel;
     selectVM.current?.cancel();
-    measurement.current?.viewModel.activeViewModel?.clear();
+    stopMeasuring(measurement.current as __esri.Measurement);
     if (coordinates.current) {
       coordinates.current.viewModel.mode = 'live';
     }
@@ -163,7 +164,7 @@ export const Shell = () => {
   const selectActivated = (sketchViewModel: __esri.SketchViewModel) => {
     selectVM.current = sketchViewModel;
     sketchVM.current?.cancel();
-    measurement.current?.viewModel.activeViewModel?.clear();
+    stopMeasuring(measurement.current as __esri.Measurement);
     if (coordinates.current) {
       coordinates.current.viewModel.mode = 'live';
     }
