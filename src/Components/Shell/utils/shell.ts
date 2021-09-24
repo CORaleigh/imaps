@@ -271,7 +271,12 @@ export const formatShellPanelContent = () => {
 };
 
 export const stopMeasuring = (measure: __esri.Measurement) => {
-  if (measure.viewModel.activeViewModel.state === 'measuring' || measure.viewModel.activeViewModel.state === 'ready') {
-    measure.viewModel.activeViewModel?.clear();
+  if (measure) {
+    if (
+      measure.viewModel.activeViewModel.state === 'measuring' ||
+      measure.viewModel.activeViewModel.state === 'ready'
+    ) {
+      measure.viewModel.activeViewModel?.clear();
+    }
   }
 };

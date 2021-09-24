@@ -91,10 +91,12 @@ export const basemapSelected = (
   }
   const handle = view.watch('stationary', (stationary: boolean) => {
     if (stationary) {
+      debugger;
       const inRaleigh = geometryEngine.contains(boundary, view.center);
       if (inRaleigh != lastInRaleigh) {
         lastInRaleigh = inRaleigh;
       }
+      (basemapGallery.source as __esri.PortalBasemapsSource).refresh();
     }
   });
   //selected = value;
