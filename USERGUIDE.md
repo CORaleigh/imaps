@@ -16,3 +16,5 @@
     5. [Print](#print)
 
 # What's New
+
+![image](https://user-images.githubusercontent.com/6587288/134600966-3687277c-af50-4df5-8733-0d4e1fe3daa1.png)
