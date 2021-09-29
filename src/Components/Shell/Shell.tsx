@@ -121,8 +121,6 @@ export const Shell = () => {
       </Suspense>,
       container,
     );
-
-    console.log('setActions');
     setActions([...[], ...actions]);
   };
   const deactiveAllTools = () => {
@@ -486,10 +484,7 @@ export const Shell = () => {
       <calcite-shell class={`shell calcite-theme-${theme}`}>
         {width >= 1000 ? (
           <calcite-shell-panel slot="primary-panel" position="start" width-scale="l" collapsed>
-            <calcite-action-bar
-              slot="action-bar"
-              expanded={/*!viewCreated && window.innerWidth > 500 ? '' : null*/ false}
-            >
+            <calcite-action-bar slot="action-bar" expanded={!viewCreated && window.innerWidth > 500 ? '' : null}>
               {actions.map((action: any) => {
                 if (action.isTool) {
                   return (
@@ -509,7 +504,6 @@ export const Shell = () => {
                           id={`${action.container}_action`}
                           disabled={!viewCreated ? '' : null}
                           onClick={async (e: any) => {
-                            console.log('setActions');
                             setActions([...actionClicked(e, action, actions)]);
                             requestAnimationFrame(() => {
                               renderWidget(action);
@@ -546,8 +540,6 @@ export const Shell = () => {
                               ?.querySelector('calcite-shell-panel[slot=primary-panel]')
                               ?.setAttribute('collapsed', '');
                             action.isActive = false;
-
-                            console.log('setActions');
                             setActions([...actions]);
                           }}
                         ></calcite-action>
@@ -587,11 +579,19 @@ export const Shell = () => {
           />
         </Suspense>
 
-        <calcite-shell-panel slot="contextual-panel" position="end" width-scale="l">
-          <calcite-action-bar
-            slot="action-bar"
-            expanded={/*!viewCreated && window.innerWidth > 500 ? '' : null*/ false}
-          >
+        <calcite-shell-panel
+          slot="contextual-panel"
+          position="end"
+          width-scale="l"
+          collapsed={
+            (window.innerWidth <= 500 &&
+              actions.filter((action) => {
+                return action.isActive;
+              }).length === 0) ||
+            (window.innerWidth > 500 && !viewCreated)
+          }
+        >
+          <calcite-action-bar slot="action-bar" expanded={!viewCreated && window.innerWidth > 500 ? '' : null}>
             {actions.map((action: any) => {
               if (!action.isTool || width < 1000) {
                 return (
@@ -611,7 +611,6 @@ export const Shell = () => {
                         id={`${action.container}_action`}
                         disabled={!viewCreated ? '' : null}
                         onClick={async (e: any) => {
-                          console.log('setActions');
                           setActions([...actionClicked(e, action, actions)]);
                           requestAnimationFrame(() => {
                             renderWidget(action);
@@ -662,8 +661,6 @@ export const Shell = () => {
                             ?.querySelector('calcite-shell-panel[slot=contextual-panel]')
                             ?.setAttribute('collapsed', '');
                           action.isActive = false;
-
-                          console.log('setActions');
                           setActions([...actions]);
                         }}
                       ></calcite-action>
