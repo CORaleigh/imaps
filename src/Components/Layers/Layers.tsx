@@ -8,11 +8,8 @@ export const Layers = (props: any) => {
   const ref = useRef<HTMLDivElement>(null);
   const input = useRef<HTMLCalciteInputElement>(null);
   const list = useRef<__esri.LayerList>();
+
   useEffect(() => {
-    console.log(props.active);
-  }, [props.active]);
-  useEffect(() => {
-    console.log('test');
     const layerList = new LayerList({
       container: ref.current as HTMLDivElement,
       view: props.view,

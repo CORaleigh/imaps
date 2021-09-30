@@ -159,7 +159,6 @@ export const formatAttributes = (selectedFeature: __esri.Graphic): string => {
     if (!['OBJECTID'].includes(field.name) && selectedFeature.getAttribute(field.name)) {
       if (field.type === 'date') {
         const date = new Date(selectedFeature.getAttribute(field.name));
-        console.log(date);
         text += `${field.alias}: ${date.getUTCMonth() + 1}/${date.getUTCDate()}/${date.getUTCFullYear()}\n`;
       } else {
         text += `${field.alias}: ${selectedFeature.getAttribute(field.name)}\n`;

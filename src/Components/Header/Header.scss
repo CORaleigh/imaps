@@ -19,7 +19,9 @@ header {
 
 header calcite-dropdown {
   max-width: 224px;
-
+  position: absolute;
+  top: 50px;
+  left: calc(100% - 224px);
 }
 header calcite-button {
   right: 0;

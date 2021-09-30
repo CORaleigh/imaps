@@ -25,6 +25,7 @@ export const Measure = (props: any) => {
       }
     });
     if (measurement.current) {
+      measurement.current.view = props.view;
       if (e.target.getAttribute('value') === 'distance') {
         if (e.target.active) {
           e.target.active = false;

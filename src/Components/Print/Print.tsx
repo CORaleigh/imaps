@@ -73,7 +73,6 @@ export const Print = (props: any) => {
         }) as __esri.Point;
         const selectedLayout = layout.current?.querySelector('calcite-option[selected]') as any;
         const selectedTemplate = JSON.parse(selectedLayout.value).template.replace('.', '');
-        console.log(selectedTemplate);
         const template = printTemplates.results[0].value.filter((value) => {
           return value.layoutTemplate === selectedTemplate;
         });
@@ -83,14 +82,12 @@ export const Print = (props: any) => {
             ? currentScale
             : parseInt((scale.current?.querySelector('calcite-option[selected]') as any)?.value);
         mapScale = mapScale / 12;
-        console.log(mapScale);
         const width = template[0]?.webMapFrameSize[0] * mapScale;
         const height = template[0]?.webMapFrameSize[1] * mapScale;
         const xmax = center.x + width / 2;
         const ymax = center.y + height / 2;
         const xmin = center.x - width / 2;
         const ymin = center.y - height / 2;
-        console.log(xmax);
         graphics.add(
           new Graphic({
             symbol: {

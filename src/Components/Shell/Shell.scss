@@ -48,6 +48,7 @@ calcite-action-bar {
       min-height: 3rem;
       z-index: 2;
       width: 100%;
+
   }
   
   .action-panel {
@@ -57,9 +58,8 @@ calcite-action-bar {
     font-size: var(--calcite-font-size--1);
     overflow-y: auto;
     height: calc(100vh - 100px);
-
   }
-  
+
 
   
   .panel-title {

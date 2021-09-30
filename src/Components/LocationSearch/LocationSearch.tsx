@@ -141,11 +141,6 @@ export const LocationSearch = (props: any) => {
               key={intersection.getObjectId()}
               value={intersection.getObjectId()}
               text-label={intersection.getAttribute('CARTONAME')}
-              afterCreate={(item: HTMLCalciteComboboxItemElement) => {
-                item.addEventListener('calciteComboboxItemChange', (event) => {
-                  console.log(event);
-                });
-              }}
             ></calcite-combobox-item>
           );
         })}

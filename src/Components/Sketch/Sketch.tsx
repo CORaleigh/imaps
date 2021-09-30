@@ -156,10 +156,7 @@ export const Sketch = (props: any) => {
 
       handles.current.push(
         sketchVM?.on('update', (e) => {
-          console.log(e.state, graphicsRef.current.length);
-
           if ((e.state === 'start' && graphicsRef.current.length === 0) || e.state === 'active') {
-            console.log(e.graphics.length);
             setSelectedGraphics([...e.graphics]);
             graphicsRef.current = [...e.graphics];
           }

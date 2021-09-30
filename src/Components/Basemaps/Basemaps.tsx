@@ -16,13 +16,14 @@ export const Basemaps = (props: any) => {
     });
 
     createAlert();
-    document?.querySelector('calcite-combobox')?.addEventListener('calciteComboboxItemChange', (event: any) => {
-      const tab = (event as any).detail.value;
+    document?.querySelector('#basemap-radio')?.addEventListener('calciteRadioGroupChange', (event: any) => {
+      //document?.querySelector('calcite-combobox')?.addEventListener('calciteComboboxItemChange', (event: any) => {
+      const tab = (event as any).detail; //.value;
       //setSelectedTab(tab);
       selectedTab = tab;
+
       basemapSelected(tab, props.view, basemapGallery, props.default, props.imagery);
       setTimeout(() => {
-        console.log(eventId);
         if (eventId === 1) {
           addSnippet(basemapGallery.viewModel.items);
         }
@@ -43,7 +44,14 @@ export const Basemaps = (props: any) => {
   }, []); // only after initial render
   return (
     <div className="panel">
-      <calcite-combobox
+      <calcite-radio-group id="basemap-radio" appearance="solid" layout="horizontal" scale="m" width="full">
+        <calcite-radio-group-item value="basemaps" checked>
+          Streets
+        </calcite-radio-group-item>
+        <calcite-radio-group-item value="imagery">Imagery</calcite-radio-group-item>
+        <calcite-radio-group-item value="esri">Esri</calcite-radio-group-item>
+      </calcite-radio-group>
+      {/* <calcite-combobox
         label="demo combobox"
         selection-mode="single"
         allow-custom-values="false"
@@ -86,7 +94,7 @@ export const Basemaps = (props: any) => {
           calcite-hydrated=""
           key="esri"
         ></calcite-combobox-item>
-      </calcite-combobox>
+      </calcite-combobox> */}
       <div ref={ref}></div>
     </div>
   );

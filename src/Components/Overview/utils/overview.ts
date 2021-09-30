@@ -7,7 +7,6 @@ import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 import * as type from '@arcgis/core/smartMapping/symbology/type';
 export const createOverview = (view: __esri.MapView): __esri.MapView => {
   const map: ArcGISMap = new ArcGISMap({ basemap: view.map.basemap });
-  console.log(document.querySelector('#overviewMap'));
   const overview = new MapView({
     map: map,
     navigation: {

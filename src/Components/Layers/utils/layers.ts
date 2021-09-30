@@ -63,7 +63,6 @@ export const togglePropertyLabels = (event: __esri.LayerListTriggerActionEvent) 
     const expressions = selectedExpressions.map((expression) => {
       return expression.expression;
     });
-    console.log(expressions);
     const expression = expressions.join('+ TextFormatting.NewLine+');
     (event.item.layer as __esri.FeatureLayer).labelingInfo = [];
 
@@ -124,7 +123,6 @@ const propertyLabelExpressions: any[] = [
 
 const addPropertyLabelToggles = (item: any) => {
   if (item.layer.title === 'Property' && item.layer.type != 'group' && item.actionsSections.length === 0) {
-    console.log(item.layer.title);
     const toggles: Collection = new Collection();
     toggles.addMany(
       propertyLabelExpressions.map((expression) => {

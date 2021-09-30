@@ -46,6 +46,8 @@ export const Shell = () => {
   const [width, setWidth] = useState(window.innerWidth);
   const view = useRef<__esri.MapView>();
   const [viewCreated, setViewCreated] = useState(false);
+  const [viewLoaded, setViewLoaded] = useState(false);
+
   const [selectedProperties, setSelectedProperties] = useState<__esri.Graphic[]>([]);
   const [selectedFeature, setSelectedFeature] = useState<any>();
   const { theme, setTheme } = useContext(ThemeContext);
@@ -251,6 +253,13 @@ export const Shell = () => {
 
     if (!viewCreated) {
       view.current = mapView;
+      const layer = mapView.map.allLayers.find((layer) => {
+        return layer.title.includes('Property') && layer.type === 'feature';
+      });
+      mapView.whenLayerView(layer).then(() => {
+        setViewLoaded(true);
+      });
+
       setViewCreated(true);
 
       const container = document.getElementById('propertySearch');
@@ -484,7 +493,7 @@ export const Shell = () => {
       <calcite-shell class={`shell calcite-theme-${theme}`}>
         {width >= 1000 ? (
           <calcite-shell-panel slot="primary-panel" position="start" width-scale="l" collapsed>
-            <calcite-action-bar slot="action-bar" expanded={!viewCreated && window.innerWidth > 500 ? '' : null}>
+            <calcite-action-bar slot="action-bar" expanded={!viewLoaded && window.innerWidth > 500 ? '' : null}>
               {actions.map((action: any) => {
                 if (action.isTool) {
                   return (
@@ -502,7 +511,7 @@ export const Shell = () => {
                           name={action.container}
                           icon={action.icon}
                           id={`${action.container}_action`}
-                          disabled={!viewCreated ? '' : null}
+                          disabled={!viewLoaded ? '' : null}
                           onClick={async (e: any) => {
                             setActions([...actionClicked(e, action, actions)]);
                             requestAnimationFrame(() => {
@@ -588,10 +597,10 @@ export const Shell = () => {
               actions.filter((action) => {
                 return action.isActive;
               }).length === 0) ||
-            (window.innerWidth > 500 && !viewCreated)
+            (window.innerWidth > 500 && !viewLoaded)
           }
         >
-          <calcite-action-bar slot="action-bar" expanded={!viewCreated && window.innerWidth > 500 ? '' : null}>
+          <calcite-action-bar slot="action-bar" expanded={!viewLoaded && window.innerWidth > 500 ? '' : null}>
             {actions.map((action: any) => {
               if (!action.isTool || width < 1000) {
                 return (
@@ -609,7 +618,7 @@ export const Shell = () => {
                         name={action.container}
                         icon={action.icon}
                         id={`${action.container}_action`}
-                        disabled={!viewCreated ? '' : null}
+                        disabled={!viewLoaded ? '' : null}
                         onClick={async (e: any) => {
                           setActions([...actionClicked(e, action, actions)]);
                           requestAnimationFrame(() => {

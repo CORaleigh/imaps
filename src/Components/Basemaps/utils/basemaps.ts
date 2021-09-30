@@ -65,12 +65,11 @@ export const addSnippet = (items: Collection<BasemapGalleryItem>) => {
         summary.className = 'esri-basemap-gallery__item-snippet';
         div.append(summary);
         listItem.append(div);
-        console.log(item.basemap.portalItem.snippet);
       }
     }
   });
 };
-
+let handle: __esri.WatchHandle;
 export const basemapSelected = (
   value: string,
   view: __esri.MapView,
@@ -89,18 +88,19 @@ export const basemapSelected = (
       (basemapGallery.source as __esri.PortalBasemapsSource).refresh();
     });
   }
-  const handle = view.watch('stationary', (stationary: boolean) => {
-    if (stationary) {
-      debugger;
-      const inRaleigh = geometryEngine.contains(boundary, view.center);
-      if (inRaleigh != lastInRaleigh) {
-        lastInRaleigh = inRaleigh;
-      }
-      (basemapGallery.source as __esri.PortalBasemapsSource).refresh();
-    }
-  });
+
   //selected = value;
+
   if (value === 'imagery') {
+    handle = view.watch('stationary', (stationary: boolean) => {
+      if (stationary) {
+        const inRaleigh = geometryEngine.contains(boundary, view.center);
+        if (inRaleigh != lastInRaleigh) {
+          lastInRaleigh = inRaleigh;
+          (basemapGallery.source as __esri.PortalBasemapsSource).refresh();
+        }
+      }
+    });
     document.querySelector('.basemaps-base .esri-button-menu')?.removeAttribute('hidden');
     query.id = imageryId;
     (basemapGallery.source as __esri.PortalBasemapsSource).filterFunction = filterBasemaps;
@@ -109,6 +109,8 @@ export const basemapSelected = (
     };
     setTimeout(() => {
       stateHandle = (basemapGallery.source as __esri.PortalBasemapsSource).watch('state', (state) => {
+        value = (document.querySelector('#basemap-radio calcite-radio-group-item[checked]') as any)?.value;
+
         if (state === 'ready' && value === 'imagery') {
           const basemap = basemapGallery.source.basemaps.find((basemap) => {
             return basemap.portalItem.title === view.map.basemap.title;
@@ -122,6 +124,7 @@ export const basemapSelected = (
                 basemapGallery.source.basemaps.getItemAt(0).portalItem.title
               }`;
               view.map.basemap = basemapGallery.source.basemaps.getItemAt(0);
+              console.log(value);
               document.querySelector('calcite-alert')?.setAttribute('active', '');
             });
           }
@@ -130,8 +133,9 @@ export const basemapSelected = (
     }, 1000);
   } else {
     document.querySelector('.basemaps-base .esri-button-menu')?.setAttribute('hidden', '');
-
-    handle?.remove();
+    if (handle) {
+      handle.remove();
+    }
     stateHandle?.remove();
     (basemapGallery.source as __esri.PortalBasemapsSource).filterFunction = () => {
       return true;

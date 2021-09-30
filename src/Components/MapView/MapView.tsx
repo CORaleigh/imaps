@@ -29,7 +29,6 @@ export const MapView = (props: any) => {
   const widgets = useRef<any[]>([]);
 
   const saveMap = () => {
-    console.log(document.visibilityState);
     // if (document.visibilityState === 'hidden' || document.hidden) {
     viewRef.current?.map.removeMany(
       viewRef.current?.map.allLayers
@@ -66,7 +65,6 @@ export const MapView = (props: any) => {
     IdentityManager.on('dialog-create', () => {
       const observer: MutationObserver = new MutationObserver((mutations) => {
         if (mutations.length) {
-          debugger;
           ((mutations[0]?.target as HTMLElement)?.querySelector('.esri-button--secondary') as HTMLElement)?.click();
           observer.disconnect();
         } else {
