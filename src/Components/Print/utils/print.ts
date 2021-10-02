@@ -3,8 +3,9 @@
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
 import * as promiseUtils from '@arcgis/core/core/promiseUtils';
+import SpatialReference from '@arcgis/core/geometry/SpatialReference';
 import esriRequest from '@arcgis/core/request';
-import PrintTask from '@arcgis/core/tasks/PrintTask';
+import * as print from '@arcgis/core/rest/print';
 import LegendLayer from '@arcgis/core/tasks/support/LegendLayer';
 import PrintParameters from '@arcgis/core/tasks/support/PrintParameters';
 import PrintTemplate from '@arcgis/core/tasks/support/PrintTemplate';
@@ -181,6 +182,7 @@ export const getTemplate = (
     outScale: mapScale,
     showLabels: true,
     format: format,
+    scalePreserved: true,
     layoutOptions: {
       titleText: title,
       scalebarUnit: 'Feet',
@@ -204,11 +206,13 @@ export const exportMap = (
   oldScale: number,
 ): Promise<__esri.PrintResponse> => {
   return promiseUtils.create((resolve, reject) => {
-    new PrintTask({ url: url })
+    print
       .execute(
+        url,
         new PrintParameters({
           template: template,
           view: view,
+          outSpatialReference: new SpatialReference({ wkid: 3632 }),
         }),
       )
       .then((result: __esri.PrintResponse) => {

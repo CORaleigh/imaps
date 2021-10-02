@@ -2,12 +2,12 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React, { useEffect, useRef } from 'react';
 import BasemapGallery from '@arcgis/core/widgets/BasemapGallery';
-import { addSnippet, basemapChanged, basemapSelected, createAlert } from './utils/basemaps';
+import { basemapChanged, basemapSelected, createAlert } from './utils/basemaps';
 import './Basemaps.scss';
 export const Basemaps = (props: any) => {
   const ref = useRef<HTMLDivElement>(null);
   let selectedTab = 'basemaps';
-  let eventId = 0;
+  //const eventId = 0;
   useEffect(() => {
     const basemapGallery = new BasemapGallery({
       container: ref.current as HTMLDivElement,
@@ -23,24 +23,24 @@ export const Basemaps = (props: any) => {
       selectedTab = tab;
 
       basemapSelected(tab, props.view, basemapGallery, props.default, props.imagery);
-      setTimeout(() => {
-        if (eventId === 1) {
-          addSnippet(basemapGallery.viewModel.items);
-        }
-        if (eventId === 0) {
-          eventId += 1;
-        } else {
-          eventId = 0;
-        }
-      }, 1000);
+      // setTimeout(() => {
+      //   if (eventId === 1) {
+      //     addSnippet(basemapGallery.viewModel.items);
+      //   }
+      //   if (eventId === 0) {
+      //     eventId += 1;
+      //   } else {
+      //     eventId = 0;
+      //   }
+      // }, 1000);
     });
     basemapGallery.watch('activeBasemap', (activeBasemap: __esri.Basemap) => {
       basemapChanged(activeBasemap, props.view, selectedTab);
     });
-    setTimeout(() => {
-      console.log(basemapGallery.viewModel.items);
-      addSnippet(basemapGallery.viewModel.items);
-    }, 1000);
+    // setTimeout(() => {
+    //   console.log(basemapGallery.viewModel.items);
+    //   addSnippet(basemapGallery.viewModel.items);
+    // }, 1000);
   }, []); // only after initial render
   return (
     <div className="panel">

@@ -8,8 +8,8 @@ import Polygon from '@arcgis/core/geometry/Polygon';
 import * as geometryEngine from '@arcgis/core/geometry/geometryEngine';
 import * as promiseUtils from '@arcgis/core/core/promiseUtils';
 import * as type from '@arcgis/core/smartMapping/symbology/type';
-import Collection from '@arcgis/core/core/Collection';
-import BasemapGalleryItem from '@arcgis/core/widgets/BasemapGallery/support/BasemapGalleryItem';
+//import Collection from '@arcgis/core/core/Collection';
+//import BasemapGalleryItem from '@arcgis/core/widgets/BasemapGallery/support/BasemapGalleryItem';
 export const createAlert = () => {
   const alert = document.createElement('calcite-alert');
   alert.setAttribute('auto-dismiss', '');
@@ -52,23 +52,23 @@ export const basemapChanged = (activeBasemap: __esri.Basemap, view: __esri.MapVi
   propertyLayer.renderer = renderer;
   //propertyLayer.refresh();
 };
-export const addSnippet = (items: Collection<BasemapGalleryItem>) => {
-  items.forEach((item, i) => {
-    if (item.basemap.portalItem.snippet) {
-      const listItem = document.querySelectorAll('.esri-basemap-gallery__item')[i];
-      const title = listItem?.querySelector('.esri-basemap-gallery__item-title');
-      if (title) {
-        const div = document.createElement('div');
-        div.append(title);
-        const summary = document.createElement('div');
-        summary.textContent = item.basemap.portalItem.snippet;
-        summary.className = 'esri-basemap-gallery__item-snippet';
-        div.append(summary);
-        listItem.append(div);
-      }
-    }
-  });
-};
+// export const addSnippet = (items: Collection<BasemapGalleryItem>) => {
+//   items.forEach((item, i) => {
+//     if (item.basemap.portalItem.snippet) {
+//       const listItem = document.querySelectorAll('.esri-basemap-gallery__item')[i];
+//       const title = listItem?.querySelector('.esri-basemap-gallery__item-title');
+//       if (title) {
+//         const div = document.createElement('div');
+//         div.append(title);
+//         const summary = document.createElement('div');
+//         summary.textContent = item.basemap.portalItem.snippet;
+//         summary.className = 'esri-basemap-gallery__item-snippet';
+//         div.append(summary);
+//         listItem.append(div);
+//       }
+//     }
+//   });
+// };
 let handle: __esri.WatchHandle;
 export const basemapSelected = (
   value: string,

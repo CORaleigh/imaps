@@ -700,6 +700,10 @@ export const createTemplate = (view: __esri.MapView | __esri.SceneView, condoTab
             label: 'Design/Style',
           },
           {
+            fieldName: 'TYPE_USE_DECODE',
+            label: 'Use Type',
+          },
+          {
             fieldName: 'TOTSTRUCTS',
             label: 'Total Structures',
           },

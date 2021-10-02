@@ -82,7 +82,7 @@ export const enableStreetHitTest = (view: __esri.MapView, layer: __esri.FeatureL
     layer.visible = true;
     layer.opacity = 0.001;
 
-    view.hitTest(view.toScreen(e.mapPoint), { include: [layer] }).then((result) => {
+    view.hitTest(view.toScreen(e.mapPoint), { include: [layer] }).then(() => {
       layer.opacity = opacity;
       layer.visible = visible;
     });

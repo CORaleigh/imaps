@@ -16,6 +16,8 @@ export const Measure = (props: any) => {
   const coordRef = useRef<HTMLDivElement>(null);
   const measurement = useRef<Measurement>();
   const coordinates = useRef<CoordinateConversion>();
+  const distanceAction = useRef<HTMLCalciteActionElement>();
+  const areaAction = useRef<HTMLCalciteActionElement>();
 
   const [widget, setWidget] = useState<string>();
   const actionClicked = (e: any) => {
@@ -168,13 +170,63 @@ export const Measure = (props: any) => {
       //   });
       // });
     });
+    requestAnimationFrame(() => {
+      const observer: MutationObserver = new MutationObserver((mutations) => {
+        if (mutations.length) {
+          document.querySelector('.esri-distance-measurement-2d__clear-button')?.addEventListener('click', () => {
+            if (!(measurement.current?.view as any).activeTool.attached) {
+              measurement.current?.clear();
+              if (measurement.current) {
+                if (distanceAction.current) {
+                  distanceAction.current.active = true;
+                }
+                measurement.current = new Measurement({
+                  container: measureRef.current as HTMLDivElement,
+                  view: props.view,
+                  areaUnit: 'imperial',
+                  linearUnit: 'imperial',
+                });
+                measurement.current.activeTool = 'distance';
+                setWidget('measurement');
+                props.measurementActivated(measurement.current, coordinates.current);
+              }
+            }
+          });
+          document.querySelector('.esri-area-measurement-2d__clear-button')?.addEventListener('click', () => {
+            if (!(measurement.current?.view as any).activeTool.attached) {
+              measurement.current?.clear();
+              if (measurement.current) {
+                if (areaAction.current) {
+                  areaAction.current.active = true;
+                }
+                measurement.current = new Measurement({
+                  container: measureRef.current as HTMLDivElement,
+                  view: props.view,
+                  areaUnit: 'imperial',
+                  linearUnit: 'imperial',
+                });
+                measurement.current.activeTool = 'area';
+                setWidget('measurement');
+                props.measurementActivated(measurement.current, coordinates.current);
+              }
+            }
+          });
+          //observer.disconnect();
+        }
+      });
+      observer.observe(document.querySelector('#measure') as Node, {
+        attributes: true,
+        childList: true,
+      });
+    });
 
     return () => {
       measurement && measurement.current?.destroy();
     };
   }, [props.view]); // only after initial render
+
   return (
-    <div className="panel">
+    <div className="panel" id="measurePanel">
       <div className="measureTools">
         <calcite-action
           text="Distance"
@@ -184,6 +236,7 @@ export const Measure = (props: any) => {
           value="distance"
           text-enabled
           onClick={actionClicked}
+          ref={distanceAction}
         ></calcite-action>
         <calcite-action
           text="Area"
@@ -193,6 +246,7 @@ export const Measure = (props: any) => {
           value="area"
           text-enabled
           onClick={actionClicked}
+          ref={areaAction}
         ></calcite-action>
         <calcite-action
           text="Coordinates"
