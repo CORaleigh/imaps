@@ -1,16 +1,16 @@
-#measure calcite-radio-group {
-    display: grid;
-    width: 100%;
-    grid-template-columns: auto auto;
-}
+// #measure calcite-radio-group {
+//     display: grid;
+//     width: 100%;
+//     grid-template-columns: auto auto;
+// }
 
 .esri-coordinate-conversion {
     width: 100% !important;
 }
 
 .measureTools {
-    display: grid;
-    grid-template-columns: 50% 50%;
+    display: flex;
+    // grid-template-columns: 50% 50%;
 }
 
 .esri-coordinate-conversion__select-row {

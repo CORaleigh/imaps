@@ -50,6 +50,8 @@ calcite-action-bar {
       width: 100%;
 
   }
+
+  
   
   .action-panel {
     box-sizing: border-box;
@@ -57,7 +59,8 @@ calcite-action-bar {
     color: var(--calcite-ui-text-2);
     font-size: var(--calcite-font-size--1);
     overflow-y: auto;
-    height: calc(100vh - 100px);
+    max-height: calc(100vh - 220px);
+    max-width: 350px;
   }
 
 

@@ -38,10 +38,12 @@ export const PropertySelect = (props: any) => {
         mode: 'hybrid',
       },
     });
-
+    sketchVM.watch('activeTool', (activeTool) => {
+      setGeometryType(activeTool);
+    });
     sketchVM.on('create', (e: any) => {
       if (e.state === 'cancel') {
-        disableAllActions();
+        //disableAllActions();
       }
       addGraphic(e, view, parseInt(distanceRef.current?.value as string)).then((geometry) => {
         if (parseInt(distanceRef.current?.value as string) > 0) {
@@ -75,6 +77,9 @@ export const PropertySelect = (props: any) => {
     if (activeViewModel) {
       setGeometryType(geometryType);
       activeViewModel.create(geometryType);
+      if (!(props.view as any).activeTool?.attached) {
+        createSketchViewModels(new GraphicsLayer({ listMode: 'hide' }), props.view);
+      }
       props.toolActivated(activeViewModel);
       inactiveViewModels.forEach((vm) => {
         vm?.cancel();
@@ -94,7 +99,15 @@ export const PropertySelect = (props: any) => {
     setPointSketchViewModel(createSketchViewModels(new GraphicsLayer({ listMode: 'hide' }), props.view));
     setPolylineSketchViewModel(createSketchViewModels(new GraphicsLayer({ listMode: 'hide' }), props.view));
     setPolygonSketchViewModel(createSketchViewModels(new GraphicsLayer({ listMode: 'hide' }), props.view));
+    requestAnimationFrame(() => {
+      pointAction.current?.click();
+    });
   }, []);
+
+  useEffect(() => {
+    disableAllActions();
+    debugger;
+  }, [props.activeTool]);
 
   return (
     <div className="panel">
@@ -104,6 +117,7 @@ export const PropertySelect = (props: any) => {
           text="Point"
           icon="pin"
           id="pointAction"
+          active={geometryType === 'point' ? '' : null}
           onClick={(event: any) => {
             if (event.target.active) {
               //disableTool(pointSketchViewModel as SketchViewModel, event.target);
@@ -128,6 +142,7 @@ export const PropertySelect = (props: any) => {
           ref={lineAction}
           text="Line"
           icon="line"
+          active={geometryType === 'polyline' ? '' : null}
           onClick={(event: any) => {
             if (event.target.active) {
               //disableTool(polylineSketchViewModel as SketchViewModel, event.target);
@@ -153,6 +168,7 @@ export const PropertySelect = (props: any) => {
           text="Polygon"
           icon="polygon-area"
           id="polygonAction"
+          active={geometryType === 'polygon' ? '' : null}
           onClick={(event: any) => {
             if (event.target.active) {
               //disableTool(polygonSketchViewModel as SketchViewModel, event.target);
@@ -178,6 +194,7 @@ export const PropertySelect = (props: any) => {
           text="Text"
           icon="rectangle-area"
           id="rectangleAction"
+          active={geometryType === 'rectangle' ? '' : null}
           onClick={(event: any) => {
             if (event.target.active) {
               //disableTool(polygonSketchViewModel as SketchViewModel, event.target);
@@ -203,6 +220,7 @@ export const PropertySelect = (props: any) => {
           text="Circle"
           icon="circle-area"
           id="circleAction"
+          active={geometryType === 'circle' ? '' : null}
           onClick={(event: any) => {
             if (event.target.active) {
               //disableTool(polygonSketchViewModel as SketchViewModel, event.target);
@@ -228,6 +246,7 @@ export const PropertySelect = (props: any) => {
           text="Multi-point"
           icon="pins"
           id="multipointAction"
+          active={geometryType === 'multi-point' ? '' : null}
           onClick={(event: any) => {
             if (event.target.active) {
               //disableTool(pointSketchViewModel as SketchViewModel, event.target);

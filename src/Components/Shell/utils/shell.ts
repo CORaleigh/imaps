@@ -46,12 +46,14 @@ export const actionClicked = (e: any, action: any, actions: any[]): any[] => {
     action.isActive = true;
   }
   const shellPanel = e.target.closest('calcite-shell-panel');
-
-  if (!action.isActive) {
-    shellPanel?.setAttribute('collapsed', '');
-  } else {
-    shellPanel?.removeAttribute('collapsed');
+  if (!action.isTool) {
+    if (!action.isActive) {
+      shellPanel?.setAttribute('collapsed', '');
+    } else {
+      shellPanel?.removeAttribute('collapsed');
+    }
   }
+
   return actions;
 };
 
@@ -101,12 +103,26 @@ export const updateTheme = (theme: string, setTheme: React.Dispatch<string>) => 
 };
 
 export const windowResize = (
+  view: __esri.MapView,
   actions: any[],
   width: number,
   setWidth: React.Dispatch<number>,
   setActions: React.Dispatch<any[]>,
 ) => {
+  if (window.innerWidth < 1000) {
+    console.log(window.innerWidth);
+
+    //view.ui?.empty('top-left');
+    actions
+      .filter((action) => {
+        return action.isTool;
+      })
+      .forEach((action) => {
+        view.ui.remove(action.container);
+      });
+  }
   const activeActions = document.querySelectorAll('calcite-action[active]');
+
   activeActions.forEach((button) => {
     const action = actions.find((action) => {
       return action.title === button.getAttribute('text');
@@ -271,11 +287,13 @@ export const formatShellPanelContent = () => {
 
 export const stopMeasuring = (measure: __esri.Measurement) => {
   if (measure) {
-    if (
-      measure.viewModel.activeViewModel.state === 'measuring' ||
-      measure.viewModel.activeViewModel.state === 'ready'
-    ) {
-      measure.viewModel.activeViewModel?.clear();
+    if (measure.viewModel) {
+      if (
+        measure.viewModel.activeViewModel.state === 'measuring' ||
+        measure.viewModel.activeViewModel.state === 'ready'
+      ) {
+        measure.viewModel.activeViewModel?.clear();
+      }
     }
   }
 };

@@ -81,6 +81,7 @@ export const Shell = () => {
               geometrySet={geometryChanged}
               toolActivated={selectActivated}
               clear={clearSelection}
+              activeTool={activeTool}
             />
           </Suspense>,
           container,
@@ -334,6 +335,7 @@ export const Shell = () => {
       if (maximize.current) {
         maximize.current.icon = 'left-edge';
       }
+
       if (!container?.hasChildNodes()) {
         if (action.title === 'Property Search') {
           ReactDOM.render(
@@ -402,6 +404,9 @@ export const Shell = () => {
             </Suspense>,
             container,
           );
+          if (window.innerWidth >= 1000) {
+            view.current?.ui.add(container as HTMLElement);
+          }
         }
         if (action.title === 'Sketch') {
           ReactDOM.render(
@@ -431,6 +436,11 @@ export const Shell = () => {
             container,
           );
         }
+        debugger;
+
+        if (window.innerWidth >= 1000 && action.isTool) {
+          view.current?.ui.add(container as HTMLElement, 'top-left');
+        }
       }
     }
   };
@@ -455,7 +465,7 @@ export const Shell = () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
         if ((window.innerWidth < 1000 && width >= 1000) || (window.innerWidth >= 1000 && width < 1000)) {
-          windowResize(actions, width, setWidth, setActions);
+          windowResize(view.current as __esri.MapView, actions, width, setWidth, setActions);
         }
       }, 250);
       document.querySelectorAll('calcite-shell-panel').forEach((panel) => {
@@ -479,7 +489,7 @@ export const Shell = () => {
 
     return () => {
       window.removeEventListener('resize', () => {
-        windowResize(actions, width, setWidth, setActions);
+        windowResize(view.current as __esri.MapView, actions, width, setWidth, setActions);
       });
       deactivate();
     };
@@ -526,7 +536,7 @@ export const Shell = () => {
                 }
               })}
             </calcite-action-bar>
-            {actions.map((action: any) => {
+            {/* {actions.map((action: any) => {
               if (action.isTool && action.isActive) {
                 return (
                   <div className="panel-header" key={`${action.icon}_header_primary`}>
@@ -557,7 +567,7 @@ export const Shell = () => {
                   </div>
                 );
               }
-            })}
+            })} */}
             {actions.map((action: any) => {
               if (action.isTool) {
                 return (

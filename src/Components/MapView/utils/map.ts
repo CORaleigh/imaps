@@ -320,11 +320,15 @@ export const createMapWidgets = (view: MapView): any[] => {
   const widgets = [];
   const identify = createIdentifyButton(view);
   widgets.push(identify);
-  view.ui.add(identify, 'top-left');
+  // view.ui.add(identify, 'top-left');
 
   const streetview = createStreetviewButton();
   widgets.push(streetview);
-  view.ui.add(streetview, 'top-left');
+  const container = document.createElement('div');
+  container.setAttribute('style', 'display: flex;justify-content: space-between;width: 70px;box-shadow:none');
+  container.append(identify);
+  container.append(streetview);
+  view.ui.add(container, 'top-left');
 
   const home = new Home({
     view: view,
@@ -340,13 +344,15 @@ export const createMapWidgets = (view: MapView): any[] => {
       );
     },
   });
-  view.ui.add(home, 'top-left');
+
+  view.ui.move('zoom', 'bottom-left');
+  view.ui.add(home, 'bottom-left');
   widgets.push(home);
   const compass = new Compass({ view: view });
-  view.ui.add(compass, 'top-left');
+  view.ui.add(compass, 'bottom-left');
   widgets.push(compass);
   const track = new Track({ view: view });
-  view.ui.add(track, 'top-left');
+  view.ui.add(track, 'bottom-left');
   widgets.push(track);
   const scalebar = new ScaleBar({ view: view });
   view.ui.add(scalebar, 'bottom-left');

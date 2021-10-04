@@ -219,6 +219,9 @@ export const Measure = (props: any) => {
         childList: true,
       });
     });
+    requestAnimationFrame(() => {
+      distanceAction.current?.click();
+    });
 
     return () => {
       measurement && measurement.current?.destroy();
@@ -229,41 +232,33 @@ export const Measure = (props: any) => {
     <div className="panel" id="measurePanel">
       <div className="measureTools">
         <calcite-action
-          text="Distance"
           appearance="outline"
           icon="measure-line"
           id="lineMeasure"
           value="distance"
-          text-enabled
           onClick={actionClicked}
           ref={distanceAction}
         ></calcite-action>
         <calcite-action
-          text="Area"
           appearance="outline"
           icon="measure-area"
           id="areaMeasure"
           value="area"
-          text-enabled
           onClick={actionClicked}
           ref={areaAction}
         ></calcite-action>
         <calcite-action
-          text="Coordinates"
           appearance="outline"
           icon="pins"
           id="coordinates"
           value="coordinates"
-          text-enabled
           onClick={actionClicked}
         ></calcite-action>
         <calcite-action
-          text="Clear"
           appearance="outline"
           icon="trash"
           id="clearMeasure"
           value="clear"
-          text-enabled
           onClick={actionClicked}
         ></calcite-action>
       </div>
