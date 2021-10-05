@@ -219,9 +219,6 @@ export const Measure = (props: any) => {
         childList: true,
       });
     });
-    requestAnimationFrame(() => {
-      distanceAction.current?.click();
-    });
 
     return () => {
       measurement && measurement.current?.destroy();

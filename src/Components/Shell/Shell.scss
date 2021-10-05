@@ -59,10 +59,13 @@ calcite-action-bar {
     color: var(--calcite-ui-text-2);
     font-size: var(--calcite-font-size--1);
     overflow-y: auto;
-    max-height: calc(100vh - 220px);
+    height: calc(100vh - 100px);
     max-width: 350px;
   }
-
+.esri-ui-top-left .action-panel{
+  max-height: calc(100vh - 220px);
+  height: auto;;
+}
 
   
   .panel-title {

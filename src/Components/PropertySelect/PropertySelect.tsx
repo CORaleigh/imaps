@@ -99,9 +99,6 @@ export const PropertySelect = (props: any) => {
     setPointSketchViewModel(createSketchViewModels(new GraphicsLayer({ listMode: 'hide' }), props.view));
     setPolylineSketchViewModel(createSketchViewModels(new GraphicsLayer({ listMode: 'hide' }), props.view));
     setPolygonSketchViewModel(createSketchViewModels(new GraphicsLayer({ listMode: 'hide' }), props.view));
-    requestAnimationFrame(() => {
-      pointAction.current?.click();
-    });
   }, []);
 
   useEffect(() => {
