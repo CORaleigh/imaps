@@ -44,20 +44,20 @@ export const geometryChanged = (
 };
 
 export const setSearchParams = (features: __esri.Graphic[]): void => {
-  const pins: string[] = features.map((feature: __esri.Graphic) => {
+  const pin: string[] = features.map((feature: __esri.Graphic) => {
     return feature.getAttribute('PIN_NUM');
   });
   const url = new URL(window.location.toString());
   //const searchParams = new URLSearchParams();
-  if (pins) {
-    url.searchParams.set('pins', pins.toString());
-    const state = { pins: pins.toString() };
+  if (pin) {
+    url.searchParams.set('pin', pin.toString());
+    const state = { pin: pin.toString() };
     if (history.state) {
-      if (history.state.pins != state.pins) {
-        history.pushState({ pins: pins.toString() }, '', url.href);
+      if (history.state.pin != state.pin) {
+        history.pushState({ pin: pin.toString() }, '', url.href);
       }
     } else {
-      history.pushState({ pins: pins.toString() }, '', url.href);
+      history.pushState({ pin: pin.toString() }, '', url.href);
     }
 
     //url.searchParams

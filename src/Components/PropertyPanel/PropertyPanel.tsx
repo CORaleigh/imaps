@@ -7,7 +7,7 @@ const PropertyList = lazy(() => import('./PropertyList/PropertyList'));
 import { geometryChanged, setSearchParams } from './utils/property';
 import './PropertyPanel.scss';
 export const PropertyPanel = (props: any) => {
-  const state = useRef({ pins: '' });
+  const state = useRef({ pin: '' });
   const infoTab = useRef<HTMLCalciteTabTitleElement>(null);
   const listTab = useRef<HTMLCalciteTabTitleElement>(null);
 
@@ -204,22 +204,23 @@ export const PropertyPanel = (props: any) => {
         observer.observe(tab as Node, { attributes: true });
       });
       window.addEventListener('popstate', (e) => {
-        if (e.state?.pins === state.current?.pins) {
+        if (e.state?.pin === state.current?.pin) {
           history.back();
         } else {
-          if (e.state?.pins.length > 0) {
-            setWhere(`PIN_NUM in ('${decodeURIComponent(history.state?.pins.split(',').join(`','`))}')`);
-            setFilter(`PIN_NUM in ('${decodeURIComponent(history.state?.pins.split(',').join(`','`))}')`);
+          if (e.state?.pin.length > 0) {
+            setWhere(`PIN_NUM in ('${decodeURIComponent(history.state?.pin.split(',').join(`','`))}')`);
+            setFilter(`PIN_NUM in ('${decodeURIComponent(history.state?.pin.split(',').join(`','`))}')`);
           }
         }
         state.current = e.state;
       });
       const url = new URL(document.URL);
-      const pins = url.searchParams.get('pins');
-      if (pins) {
-        if (pins.length > 0) {
-          setWhere(`PIN_NUM in ('${decodeURIComponent(pins.split(',').join(`','`))}')`);
-          setFilter(`PIN_NUM in ('${decodeURIComponent(pins.split(',').join(`','`))}')`);
+      const pin = url.searchParams.get('pin');
+
+      if (pin) {
+        if (pin.length > 0) {
+          setWhere(`PIN_NUM in ('${decodeURIComponent(pin.split(',').join(`','`))}')`);
+          setFilter(`PIN_NUM in ('${decodeURIComponent(pin.split(',').join(`','`))}')`);
         }
       }
     }
