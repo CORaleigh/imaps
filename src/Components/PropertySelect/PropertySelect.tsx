@@ -21,6 +21,7 @@ export const PropertySelect = (props: any) => {
   const [distance, setDistance] = useState(0);
 
   const disableAllActions = () => {
+    debugger;
     [pointAction, lineAction, polygonAction, circleAction, rectangleAction, multipointAction].forEach((action) => {
       if (action.current) {
         action.current.active = false;
@@ -40,9 +41,9 @@ export const PropertySelect = (props: any) => {
     });
 
     sketchVM.on('create', (e: any) => {
-      if (e.state === 'cancel') {
-        disableAllActions();
-      }
+      // if (e.state === 'cancel') {
+      //   disableAllActions();
+      // }
       addGraphic(e, view, parseInt(distanceRef.current?.value as string)).then((geometry) => {
         if (parseInt(distanceRef.current?.value as string) > 0) {
           props.geometrySet(bufferGraphic(geometry, parseInt(distanceRef.current?.value as string), props.view));
