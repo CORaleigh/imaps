@@ -10,7 +10,7 @@
         "message": "This is the new version of iMAPS, the legacy version will be available for a limited time.",
         "link": {
           "text": "Legacy Version",
-          "url": "https://maps.raleighnc.gov/imaps",
+          "url": "https://maps.raleighnc.gov/imaps-legacy",
           "show": true
         }
       },
@@ -18,11 +18,9 @@
       {
         "title": "Help",
         "links": [
-          { "title": "Feedback", "href": "https://arcg.is/1GurDS" },
+          { "title": "Feedback", "href": "https://arcg.is/CW1TL" },
           { "title": "User Guide", "href": "https://maps.wakegov.com/imaps/iMAPShelpPDF.pdf" },
-          { "title": "Videos", "href": "https://www.wakegov.com/departments-government/geographic-information-services-gis/maps-apps-data/imaps-information#video" },
-          { "title": "FAQ", "href": "https://www.wakegov.com/departments-government/geographic-information-services-gis/maps-apps-data/imaps-information#faq" }
-
+          { "title": "Videos/FAQs", "href": "https://www.wakegov.com/departments-government/geographic-information-services-gis/maps-apps-data/imaps-information#video" }
         ]
       },
       {
