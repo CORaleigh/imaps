@@ -3,7 +3,7 @@
     "alert": {
         "show": true,
         "autoDismiss": true,
-        "duration": "fast",
+        "duration": "medium",
         "color": "blue",
         "icon": "information",
         "title": "New Version",
