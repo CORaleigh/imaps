@@ -28,10 +28,15 @@ export const createOverview = (view: __esri.MapView): __esri.MapView => {
 };
 const setGraphicSymbol = (overview: __esri.MapView): SimpleFillSymbol | undefined => {
   const scheme = type.getSchemes({ basemap: overview.map.basemap, geometryType: 'polygon' });
-  if (scheme.basemapTheme === 'light') {
+  const isImage =
+    overview.map.basemap.baseLayers.filter((layer: __esri.Layer) => {
+      return layer.type === 'imagery';
+    }).length > 0;
+  if (scheme.basemapTheme === 'light' && !isImage && !overview.map.basemap.title.includes('Dark')) {
     return new SimpleFillSymbol({ color: { r: 0, g: 0, b: 0 } as __esri.Color });
   }
-  if (scheme.basemapTheme === 'dark') {
+
+  if (scheme.basemapTheme === 'dark' || isImage || overview.map.basemap.title.includes('Dark')) {
     return new SimpleFillSymbol({ color: { r: 255, g: 255, b: 255 } as __esri.Color });
   }
 };
