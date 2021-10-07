@@ -1,9 +1,9 @@
 {
     "mapId": "95092428774c4b1fb6a3b6f5fed9fbc4",
     "alert": {
-        "show": false,
+        "show": true,
         "autoDismiss": true,
-        "duration": "fast",
+        "duration": "medium",
         "color": "blue",
         "icon": "information",
         "title": "New Version",
