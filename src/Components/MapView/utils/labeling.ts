@@ -71,16 +71,18 @@ const updateLabels = (labels: GraphicsLayer, view: __esri.MapView) => {
                   (layer as __esri.FeatureLayer).labelingInfo[0].labelExpression.replace('[', '').replace(']', ''),
                 );
                 const clipGeom = geometryEngine.clip(feature.geometry, view.extent) as __esri.Polygon;
-                const dupes = labels.graphics.filter((graphic) => {
-                  return geometryEngine.distance(clipGeom.centroid, graphic.geometry, 9002) < 5;
-                });
-                if (dupes.length === 0 && geometryEngine.within(clipGeom.centroid, clipGeom)) {
-                  labels.graphics.add(
-                    new Graphic({
-                      symbol: symbol,
-                      geometry: clipGeom.centroid,
-                    }),
-                  );
+                if (clipGeom) {
+                  const dupes = labels.graphics.filter((graphic) => {
+                    return geometryEngine.distance(clipGeom.centroid, graphic.geometry, 9002) < 5;
+                  });
+                  if (dupes.length === 0 && geometryEngine.within(clipGeom.centroid, clipGeom)) {
+                    labels.graphics.add(
+                      new Graphic({
+                        symbol: symbol,
+                        geometry: clipGeom.centroid,
+                      }),
+                    );
+                  }
                 }
               }
             }
