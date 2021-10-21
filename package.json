@@ -2,7 +2,7 @@
   "name": "imaps",
   "version": "4.0.1",
   "private": true,
-  "homepage": "https://coraleigh.github.io/imaps",
+  "homepage": "https://maps.raleighnc.gov/imaps",
   "dependencies": {
     "@arcgis/core": "^4.21.2",
     "@babel/core": "^7.15.0",
@@ -19,10 +19,11 @@
     "@vaadin/vaadin-button": "^2.4.0",
     "@vaadin/vaadin-grid": "^5.7.12",
     "@vaadin/vaadin-text-field": "^2.8.4",
-    "eslint": "^7.23.0",
+    "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-react": "^7.23.2",
+    "ga-4-react": "^0.1.281",
     "gh-pages": "^3.1.0",
     "husky": "^6.0.0",
     "lint-staged": "^10.5.4",
@@ -30,9 +31,11 @@
     "prettier": "^2.2.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-scripts": "^4.0.3",
     "typescript": "^4.2.4",
     "web-vitals": "^1.1.1"
+  },
+  "devDependencies": {
+    "react-scripts": "^4.0.3"
   },
   "scripts": {
     "start": "npm run copyIcons && npm run copyTheme && react-scripts start",

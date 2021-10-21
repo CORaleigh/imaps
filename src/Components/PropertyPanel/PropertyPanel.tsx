@@ -180,7 +180,6 @@ export const PropertyPanel = (props: any) => {
       document.querySelectorAll('calcite-tab-nav').forEach((tab) => {
         tab.addEventListener('calciteTabChange', (event) => {
           setReloadTable((event as any).detail.tab === 0 || (event as any).detail.tab === 'list');
-          console.log(featureRef.current);
         });
       });
 

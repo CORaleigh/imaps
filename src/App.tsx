@@ -14,6 +14,7 @@ import ActionContext from './Components/ActionContext';
 import '@esri/calcite-components/dist/calcite/calcite.css';
 import '@arcgis/core/assets/esri/themes/light/main.css';
 import Alert from './Components/Alert/Alert';
+
 function App() {
   const [theme, setTheme] = useState('dark');
   const [actions, setActions] = useState<any>(Actions);

@@ -57,12 +57,12 @@ const arcadeExpressionInfos = [
   {
     name: 'city',
     title: 'City',
-    expression: "var city = $feature.CITY_DECODE;When(IsEmpty(city),'Unincorporated', Proper(city));",
+    expression: "var city = $feature.CITY_DECODE;When(IsEmpty(city),'', Proper(city));",
   },
   {
     name: 'township',
     title: 'Township',
-    expression: "var ts = $feature.TOWNSHIP_DECODE;When(IsEmpty(ts),'None', Proper(ts));",
+    expression: "var ts = $feature.TOWNSHIP_DECODE;When(IsEmpty(ts),'', Proper(ts));",
   },
   {
     name: 'jurisdiction',
@@ -85,7 +85,7 @@ const arcadeExpressionInfos = [
       "juris == 'WE', 'Wendell'," +
       "juris == 'ZB', 'Zebulon'," +
       "juris == 'WC', 'Wake County'," +
-      " 'Wake County');",
+      " '');",
   },
   {
     name: 'general',
