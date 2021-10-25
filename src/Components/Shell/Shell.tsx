@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useContext, useEffect, useState, lazy, Suspense, useRef } from 'react';
-import GA4React from 'ga-4-react';
+// import GA4React from 'ga-4-react';
 
 import ReactDOM from 'react-dom';
 const MapView = lazy(() => {
@@ -66,7 +66,7 @@ export const Shell = () => {
   const [activeTool, setActiveTool] = useState<string>();
   const { actions, setActions } = useContext(ActionContext);
   const start = useRef<Date>();
-  const ga4react = useRef<GA4React>();
+  // const ga4react = useRef<GA4React>();
 
   //when feature is selected update featureSelected state and render PropertySelect
   const featureSelected = (feature: __esri.Graphic | undefined) => {
@@ -256,11 +256,11 @@ export const Shell = () => {
       });
       watchUtils.whenFalseOnce(mapView, 'updating', () => {
         if (start.current) {
-          ga4react.current?.event(
-            'Map loaded',
-            (new Date().getTime() - start.current.getTime() / 1000).toString(),
-            'Map',
-          );
+          // ga4react.current?.event(
+          //   'Map loaded',
+          //   ((new Date().getTime() - start.current.getTime()) / 1000).toString(),
+          //   'Map',
+          // );
           console.log(`Map fully loaded in ${(new Date().getTime() - start.current.getTime()) / 1000} seconds`);
         }
       });
@@ -273,11 +273,11 @@ export const Shell = () => {
       });
       mapView.whenLayerView(layer).then(() => {
         if (start.current) {
-          ga4react.current?.event(
-            'Map inialized',
-            (new Date().getTime() - start.current.getTime() / 1000).toString(),
-            'Map',
-          );
+          // ga4react.current?.event(
+          //   'Map inialized',
+          //   (new Date().getTime() - start.current.getTime() / 1000).toString(),
+          //   'Map',
+          // );
           console.log(`Map initialized in ${(new Date().getTime() - start.current.getTime()) / 1000} seconds`);
           setViewLoaded(true);
         }
@@ -459,16 +459,16 @@ export const Shell = () => {
   };
   useEffect(() => {
     start.current = new Date();
-    ga4react.current = new GA4React('G-WS0FB3FN0T');
-    ga4react.current.initialize().then(
-      (ga4) => {
-        ga4.pageview('path');
-        ga4.gtag('event', 'pageview', 'path'); // or your custom gtag event
-      },
-      (err) => {
-        console.error(err);
-      },
-    );
+    // ga4react.current = new GA4React('G-WS0FB3FN0T');
+    // ga4react.current.initialize().then(
+    //   (ga4) => {
+    //     ga4.pageview('path');
+    //     ga4.gtag('event', 'pageview', 'path'); // or your custom gtag event
+    //   },
+    //   (err) => {
+    //     console.error(err);
+    //   },
+    // );
     const theme = window.localStorage.getItem('imaps_theme') as string;
     const url = new URL(document.URL);
     const id = url.searchParams.get('id');

@@ -95,7 +95,7 @@ export const PropertyPanel = (props: any) => {
     setReloadTable(true);
   };
   const searchComplete = (result: any) => {
-    if (result.feature) {
+    if (result.feature || result.features.length === 1) {
       featureRef.current = result.features[0];
       props.featureSelected(result.features[0]);
       setInfoTabDisabled(false);

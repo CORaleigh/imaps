@@ -21,7 +21,6 @@ export const PropertySelect = (props: any) => {
   const [distance, setDistance] = useState(0);
 
   const disableAllActions = () => {
-    debugger;
     [pointAction, lineAction, polygonAction, circleAction, rectangleAction, multipointAction].forEach((action) => {
       if (action.current) {
         action.current.active = false;
