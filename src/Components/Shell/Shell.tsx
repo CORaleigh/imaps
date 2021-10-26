@@ -254,6 +254,10 @@ export const Shell = () => {
           setUpdating(false);
         }
       });
+    });
+
+    if (!viewCreated) {
+      view.current = mapView;
       watchUtils.whenFalseOnce(mapView, 'updating', () => {
         if (start.current) {
           // ga4react.current?.event(
@@ -261,13 +265,10 @@ export const Shell = () => {
           //   ((new Date().getTime() - start.current.getTime()) / 1000).toString(),
           //   'Map',
           // );
+          setUpdating(false);
           console.log(`Map fully loaded in ${(new Date().getTime() - start.current.getTime()) / 1000} seconds`);
         }
       });
-    });
-
-    if (!viewCreated) {
-      view.current = mapView;
       const layer = mapView.map.allLayers.find((layer) => {
         return layer.title.includes('Property') && layer.type === 'feature';
       });
