@@ -246,18 +246,19 @@ export const Shell = () => {
   };
   //after map has initiliazed
   const mapInitialized = async (mapView: __esri.MapView) => {
-    setTimeout(() => {
-      mapView.watch('updating', (updating) => {
-        if ((view.current as any).cursor === 'default') {
-          setUpdating(updating);
-        } else {
-          setUpdating(false);
-        }
-      });
+    //setTimeout(() => {
+    mapView.watch('updating', (updating) => {
+      if ((view.current as any).cursor === 'default') {
+        setUpdating(updating);
+      } else {
+        setUpdating(false);
+      }
     });
+    //});
 
     if (!viewCreated) {
       view.current = mapView;
+
       watchUtils.whenFalseOnce(mapView, 'updating', () => {
         if (start.current) {
           // ga4react.current?.event(
@@ -265,7 +266,6 @@ export const Shell = () => {
           //   ((new Date().getTime() - start.current.getTime()) / 1000).toString(),
           //   'Map',
           // );
-          setUpdating(false);
           console.log(`Map fully loaded in ${(new Date().getTime() - start.current.getTime()) / 1000} seconds`);
         }
       });

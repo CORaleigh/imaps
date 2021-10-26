@@ -26,22 +26,24 @@ export const layerListItemCreated = (event: any): void => {
       content: [slider, 'legend'],
       open: item.layer.visible,
     };
-    item.layer.watch('visible', (visible: boolean) => {
+  }
+  item.layer.watch('visible', (visible: boolean) => {
+    if (item.panel) {
       item.panel.open = visible;
-      if (visible) {
-        if (item.layer.parent) {
-          if (item.layer.parent.type === 'group') {
-            item.layer.parent.visible = true;
-          }
-        }
-        if (item.layer.parent.parent) {
-          if (item.layer.parent.parent.type === 'group') {
-            item.layer.parent.parent.visible = true;
-          }
+    }
+    if (visible) {
+      if (item.layer.parent) {
+        if (item.layer.parent.type === 'group') {
+          item.layer.parent.visible = true;
         }
       }
-    });
-  }
+      if (item.layer.parent.parent) {
+        if (item.layer.parent.parent.type === 'group') {
+          item.layer.parent.parent.visible = true;
+        }
+      }
+    }
+  });
   addPropertyLabelToggles(item);
 };
 export const togglePropertyLabels = (event: __esri.LayerListTriggerActionEvent) => {
