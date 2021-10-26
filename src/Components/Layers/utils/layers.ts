@@ -178,15 +178,24 @@ export const filterLayers = (value: string, layerList: __esri.LayerList): void =
       if (!value.length) {
         item.open = false;
         document
+          .getElementById(`${(layerList as any).id}_${(item as any).uid}__title`)
+          ?.parentElement?.parentElement?.parentElement?.removeAttribute('hidden');
+        document
           .querySelector(`#layerListDiv_${(item as any).uid}__title`)
           ?.parentElement?.parentElement?.parentElement?.removeAttribute('hidden');
       } else if (!open) {
         item.open = false;
         document
+          .getElementById(`${(layerList as any).id}_${(item as any).uid}__title`)
+          ?.parentElement?.parentElement?.parentElement?.setAttribute('hidden', '');
+        document
           .querySelector(`#layerListDiv_${(item as any).uid}__title`)
           ?.parentElement?.parentElement?.parentElement?.setAttribute('hidden', '');
       } else {
         item.open = true;
+        document
+          .getElementById(`${(layerList as any).id}_${(item as any).uid}__title`)
+          ?.parentElement?.parentElement?.parentElement?.removeAttribute('hidden');
         document
           .querySelector(`#layerListDiv_${(item as any).uid}__title`)
           ?.parentElement?.parentElement?.parentElement?.removeAttribute('hidden');
