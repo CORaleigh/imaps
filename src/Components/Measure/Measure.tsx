@@ -93,6 +93,7 @@ export const Measure = (props: any) => {
         document.querySelectorAll('#measureTools calcite-action').forEach((action) => {
           (action as HTMLCalciteActionElement).active = false;
         });
+        props.measurementActivated(measurement.current);
       }
       if (state === 'measured' && measurement.current) {
         measurement.current.view.popup.autoOpenEnabled = true;
