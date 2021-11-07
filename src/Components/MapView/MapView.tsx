@@ -77,6 +77,7 @@ export const MapView = (props: any) => {
       observer.observe(container as Node, { childList: true });
     });
     if (!loaded) {
+      console.log('creating map view');
       createMapView(mapRef.current, mapProperties, viewProperties).when((mapView: __esri.MapView) => {
         if (checkRequiredLayers(mapView)) {
           setLoaded(true);

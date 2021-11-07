@@ -261,11 +261,6 @@ export const Shell = () => {
 
       watchUtils.whenFalseOnce(mapView, 'updating', () => {
         if (start.current) {
-          // ga4react.current?.event(
-          //   'Map loaded',
-          //   ((new Date().getTime() - start.current.getTime()) / 1000).toString(),
-          //   'Map',
-          // );
           console.log(`Map fully loaded in ${(new Date().getTime() - start.current.getTime()) / 1000} seconds`);
         }
       });
@@ -274,11 +269,6 @@ export const Shell = () => {
       });
       mapView.whenLayerView(layer).then(() => {
         if (start.current) {
-          // ga4react.current?.event(
-          //   'Map inialized',
-          //   (new Date().getTime() - start.current.getTime() / 1000).toString(),
-          //   'Map',
-          // );
           console.log(`Map initialized in ${(new Date().getTime() - start.current.getTime()) / 1000} seconds`);
           setViewLoaded(true);
         }
