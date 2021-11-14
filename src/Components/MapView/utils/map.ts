@@ -90,6 +90,7 @@ export const enableStreetHitTest = (view: __esri.MapView, layer: __esri.FeatureL
 };
 
 export const customizePopup = (view: __esri.MapView) => {
+  debugger;
   const propertyLayer = view.map.allLayers.find((layer) => {
     return layer.type === 'feature' && layer.title.startsWith('Property');
   }) as __esri.FeatureLayer;
