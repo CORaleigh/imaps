@@ -24,13 +24,16 @@ export const layerListItemCreated = (event: any): void => {
     );
     item.panel = {
       content: [slider, 'legend'],
-      open: item.layer.visible,
+      open: false, //item.layer.visible,
     };
   }
+  item.open = item.layer.visible;
   item.layer.watch('visible', (visible: boolean) => {
-    if (item.panel) {
-      item.panel.open = visible;
-    }
+    // if (item.panel) {
+    //   item.panel.open = visible;
+    // }
+    item.open = visible;
+
     if (visible) {
       if (item.layer.parent) {
         if (item.layer.parent.type === 'group') {
