@@ -1,6 +1,6 @@
 {
   "name": "imaps",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "private": true,
   "homepage": "https://maps.raleighnc.gov/imaps",
   "dependencies": {

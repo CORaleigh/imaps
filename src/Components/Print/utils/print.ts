@@ -183,6 +183,9 @@ export const getTemplate = (
     showLabels: true,
     format: format,
     scalePreserved: true,
+    exportOptions: {
+      dpi: 200,
+    },
     layoutOptions: {
       titleText: title,
       scalebarUnit: 'Feet',
