@@ -29,13 +29,19 @@ const addBufferGraphic = (geometry: __esri.Geometry, view: __esri.MapView): void
   view.graphics.add(graphic);
 };
 export const bufferGraphic = (
-  geometry: __esri.Geometry,
+  geometry: __esri.Geometry[] | __esri.Geometry,
   bufferDistance: number,
   view: __esri.MapView,
 ): __esri.Geometry => {
-  geometry = geometryEngine.geodesicBuffer(geometry, bufferDistance, 'feet') as __esri.Geometry;
-  addBufferGraphic(geometry, view);
-  return geometry;
+  debugger;
+  let bufferGeometry = geometryEngine.geodesicBuffer(geometry, bufferDistance, 'feet', true) as
+    | __esri.Geometry[]
+    | __esri.Geometry;
+  if ('length' in bufferGeometry) {
+    bufferGeometry = (bufferGeometry as __esri.Geometry[])[0];
+  }
+  addBufferGraphic(bufferGeometry, view);
+  return bufferGeometry;
 };
 export const addGraphic = (e: any, view: __esri.MapView, distance: number): Promise<__esri.Geometry> => {
   return promiseUtils.create((resolve) => {

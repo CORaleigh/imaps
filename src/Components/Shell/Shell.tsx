@@ -75,6 +75,8 @@ export const Shell = () => {
     const action = actions.find((action) => {
       return action.title === 'Property Select';
     });
+    debugger;
+
     if (action && view.current) {
       const container = document.getElementById(action?.container);
       if (container) {
@@ -83,6 +85,7 @@ export const Shell = () => {
             <PropertySelect
               view={view.current}
               selectedFeature={feature}
+              selectedProperties={selectedProperties}
               geometrySet={geometryChanged}
               toolActivated={selectActivated}
               clear={clearSelection}
@@ -122,12 +125,33 @@ export const Shell = () => {
       <Suspense fallback={''}>
         <PropertyPanel
           propertiesSelected={propertiesSelected}
-          featureSelected={featureSelected}
+          featureSelected={selectedFeature}
           selectedProperties={properties}
         />
       </Suspense>,
       container,
     );
+    const action = actions.find((action) => {
+      return action.title === 'Property Select';
+    });
+    if (action && view.current && properties.length > 1) {
+      const container = document.getElementById(action?.container);
+      if (container) {
+        ReactDOM.render(
+          <Suspense fallback={''}>
+            <PropertySelect
+              view={view.current}
+              selectedFeature={selectedFeature}
+              selectedProperties={properties}
+              geometrySet={geometryChanged}
+              toolActivated={selectActivated}
+              clear={clearSelection}
+            />
+          </Suspense>,
+          container,
+        );
+      }
+    }
     setActions([...[], ...actions]);
   };
   const deactiveAllTools = () => {
@@ -401,6 +425,7 @@ export const Shell = () => {
                 view={view.current}
                 geometrySet={geometryChanged}
                 selectedFeature={selectedFeature}
+                selectedProperties={selectedProperties}
                 toolActivated={selectActivated}
                 activeTool={activeTool}
                 clear={clearSelection}

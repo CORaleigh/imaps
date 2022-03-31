@@ -96,6 +96,10 @@ export const PropertySelect = (props: any) => {
     setPolygonSketchViewModel(createSketchViewModels(new GraphicsLayer({ listMode: 'hide' }), props.view));
   }, []);
 
+  useEffect(() => {
+    debugger;
+  }, [props.selectedFeature]);
+
   return (
     <div className="panel">
       <div className="selectTools">
@@ -292,16 +296,31 @@ export const PropertySelect = (props: any) => {
           }}
         ></calcite-input>
       </calcite-label>
-      {props.selectedFeature && distance > 0 && (
+
+      {props.selectedFeature != undefined && distance > 0 && (
         <calcite-button
           onClick={() => {
             props.geometrySet(bufferGraphic(props.selectedFeature?.geometry, distance, props.view));
             //disableAllActions();
           }}
         >
-          Buffer Selected
+          Buffer Selected Property
         </calcite-button>
       )}
+      {props.selectedProperties.length > 1 && distance > 0 && (
+        <calcite-button
+          onClick={() => {
+            const geoms = props.selectedProperties.map((property: __esri.Graphic) => {
+              return property.geometry;
+            });
+            props.geometrySet(bufferGraphic(geoms, distance, props.view));
+            //disableAllActions();
+          }}
+        >
+          Buffer All Selected
+        </calcite-button>
+      )}
+      {props.selectedProperties.length}
     </div>
   );
 };
