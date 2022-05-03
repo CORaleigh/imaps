@@ -4,9 +4,9 @@
   "private": true,
   "homepage": "https://maps.raleighnc.gov/imaps",
   "dependencies": {
-    "@arcgis/core": "^4.21.2",
+    "@arcgis/core": "^4.23.7",
     "@babel/core": "^7.15.0",
-    "@esri/calcite-components": "^1.0.0-beta.66",
+    "@esri/calcite-components": "^1.0.0-beta.77",
     "@testing-library/jest-dom": "^5.11.10",
     "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^12.8.3",
@@ -23,10 +23,11 @@
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-react": "^7.23.2",
+    "eslint-plugin-react-hooks": "^4.6.0-next-99eef9e2d-20220503",
     "gh-pages": "^3.1.0",
     "husky": "^6.0.0",
     "lint-staged": "^10.5.4",
-    "node-sass": "^6.0.1",
+    "node-sass": "^7.0.1",
     "prettier": "^2.2.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -34,7 +35,7 @@
     "web-vitals": "^1.1.1"
   },
   "devDependencies": {
-    "react-scripts": "^4.0.3"
+    "react-scripts": "^5.0.1"
   },
   "scripts": {
     "start": "npm run copyIcons && npm run copyTheme && react-scripts start",
