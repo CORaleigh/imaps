@@ -36,11 +36,15 @@ const getSuggestions = (
   searchWidget: widgetsSearch,
 ) => {
   const whereArray: string[] = [];
+  const term: string = params.suggestTerm
+    .toUpperCase()
+    .replace(/'/g, "''")
+    .replace(/[\u2018\u2019]/g, "''");
   searchFields.forEach((field) => {
     if (startsWith) {
-      whereArray.push(`${field} LIKE '${params.suggestTerm.toUpperCase()}%'`);
+      whereArray.push(`${field} LIKE '${term}%'`);
     } else {
-      whereArray.push(`${field} LIKE '%${params.suggestTerm.toUpperCase()}%'`);
+      whereArray.push(`${field} LIKE '%${term}%'`);
     }
   });
   return layer
@@ -83,9 +87,13 @@ const getLayerSource = (
       return getSuggestions(params, name, table, outFields, orderByFields, searchFields, startsWith, searchWidget);
     },
     getResults: (params: any) => {
+      const term: string = params.suggestResult.text
+        .toUpperCase()
+        .replace(/'/g, "''")
+        .replace(/[\u2018\u2019]/g, "''");
       return table
         .queryFeatures({
-          where: `${orderByFields[0]} = '${params.suggestResult.text.toUpperCase()}'`,
+          where: `${orderByFields[0]} = '${term}'`,
           outFields: resultFields,
         })
         .then((results) => {
@@ -253,16 +261,16 @@ const wildcardSearch = (where: string, condoTable: FeatureLayer): Promise<__esri
 const getWildcardSearchWhere = (searchFields: string[], term: string): string => {
   let where = '';
   if (!searchFields.length) {
-    where = `SITE_ADDRESS like '%${term.toUpperCase()}%' OR FULL_STREET_NAME like '%${term.toUpperCase()}%' OR OWNER like '%${term.toUpperCase()}%' OR REID like '${term.toUpperCase()}%' OR PIN_NUM like '${term.toUpperCase()}%'`;
+    where = `SITE_ADDRESS like '%${term}%' OR FULL_STREET_NAME like '%${term}%' OR OWNER like '%${term}%' OR REID like '${term}%' OR PIN_NUM like '${term}%'`;
   } else {
     if (searchFields.includes('OWNER')) {
-      where = `OWNER like '_%${term.toUpperCase()}%'`;
+      where = `OWNER like '_%${term}%'`;
     }
     if (searchFields.includes('PIN_NUM')) {
-      where = `PIN_NUM like '%${term.toUpperCase()}%'`;
+      where = `PIN_NUM like '%${term}%'`;
     }
     if (searchFields.includes('REID')) {
-      where = `REID like '%${term.toUpperCase()}%'`;
+      where = `REID like '%${term}%'`;
     }
   }
   return where;
@@ -275,7 +283,11 @@ export const searchComplete = (event: __esri.SearchSearchCompleteEvent): Promise
       if (search.activeSource) {
         searchFields = (search.activeSource as LayerSearchSource)?.searchFields;
       }
-      const where = getWildcardSearchWhere(searchFields, event.searchTerm);
+      const term: string = event.searchTerm
+        .toUpperCase()
+        .replace(/'/g, "''")
+        .replace(/[\u2018\u2019]/g, "''");
+      const where = getWildcardSearchWhere(searchFields, term);
       resolve(wildcardSearch(where, condos));
     }
     if (event.numResults) {
