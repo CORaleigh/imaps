@@ -33,3 +33,7 @@ calcite-input input, textarea {
 calcite-tooltip {
   z-index: 10000;
 }
+.esri-feature-table {
+  height: calc(100% - 100px) !important;
+  overflow: auto;
+}
