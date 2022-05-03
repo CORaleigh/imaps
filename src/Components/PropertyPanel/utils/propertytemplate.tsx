@@ -769,6 +769,7 @@ export const createTemplate = (view: __esri.MapView | __esri.SceneView, condoTab
             customParameters: {
               outSR: view.spatialReference,
               orderByFields: 'ADDRESS',
+              returnGeometry: true,
             },
           });
           return addresses
