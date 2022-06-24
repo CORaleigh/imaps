@@ -33,9 +33,10 @@ export const PropertyInfo = (props: any) => {
           if (featureWidget.current) {
             featureWidget.current.graphic = props.feature;
           }
-          requestAnimationFrame(() => {
-            document.querySelector('.esri-feature')?.parentElement?.scrollTo({ top: 0, behavior: 'smooth' });
-          });
+          const scroll = document.querySelector('.esri-feature')?.scrollTop;
+          setTimeout(() => {
+            document.querySelector('.esri-feature')?.scrollTo({ top: scroll, behavior: 'smooth' });
+          }, 1000);
         });
       } else {
         featureWidget.current.graphic = props.feature;

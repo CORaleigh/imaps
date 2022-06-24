@@ -14,6 +14,7 @@ import Extent from '@arcgis/core/geometry/Extent';
 import * as type from '@arcgis/core/smartMapping/symbology/type';
 import Collection from '@arcgis/core/core/Collection';
 import { handlePolygonLabels } from './labeling';
+import { features } from 'process';
 
 export const createSelectionLayer = (view: __esri.MapView) => {
   const layer = new FeatureLayer({
@@ -77,15 +78,34 @@ export const createSelectionLayer = (view: __esri.MapView) => {
 
 export const enableStreetHitTest = (view: __esri.MapView, layer: __esri.FeatureLayer): __esri.Handle => {
   return view.on('click', (e: __esri.ViewClickEvent) => {
-    const opacity = layer.opacity;
-    const visible = layer.visible;
-    layer.visible = true;
-    layer.opacity = 0.001;
+    layer
+      .queryFeatures({
+        geometry: e.mapPoint,
+        outFields: ['*'],
+        returnGeometry: true,
+        outSpatialReference: view.spatialReference,
+        distance: 5,
+        units: 'feet',
+      })
+      .then((featureSet) => {
+        if (featureSet.features.length) {
+          featureSet.features.forEach((feature) => {
+            feature.set('popupTemplate', layer.popupTemplate);
+          });
 
-    view.hitTest(view.toScreen(e.mapPoint), { include: [layer] }).then(() => {
-      layer.opacity = opacity;
-      layer.visible = visible;
-    });
+          view.popup.open({ location: e.mapPoint, features: view.popup.features.concat(featureSet.features) });
+        }
+      });
+    // const opacity = layer.opacity;
+    // const visible = layer.visible;
+    // layer.visible = true;
+    // layer.opacity = 1;
+    // view.hitTest(view.toScreen(e.mapPoint), { include: [layer] }).then(() => {
+    //   setTimeout(() => {
+    //     layer.opacity = opacity;
+    //     layer.visible = visible;
+    //   });
+    // });
   });
 };
 
