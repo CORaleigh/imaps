@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React, { useEffect, useRef } from 'react';
 import FeatureTable from '@arcgis/core/widgets/FeatureTable';
@@ -8,7 +7,8 @@ export const AddressTable = (props: any) => {
   const tableRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    (props.layer as __esri.FeatureLayer).definitionExpression = `NCPIN = '${props.pin}'`;
+    (props.layer as __esri.FeatureLayer).definitionExpression = `OBJECTID IS NULL`;
+    console.log(props.geometry);
     const table = new FeatureTable({
       layer: props.layer,
       container: tableRef.current as HTMLDivElement,
@@ -29,8 +29,13 @@ export const AddressTable = (props: any) => {
       ],
     });
     setTimeout(() => {
-      const grid = (table.container as HTMLElement).querySelector('vaadin-grid');
+      table.filterGeometry = props.geometry;
+      (props.layer as __esri.FeatureLayer).definitionExpression = `ADDRESS NOT LIKE 'EN%'`;
+      table.refresh();
+    });
 
+    setTimeout(() => {
+      const grid = (table.container as HTMLElement).querySelector('vaadin-grid');
       grid?.addEventListener('click', (e) => {
         if ((e.target as HTMLElement).nodeName === 'VAADIN-GRID-CELL-CONTENT') {
           //grid.selectItem((grid.getEventContext(e) as any)?.item);
@@ -51,6 +56,9 @@ export const AddressTable = (props: any) => {
         }
       });
     }, 2000);
+    return () => {
+      table && table.destroy();
+    };
   }, []); // only after initial render
 
   return <div id="addressTable" ref={tableRef}></div>;

@@ -1,14 +1,11 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 
-import * as promiseUtils from '@arcgis/core/core/promiseUtils';
 import SpatialReference from '@arcgis/core/geometry/SpatialReference';
 import esriRequest from '@arcgis/core/request';
 import * as print from '@arcgis/core/rest/print';
-import LegendLayer from '@arcgis/core/tasks/support/LegendLayer';
-import PrintParameters from '@arcgis/core/tasks/support/PrintParameters';
-import PrintTemplate from '@arcgis/core/tasks/support/PrintTemplate';
+import LegendLayer from '@arcgis/core/rest/support/LegendLayer';
+import PrintParameters from '@arcgis/core/rest/support/PrintParameters';
+import PrintTemplate from '@arcgis/core/rest/support/PrintTemplate';
 import { printTemplates } from './templates';
 type Layout = {
   label: string;
@@ -21,7 +18,7 @@ type MapScale = {
   label: string;
 };
 export const getFormats = (url: string): Promise<string[]> => {
-  return promiseUtils.create((resolve, reject) =>
+  return new Promise((resolve, reject) =>
     esriRequest(url, { query: { f: 'json' } })
       .then((result) => {
         result.data.parameters.forEach((parameter: any) => {
@@ -37,7 +34,7 @@ export const getFormats = (url: string): Promise<string[]> => {
 };
 
 export const getLayouts = (): Promise<Layout[]> => {
-  return promiseUtils.create((resolve) => {
+  return new Promise((resolve) => {
     //esriRequest(url, { query: { f: 'json' } })
     //.then((result) => {
     const layouts: Layout[] = [];
@@ -208,7 +205,7 @@ export const exportMap = (
   view: __esri.MapView,
   oldScale: number,
 ): Promise<__esri.PrintResponse> => {
-  return promiseUtils.create((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     print
       .execute(
         url,

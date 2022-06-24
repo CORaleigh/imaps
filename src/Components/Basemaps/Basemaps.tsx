@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React, { useEffect, useRef } from 'react';
 import BasemapGallery from '@arcgis/core/widgets/BasemapGallery';

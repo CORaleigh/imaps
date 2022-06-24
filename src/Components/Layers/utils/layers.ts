@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import Collection from '@arcgis/core/core/Collection';
 import ActionToggle from '@arcgis/core/support/actions/ActionToggle';
 export const layerListItemCreated = (event: any): void => {

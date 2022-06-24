@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import Graphic from '@arcgis/core/Graphic';
 import * as geometryEngine from '@arcgis/core/geometry/geometryEngine';
-import * as promiseUtils from '@arcgis/core/core/promiseUtils';
 
 export const removeBufferGraphic = (view: __esri.MapView): void => {
   const graphics = view.graphics.filter((graphic) => {
@@ -38,7 +37,7 @@ export const bufferGraphic = (
   return geometry;
 };
 export const addGraphic = (e: any, view: __esri.MapView, distance: number): Promise<__esri.Geometry> => {
-  return promiseUtils.create((resolve) => {
+  return new Promise((resolve) => {
     if (e.state === 'complete') {
       removeBufferGraphic(view);
       const geometry = e.graphic.geometry;

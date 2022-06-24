@@ -1,11 +1,9 @@
-import * as promiseUtils from '@arcgis/core/core/promiseUtils';
 export const geometryChanged = (
   view: __esri.MapView,
   layer: __esri.FeatureLayer,
   geometry: __esri.Geometry,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> => {
-  return promiseUtils.create((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     if (geometry != undefined) {
       layer
         ?.queryFeatures({

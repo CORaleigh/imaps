@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import Collection from '@arcgis/core/core/Collection';
 import LayerSearchSource from '@arcgis/core/widgets/Search/LayerSearchSource';
 
 import widgetsSearch from '@arcgis/core/widgets/Search';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
-import * as promiseUtils from '@arcgis/core/core/promiseUtils';
 let condos: FeatureLayer;
 let addresses: FeatureLayer;
 let search: widgetsSearch;
@@ -109,7 +107,7 @@ const getLayerSource = (
 };
 
 const getProperty = (oids: number[]): Promise<__esri.Graphic[]> => {
-  return promiseUtils.create((resolve) => {
+  return new Promise((resolve) => {
     const relationship = condos.relationships.find((r) => {
       return r.name === 'CONDO_PROPERTY';
     });
@@ -142,7 +140,7 @@ const getProperty = (oids: number[]): Promise<__esri.Graphic[]> => {
   });
 };
 const searchRelatedCondos = (oids: number[], layer: __esri.FeatureLayer) => {
-  return promiseUtils.create((resolve) => {
+  return new Promise((resolve) => {
     const relationship = layer.relationships.find((r) => {
       return r.name === 'ADDRESSES_CONDO';
     });
@@ -179,7 +177,7 @@ const searchRelatedCondos = (oids: number[], layer: __esri.FeatureLayer) => {
 //     searchCondos(where, []);
 // };
 export const searchCondos = (where: string, oids: number[]): Promise<any> => {
-  return promiseUtils.create((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const params: any = { outFields: ['*'] };
     if (where != '') {
       params.where = where;
@@ -210,7 +208,7 @@ export const searchCondos = (where: string, oids: number[]): Promise<any> => {
   });
 };
 const searchResultSelected = (layer: FeatureLayer, source: string, results: any, term: string) => {
-  return promiseUtils.create((resolve) => {
+  return new Promise((resolve) => {
     if (!layer && source === 'Owner') {
       layer = condos;
     }
@@ -241,8 +239,8 @@ const searchResultSelected = (layer: FeatureLayer, source: string, results: any,
     }
   });
 };
-const wildcardSearch = (where: string, condoTable: FeatureLayer): Promise<__esri.FeatureSet> => {
-  return promiseUtils.create((resolve) => {
+const wildcardSearch = (where: string, condoTable: FeatureLayer): Promise<any> => {
+  return new Promise((resolve) => {
     document.querySelector('.esri-search__warning-menu')?.setAttribute('style', 'visibility: hidden');
 
     const oids: number[] = [];
@@ -277,7 +275,7 @@ const getWildcardSearchWhere = (searchFields: string[], term: string): string =>
 };
 
 export const searchComplete = (event: __esri.SearchSearchCompleteEvent): Promise<any> => {
-  return promiseUtils.create((resolve) => {
+  return new Promise((resolve) => {
     if (!search.viewModel.selectedSuggestion) {
       let searchFields: string[] = [];
       if (search.activeSource) {

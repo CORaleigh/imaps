@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 let stateHandle: __esri.WatchHandle;
 let lastInRaleigh = false;
@@ -6,7 +5,6 @@ let boundary: __esri.Geometry;
 import esriRequest from '@arcgis/core/request';
 import Polygon from '@arcgis/core/geometry/Polygon';
 import * as geometryEngine from '@arcgis/core/geometry/geometryEngine';
-import * as promiseUtils from '@arcgis/core/core/promiseUtils';
 import * as type from '@arcgis/core/smartMapping/symbology/type';
 //import Collection from '@arcgis/core/core/Collection';
 //import BasemapGalleryItem from '@arcgis/core/widgets/BasemapGallery/support/BasemapGalleryItem';
@@ -160,7 +158,7 @@ export const filterBasemaps = (item: __esri.Basemap): boolean => {
 };
 
 export const getBoundary = (view: __esri.MapView): Promise<__esri.Geometry> => {
-  return promiseUtils.create((resolve) => {
+  return new Promise((resolve) => {
     esriRequest(
       'https://maps.raleighnc.gov/images/rest/services/Orthos2020/ImageServer/queryBoundary?outSR=102100&f=json',
       { responseType: 'json' },

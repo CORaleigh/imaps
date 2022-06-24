@@ -1,12 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React, { useEffect, useRef } from 'react';
 import BookmarksWidget from '@arcgis/core/widgets/Bookmarks';
 import WebMap from '@arcgis/core/WebMap';
-import * as promiseUtils from '@arcgis/core/core/promiseUtils';
 
-const checkSavedBookmarks = (): Promise<any[]> => {
-  return promiseUtils.create((resolve) => {
+const checkSavedBookmarks = (): Promise<__esri.Collection<__esri.Bookmark>> => {
+  return new Promise((resolve) => {
     if (window.localStorage.getItem('imaps')) {
       const webmap: WebMap = WebMap.fromJSON(JSON.parse(window.localStorage.getItem('imaps') as string));
       webmap.load().then(() => {

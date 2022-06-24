@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import FeatureTable from '@arcgis/core/widgets/FeatureTable';
 import FieldColumnConfig from '@arcgis/core/widgets/FeatureTable/FieldColumnConfig';
 import ButtonMenuItem from '@arcgis/core/widgets/FeatureTable/Grid/support/ButtonMenuItem';

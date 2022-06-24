@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import PopupTemplate from '@arcgis/core/PopupTemplate';
 import ExpressionInfo from '@arcgis/core/popup/ExpressionInfo';
@@ -7,7 +6,6 @@ import CustomContent from '@arcgis/core/popup/content/CustomContent';
 //import * as geodesicUtils from '@arcgis/core/geometry/support/geodesicUtils';
 import Feature from '@arcgis/core/widgets/Feature';
 import FieldInfo from '@arcgis/core/popup/FieldInfo';
-import * as promiseUtils from '@arcgis/core/core/promiseUtils';
 import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { services } from '../../../config/config';
@@ -282,7 +280,7 @@ const wellCreator = (e: any, view: __esri.MapView) => {
 };
 
 export const getPhotos = (feature: __esri.Graphic): Promise<__esri.MediaInfo[]> => {
-  return promiseUtils.create(function (resolve) {
+  return new Promise(function (resolve) {
     const relationship = (feature.layer as FeatureLayer)?.relationships.find((r) => {
       return r.name === 'CONDO_PHOTOS';
     });
@@ -772,25 +770,28 @@ export const createTemplate = (view: __esri.MapView | __esri.SceneView, condoTab
               returnGeometry: true,
             },
           });
-          return addresses
-            .queryFeatureCount({ where: `NCPIN = '${graphic.getAttribute('PIN_NUM')}'` })
-            .then((count) => {
-              if (count > 0) {
-                const suspense = (
-                  <Suspense fallback={''}>
-                    <AddressTable
-                      layer={addresses}
-                      view={view}
-                      geometry={graphic.geometry}
-                      pin={graphic.getAttribute('PIN_NUM')}
-                    />
-                  </Suspense>
-                );
-                ReactDOM.render(suspense, tablediv);
+          return (
+            addresses
+              //.queryFeatureCount({ where: `NCPIN = '${graphic.getAttribute('PIN_NUM')}'` })
+              .queryFeatureCount({ geometry: graphic.geometry })
+              .then((count) => {
+                if (count > 0) {
+                  const suspense = (
+                    <Suspense fallback={''}>
+                      <AddressTable
+                        layer={addresses}
+                        view={view}
+                        geometry={graphic.geometry}
+                        pin={graphic.getAttribute('PIN_NUM')}
+                      />
+                    </Suspense>
+                  );
+                  ReactDOM.render(suspense, tablediv);
 
-                return container;
-              }
-            });
+                  return container;
+                }
+              })
+          );
         },
       }),
       // {

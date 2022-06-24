@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import * as promiseUtils from '@arcgis/core/core/promiseUtils';
 import { GridElement } from '@vaadin/vaadin-grid';
 import { GridSortColumnElement } from '@vaadin/vaadin-grid/vaadin-grid-sort-column';
 export const setColumnRenderer = (grid: GridElement, layer: __esri.FeatureLayer): void => {
@@ -57,7 +55,7 @@ export const createColumns = (layer: __esri.FeatureLayer): any[] => {
   return columns;
 };
 export const createFeatureTable = (layer: __esri.FeatureLayer): Promise<any[]> => {
-  return promiseUtils.create((resolve) => {
+  return new Promise((resolve) => {
     layer.load().then(() => {
       //   layer.popupTemplate.fieldInfos.forEach((field) => {
       //     if (['SITE_ADDRESS', 'OWNER', 'PIN_NUM', 'PIN_EXT', 'REID'].includes(field.fieldName)) {

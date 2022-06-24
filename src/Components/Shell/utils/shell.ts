@@ -2,7 +2,6 @@
 
 import React from 'react';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 const panelDismissedChange = (e: Event) => {
   const shellPanel = (e.target as HTMLElement)?.parentElement;
   (shellPanel as HTMLCalciteShellPanelElement).collapsed = (e.target as HTMLCalcitePanelElement)?.dismissed;

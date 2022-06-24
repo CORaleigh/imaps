@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import * as promiseUtils from '@arcgis/core/core/promiseUtils';
-import Locator from '@arcgis/core/tasks/Locator';
+import { addressToLocations } from '@arcgis/core/rest/locator';
 import LayerSearchSource from '@arcgis/core/widgets/Search/LayerSearchSource';
 import LocatorSearchSource from '@arcgis/core/widgets/Search/LocatorSearchSource';
 //import CIMSymbol from '@arcgis/core/symbols/CIMSymbol';
@@ -10,17 +8,17 @@ import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import Graphic from '@arcgis/core/Graphic';
 import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 import Color from '@arcgis/core/Color';
-export const addLocationSearch = (view: __esri.MapView): Promise<LayerSearchSource> => {
-  return promiseUtils.create((resolve) => {
-    const locator = new Locator({
-      url: 'https://maps.raleighnc.gov/arcgis/rest/services/Locators/Locator/GeocodeServer',
-      outSpatialReference: view.spatialReference,
-    });
+export const addLocationSearch = (): Promise<LocatorSearchSource> => {
+  return new Promise((resolve) => {
+    // const locator = new Locator({
+    //   url: 'https://maps.raleighnc.gov/arcgis/rest/services/Locators/Locator/GeocodeServer',
+    //   outSpatialReference: view.spatialReference,
+    // });
 
     const source = new LocatorSearchSource({
       name: 'Street Address',
       placeholder: 'Enter an address',
-      locator: locator,
+      url: 'https://maps.raleighnc.gov/arcgis/rest/services/Locators/Locator/GeocodeServer',
       autoNavigate: true,
       resultSymbol: new PictureMarkerSymbol({ url: 'assets/pin.svg', height: 36, width: 36 }), //new CIMSymbol(pinSymbol as any),
     });
@@ -28,7 +26,7 @@ export const addLocationSearch = (view: __esri.MapView): Promise<LayerSearchSour
   });
 };
 export const addIntersectionSource = (): Promise<LayerSearchSource> => {
-  return promiseUtils.create((resolve) => {
+  return new Promise((resolve) => {
     const layer = new FeatureLayer({
       portalItem: {
         id: 'edb2153e06c2477995f95b27e5c24661',
@@ -49,7 +47,7 @@ export const addIntersectionSource = (): Promise<LayerSearchSource> => {
 };
 
 export const getIntersectingStreets = (layer: FeatureLayer, geometry: __esri.Geometry): Promise<__esri.Graphic[]> => {
-  return promiseUtils.create((resolve) => {
+  return new Promise((resolve) => {
     layer
       .queryFeatures({ geometry: geometry, outFields: ['OBJECTID', 'CARTONAME'], returnGeometry: true })
       .then((featureSet) => {
@@ -102,19 +100,21 @@ export const intersectionSelected = (
     return intersection.getObjectId() === objectId;
   }) as __esri.Graphic;
 
-  const locator = new Locator({
-    url: 'https://maps.raleighnc.gov/arcgis/rest/services/Locators/CompositeLocator/GeocodeServer',
-    outSpatialReference: view.spatialReference,
+  // const loc = new locator({
+  //   url: 'https://maps.raleighnc.gov/arcgis/rest/services/Locators/CompositeLocator/GeocodeServer',
+  //   outSpatialReference: view.spatialReference,
+  // });
+
+  addressToLocations('https://maps.raleighnc.gov/arcgis/rest/services/Locators/CompositeLocator/GeocodeServer', {
+    address: {
+      outSpatialReference: view.spatialReference,
+      street: `${street.getAttribute('CARTONAME')} & ${intersection.getAttribute('CARTONAME')}`,
+    },
+  }).then((candidates: any) => {
+    if (candidates.length) {
+      view.goTo({ target: candidates[0].location, zoom: 17 }, { duration: 1000, easing: 'ease' });
+      removeGraphics(view);
+      addGraphics(view, candidates[0].location);
+    }
   });
-  locator
-    .addressToLocations({
-      address: { street: `${street.getAttribute('CARTONAME')} & ${intersection.getAttribute('CARTONAME')}` },
-    })
-    .then((candidates) => {
-      if (candidates.length) {
-        view.goTo({ target: candidates[0].location, zoom: 17 }, { duration: 1000, easing: 'ease' });
-        removeGraphics(view);
-        addGraphics(view, candidates[0].location);
-      }
-    });
 };

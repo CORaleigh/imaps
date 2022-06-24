@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React, { useEffect, useRef, useState } from 'react';
 import SearchWidget from '@arcgis/core/widgets/Search';
@@ -52,7 +51,7 @@ export const LocationSearch = (props: any) => {
       search.sources.add(source);
     });
 
-    addLocationSearch(props.view).then((source) => {
+    addLocationSearch().then((source) => {
       search.sources.add(source);
     });
     const feature = new Feature({ view: props.view, container: featureRef.current as HTMLDivElement });

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import Graphic from '@arcgis/core/Graphic';
 import MapNotesLayer from '@arcgis/core/layers/MapNotesLayer';
 import SketchViewModel from '@arcgis/core/widgets/Sketch/SketchViewModel';

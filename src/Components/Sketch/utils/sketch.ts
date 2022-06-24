@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import Sketch from '@arcgis/core/widgets/Sketch';
 import Color from '@arcgis/core/Color';
 

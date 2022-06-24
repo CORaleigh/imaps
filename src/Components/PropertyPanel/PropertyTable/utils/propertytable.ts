@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import * as promiseUtils from '@arcgis/core/core/promiseUtils';
 import { GridElement } from '@vaadin/vaadin-grid';
 import { GridColumnElement } from '@vaadin/vaadin-grid/src/vaadin-grid-column';
 import { GridSortColumnElement } from '@vaadin/vaadin-grid/vaadin-grid-sort-column';
@@ -98,7 +96,7 @@ const configureMenuButton = (
 };
 
 export const createFeatureTable = (layer: __esri.FeatureLayer): Promise<any[]> => {
-  return promiseUtils.create((resolve) => {
+  return new Promise((resolve) => {
     layer.load().then(() => {
       layer.popupTemplate.fieldInfos.forEach((field) => {
         if (['SITE_ADDRESS', 'OWNER', 'PIN_NUM', 'PIN_EXT', 'REID'].includes(field.fieldName)) {
@@ -148,7 +146,7 @@ export const createColumns = (layer: __esri.FeatureLayer): any[] => {
 
 export const getFeatures = (layer: __esri.FeatureLayer, filter: string, grid: GridElement): Promise<number> => {
   definitionExpression = filter;
-  return promiseUtils.create((resolve) => {
+  return new Promise((resolve) => {
     layer
       .queryFeatures({ where: filter, returnGeometry: true, outFields: ['*'] })
       .then((featureSet: __esri.FeatureSet) => {
