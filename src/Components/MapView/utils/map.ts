@@ -14,7 +14,6 @@ import Extent from '@arcgis/core/geometry/Extent';
 import * as type from '@arcgis/core/smartMapping/symbology/type';
 import Collection from '@arcgis/core/core/Collection';
 import { handlePolygonLabels } from './labeling';
-import { features } from 'process';
 
 export const createSelectionLayer = (view: __esri.MapView) => {
   const layer = new FeatureLayer({

@@ -95,12 +95,12 @@ const arcadeExpressionInfos = [
       '$feature.PLANNING_JURISDICTION+TextFormatting.NewLine+"Township"+TextFormatting.NewLine+Proper($feature.TOWNSHIP_DECODE)+"Map Name"+TextFormatting.NewLine+' +
       '$feature.MAP_NAME+TextFormatting.NewLine+"Land Class"+TextFormatting.NewLine+Proper($feature.LAND_CLASS_DECODE)',
   },
-  {
-    name: 'addresses',
-    title: 'Addresses',
-    expression:
-      "var rel = FeatureSetByRelationshipName($feature, 'CONDO_PROPERTY', ['*'], true);var test = Array(Count(rel));var cnt = 0;var f = First(rel);var fs = FeatureSetByPortalItem(Portal('https://ral.maps.arcgis.com/'), '318be24592ea4dcba042511b3125fd53', 2, ['ADDRESS','FEATURETYPE']);var containfs = Contains(f, fs);var addresses = Array(Count(containfs));var cnt = 0;for (var i in containfs){        addresses[cnt] = {'ADDRESS': i['ADDRESS'], 'FEATURETYPE': i['FEATURETYPE']};    cnt+=1;}function sortAddresses(a,b) {    return  a['ADDRESS'] > b['ADDRESS'];}var sorted =  Sort(addresses, sortAddresses);var list = '';for (var i in sorted) {    list += sorted[i]['ADDRESS'] + ' (' + sorted[i]['FEATURETYPE'] + ')' + TextFormatting.NewLine;}return list;",
-  },
+  // {
+  //   name: 'addresses',
+  //   title: 'Addresses',
+  //   expression:
+  //     "var rel = FeatureSetByRelationshipName($feature, 'CONDO_PROPERTY', ['*'], true);var test = Array(Count(rel));var cnt = 0;var f = First(rel);var fs = FeatureSetByPortalItem(Portal('https://ral.maps.arcgis.com/'), '318be24592ea4dcba042511b3125fd53', 2, ['ADDRESS','FEATURETYPE']);var containfs = Contains(f, fs);var addresses = Array(Count(containfs));var cnt = 0;for (var i in containfs){        addresses[cnt] = {'ADDRESS': i['ADDRESS'], 'FEATURETYPE': i['FEATURETYPE']};    cnt+=1;}function sortAddresses(a,b) {    return  a['ADDRESS'] > b['ADDRESS'];}var sorted =  Sort(addresses, sortAddresses);var list = '';for (var i in sorted) {    list += sorted[i]['ADDRESS'] + ' (' + sorted[i]['FEATURETYPE'] + ')' + TextFormatting.NewLine;}return list;",
+  // },
 ] as ExpressionInfo[];
 
 const scrollToService = (e: any) => {

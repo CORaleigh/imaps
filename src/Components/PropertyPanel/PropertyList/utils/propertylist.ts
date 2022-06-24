@@ -1,42 +1,40 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
 import FeatureTable from '@arcgis/core/widgets/FeatureTable';
-import FieldColumnConfig from '@arcgis/core/widgets/FeatureTable/FieldColumnConfig';
+import FieldColumnTemplate from '@arcgis/core/widgets/FeatureTable/support/FieldColumnTemplate';
+import TableTemplate from '@arcgis/core/widgets/FeatureTable/support/TableTemplate';
 import ButtonMenuItem from '@arcgis/core/widgets/FeatureTable/Grid/support/ButtonMenuItem';
-const getColumns = (layer: __esri.FeatureLayer): FieldColumnConfig[] => {
-  const columns: FieldColumnConfig[] = [];
+const getTableTemplate = (layer: __esri.FeatureLayer): TableTemplate => {
+  const tableTemplate: TableTemplate = new TableTemplate({ columnTemplates: [] });
 
   const ignoreFields = ['OBJECTID', 'PARCELPK', 'GlobalID'];
   const showColumns = ['SITE_ADDRESS', 'OWNER', 'REID', 'PIN_NUM', 'PIN_EXT'];
   showColumns.forEach((columnName) => {
-    const field = layer.fields.find((column) => {
-      return column.name === columnName;
-    }) as __esri.Field;
-
-    const config = new FieldColumnConfig({
-      alias: field.alias,
-      name: field.name,
-      field: field,
-      layer: layer,
-      visible: showColumns.includes(field.name),
+    const field = layer.popupTemplate.fieldInfos.find((column) => {
+      return column.fieldName === columnName;
+    }) as __esri.FieldInfo;
+    console.log(field);
+    const columnTemplate = new FieldColumnTemplate({
+      label: field.label,
+      fieldName: field.fieldName,
+      visible: showColumns.includes(field.fieldName),
       editable: false,
     } as any);
-    columns.push(config);
+    tableTemplate.columnTemplates.push(columnTemplate);
   });
-  layer.fields.forEach((field) => {
-    if (!ignoreFields.includes(field.name) && !showColumns.includes(field.name)) {
-      columns.push(
-        new FieldColumnConfig({
-          alias: field.alias,
-          name: field.name,
-          field: field,
-          layer: layer,
-          visible: showColumns.includes(field.name),
+  layer.popupTemplate.fieldInfos.forEach((field) => {
+    if (!ignoreFields.includes(field.fieldName) && !showColumns.includes(field.fieldName)) {
+      tableTemplate.columnTemplates.push(
+        new FieldColumnTemplate({
+          label: field.label,
+          fieldName: field.fieldName,
+          visible: showColumns.includes(field.fieldName),
+          editable: false,
         } as any),
       );
     }
   });
-  return columns;
+  return tableTemplate;
 };
 
 const exportTable = (layer: __esri.FeatureLayer): void => {
@@ -90,7 +88,8 @@ export const createFeatureTable = async (
   const table = new FeatureTable({
     layer: layer,
     container: ref.current as HTMLDivElement,
-    fieldConfigs: getColumns(layer),
+    // fieldConfigs: getColumns(layer),
+    tableTemplate: getTableTemplate(layer),
     view: view,
     editingEnabled: false,
     visibleElements: {

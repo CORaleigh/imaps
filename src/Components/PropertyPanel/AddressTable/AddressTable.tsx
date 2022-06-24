@@ -16,19 +16,17 @@ export const AddressTable = (props: any) => {
         header: false,
         selectionColumn: false,
       },
-      fieldConfigs: [
-        {
-          label: 'Address',
-          name: 'ADDRESS',
-          width: '200px',
-        } as any,
-        {
-          label: 'Type',
-          name: 'FEATURETYPE',
-        } as any,
-      ],
+      tableTemplate: {
+        columnTemplates: [
+          { label: 'Address', fieldName: 'ADDRESS' } as __esri.FieldColumnTemplate,
+          { label: 'Type', fieldName: 'FEATURETYPE' } as __esri.FieldColumnTemplate,
+        ],
+      },
     });
+
     setTimeout(() => {
+      const addressColumn = table.findColumn('FEATURETYPE') as any;
+      addressColumn.width = 100;
       table.filterGeometry = props.geometry;
       (props.layer as __esri.FeatureLayer).definitionExpression = `ADDRESS NOT LIKE 'EN%'`;
       table.refresh();

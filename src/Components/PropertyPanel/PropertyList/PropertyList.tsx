@@ -37,11 +37,15 @@ export const PropertyList = (props: any) => {
         } else {
           table.layer.definitionExpression = 'OBJECTID IS NOT NULL';
         }
-        table.fieldConfigs.forEach((config) => {
-          if (config.name.includes('PIN')) {
-            config.direction = 'asc';
-          }
-        });
+        table.tableTemplate.columnTemplates.forEach(
+          (template: __esri.FieldColumnTemplate | __esri.GroupColumnTemplate) => {
+            template = template as __esri.FieldColumnTemplate;
+            if (template.fieldName.includes('PIN')) {
+              template.direction = 'asc';
+            }
+          },
+        );
+
         setTimeout(() => {
           table.menu.items.reverse();
           table.editingEnabled = false;
