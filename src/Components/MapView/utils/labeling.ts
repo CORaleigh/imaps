@@ -2,7 +2,7 @@ import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 import Graphic from '@arcgis/core/Graphic';
 import * as geometryEngine from '@arcgis/core/geometry/geometryEngine';
 import Collection from '@arcgis/core/core/Collection';
-import * as watchUtils from '@arcgis/core/core/watchUtils';
+import * as reactiveUtils from '@arcgis/core/core/reactiveUtils';
 export const getAllPolyLayers = (view: __esri.MapView): Collection<__esri.FeatureLayer> => {
   return view.map.allLayers.filter((layer) => {
     return (
@@ -105,7 +105,10 @@ export const handlePolygonLabels = (view: __esri.MapView): void => {
   });
 
   view.map.add(labels);
-  watchUtils.whenTrue(view, 'stationary', () => {
-    updateLabels(labels, view);
-  });
+  reactiveUtils.when(
+    () => view.stationary,
+    () => {
+      updateLabels(labels, view);
+    },
+  );
 };

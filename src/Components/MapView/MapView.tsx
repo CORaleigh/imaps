@@ -17,7 +17,7 @@ import {
 } from './utils/map';
 
 import './MapView.scss';
-import { whenTrueOnce } from '@arcgis/core/core/watchUtils';
+import * as reactiveUtils from '@arcgis/core/core/reactiveUtils';
 import ReactDOM from 'react-dom';
 export const MapView = (props: any) => {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -85,15 +85,17 @@ export const MapView = (props: any) => {
           widgets.current.push(createMapWidgets(mapView));
 
           const expand: __esri.Expand = addOverviewMap(mapView);
-          whenTrueOnce(expand, 'expanded', () => {
-            const Overview = lazy(() => import('../Overview/Overview'));
-            ReactDOM.render(
-              <Suspense fallback={''}>
-                <Overview view={mapView} expand={expand} />
-              </Suspense>,
-              document.createElement('div'),
-            );
-          });
+          reactiveUtils
+            .whenOnce(() => expand.expanded)
+            .then(() => {
+              const Overview = lazy(() => import('../Overview/Overview'));
+              ReactDOM.render(
+                <Suspense fallback={''}>
+                  <Overview view={mapView} expand={expand} />
+                </Suspense>,
+                document.createElement('div'),
+              );
+            });
           setView(mapView);
           customizePopup(mapView);
           mapView.popup.on('trigger-action', (event) => {

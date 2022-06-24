@@ -39,7 +39,7 @@ import ThemeContext from '../ThemeContext';
 import { basemaps } from '../../config/config';
 import ActionContext from '../ActionContext';
 import * as config from '../../config/config';
-import * as watchUtils from '@arcgis/core/core/watchUtils';
+import * as reactiveUtils from '@arcgis/core/core/reactiveUtils';
 
 export const Shell = () => {
   const [mapId, setMapId] = useState<string>();
@@ -259,11 +259,13 @@ export const Shell = () => {
     if (!viewCreated) {
       view.current = mapView;
 
-      watchUtils.whenFalseOnce(mapView, 'updating', () => {
-        if (start.current) {
-          console.log(`Map fully loaded in ${(new Date().getTime() - start.current.getTime()) / 1000} seconds`);
-        }
-      });
+      reactiveUtils
+        .whenOnce(() => !mapView.updating)
+        .then(() => {
+          if (start.current) {
+            console.log(`Map fully loaded in ${(new Date().getTime() - start.current.getTime()) / 1000} seconds`);
+          }
+        });
       const layer = mapView.map.allLayers.find((layer) => {
         return layer.title.includes('Property') && layer.type === 'feature';
       });
