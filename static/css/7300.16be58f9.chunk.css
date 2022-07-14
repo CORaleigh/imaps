@@ -1,0 +1,2 @@
+.panel{display:flex;flex-direction:column;height:100%}#propertyPanel calcite-tab-nav{bottom:0;left:0;max-width:350px;position:absolute;z-index:10000}#propertyPanel calcite-tab{bottom:34px;left:0;max-height:calc(100% - 34px);max-width:350px;overflow:auto;position:absolute;top:82px}#propertyPanel calcite-tab-title{cursor:pointer}#propertyPanel .calcite-tab-title{-webkit-overflow-scrolling:touch}@media only screen and (max-width:500px){#propertyPanel calcite-tab,#propertyPanel calcite-tab-nav{max-width:calc(100% - 50px)}}
+/*# sourceMappingURL=7300.16be58f9.chunk.css.map*/

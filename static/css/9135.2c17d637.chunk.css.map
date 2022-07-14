@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/9135.2c17d637.chunk.css","mappings":"AAAA,yBACI,kBAAmB,CACtB,cAIG,sBAAwB","sources":["Components/PropertyPanel/AddressTable/AddressTable.scss"],"sourcesContent":["vaadin-grid-cell-content {\n    white-space: normal;\n}\n\n#addressTable {\n\n    height: 300px !important;\n}"],"names":[],"sourceRoot":""}
