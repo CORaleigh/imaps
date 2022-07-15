@@ -105,10 +105,10 @@ export const intersectionSelected = (
   //   outSpatialReference: view.spatialReference,
   // });
 
-  addressToLocations('https://maps.raleighnc.gov/arcgis/rest/services/Locators/CompositeLocator/GeocodeServer', {
+  addressToLocations('https://maps.raleighnc.gov/arcgis/rest/services/Locators/Locator/GeocodeServer', {
     address: {
       outSpatialReference: view.spatialReference,
-      street: `${street.getAttribute('CARTONAME')} & ${intersection.getAttribute('CARTONAME')}`,
+      SingleLine: `${street.getAttribute('CARTONAME')} & ${intersection.getAttribute('CARTONAME')}`,
     },
   }).then((candidates: any) => {
     if (candidates.length) {
