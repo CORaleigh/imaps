@@ -189,7 +189,7 @@ export const getTemplate = (
       customTextElements: customElements,
       legendLayers: view.map.allLayers
         .filter((layer) => {
-          return layer.type != 'imagery' && layer.id != 'selection-layer';
+          return layer.type !== 'imagery' && layer.type !== 'imagery-tile' && layer.id != 'selection-layer';
         })
         .map((layer) => {
           return new LegendLayer({ layerId: layer.id, title: layer.title });
