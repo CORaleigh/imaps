@@ -104,23 +104,20 @@ const arcadeExpressionInfos = [
 ] as ExpressionInfo[];
 
 const scrollToService = (e: any) => {
-  const rect = (e.detail.requestedAccordionItem as HTMLElement).getBoundingClientRect();
+  const rect = (e.target as HTMLElement).getBoundingClientRect();
   const div = document.querySelector('#featureWidget')?.parentElement;
   setTimeout(() => {
     div?.scrollTo({ top: rect.top + div.scrollTop - 155, behavior: 'smooth' });
   }, 100);
 };
 const serviceChanged = (graphic: __esri.Graphic, view: __esri.MapView | __esri.SceneView, e: any) => {
-  if (
-    !e.detail.requestedAccordionItem.hasAttribute('active') &&
-    e.detail.requestedAccordionItem.childElementCount === 0
-  ) {
+  if (!(e.target as HTMLCalciteAccordionItemElement).hasAttribute('active')) {
     const loader = document.createElement('calcite-loader');
     loader.setAttribute('inline', '');
-    const header = e.detail.requestedAccordionItem.shadowRoot.querySelector('.accordion-item-header') as HTMLElement;
+    const header = e.target.shadowRoot.querySelector('.accordion-item-header') as HTMLElement;
     header.insertBefore(loader, header.childNodes[1]);
     const serviceGroup: any = services.find((service) => {
-      return service.group.title === e.detail.requestedAccordionItem.getAttribute('item-title');
+      return service.group.title === e.target.getAttribute('item-title');
     });
     const promises: Promise<__esri.FeatureSet>[] = [];
 
@@ -149,7 +146,7 @@ const serviceChanged = (graphic: __esri.Graphic, view: __esri.MapView | __esri.S
             hasFeatures = true;
             result.features.forEach((feature: __esri.Graphic) => {
               const div = document.createElement('div');
-              e.detail.requestedAccordionItem.append(div);
+              e.target.append(div);
               new Feature({ container: div, graphic: feature });
             });
           }
@@ -158,7 +155,7 @@ const serviceChanged = (graphic: __esri.Graphic, view: __esri.MapView | __esri.S
           const div = document.createElement('div');
           div.textContent = 'No information available.';
           div.style.margin = '0.5em';
-          e.detail.requestedAccordionItem.append(div);
+          e.target.append(div);
         }
         scrollToService(e);
         header.removeChild(loader);
@@ -722,6 +719,8 @@ export const createTemplate = (view: __esri.MapView | __esri.SceneView, condoTab
       new CustomContent({
         outFields: ['*'],
         creator: (e: any) => {
+          const graphic = e.graphic;
+
           const accordion = document.createElement('calcite-accordion');
           accordion.setAttribute('selection-mode', 'single');
           accordion.setAttribute('icon-type', 'chevron');
@@ -729,17 +728,23 @@ export const createTemplate = (view: __esri.MapView | __esri.SceneView, condoTab
             const item = document.createElement('calcite-accordion-item');
             item.setAttribute('item-title', service.group.title);
             accordion.append(item);
+            item.addEventListener(
+              'click',
+              (e: any) => {
+                serviceChanged(graphic, view, e);
+              },
+              { passive: true },
+            );
           });
           //const f = serviceChanged.bind(e.Graphic);
           // setTimeout(f, 1000);
-          const graphic = e.graphic;
-          accordion.addEventListener(
-            'calciteAccordionChange',
-            (e: any) => {
-              serviceChanged(graphic, view, e);
-            },
-            { passive: true },
-          );
+          // accordion.addEventListener(
+          //   'calciteAccordionChange',
+          //   (e: any) => {
+          //     serviceChanged(graphic, view, e);
+          //   },
+          //   { passive: true },
+          // );
           return accordion;
         },
       }),

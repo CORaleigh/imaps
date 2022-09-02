@@ -189,10 +189,13 @@ export const Print = (props: any) => {
         </calcite-select>
       </calcite-label>
       <calcite-radio-button-group ref={scaleRadio} layout="vertical" name="Radio Group name">
-        <calcite-radio-button value="current" checked>
-          Current Scale ({`1" = ${(currentScale / 12).toLocaleString('en')}'`})
-        </calcite-radio-button>
-        <calcite-radio-button value="custom">Custom Scale</calcite-radio-button>
+        <calcite-label layout="inline">
+          <calcite-radio-button value="current" checked></calcite-radio-button>Current Scale (
+          {`1" = ${(currentScale / 12).toLocaleString('en')}'`})
+        </calcite-label>
+        <calcite-label layout="inline">
+          <calcite-radio-button value="custom"></calcite-radio-button>Custom Scale
+        </calcite-label>
       </calcite-radio-button-group>
       {scaleType === 'custom' && (
         <calcite-label>
@@ -219,15 +222,15 @@ export const Print = (props: any) => {
           value={userScale}
         ></calcite-input>
       )}
-      <calcite-label>
-        Include legend <calcite-checkbox checked ref={legendCheck}></calcite-checkbox>
+      <calcite-label layout="inline">
+        <calcite-checkbox checked ref={legendCheck}></calcite-checkbox>Include legend
       </calcite-label>
-      <calcite-label>
-        Show Map Frame<calcite-checkbox ref={mapFrameCheck}></calcite-checkbox>
+      <calcite-label layout="inline">
+        <calcite-checkbox ref={mapFrameCheck}></calcite-checkbox>Show Map Frame
       </calcite-label>
       {selectedFeature && (
-        <calcite-label>
-          Include attributes <calcite-checkbox ref={attributeCheck}></calcite-checkbox>
+        <calcite-label layout="inline">
+          <calcite-checkbox ref={attributeCheck}></calcite-checkbox>Include attributes
         </calcite-label>
       )}
       <calcite-button

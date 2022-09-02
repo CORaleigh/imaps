@@ -6,6 +6,8 @@ import * as print from '@arcgis/core/rest/print';
 import LegendLayer from '@arcgis/core/rest/support/LegendLayer';
 import PrintParameters from '@arcgis/core/rest/support/PrintParameters';
 import PrintTemplate from '@arcgis/core/rest/support/PrintTemplate';
+import TileInfo from '@arcgis/core/layers/support/TileInfo';
+
 import { printTemplates } from './templates';
 type Layout = {
   label: string;
@@ -121,7 +123,7 @@ export const roundScale = (mapScale: number): number => {
 };
 
 export const getScales = (view: __esri.MapView): MapScale[] => {
-  const scales = (view.constraints as any)._defaultLODs
+  const scales = (TileInfo.create().lods as any)
     .filter((lod: any) => {
       return lod.scale >= 300 && lod.scale < 614400;
     })

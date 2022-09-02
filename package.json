@@ -2,8 +2,9 @@
   "name": "imaps",
   "version": "4.0.3",
   "private": true,
+  "homepage": "https://maps.raleighnc.gov/imaps",
   "dependencies": {
-    "@arcgis/core": "^4.24.1",
+    "@arcgis/core": "^4.24.7",
     "@babel/core": "^7.15.0",
     "@esri/calcite-components": "^1.0.0-beta.83",
     "@testing-library/jest-dom": "^5.11.10",

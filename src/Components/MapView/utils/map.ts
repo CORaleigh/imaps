@@ -13,6 +13,7 @@ import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 import Extent from '@arcgis/core/geometry/Extent';
 import * as type from '@arcgis/core/smartMapping/symbology/type';
 import Collection from '@arcgis/core/core/Collection';
+
 import { handlePolygonLabels } from './labeling';
 
 export const createSelectionLayer = (view: __esri.MapView) => {
@@ -180,6 +181,7 @@ export const createMapView = (mapRef: any, mapProperties: any, viewProperties: a
   viewProperties.container = mapRef;
   viewProperties.constraints = {
     minZoom: 9,
+    maxScale: 0,
     geometry: {
       type: 'polygon',
       rings: [
