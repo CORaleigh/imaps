@@ -195,7 +195,13 @@ $base-scrim-z-index: 50;
     }
 
     &__message {
+      display: flex;
+      flex-basis: 100%;
       justify-content: center;
+      align-items: center;
+      font-size: var(--calcite-font-size-0);
+      padding: 0 15px;
+      text-align: center;
     }
   }
 

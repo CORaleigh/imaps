@@ -1,2 +1,0 @@
-"use strict";(globalThis.webpackChunkimaps=globalThis.webpackChunkimaps||[]).push([[3922],{33922:(n,r,a)=>{a.r(r),a.d(r,{g:()=>i});var i=function(){return[2,1,1,1,3].map((function(n){for(var r="",a=0;a<n;a++)r+=(65536*(1+Math.random())|0).toString(16).substring(1);return r})).join("-")}}}]);
-//# sourceMappingURL=3922.641131b2.chunk.js.map

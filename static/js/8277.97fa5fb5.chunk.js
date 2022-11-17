@@ -1,3 +1,0 @@
-/*! For license information please see 8277.97fa5fb5.chunk.js.LICENSE.txt */
-"use strict";(globalThis.webpackChunkimaps=globalThis.webpackChunkimaps||[]).push([[8277],{88277:(e,n,i)=>{function r(e,n,i){var r=function(e){return"intersection"===e?window.IntersectionObserver:"mutation"===e?window.MutationObserver:window.ResizeObserver}(e);return new r(n,i)}i.r(n),i.d(n,{c:()=>r})}}]);
-//# sourceMappingURL=8277.97fa5fb5.chunk.js.map
