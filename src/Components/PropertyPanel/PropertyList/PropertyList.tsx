@@ -7,6 +7,7 @@ export const PropertyList = (props: any) => {
   const listRef = useRef<HTMLDivElement>(null);
   const [loaded, setLoaded] = useState(false);
   const [table, setTable] = useState<FeatureTable>();
+  let observer: MutationObserver;
   useEffect(() => {
     if (table) {
       setTimeout(() => {
@@ -51,6 +52,22 @@ export const PropertyList = (props: any) => {
           table.editingEnabled = false;
           const grid = (table.container as HTMLElement).querySelector('vaadin-grid');
           const title = (table.container as HTMLElement).querySelector('.esri-feature-table__title');
+          observer = new MutationObserver((mutations) => {
+            if (mutations.length) {
+              debugger;
+              if (title) {
+                if (grid?.items) {
+                  title.textContent = 'Selected Properties: ' + grid?.items?.length;
+                } else {
+                  title.textContent = 'Selected Properties: 0';
+                }
+              }
+              //observer.disconnect();
+            } else {
+              observer.disconnect();
+            }
+          });
+          observer.observe(title as Node, { childList: true });
           if (title) {
             title.textContent = 'Selected Properties: ' + grid?.items?.length;
           }
@@ -114,6 +131,7 @@ export const PropertyList = (props: any) => {
 
     return () => {
       table && table.destroy();
+      observer && observer.disconnect();
     };
   }, []); // only after initial render
   useEffect(() => {

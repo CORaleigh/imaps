@@ -48,11 +48,11 @@ export const Print = (props: any) => {
 
     if (e.target.selectedOption.value === 'custom') {
       if (userInput.current) {
-        userInput.current.addEventListener('change', userScaleChanged);
+        userInput.current.addEventListener('calciteInputChange', userScaleChanged);
       }
     } else {
       if (userInput.current) {
-        userInput.current.removeEventListener('change', userScaleChanged);
+        userInput.current.removeEventListener('calciteInputChange', userScaleChanged);
       }
     }
   };
@@ -117,7 +117,7 @@ export const Print = (props: any) => {
     (props.view as __esri.MapView).map.add(graphics);
     getLayouts().then((layouts) => setLayouts(layouts));
     getFormats(props.exportUrl).then((formats) => setFormats(formats));
-    setScales(getScales(props.view));
+    setScales(getScales());
     const mapScale = roundScale(props.view.scale);
     setCurrentScale(mapScale);
     props.view.watch('stationary', () => {
@@ -223,7 +223,7 @@ export const Print = (props: any) => {
         ></calcite-input>
       )}
       <calcite-label layout="inline">
-        <calcite-checkbox checked ref={legendCheck}></calcite-checkbox>Include legend
+        <calcite-checkbox ref={legendCheck}></calcite-checkbox>Include legend
       </calcite-label>
       <calcite-label layout="inline">
         <calcite-checkbox ref={mapFrameCheck}></calcite-checkbox>Show Map Frame

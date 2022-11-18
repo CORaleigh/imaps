@@ -122,7 +122,7 @@ export const roundScale = (mapScale: number): number => {
   return 0;
 };
 
-export const getScales = (view: __esri.MapView): MapScale[] => {
+export const getScales = (): MapScale[] => {
   const scales = (TileInfo.create().lods as any)
     .filter((lod: any) => {
       return lod.scale >= 300 && lod.scale < 614400;
@@ -155,13 +155,20 @@ export const getCustomElements = (size: number, mapScale: number): any[] => {
 
 export const formatAttributes = (selectedFeature: __esri.Graphic): string => {
   let text = '';
-  (selectedFeature.layer as __esri.FeatureLayer).fields.forEach((field) => {
-    if (!['OBJECTID'].includes(field.name) && selectedFeature.getAttribute(field.name)) {
-      if (field.type === 'date') {
-        const date = new Date(selectedFeature.getAttribute(field.name));
-        text += `${field.alias}: ${date.getUTCMonth() + 1}/${date.getUTCDate()}/${date.getUTCFullYear()}\n`;
-      } else {
-        text += `${field.alias}: ${selectedFeature.getAttribute(field.name)}\n`;
+  (selectedFeature.layer as __esri.FeatureLayer).popupTemplate.fieldInfos.forEach((field) => {
+    if (
+      !['OBJECTID', 'PARCEL_PK', 'PARCEL_STATUS'].includes(field.fieldName) &&
+      selectedFeature.getAttribute(field.fieldName)
+    ) {
+      if (selectedFeature.getAttribute(field.fieldName) !== null) {
+        if (field.fieldName.includes('DATE')) {
+          const date = new Date(selectedFeature.getAttribute(field.fieldName));
+          text += `${field.label}: ${date.getUTCMonth() + 1}/${date.getUTCDate()}/${date.getUTCFullYear()}\n`;
+        } else if (field.fieldName.includes('PRICE') || field.fieldName.includes('VAL')) {
+          text += `${field.label}: $${selectedFeature.getAttribute(field.fieldName)}\n`;
+        } else {
+          text += `${field.label}: ${selectedFeature.getAttribute(field.fieldName)}\n`;
+        }
       }
     }
   });
@@ -216,6 +223,7 @@ export const exportMap = (
           view: view,
           outSpatialReference: new SpatialReference({ wkid: 3632 }),
         }),
+        { timeout: 120000 },
       )
       .then((result: __esri.PrintResponse) => {
         resolve(result);

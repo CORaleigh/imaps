@@ -125,6 +125,7 @@ export const PropertyPanel = (props: any) => {
       return graphic.getAttribute('type') === 'buffer';
     });
     props.view.graphics.removeMany(graphics);
+    setReloadTable(true);
   };
   const tableFeatureSelected = (feature: __esri.Graphic) => {
     if (feature) {
@@ -289,7 +290,7 @@ export const PropertyPanel = (props: any) => {
           </calcite-tab-title>
         </calcite-tab-nav>
 
-        <calcite-tab tab="list">
+        <calcite-tab tab="list" active>
           {loaded && (
             <Suspense fallback={''}>
               <PropertyList
