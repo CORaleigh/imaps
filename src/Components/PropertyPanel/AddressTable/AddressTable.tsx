@@ -27,17 +27,17 @@ export const AddressTable = (props: any) => {
     setTimeout(() => {
       const addressColumn = table.findColumn('FEATURETYPE') as any;
       addressColumn.width = 100;
+      table.clearSelection();
       table.filterGeometry = props.geometry;
       (props.layer as __esri.FeatureLayer).definitionExpression = `ADDRESS NOT LIKE 'EN%'`;
       table.refresh();
-    });
+    }, 500);
 
     setTimeout(() => {
       const grid = (table.container as HTMLElement).querySelector('vaadin-grid');
       grid?.addEventListener('click', (e) => {
         if ((e.target as HTMLElement).nodeName === 'VAADIN-GRID-CELL-CONTENT') {
           //grid.selectItem((grid.getEventContext(e) as any)?.item);
-          table.clearSelection();
           const item = (grid.getEventContext(e) as any)?.item;
           const feature = item.feature as __esri.Graphic;
           table.selectRows(feature);

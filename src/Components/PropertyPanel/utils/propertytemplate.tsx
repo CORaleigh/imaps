@@ -114,8 +114,8 @@ const serviceChanged = (graphic: __esri.Graphic, view: __esri.MapView | __esri.S
   if (!(e.target as HTMLCalciteAccordionItemElement).hasAttribute('active')) {
     const loader = document.createElement('calcite-loader');
     loader.setAttribute('inline', '');
-    const header = e.target.shadowRoot.querySelector('.accordion-item-header') as HTMLElement;
-    header.insertBefore(loader, header.childNodes[1]);
+    const header = e.target.shadowRoot.querySelector('.header-container') as HTMLElement;
+    header.appendChild(loader);
     const serviceGroup: any = services.find((service) => {
       return service.group.title === e.target.getAttribute('item-title');
     });

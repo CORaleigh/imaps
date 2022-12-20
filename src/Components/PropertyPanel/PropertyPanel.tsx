@@ -256,6 +256,16 @@ export const PropertyPanel = (props: any) => {
             setSelectedTab('list');
           }
           props.propertiesSelected(data.properties);
+          setTimeout(() => {
+            const title = document.querySelector('.esri-feature-table__title');
+            if (title) {
+              if (data.properties) {
+                title.textContent = 'Selected Properties: ' + data.properties?.length;
+              } else {
+                title.textContent = 'Selected Properties: 0';
+              }
+            }
+          }, 250);
         } else {
           clear();
         }
