@@ -155,34 +155,34 @@ function Header() {
           <table>
             <tr>
               <td>Property Search</td>
-              <td>Shift+Alt+P</td>
+              <td>Alt+P</td>
             </tr>
             <tr>
               <td>Location Search</td>
-              <td>Shift+Alt+O</td>
+              <td>Alt+O</td>
             </tr>
             <tr>
               <td>Layer list</td>
-              <td>Shift+Alt+L</td>
+              <td>Alt+L</td>
             </tr>
             <tr>
               <td>Legend</td>
-              <td>Shift+Alt+G</td>
+              <td>Alt+G</td>
             </tr>
             <tr>
               <td>Basemap</td>
-              <td>Shift+Alt+B</td>
+              <td>Alt+B</td>
             </tr>
           </table>
           <h3>Tools</h3>
           <table>
             <tr>
               <td>Property Select</td>
-              <td>Alt+s</td>
+              <td>Shift+Alt+S</td>
             </tr>
             <tr>
               <td>Measure</td>
-              <td>Alt+m</td>
+              <td>Shift+Alt+M</td>
             </tr>
             <tr>
               <td>Sketch</td>
@@ -190,11 +190,11 @@ function Header() {
             </tr>
             <tr>
               <td>Bookmarks</td>
-              <td>Alt+b</td>
+              <td>Shift+Alt+B</td>
             </tr>
             <tr>
               <td>Print</td>
-              <td>Alt+p</td>
+              <td>Shift+Alt+P</td>
             </tr>
           </table>
           <h3>Select Property</h3>

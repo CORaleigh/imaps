@@ -2,6 +2,7 @@
   "name": "imaps",
   "version": "4.1.0",
   "private": true,
+  "homepage": "https://coraleigh.github.io/imaps",
   "dependencies": {
     "@arcgis/core": "^4.26.5",
     "@esri/calcite-components": "^1.0.0",
