@@ -1,124 +1,178 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import ThemeContext from '../ThemeContext';
-import './Header.scss';
-export const Header = (props: any) => {
+import {
+  CalciteButton,
+  CalciteDropdown,
+  CalciteDropdownGroup,
+  CalciteDropdownItem,
+  CalciteIcon,
+  CalciteLabel,
+  CalciteModal,
+  CalciteSwitch,
+  CalciteTooltip,
+} from "@esri/calcite-components-react";
+import React, { useEffect, useRef, useState } from "react";
+import "./Header.css";
+import { toggleTheme } from "./utils/header";
+function Header() {
+  const logo = useRef<HTMLImageElement>(null);
   const ref = useRef<HTMLElement>();
-  const disclaimer = useRef<HTMLCalciteModalElement>();
 
-  const [links, setLinks] = useState<any>();
-  const { theme, setTheme } = useContext(ThemeContext);
+  const disclaimer = useRef<HTMLCalciteModalElement>();
+  const [links, setLinks] = useState<any[]>();
+  const [theme, setTheme] = useState("light");
+
   useEffect(() => {
-    fetch('./config.json').then((response) => {
+    fetch("./config.json").then((response) => {
       response.json().then((config) => {
         setLinks(config.links);
       });
     });
-    ref.current?.addEventListener('calciteDropdownSelect', (event: any) => {
+    const theme = window.localStorage.getItem("calcite-imaps-theme");
+    if (theme === "dark") {
       requestAnimationFrame(() => {
-        const theme = event.target.querySelector('calcite-dropdown-item[active]').getAttribute('value');
-        setTheme(theme);
-        document.body.classList.remove(theme === 'light' ? 'dark' : 'light');
-        document.body.classList.add(theme === 'light' ? 'light' : 'dark');
-
-        const link = Array.from(document.head.querySelectorAll('link')).find((link: HTMLLinkElement) => {
-          return link.href.includes(`${theme}/main.css`);
-        });
-        if (link) {
-          document.head.appendChild(link);
-        }
-        window.localStorage.setItem('imaps_theme', theme);
-
-        // document.body.classList.remove(theme === 'dark' ? 'light' : 'dark');
-        // document.body.classList.add(theme === 'dark' ? 'dark' : 'light');
-        // const styles = document.querySelectorAll('style');
-        // const styleArray = Array.from(styles);
-        // styleArray.forEach((style, i) => {
-        //   if (style.innerHTML.includes(`--esri-calcite-theme-name: "${theme}"`)) {
-        //     document.head.appendChild(style);
-        //   }
-        // });
+        toggleTheme(true);
+        setTheme("dark");
       });
-    });
+    }
   }, []);
   return (
-    <div>
-      <header>
-        <a
-          href="https://www.wakegov.com/departments-government/geographic-information-services-gis/maps-apps-data/imaps-information"
-          target="_blank"
-          rel="noreferrer"
+    <div slot="header" id="header">
+      <div>
+        <img
+          ref={logo}
+          alt="imaps"
+          src={theme === "dark" ? "logo_dark.svg" : "logo.svg"}
+          className="logo"
+        />
+      </div>
+      <div id="header-controls">
+        <CalciteDropdown
+          ref={ref as any}
+          placement="bottom-end"
+          scale="m"
+          width="l"
+          type="click"
+          onCalciteDropdownOpen={(e: any) => {
+            e.target.shadowRoot
+              ?.querySelector(".calcite-dropdown-content")
+              ?.setAttribute("style", "min-height: 590px");
+          }}
         >
-          <img className="logo" src={theme === 'light' ? 'logo.svg' : 'logo_dark.svg'} />
-        </a>
-        <calcite-dropdown ref={ref} alignment="end" scale="m" width="m" type="click">
-          <calcite-button scale="s" slot="dropdown-trigger">
-            <calcite-icon icon="hamburger"></calcite-icon>
-          </calcite-button>
-          <calcite-dropdown-group selection-mode="none" group-title="About" key="disclaimer">
-            <calcite-dropdown-item
-              rel="noreferrer"
+          <CalciteButton
+            id="menuButton"
+            scale="m"
+            slot="trigger"
+            name="Menu"
+            role="button"
+            aria-label="Menu"
+          >
+            <CalciteIcon icon="hamburger" scale="m"></CalciteIcon>
+          </CalciteButton>
+          <CalciteTooltip
+            label="Menu"
+            referenceElement="menuButton"
+            closeOnClick
+          >
+            Menu
+          </CalciteTooltip>
+          <CalciteDropdownGroup
+            selection-mode="none"
+            group-title="About"
+            key="disclaimer"
+          >
+            <CalciteDropdownItem
               onClick={() => {
                 if (disclaimer.current) {
-                  disclaimer.current.active = true;
+                  disclaimer.current.open = !disclaimer.current.open;
                 }
               }}
             >
               Disclaimer
-            </calcite-dropdown-item>
-          </calcite-dropdown-group>
+            </CalciteDropdownItem>
+          </CalciteDropdownGroup>
           {links &&
             links.map((group: any) => {
               return (
-                <calcite-dropdown-group selection-mode="none" group-title={group.title} key={group.title}>
+                <CalciteDropdownGroup
+                  selection-mode="none"
+                  group-title={group.title}
+                  key={group.title}
+                >
                   {group.links.map((link: any) => {
                     return (
-                      <calcite-dropdown-item rel="noreferrer" href={link.href} target="_blank" key={link.title}>
+                      <CalciteDropdownItem
+                        rel="noreferrer"
+                        href={link.href}
+                        target="_blank"
+                        key={link.title}
+                      >
                         {link.title}
-                      </calcite-dropdown-item>
+                      </CalciteDropdownItem>
                     );
                   })}
-                </calcite-dropdown-group>
+                </CalciteDropdownGroup>
               );
             })}
-          <calcite-dropdown-group selection-mode="single" group-title="Theme">
-            <calcite-dropdown-item value="light" active={theme === 'light' ? '' : null}>
-              Light
-            </calcite-dropdown-item>
-            <calcite-dropdown-item value="dark" active={theme === 'dark' ? '' : null}>
-              Dark
-            </calcite-dropdown-item>
-          </calcite-dropdown-group>
-        </calcite-dropdown>
-      </header>
-
-      <calcite-modal ref={disclaimer} aria-labelledby="modal-title">
+          <CalciteDropdownGroup selectionMode="none" group-title="Settings">
+            <CalciteDropdownItem>
+              <CalciteLabel layout="inline" className="label-wrapper">
+                Light
+                <CalciteIcon icon="brightness" scale="s"></CalciteIcon>
+                <CalciteSwitch
+                  checked={theme === "dark" ? true : undefined}
+                  onCalciteSwitchChange={(e: any) => {
+                    const isDark = toggleTheme(e.currentTarget.checked);
+                    setTheme(isDark ? "dark" : "light");
+                    window.localStorage.setItem(
+                      "calcite-imaps-theme",
+                      isDark ? "dark" : "light"
+                    );
+                  }}
+                ></CalciteSwitch>
+                <CalciteIcon icon="moon" scale="s"></CalciteIcon>
+                Dark
+              </CalciteLabel>
+            </CalciteDropdownItem>
+            <CalciteDropdownItem
+              iconStart="reset"
+              onClick={() => {
+                window.localStorage.setItem("imaps_reset", "true");
+                window.localStorage.removeItem("imaps_calcite");
+                window.location.reload();
+              }}
+            >
+              Reset To Default
+            </CalciteDropdownItem>
+          </CalciteDropdownGroup>
+        </CalciteDropdown>
+      </div>
+      <CalciteModal ref={disclaimer as any} aria-labelledby="modal-title">
         <div slot="header" id="modal-title">
           Disclaimer
         </div>
         <div slot="content">
-          iMAPS makes every effort to produce and publish the most current and accurate information possible. However,
-          the maps are productions for information purposed, and are NOT surveys. No warranties, expressed or implied,
-          are provided for the data therein, its use, or its interpretation. Register of Deeds documents accessed
-          through this site are unofficial. The official records are maintained at the Wake County Register of Deeds
-          office. The Wake County Register of Deeds assumes no responsibility or liability associated with the use or
-          misused of this data.
+          iMAPS makes every effort to produce and publish the most current and
+          accurate information possible. However, the maps are productions for
+          information purposed, and are NOT surveys. No warranties, expressed or
+          implied, are provided for the data therein, its use, or its
+          interpretation. Register of Deeds documents accessed through this site
+          are unofficial. The official records are maintained at the Wake County
+          Register of Deeds office. The Wake County Register of Deeds assumes no
+          responsibility or liability associated with the use or misused of this
+          data.
         </div>
-        <calcite-button
+        <CalciteButton
           slot="primary"
           width="full"
           onClick={() => {
             if (disclaimer.current) {
-              disclaimer.current.active = false;
+              disclaimer.current.open = !disclaimer.current.open;
             }
           }}
         >
           Close
-        </calcite-button>
-      </calcite-modal>
+        </CalciteButton>
+      </CalciteModal>
     </div>
   );
-};
-export default Header;
+}
+export default React.memo(Header);

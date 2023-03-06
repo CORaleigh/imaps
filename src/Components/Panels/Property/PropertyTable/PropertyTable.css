@@ -1,0 +1,9 @@
+vaadin-grid::part(cell) {
+  white-space: pre-wrap;
+  height: auto;
+  text-align: right;
+}
+vaadin-grid::part(header-cell) {
+  height: auto;
+  white-space: nowrap;
+}

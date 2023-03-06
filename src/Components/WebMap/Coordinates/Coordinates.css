@@ -1,0 +1,31 @@
+.coordinates-row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.coordinates-row calcite-button {
+  margin: 0;
+}
+.coordinates-text {
+  width: 150px;
+}
+
+#coordinatesWidget {
+  background-color: var(--calcite-ui-foreground-1);
+  padding: 1em;
+}
+d #coordinatesWidget:before {
+  opacity: 0.8;
+}
+
+#coordinatesWidget calcite-button {
+  margin: 0.5em 0;
+}
+
+#coordinatesWidget calcite-select {
+  margin-bottom: 0.5em;
+}
+#coordinatesWidget calcite-input-message {
+  color: var(--calcite-ui-danger);
+}

@@ -1,0 +1,47 @@
+.property calcite-tabs {
+  height: calc(var(--app-height) - 49px - 34px - 53.8438px);
+}
+
+.property calcite-tab {
+  height: 100vh;
+}
+
+.property calcite-tab[role='tabpanel'] {
+  height: 100%;
+}
+
+.esri-search__suggestions-menu {
+  z-index: 1000 !important;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+calcite-tab {
+  padding: 0;
+}
+
+.esri-widget calcite-button {
+  margin: 0 1em 0 1em;
+}
+
+.esri-feature__content-element {
+  margin-bottom: 1em;
+}
+@media only screen and (max-height: 400px) {
+  .property calcite-tabs {
+    height: calc(var(--app-height) - 34px - 40px);
+  }
+}
+
+.feature-title {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  text-align: center;  
+}
+
+.feature-title h2 {
+  width: 100%;
+}

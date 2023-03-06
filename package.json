@@ -1,77 +1,66 @@
 {
-  "name": "imaps",
-  "version": "4.0.3",
+  "name": "imaps-app",
+  "version": "4.1.0",
   "private": true,
-  "homepage": "https://maps.raleighnc.gov/imaps",
+  "homepage": "https://justingreco.github.io/imaps-app",
   "dependencies": {
-    "@arcgis/core": "^4.21.2",
-    "@babel/core": "^7.15.0",
-    "@esri/calcite-components": "^1.0.0-beta.66",
-    "@testing-library/jest-dom": "^5.11.10",
-    "@testing-library/react": "^11.2.6",
-    "@testing-library/user-event": "^12.8.3",
-    "@types/jest": "^26.0.22",
-    "@types/node": "^12.20.7",
-    "@types/react": "^17.0.3",
-    "@types/react-dom": "^17.0.3",
-    "@typescript-eslint/eslint-plugin": "^4.21.0",
-    "@typescript-eslint/parser": "^4.21.0",
-    "@vaadin/vaadin-button": "^2.4.0",
-    "@vaadin/vaadin-grid": "^5.7.12",
-    "@vaadin/vaadin-text-field": "^2.8.4",
-    "eslint": "^7.32.0",
-    "eslint-config-prettier": "^8.1.0",
-    "eslint-plugin-prettier": "^3.3.1",
-    "eslint-plugin-react": "^7.23.2",
-    "gh-pages": "^3.1.0",
-    "husky": "^6.0.0",
-    "lint-staged": "^10.5.4",
-    "node-sass": "^6.0.1",
-    "prettier": "^2.2.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "typescript": "^4.2.4",
-    "web-vitals": "^1.1.1"
-  },
-  "devDependencies": {
-    "react-scripts": "^4.0.3"
+    "@arcgis/core": "^4.26.5",
+    "@esri/calcite-components": "^1.0.0",
+    "@esri/calcite-components-react": "^1.0.4",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.3.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.11.45",
+    "@types/react": "^18.0.15",
+    "@types/react-dom": "^18.0.6",
+    "gh-pages": "^4.0.0",
+    "prettier": "^2.7.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "typescript": "^4.7.4",
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "npm run copyIcons && npm run copyTheme && react-scripts start",
-    "build": "react-scripts build",
-    "copyIcons": "find node_modules/@esri/calcite-components/dist/calcite/assets/ -iname \\*.json -exec cp {} ./public/assets/calcite-icon/ \\;",
-    "copyTheme": "cp -r node_modules/@arcgis/core/assets/esri/themes/dark ./public/assets/ && cp -r node_modules/@arcgis/core/assets/esri/themes/light ./public/assets/ && cp -r node_modules/@arcgis/core/assets/esri/themes/base ./public/assets/ ",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
+    ],
+    "overrides": [
+      {
+        "files": [
+          ""
+        ],
+        "rules": {
+          "import/no-anonymous-default-export": "off",
+          "react-hooks/exhaustive-deps": "off"
+        }
+      }
     ]
   },
   "browserslist": {
     "production": [
-      "last 2 chrome version",
-      "last 2 firefox version",
-      "last 2 safari version"
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
     ],
     "development": [
-      "last 2 chrome version",
-      "last 2 firefox version",
-      "last 2 safari version"
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
     ]
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
-      "prettier --write"
-    ]
+  "devDependencies": {
+    "eslint-config-prettier": "^8.7.0",
+    "eslint-plugin-prettier": "^4.2.1"
   }
 }

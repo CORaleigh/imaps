@@ -1,0 +1,20 @@
+#print-container {
+  padding: 1em;
+}
+
+.print-job calcite-button {
+  margin: 0 !important;
+}
+
+.loader-text {
+  margin: 0 20px;
+}
+
+#print-container {
+  max-height: calc(100vh - 160px) !important;
+  overflow-y: auto;
+}
+
+.print-job calcite-loader {
+  display: flex;
+}
