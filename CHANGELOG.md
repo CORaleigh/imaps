@@ -41,6 +41,8 @@
 ### Header
 1. Reset to default button added.  This will reset iMAPS to the default extent, layers, and base  map.
    1. This was added in case there are issues with what is stored in local storage
+2. Added modal showing keyboard shortcuts
+   1. There are shortcuts for opening panels and tools and for selecting properties without going to select tool
 
 ### Code
 1. React JS code has been refactored to follow best practices.
