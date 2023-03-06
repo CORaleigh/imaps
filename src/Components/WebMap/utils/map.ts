@@ -96,7 +96,6 @@ function isSearchable(layer: __esri.Layer, webmap: any) {
   return found;
 }
 function isInUrl(layer: __esri.Layer) {
-  debugger;
   const url = new URL(window.location as any);
   const layers = url.searchParams.get("layers")?.split(",");
   if (!layers) {
@@ -120,7 +119,6 @@ function getWebMap(mapId: string): Promise<WebMap> {
       );
       const url = new URL(window.location as any);
       if (url.searchParams.get("layers")) {
-        debugger;
         const layers = url.searchParams.get("layers")?.split(",");
         if (layers) {
           const sourceMap = new WebMap({
@@ -167,7 +165,6 @@ function getWebMap(mapId: string): Promise<WebMap> {
           (group as __esri.GroupLayer).removeMany(
             (group as __esri.GroupLayer).allLayers
               .filter((layer) => {
-                debugger;
                 return (
                   !layer.visible &&
                   !layer.title.includes("Property") &&

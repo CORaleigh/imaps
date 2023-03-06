@@ -6,6 +6,7 @@ import {
   widgetActivated,
 } from "../utils/shell";
 import { Alert } from "./alert";
+import { addShortcuts } from "./shortcuts";
 
 const useShell = () => {
   const [activePanel, setActivePanel] = useState("search");
@@ -77,6 +78,7 @@ const useShell = () => {
 
   const mapCallback = useCallback((mapView: __esri.MapView) => {
     viewRef.current = mapView;
+    addShortcuts(mapView, setGeometry);
     mapViewSet(mapView, setView, setLoading, setShowAlert, setAlert);
   }, []);
   const geometryCallback = useCallback((geometry: __esri.Geometry) => {
@@ -123,7 +125,6 @@ const useShell = () => {
   }, []);
   const propertySelected = useCallback(
     (feature: __esri.Graphic, condos: __esri.Graphic[]) => {
-      debugger;
       setSelectedProperty(feature);
       setProperties(getDistinctProperties(feature, condos));
     },
@@ -135,7 +136,7 @@ const useShell = () => {
     lastTips.current = lastTips.current === newTips ? null : newTips;
   };
   const alertSet = (alert: Alert) => {
-    debugger
+    
     setShowAlert(true);
     setAlert(alert);
   }

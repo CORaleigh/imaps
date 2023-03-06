@@ -8,41 +8,38 @@ import {
   CalciteModal,
   CalciteSwitch,
   CalciteTooltip,
-} from "@esri/calcite-components-react";
-import React, { useEffect, useRef, useState } from "react";
-import "./Header.css";
-import { toggleTheme } from "./utils/header";
+} from '@esri/calcite-components-react';
+import React, { useEffect, useRef, useState } from 'react';
+import './Header.css';
+import { toggleTheme } from './utils/header';
 function Header() {
   const logo = useRef<HTMLImageElement>(null);
   const ref = useRef<HTMLElement>();
 
   const disclaimer = useRef<HTMLCalciteModalElement>();
+  const shortcuts = useRef<HTMLCalciteModalElement>();
+
   const [links, setLinks] = useState<any[]>();
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState('light');
 
   useEffect(() => {
-    fetch("./config.json").then((response) => {
+    fetch('./config.json').then((response) => {
       response.json().then((config) => {
         setLinks(config.links);
       });
     });
-    const theme = window.localStorage.getItem("calcite-imaps-theme");
-    if (theme === "dark") {
+    const theme = window.localStorage.getItem('calcite-imaps-theme');
+    if (theme === 'dark') {
       requestAnimationFrame(() => {
         toggleTheme(true);
-        setTheme("dark");
+        setTheme('dark');
       });
     }
   }, []);
   return (
     <div slot="header" id="header">
       <div>
-        <img
-          ref={logo}
-          alt="imaps"
-          src={theme === "dark" ? "logo_dark.svg" : "logo.svg"}
-          className="logo"
-        />
+        <img ref={logo} alt="imaps" src={theme === 'dark' ? 'logo_dark.svg' : 'logo.svg'} className="logo" />
       </div>
       <div id="header-controls">
         <CalciteDropdown
@@ -52,33 +49,16 @@ function Header() {
           width="l"
           type="click"
           onCalciteDropdownOpen={(e: any) => {
-            e.target.shadowRoot
-              ?.querySelector(".calcite-dropdown-content")
-              ?.setAttribute("style", "min-height: 590px");
+            e.target.shadowRoot?.querySelector('.calcite-dropdown-content')?.setAttribute('style', 'min-height: 620px');
           }}
         >
-          <CalciteButton
-            id="menuButton"
-            scale="m"
-            slot="trigger"
-            name="Menu"
-            role="button"
-            aria-label="Menu"
-          >
+          <CalciteButton id="menuButton" scale="m" slot="trigger" name="Menu" role="button" aria-label="Menu">
             <CalciteIcon icon="hamburger" scale="m"></CalciteIcon>
           </CalciteButton>
-          <CalciteTooltip
-            label="Menu"
-            referenceElement="menuButton"
-            closeOnClick
-          >
+          <CalciteTooltip label="Menu" referenceElement="menuButton" closeOnClick>
             Menu
           </CalciteTooltip>
-          <CalciteDropdownGroup
-            selection-mode="none"
-            group-title="About"
-            key="disclaimer"
-          >
+          <CalciteDropdownGroup selection-mode="none" group-title="About" key="disclaimer">
             <CalciteDropdownItem
               onClick={() => {
                 if (disclaimer.current) {
@@ -92,19 +72,10 @@ function Header() {
           {links &&
             links.map((group: any) => {
               return (
-                <CalciteDropdownGroup
-                  selection-mode="none"
-                  group-title={group.title}
-                  key={group.title}
-                >
+                <CalciteDropdownGroup selection-mode="none" group-title={group.title} key={group.title}>
                   {group.links.map((link: any) => {
                     return (
-                      <CalciteDropdownItem
-                        rel="noreferrer"
-                        href={link.href}
-                        target="_blank"
-                        key={link.title}
-                      >
+                      <CalciteDropdownItem rel="noreferrer" href={link.href} target="_blank" key={link.title}>
                         {link.title}
                       </CalciteDropdownItem>
                     );
@@ -118,14 +89,11 @@ function Header() {
                 Light
                 <CalciteIcon icon="brightness" scale="s"></CalciteIcon>
                 <CalciteSwitch
-                  checked={theme === "dark" ? true : undefined}
+                  checked={theme === 'dark' ? true : undefined}
                   onCalciteSwitchChange={(e: any) => {
                     const isDark = toggleTheme(e.currentTarget.checked);
-                    setTheme(isDark ? "dark" : "light");
-                    window.localStorage.setItem(
-                      "calcite-imaps-theme",
-                      isDark ? "dark" : "light"
-                    );
+                    setTheme(isDark ? 'dark' : 'light');
+                    window.localStorage.setItem('calcite-imaps-theme', isDark ? 'dark' : 'light');
                   }}
                 ></CalciteSwitch>
                 <CalciteIcon icon="moon" scale="s"></CalciteIcon>
@@ -133,10 +101,19 @@ function Header() {
               </CalciteLabel>
             </CalciteDropdownItem>
             <CalciteDropdownItem
+              onClick={() => {
+                if (shortcuts.current) {
+                  shortcuts.current.open = !shortcuts.current.open;
+                }
+              }}
+            >
+              Keyboard Shortcuts
+            </CalciteDropdownItem>
+            <CalciteDropdownItem
               iconStart="reset"
               onClick={() => {
-                window.localStorage.setItem("imaps_reset", "true");
-                window.localStorage.removeItem("imaps_calcite");
+                window.localStorage.setItem('imaps_reset', 'true');
+                window.localStorage.removeItem('imaps_calcite');
                 window.location.reload();
               }}
             >
@@ -150,15 +127,12 @@ function Header() {
           Disclaimer
         </div>
         <div slot="content">
-          iMAPS makes every effort to produce and publish the most current and
-          accurate information possible. However, the maps are productions for
-          information purposed, and are NOT surveys. No warranties, expressed or
-          implied, are provided for the data therein, its use, or its
-          interpretation. Register of Deeds documents accessed through this site
-          are unofficial. The official records are maintained at the Wake County
-          Register of Deeds office. The Wake County Register of Deeds assumes no
-          responsibility or liability associated with the use or misused of this
-          data.
+          iMAPS makes every effort to produce and publish the most current and accurate information possible. However,
+          the maps are productions for information purposed, and are NOT surveys. No warranties, expressed or implied,
+          are provided for the data therein, its use, or its interpretation. Register of Deeds documents accessed
+          through this site are unofficial. The official records are maintained at the Wake County Register of Deeds
+          office. The Wake County Register of Deeds assumes no responsibility or liability associated with the use or
+          misused of this data.
         </div>
         <CalciteButton
           slot="primary"
@@ -166,6 +140,91 @@ function Header() {
           onClick={() => {
             if (disclaimer.current) {
               disclaimer.current.open = !disclaimer.current.open;
+            }
+          }}
+        >
+          Close
+        </CalciteButton>
+      </CalciteModal>
+      <CalciteModal ref={shortcuts as any} aria-labelledby="modal-title">
+        <div slot="header" id="modal-title">
+          Keyboard Shortcuts
+        </div>
+        <div className="shortcuts-content " slot="content">
+          <h3>Panels</h3>
+          <table>
+            <tr>
+              <td>Property Search</td>
+              <td>Shift+Alt+P</td>
+            </tr>
+            <tr>
+              <td>Location Search</td>
+              <td>Shift+Alt+O</td>
+            </tr>
+            <tr>
+              <td>Layer list</td>
+              <td>Shift+Alt+L</td>
+            </tr>
+            <tr>
+              <td>Legend</td>
+              <td>Shift+Alt+G</td>
+            </tr>
+            <tr>
+              <td>Basemap</td>
+              <td>Shift+Alt+B</td>
+            </tr>
+          </table>
+          <h3>Tools</h3>
+          <table>
+            <tr>
+              <td>Property Select</td>
+              <td>Alt+s</td>
+            </tr>
+            <tr>
+              <td>Measure</td>
+              <td>Alt+m</td>
+            </tr>
+            <tr>
+              <td>Sketch</td>
+              <td>Alt+k</td>
+            </tr>
+            <tr>
+              <td>Bookmarks</td>
+              <td>Alt+b</td>
+            </tr>
+            <tr>
+              <td>Print</td>
+              <td>Alt+p</td>
+            </tr>
+          </table>
+          <h3>Select Property</h3>
+          <em>Hold keys without releasing to use these shortcuts</em>
+          <br />
+          <table>
+            <tr>
+              <td>Select by Area</td>
+              <td>Shift+Alt+A</td>
+            </tr>
+            <tr>
+              <td>Select by Circle</td>
+              <td>Shift+Alt+C</td>
+            </tr>
+            <tr>
+              <td>Select by Rectangle</td>
+              <td>Shift+Alt+R</td>
+            </tr>
+            <tr>
+              <td>Select by Line</td>
+              <td>Shift+Alt+L</td>
+            </tr>
+          </table>
+        </div>
+        <CalciteButton
+          slot="primary"
+          width="full"
+          onClick={() => {
+            if (shortcuts.current) {
+              shortcuts.current.open = !shortcuts.current.open;
             }
           }}
         >
