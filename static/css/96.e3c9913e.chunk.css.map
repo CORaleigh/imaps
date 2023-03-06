@@ -1,1 +1,0 @@
-{"version":3,"file":"static/css/96.e3c9913e.chunk.css","mappings":"AAAA,aACI,YAAa","sources":["Components/Sketch/Sketch.scss"],"sourcesContent":[".sketchTools {\n    display: flex;\n}"],"names":[],"sourceRoot":""}

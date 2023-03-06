@@ -1,1 +1,0 @@
-{"version":3,"file":"static/css/6861.c5265708.chunk.css","mappings":"AAAA,cAEI,aADA,WACa","sources":["Components/Overview/Overview.scss"],"sourcesContent":[".overview-map {\n    width: 200px;\n    height: 200px;\n}\n"],"names":[],"sourceRoot":""}
