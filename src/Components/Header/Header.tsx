@@ -153,70 +153,76 @@ function Header() {
         <div className="shortcuts-content " slot="content">
           <h3>Panels</h3>
           <table>
-            <tr>
-              <td>Property Search</td>
-              <td>Alt+P</td>
-            </tr>
-            <tr>
-              <td>Location Search</td>
-              <td>Alt+O</td>
-            </tr>
-            <tr>
-              <td>Layer list</td>
-              <td>Alt+L</td>
-            </tr>
-            <tr>
-              <td>Legend</td>
-              <td>Alt+G</td>
-            </tr>
-            <tr>
-              <td>Basemap</td>
-              <td>Alt+B</td>
-            </tr>
+            <tbody>
+              <tr>
+                <td>Property Search</td>
+                <td>Alt+P</td>
+              </tr>
+              <tr>
+                <td>Location Search</td>
+                <td>Alt+O</td>
+              </tr>
+              <tr>
+                <td>Layer list</td>
+                <td>Alt+L</td>
+              </tr>
+              <tr>
+                <td>Legend</td>
+                <td>Alt+G</td>
+              </tr>
+              <tr>
+                <td>Basemap</td>
+                <td>Alt+B</td>
+              </tr>
+            </tbody>
           </table>
           <h3>Tools</h3>
           <table>
-            <tr>
-              <td>Property Select</td>
-              <td>Shift+Alt+S</td>
-            </tr>
-            <tr>
-              <td>Measure</td>
-              <td>Shift+Alt+M</td>
-            </tr>
-            <tr>
-              <td>Sketch</td>
-              <td>Alt+k</td>
-            </tr>
-            <tr>
-              <td>Bookmarks</td>
-              <td>Shift+Alt+B</td>
-            </tr>
-            <tr>
-              <td>Print</td>
-              <td>Shift+Alt+P</td>
-            </tr>
+            <tbody>
+              <tr>
+                <td>Property Select</td>
+                <td>Shift+Alt+S</td>
+              </tr>
+              <tr>
+                <td>Measure</td>
+                <td>Shift+Alt+M</td>
+              </tr>
+              <tr>
+                <td>Sketch</td>
+                <td>Shift+Alt+K</td>
+              </tr>
+              <tr>
+                <td>Bookmarks</td>
+                <td>Shift+Alt+B</td>
+              </tr>
+              <tr>
+                <td>Print</td>
+                <td>Shift+Alt+P</td>
+              </tr>
+            </tbody>
           </table>
           <h3>Select Property</h3>
           <em>Hold keys without releasing to use these shortcuts</em>
           <br />
           <table>
-            <tr>
-              <td>Select by Area</td>
-              <td>Shift+Alt+A</td>
-            </tr>
-            <tr>
-              <td>Select by Circle</td>
-              <td>Shift+Alt+C</td>
-            </tr>
-            <tr>
-              <td>Select by Rectangle</td>
-              <td>Shift+Alt+R</td>
-            </tr>
-            <tr>
-              <td>Select by Line</td>
-              <td>Shift+Alt+L</td>
-            </tr>
+            <tbody>
+              <tr>
+                <td>Select by Area</td>
+                <td>Shift+Alt+A</td>
+              </tr>
+              <tr>
+                <td>Select by Circle</td>
+                <td>Shift+Alt+C</td>
+              </tr>
+              <tr>
+                <td>Select by Rectangle</td>
+                <td>Shift+Alt+R</td>
+              </tr>
+              <tr>
+                <td>Select by Line</td>
+                <td>Shift+Alt+L</td>
+              </tr>
+            </tbody>
           </table>
         </div>
         <CalciteButton
