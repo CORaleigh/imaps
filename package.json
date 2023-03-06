@@ -1,8 +1,7 @@
 {
-  "name": "imaps-app",
+  "name": "imaps",
   "version": "4.1.0",
   "private": true,
-  "homepage": "https://justingreco.github.io/imaps-app",
   "dependencies": {
     "@arcgis/core": "^4.26.5",
     "@esri/calcite-components": "^1.0.0",
@@ -58,9 +57,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "eslint-config-prettier": "^8.7.0",
-    "eslint-plugin-prettier": "^4.2.1"
   }
 }
