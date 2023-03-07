@@ -21,7 +21,8 @@ function Header() {
 
   const [links, setLinks] = useState<any[]>();
   const [theme, setTheme] = useState('light');
-
+  const altOptKey: string = navigator.userAgent.toUpperCase().includes('MAC') ? 'Option' : 'Alt';
+  const isMobile: boolean =  window.matchMedia("(pointer:coarse)").matches;
   useEffect(() => {
     fetch('./config.json').then((response) => {
       response.json().then((config) => {
@@ -49,7 +50,7 @@ function Header() {
           width="l"
           type="click"
           onCalciteDropdownOpen={(e: any) => {
-            e.target.shadowRoot?.querySelector('.calcite-dropdown-content')?.setAttribute('style', 'min-height: 620px');
+            e.target.shadowRoot?.querySelector('.calcite-dropdown-content')?.setAttribute('style', `min-height: ${isMobile ? '590' : '620'}px`);
           }}
         >
           <CalciteButton id="menuButton" scale="m" slot="trigger" name="Menu" role="button" aria-label="Menu">
@@ -100,7 +101,7 @@ function Header() {
                 Dark
               </CalciteLabel>
             </CalciteDropdownItem>
-            <CalciteDropdownItem
+            {!isMobile && <CalciteDropdownItem
               onClick={() => {
                 if (shortcuts.current) {
                   shortcuts.current.open = !shortcuts.current.open;
@@ -108,7 +109,7 @@ function Header() {
               }}
             >
               Keyboard Shortcuts
-            </CalciteDropdownItem>
+            </CalciteDropdownItem>}
             <CalciteDropdownItem
               iconStart="reset"
               onClick={() => {
@@ -146,7 +147,7 @@ function Header() {
           Close
         </CalciteButton>
       </CalciteModal>
-      <CalciteModal ref={shortcuts as any} aria-labelledby="modal-title">
+      {!isMobile && <CalciteModal ref={shortcuts as any} aria-labelledby="modal-title">
         <div slot="header" id="modal-title">
           Keyboard Shortcuts
         </div>
@@ -156,23 +157,23 @@ function Header() {
             <tbody>
               <tr>
                 <td>Property Search</td>
-                <td>Alt+P</td>
+                <td>{altOptKey}+P</td>
               </tr>
               <tr>
                 <td>Location Search</td>
-                <td>Alt+O</td>
+                <td>{altOptKey}+O</td>
               </tr>
               <tr>
                 <td>Layer list</td>
-                <td>Alt+L</td>
+                <td>{altOptKey}+L</td>
               </tr>
               <tr>
                 <td>Legend</td>
-                <td>Alt+G</td>
+                <td>{altOptKey}+G</td>
               </tr>
               <tr>
                 <td>Basemap</td>
-                <td>Alt+B</td>
+                <td>{altOptKey}+B</td>
               </tr>
             </tbody>
           </table>
@@ -181,23 +182,23 @@ function Header() {
             <tbody>
               <tr>
                 <td>Property Select</td>
-                <td>Shift+Alt+S</td>
+                <td>Shift+{altOptKey}+S</td>
               </tr>
               <tr>
                 <td>Measure</td>
-                <td>Shift+Alt+M</td>
+                <td>Shift+{altOptKey}+M</td>
               </tr>
               <tr>
                 <td>Sketch</td>
-                <td>Shift+Alt+K</td>
+                <td>Shift+{altOptKey}+K</td>
               </tr>
               <tr>
                 <td>Bookmarks</td>
-                <td>Shift+Alt+B</td>
+                <td>Shift+{altOptKey}+B</td>
               </tr>
               <tr>
                 <td>Print</td>
-                <td>Shift+Alt+P</td>
+                <td>Shift+{altOptKey}+P</td>
               </tr>
             </tbody>
           </table>
@@ -208,19 +209,19 @@ function Header() {
             <tbody>
               <tr>
                 <td>Select by Area</td>
-                <td>Shift+Alt+A</td>
+                <td>Shift+{altOptKey}+A</td>
               </tr>
               <tr>
                 <td>Select by Circle</td>
-                <td>Shift+Alt+C</td>
+                <td>Shift+{altOptKey}+C</td>
               </tr>
               <tr>
                 <td>Select by Rectangle</td>
-                <td>Shift+Alt+R</td>
+                <td>Shift+{altOptKey}+R</td>
               </tr>
               <tr>
                 <td>Select by Line</td>
-                <td>Shift+Alt+L</td>
+                <td>Shift+{altOptKey}+L</td>
               </tr>
             </tbody>
           </table>
@@ -236,7 +237,7 @@ function Header() {
         >
           Close
         </CalciteButton>
-      </CalciteModal>
+      </CalciteModal>}
     </div>
   );
 }
