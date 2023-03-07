@@ -25,9 +25,7 @@ function Coordinates(props: CoordinateProps) {
     showSearch,
     selectedFormat,
     searchCoordinates,
-    x,
-    y,
-    other,
+    coordInput,
     modeClicked,
     coordinateRef,
     modeActionRef,
@@ -55,7 +53,7 @@ function Coordinates(props: CoordinateProps) {
         </CalciteSelect>
       </div>
       <div hidden={showSearch ? undefined : true}>
-        <CalciteLabel scale="s">
+        {/* <CalciteLabel scale="s">
           {selectedFormat === "dd"
             ? "Latitude"
             : selectedFormat === "spft"
@@ -122,27 +120,30 @@ function Coordinates(props: CoordinateProps) {
           >
             Value is not valid
           </CalciteInputMessage>
-        </CalciteLabel>
+        </CalciteLabel> */}
+        <CalciteLabel>
+        <div className="coordinate-input">
         <CalciteInput
-          scale="s"
-          ref={other}
-          hidden={
-            ["dd", "spft", "dms"].includes(selectedFormat) ? true : undefined
-          }
-          id="othercoord"
-          placeholder={
-            selectedFormat === "usng"
-              ? "17S PV 98178 59368"
-              : selectedFormat === "mrgs"
-              ? "17S PV 98136 59346"
-              : selectedFormat === "utm"
-              ? "17S 698184 3959363"
-              : ""
-          }
+          scale="m"
+          ref={coordInput}
+          id="coordInput"
+          placeholder={selectedFormat.placeholder}
         ></CalciteInput>
-        <CalciteButton onClick={searchCoordinates} width="full" scale="s">
-          Search
-        </CalciteButton>
+        <CalciteButton onClick={searchCoordinates} width="full" scale="m" iconEnd="search">
+          
+        </CalciteButton>   
+        </div>
+     
+          <CalciteInputMessage
+            hidden={
+              coordInput.current?.getAttribute("status") === "invalid" ? undefined : true
+            }
+            status="invalid"
+          >
+            Value is not valid
+          </CalciteInputMessage>        
+        </CalciteLabel>
+
       </div>
       <div className="coordinates-row">
         <div ref={coordinateRef} className="coordinates-text"></div>

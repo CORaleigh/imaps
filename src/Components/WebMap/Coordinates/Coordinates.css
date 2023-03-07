@@ -19,13 +19,24 @@ d #coordinatesWidget:before {
   opacity: 0.8;
 }
 
-#coordinatesWidget calcite-button {
-  margin: 0.5em 0;
-}
 
 #coordinatesWidget calcite-select {
   margin-bottom: 0.5em;
 }
 #coordinatesWidget calcite-input-message {
   color: var(--calcite-ui-danger);
+}
+
+.coordinate-input {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.coordinate-input calcite-input {
+  width: 100%;
+}
+.coordinate-input calcite-button {
+  width:  50px;
+  margin: 0;
 }
