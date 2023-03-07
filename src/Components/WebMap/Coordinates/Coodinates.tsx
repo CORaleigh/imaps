@@ -39,7 +39,7 @@ function Coordinates(props: CoordinateProps) {
 
       <div hidden={showSettings ? undefined : true}>
         <CalciteSelect
-          scale="s"
+          scale="m"
           label="Coordinate Systems"
           onCalciteSelectChange={formatChanged}
         >
