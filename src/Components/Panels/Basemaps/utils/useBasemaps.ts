@@ -12,11 +12,6 @@ import { tips } from "./tips";
 
 const useBasemaps = (props: PanelProps) => {
   const [view, setView] = useState<MapView>();
-  const [showAlert, setShowAlert] = useState<any>({
-    show: false,
-    from: "",
-    to: "",
-  });
   const [isActive, setIsActive] = useState(false);
   const [blendActive, setBlendActive] = useState(false);
 
@@ -83,7 +78,6 @@ const useBasemaps = (props: PanelProps) => {
     mapGroup,
     imageGroup,
     view,
-    showAlert,
     isActive,
     panelDismissed,
     tipsClicked,

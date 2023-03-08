@@ -1,21 +1,17 @@
-import * as geometryEngine from "@arcgis/core/geometry/geometryEngine";
-import BasemapGallery from "@arcgis/core/widgets/BasemapGallery";
-import MapView from "@arcgis/core/views/MapView";
-import PortalBasemapsSource from "@arcgis/core/widgets/BasemapGallery/support/PortalBasemapsSource";
-import request from "@arcgis/core/request";
-import Polygon from "@arcgis/core/geometry/Polygon";
-import Basemap from "@arcgis/core/Basemap";
-import Color from "@arcgis/core/Color";
-import * as reactiveUtils from "@arcgis/core/core/reactiveUtils";
-import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
-import VectorTileLayer from "@arcgis/core/layers/VectorTileLayer";
-import { Alert } from "../../../Shell/utils/alert";
+import * as geometryEngine from '@arcgis/core/geometry/geometryEngine';
+import BasemapGallery from '@arcgis/core/widgets/BasemapGallery';
+import MapView from '@arcgis/core/views/MapView';
+import PortalBasemapsSource from '@arcgis/core/widgets/BasemapGallery/support/PortalBasemapsSource';
+import request from '@arcgis/core/request';
+import Polygon from '@arcgis/core/geometry/Polygon';
+import Basemap from '@arcgis/core/Basemap';
+import Color from '@arcgis/core/Color';
+import * as reactiveUtils from '@arcgis/core/core/reactiveUtils';
+import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
+import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
+import { Alert } from '../../../Shell/utils/alert';
 
-export function initializeBasemaps(
-  view: MapView,
-  ref: HTMLDivElement,
-  id: string
-) {
+export const initializeBasemaps = async (view: MapView, ref: HTMLDivElement, id: string) => {
   const gallery = new BasemapGallery({
     container: ref,
     view: view,
@@ -23,25 +19,23 @@ export function initializeBasemaps(
       query: `id: ${id}`,
     },
   });
-  reactiveUtils
-    .whenOnce(() => gallery.source.basemaps.length > 0)
-    .then(() => {
-      const basemap = gallery.source.basemaps.find((basemap) => {
-        return basemap.portalItem.title === view.map.basemap.title;
-      });
-      if (basemap) {
-        gallery.activeBasemap = basemap;
-      }
-    });
-}
+  await reactiveUtils.whenOnce(() => gallery.source.basemaps.length > 0);
+
+  const basemap = gallery.source.basemaps.find((basemap) => {
+    return basemap.portalItem.title === view.map.basemap.title;
+  });
+  if (basemap) {
+    gallery.activeBasemap = basemap;
+  }
+};
 
 let images: BasemapGallery;
-export function initializeImageMaps(
+export const initializeImageMaps = async (
   view: MapView,
   ref: HTMLDivElement,
   id: string,
-  alertSet: Function | undefined
-) {
+  alertSet: Function | undefined,
+) => {
   images = new BasemapGallery({
     container: ref,
     view: view,
@@ -53,52 +47,45 @@ export function initializeImageMaps(
       },
     }),
   });
-  reactiveUtils
-    .whenOnce(() => images.source.basemaps.length > 0)
-    .then(() => {
-      const basemap = images.source.basemaps.find((basemap) => {
-        return basemap.portalItem.title === view.map.basemap.title;
-      });
-      if (basemap) {
-        images.activeBasemap = basemap;
-      }
-    });
-  images.when(() => {
-    images.source.basemaps.reverse();
-    if (!imageryBoundary) {
-      getBoundary(view).then((boundary: Polygon) => {
-        imageryBoundary = boundary;
-        inRaleigh = checkBoundary(view.extent);
-        (images.source as PortalBasemapsSource).refresh();
-      });
-    }
-    view.watch("extent", (extent: __esri.Extent) =>
-      viewExtentChanged(extent, view, alertSet)
-    );
-  });
-  view.map.watch("basemap", (basemap: Basemap) => {
-    checkBasemapTheme(basemap, view).then((isLight: boolean) => {
-      setPropertyColor(view, isLight);
-    });
-  });
-}
+  await reactiveUtils.whenOnce(() => images.source.basemaps.length > 0);
 
-export function initializeEsriMaps(view: MapView, ref: HTMLDivElement) {
+  const basemap = images.source.basemaps.find((basemap) => {
+    return basemap.portalItem.title === view.map.basemap.title;
+  });
+  if (basemap) {
+    images.activeBasemap = basemap;
+  }
+
+  await images.when();
+  images.source.basemaps.reverse();
+  if (!imageryBoundary) {
+    const boundary = await getBoundary(view);
+    imageryBoundary = boundary;
+    inRaleigh = checkBoundary(view.extent);
+    (images.source as PortalBasemapsSource).refresh();
+  }
+  view.watch('extent', (extent: __esri.Extent) => viewExtentChanged(extent, view, alertSet));
+
+  view.map.watch('basemap', async (basemap: Basemap) => {
+    const isLight = await checkBasemapTheme(basemap, view);
+    setPropertyColor(view, isLight);
+  });
+};
+
+export const initializeEsriMaps = async (view: MapView, ref: HTMLDivElement) => {
   const esri = new BasemapGallery({
     container: ref,
     view: view,
   });
-  reactiveUtils
-    .whenOnce(() => esri.source.basemaps.length > 0)
-    .then(() => {
-      const basemap = esri.source.basemaps.find((basemap) => {
-        return basemap.portalItem.title === view.map.basemap.title;
-      });
-      if (basemap) {
-        esri.activeBasemap = basemap;
-      }
-    });
-}
+  await reactiveUtils.whenOnce(() => esri.source.basemaps.length > 0);
+
+  const basemap = esri.source.basemaps.find((basemap) => {
+    return basemap.portalItem.title === view.map.basemap.title;
+  });
+  if (basemap) {
+    esri.activeBasemap = basemap;
+  }
+};
 
 let imageryBoundary: Polygon;
 let inRaleigh: Boolean;
@@ -111,47 +98,29 @@ export const filterBasemaps = (item: __esri.Basemap): boolean => {
   if (inRaleigh) {
     return true;
   } else {
-    return item.portalItem.tags.includes("countywide");
+    return item.portalItem.tags.includes('countywide');
   }
 };
 
-const getBoundary = (view: __esri.MapView): Promise<Polygon> => {
-  return new Promise((resolve, reject) => {
-    request(
-      "https://maps.raleighnc.gov/images/rest/services/Orthos2020/ImageServer/queryBoundary?outSR=102100&f=json",
-      { responseType: "json" }
-    ).then((response) => {
-      imageryBoundary = Polygon.fromJSON(response.data.shape);
-      resolve(imageryBoundary);
-    });
-  });
+const getBoundary = async (view: __esri.MapView): Promise<Polygon> => {
+    const response = await request(
+      'https://maps.raleighnc.gov/images/rest/services/Orthos2020/ImageServer/queryBoundary?outSR=102100&f=json',
+      { responseType: 'json' });
+      return Polygon.fromJSON(response.data.shape);
 };
 
-const viewExtentChanged = (
-  extent: __esri.Extent,
-  view: MapView,
-  alertSet: Function | undefined
-) => {
-  if (
-    imageryBoundary &&
-    images.source.basemaps.find(
-      (basemap) => images.activeBasemap.title === basemap.title
-    )
-  ) {
+const viewExtentChanged = (extent: __esri.Extent, view: MapView, alertSet: Function | undefined) => {
+  if (imageryBoundary && images.source.basemaps.find((basemap) => images.activeBasemap.title === basemap.title)) {
     wasRaleigh = inRaleigh;
     inRaleigh = checkBoundary(view.extent);
     if (wasRaleigh !== inRaleigh) {
       (images.source as PortalBasemapsSource).refresh();
       setTimeout(() => {
-        const match = images.source.basemaps.find(
-          (basemap) => view.map.basemap.title === basemap.title
-        );
+        const match = images.source.basemaps.find((basemap) => view.map.basemap.title === basemap.title);
         if (!match) {
           const from = images.activeBasemap.title;
           images.activeBasemap = images.source.basemaps.at(0);
           const to = images.activeBasemap.title;
-          //setShowAlert({ show: true, from: from, to: to });
-          debugger
           if (alertSet) {
             const alert: Alert = {
               show: true,
@@ -159,8 +128,8 @@ const viewExtentChanged = (
               duration: 'medium',
               kind: 'warning',
               title: 'Imagery Year Changed',
-              message: `Imagery for ${from} only available inside Raleigh, base map has changed to ${to}`
-            }      
+              message: `Imagery for ${from} only available inside Raleigh, base map has changed to ${to}`,
+            };
             alertSet(alert);
           }
         } else {
@@ -175,10 +144,10 @@ export const updateBlendOpacity = (
   opacityValue: number,
   view: __esri.MapView,
   streetMapId: string,
-  opacity: number
+  opacity: number,
 ) => {
   const layer = view.map.basemap.baseLayers.find((layer) => {
-    if (layer.type === "vector-tile") {
+    if (layer.type === 'vector-tile') {
       return (layer as VectorTileLayer).portalItem.id === streetMapId;
     } else {
       return false;
@@ -189,12 +158,7 @@ export const updateBlendOpacity = (
     layer.opacity = opacity;
   }
 };
-export const blendBasemap = (
-  switched: boolean,
-  view: __esri.MapView,
-  streetMapId: string,
-  opacity: number
-) => {
+export const blendBasemap = (switched: boolean, view: __esri.MapView, streetMapId: string, opacity: number) => {
   const streetMap = new VectorTileLayer({ portalItem: { id: streetMapId } });
   if (switched) {
     streetMap.opacity = opacity;
@@ -202,10 +166,8 @@ export const blendBasemap = (
   } else {
     view.map.basemap.baseLayers.remove(streetMap);
     const layer = view.map.basemap.baseLayers.find((layer) => {
-      if (layer.type === "vector-tile") {
-        return (
-          (layer as VectorTileLayer).portalItem.id === streetMap.portalItem.id
-        );
+      if (layer.type === 'vector-tile') {
+        return (layer as VectorTileLayer).portalItem.id === streetMap.portalItem.id;
       } else {
         return false;
       }
@@ -215,13 +177,11 @@ export const blendBasemap = (
       view.map.basemap.baseLayers.remove(layer);
     }
   }
-  images.watch("activeBasemap", (activeBasemap) => {
+  images.watch('activeBasemap', (activeBasemap) => {
     if (switched) {
       const layer = activeBasemap.baseLayers.find((layer: __esri.Layer) => {
-        if (layer.type === "vector-tile") {
-          return (
-            (layer as VectorTileLayer).portalItem.id === streetMap.portalItem.id
-          );
+        if (layer.type === 'vector-tile') {
+          return (layer as VectorTileLayer).portalItem.id === streetMap.portalItem.id;
         } else {
           return false;
         }
@@ -233,52 +193,39 @@ export const blendBasemap = (
   });
 };
 
-const checkBasemapTheme = (
-  basemap: Basemap,
-  view: MapView
-): Promise<boolean> => {
-  return new Promise((resolve, reject) => {
+const checkBasemapTheme = async (basemap: Basemap, view: MapView): Promise<boolean> => {
     if (basemap.baseLayers.length) {
       const baseLayer = basemap.baseLayers.find((layer) => {
-        return layer.type === "vector-tile";
+        return layer.type === 'vector-tile';
       });
-      if (baseLayer?.type === "vector-tile") {
-        reactiveUtils
-          .whenOnce(() => baseLayer.loaded)
-          .then((loaded) => {
-            const background = (
-              baseLayer as __esri.VectorTileLayer
-            ).getStyleLayer("background");
+      if (baseLayer?.type === 'vector-tile') {
+        await reactiveUtils.whenOnce(() => baseLayer.loaded);
+
+            const background = (baseLayer as __esri.VectorTileLayer).getStyleLayer('background');
             if (background) {
-              const color: Color = new Color(
-                background.paint["background-color"]
-              );
+              const color: Color = new Color(background.paint['background-color']);
               view.background = { color: color } as __esri.ColorBackground;
-              resolve((color as any).isBright);
+              return (color as any).isBright;
             } else {
-              resolve(true);
+              return true;
             }
-          });
-      } else if (
-        !baseLayer &&
-        basemap.baseLayers.getItemAt(0).type === "imagery"
-      ) {
-        resolve(false);
+
+      } else if (!baseLayer && basemap.baseLayers.getItemAt(0).type === 'imagery') {
+        return false;
       } else {
-        resolve(true);
+        return true;
       }
+    } else {
+      return false;
     }
-  });
 };
 
 const setPropertyColor = (view: MapView, isLight: boolean) => {
   const layer = view.map.allLayers.find((layer) => {
-    return layer.title.includes("Property") && layer.type === "feature";
+    return layer.title.includes('Property') && layer.type === 'feature';
   });
   if (layer) {
-    const renderer = (
-      (layer as FeatureLayer)?.renderer as __esri.SimpleRenderer
-    ).clone();
+    const renderer = ((layer as FeatureLayer)?.renderer as __esri.SimpleRenderer).clone();
     if (isLight) {
       (renderer.symbol as __esri.SimpleFillSymbol).outline.color.r = 0;
       (renderer.symbol as __esri.SimpleFillSymbol).outline.color.g = 0;

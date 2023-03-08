@@ -68,7 +68,22 @@ const useCoordinates = (props: CoordinateProps) => {
     },
     [formatRef]
   );
+  const coordinateInputChanged = useCallback(
+    (e: any) => {
+      if (e.currentTarget.value === '') {
+        const layer = props.view.map.findLayerById("coordinate-widget");
+        if (layer) {
+          (layer as GraphicsLayer).removeAll();
+        }
+      }
+    },
+    []
+  );
   const searchCoordinates = useCallback(async (e: any) => {
+    if (coordInput.current?.value === '') {
+      coordInput.current?.setAttribute('status', 'invalid');   
+      return;   
+    }
     if (!coordinateFormatter.isLoaded()) {
       await coordinateFormatter.load();
     }
@@ -147,7 +162,6 @@ const useCoordinates = (props: CoordinateProps) => {
       if (!props.view.map.findLayerById("coordinate-widget")) {
         props.view.map.add(layer);
       }
-      debugger
       layer.removeAll();
       layer.add({
         geometry: point as __esri.Geometry,
@@ -288,6 +302,7 @@ const useCoordinates = (props: CoordinateProps) => {
     coordinateRef,
     modeActionRef,
     noticeRef,
+    coordinateInputChanged
   };
 };
 

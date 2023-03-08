@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { initializeFeatureTable, updateTable } from "../utils/table";
 import { PropertyTableProps } from "./PropertyProps";
 
-function PropertyTable(args: PropertyTableProps) {
+function PropertyTable(props: PropertyTableProps) {
   const ref = useRef() as any;
   const loaded = useRef(false);
   const [featureTable, setFeatureTable] = useState<__esri.FeatureTable>();
@@ -11,10 +11,10 @@ function PropertyTable(args: PropertyTableProps) {
     if (!loaded.current) {
       loaded.current = true;
 
-      initializeFeatureTable(ref.current, args.view, args.featureSelected).then(
+      initializeFeatureTable(ref.current, props.view, props.featureSelected).then(
         (table: __esri.FeatureTable) => {
           setFeatureTable(table);
-          args.featureTableSet(table);
+          props.featureTableSet(table);
         }
       );
     }
@@ -24,9 +24,9 @@ function PropertyTable(args: PropertyTableProps) {
   }, []);
   useEffect(() => {
     if (featureTable) {
-      updateTable(args.condos, featureTable);
+      updateTable(props.condos, featureTable);
     }
-  }, [args.condos]);
+  }, [props.condos]);
   return <div ref={ref}></div>;
 }
 

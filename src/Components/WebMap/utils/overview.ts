@@ -5,7 +5,7 @@ import SimpleFillSymbol from "@arcgis/core/symbols/SimpleFillSymbol";
 import * as geometryEngine from "@arcgis/core/geometry/geometryEngine";
 let stationaryHandle: __esri.WatchHandle;
 let extentHandle: __esri.WatchHandle;
-export function initializeOverview(ref: HTMLDivElement, view: MapView) {
+export const initializeOverview = (ref: HTMLDivElement, view: MapView) => {
   const map = new Map({
     basemap: view.map.basemap,
   });

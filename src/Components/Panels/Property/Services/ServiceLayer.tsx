@@ -1,17 +1,20 @@
 import Feature from "@arcgis/core/widgets/Feature";
 import React from "react";
 import { useEffect, useRef } from "react";
-
-export const ServiceLayer = (args: any) => {
+interface Props {
+  key: number;
+  feature: __esri.Graphic;
+}
+export const ServiceLayer = (props: Props) => {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (args.feature) {
+    if (props.feature) {
       new Feature({
         container: ref.current as HTMLDivElement,
-        graphic: args.feature,
+        graphic: props.feature,
       });
     }
-  }, [args.feature]);
+  }, [props.feature]);
   return <div ref={ref}></div>;
 };
 export default ServiceLayer;

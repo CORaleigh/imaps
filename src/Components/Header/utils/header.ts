@@ -1,4 +1,4 @@
-export function toggleTheme(isDark: boolean) {
+export const toggleTheme = (isDark: boolean) => {
   // document.body.classList.toggle("calcite-mode-dark");
   //document.querySelector('.esri-ui')?.classList.toggle("calcite-mode-dark");
   //document.querySelector('.esri-ui')?.classList.toggle("calcite-mode-light");

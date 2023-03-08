@@ -19,7 +19,7 @@ const usePrint = (props: PrintProps) => {
   const scale = useRef<HTMLCalciteSelectElement>(null);
 
   const [layouts, setLayouts] = useState<any[]>([]);
-  const [formats, setFormats] = useState<any[]>([]);
+  const [formats, setFormats] = useState<string[]>([]);
   const [scaleType, setScaleType] = useState<string>("current");
   const [customScale, setCustomScale] = useState<any>();
   const [selectedProperty, setSelectedProperty] = useState<__esri.Graphic>();

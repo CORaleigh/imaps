@@ -2,15 +2,18 @@ import { useEffect, useRef } from "react";
 import MapView from "@arcgis/core/views/MapView";
 
 import { initializeOverview } from "../utils/overview";
-
-const useOverview = (args: any) => {
+interface Props {
+  id: string;
+  view: __esri.MapView;
+}
+const useOverview = (props: Props) => {
   const ref = useRef() as any;
   const loaded = useRef(false);
   let overview: MapView;
   useEffect(() => {
-    if (!loaded.current && args.view) {
+    if (!loaded.current && props.view) {
       loaded.current = true;
-      overview = initializeOverview(ref.current, args.view);
+      overview = initializeOverview(ref.current, props.view);
     }
     return () => {
       overview && overview.destroy();

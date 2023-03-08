@@ -2,29 +2,28 @@ import Graphic from "@arcgis/core/Graphic";
 import MapView from "@arcgis/core/views/MapView";
 import * as geometryEngine from "@arcgis/core/geometry/geometryEngine";
 import WebMap from "@arcgis/core/WebMap";
-function loadWebmap(serviceLayers: any[]): Promise<__esri.Layer[]> {
-  return new Promise((resolve, reject) => {
+const loadWebmap = async (serviceLayers: any[]): Promise<__esri.Layer[]> => {
+
     const map = new WebMap({
       portalItem: {
         id: "95092428774c4b1fb6a3b6f5fed9fbc4",
       },
     });
 
-    map.load().then(() => {
-      const layers = map.allLayers.filter((layer: __esri.Layer) => {
-        return serviceLayers.includes(layer.title);
-      });
-      resolve(layers.toArray());
+    await map.load();
+    const layers = map.allLayers.filter((layer: __esri.Layer) => {
+      return serviceLayers.includes(layer.title);
     });
-  });
+    return layers.toArray();
+
 }
-function getServiceData(
+const getServiceData = (
   layers: any[],
   graphic: Graphic,
   setFeatures: Function,
   setSearching: Function,
   promises: Promise<__esri.FeatureSet>[]
-) {
+) => {
   layers?.forEach((layer) => {
     if (layer.type === "feature") {
       promises.push(
@@ -55,15 +54,15 @@ function getServiceData(
     });
   }
 }
-export function getServices(
+export const getServices = (
   e: any,
   services: any[],
   view: MapView,
   graphic: Graphic,
   setFeatures: Function,
   setSearching: Function
-) {
-  requestAnimationFrame(() => {
+) => {
+  requestAnimationFrame(async () => {
     if (
       (e.target as HTMLCalciteAccordionItemElement).hasAttribute("expanded")
     ) {
@@ -83,7 +82,7 @@ export function getServices(
         });
 
         if (layers.length !== service.group.layers.length) {
-          loadWebmap(service.group.layers).then((layers: any[]) => {
+          const layers: any[] = await loadWebmap(service.group.layers);
             getServiceData(
               layers,
               graphic,
@@ -91,7 +90,6 @@ export function getServices(
               setSearching,
               promises
             );
-          });
         } else {
           getServiceData(
             layers.toArray(),

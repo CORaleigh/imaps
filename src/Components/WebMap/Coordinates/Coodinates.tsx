@@ -30,6 +30,7 @@ function Coordinates(props: CoordinateProps) {
     coordinateRef,
     modeActionRef,
     noticeRef,
+    coordinateInputChanged
   } = useCoordinates(props);
   return (
     <div id="coordinatesWidget">
@@ -128,8 +129,10 @@ function Coordinates(props: CoordinateProps) {
           ref={coordInput}
           id="coordInput"
           placeholder={selectedFormat.placeholder}
+          clearable
+          onCalciteInputChange={coordinateInputChanged}
         ></CalciteInput>
-        <CalciteButton onClick={searchCoordinates} width="full" scale="m" iconEnd="search">
+        <CalciteButton onClick={searchCoordinates} appearance="transparent" kind="neutral" width="full" scale="m" iconEnd="search">
           
         </CalciteButton>   
         </div>

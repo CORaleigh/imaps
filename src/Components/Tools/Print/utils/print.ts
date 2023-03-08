@@ -1,16 +1,16 @@
-import request from "@arcgis/core/request";
-import SpatialReference from "@arcgis/core/geometry/SpatialReference";
-import * as print from "@arcgis/core/rest/print";
-import PrintParameters from "@arcgis/core/rest/support/PrintParameters";
-import PrintTemplate from "@arcgis/core/rest/support/PrintTemplate";
+import request from '@arcgis/core/request';
+import SpatialReference from '@arcgis/core/geometry/SpatialReference';
+import * as print from '@arcgis/core/rest/print';
+import PrintParameters from '@arcgis/core/rest/support/PrintParameters';
+import PrintTemplate from '@arcgis/core/rest/support/PrintTemplate';
 
-import TileInfo from "@arcgis/core/layers/support/TileInfo";
-import Graphic from "@arcgis/core/Graphic";
-import { printTemplates } from "./templates";
-import MapView from "@arcgis/core/views/MapView";
-import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer";
-import Extent from "@arcgis/core/geometry/Extent";
-import * as projection from "@arcgis/core/geometry/projection";
+import TileInfo from '@arcgis/core/layers/support/TileInfo';
+import Graphic from '@arcgis/core/Graphic';
+import { printTemplates } from './templates';
+import MapView from '@arcgis/core/views/MapView';
+import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
+import Extent from '@arcgis/core/geometry/Extent';
+import * as projection from '@arcgis/core/geometry/projection';
 
 type MapScale = {
   scale: number;
@@ -21,20 +21,15 @@ type Layout = {
   template: string;
   size: number;
 };
-export const getFormats = (url: string): Promise<string[]> => {
-  return new Promise((resolve, reject) =>
-    request(url, { query: { f: "json" } })
-      .then((result) => {
-        result.data.parameters.forEach((parameter: any) => {
-          if (parameter.name === "Format") {
-            resolve(parameter.choiceList);
-          }
-        });
-      })
-      .catch((reason) => {
-        reject(reason);
-      })
-  );
+export const getFormats = async (url: string): Promise<string[]> => {
+  try {
+    const result = await request(url, { query: { f: 'json' } });
+    const parameter = result.data.parameters.find((parameter: any) => parameter.name === 'Format');
+    return parameter?.choiceList;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
 };
 
 const roundScale = (mapScale: number): number => {
@@ -95,80 +90,72 @@ export const getScales = (view: __esri.MapView): MapScale[] => {
       const scale = roundScale(lod.scale);
       return {
         scale: scale,
-        label: `1" = ${(scale / 12).toLocaleString("en")}'`,
+        label: `1" = ${(scale / 12).toLocaleString('en')}'`,
       };
     })
     ?.reverse();
-  scales.push({ scale: "custom", label: "User Defined" } as any);
+  scales.push({ scale: 'custom', label: 'User Defined' } as any);
   return scales;
 };
 
-export function getPrintScale(
+export const getPrintScale = (
   scaleType: string,
   currentScale: number,
   customScale: string | number,
-  userScale: number | undefined
-): number {
-  let mapScale = scaleType === "current" ? currentScale : customScale;
-  if (customScale === "custom" && userScale) {
+  userScale: number | undefined,
+): number => {
+  let mapScale = scaleType === 'current' ? currentScale : customScale;
+  if (customScale === 'custom' && userScale) {
     mapScale = userScale * 12;
   }
   return roundScale(mapScale as number);
 }
 
-export const getLayouts = (): Promise<Layout[]> => {
-  return new Promise((resolve) => {
-    //esriRequest(url, { query: { f: 'json' } })
-    //.then((result) => {
-    const layouts: Layout[] = [];
-    const templates: string[] = [];
-    printTemplates.results[0].value.forEach((value: any) => {
-      const width = value.pageSize[0];
-      const height = value.pageSize[1];
-      let label = `${width}"x${height}"`;
-      let orient = "Portrait";
-      let size: number = width;
-      let template = `${width}x${height}_${orient.toLowerCase()}`;
-      if (width > height) {
-        label = `${height}"x${width}"`;
-        orient = "Landscape";
-        template = `${height}x${width}_${orient.toLowerCase()}`;
-        size = height;
-      }
-      label += ` ${orient}`;
+export const getLayouts = async (): Promise<Layout[]> => {
+  const layouts: Layout[] = [];
+  const templates: string[] = [];
+  printTemplates.results[0].value.forEach((value: any) => {
+    const width = value.pageSize[0];
+    const height = value.pageSize[1];
+    let label = `${width}"x${height}"`;
+    let orient = 'Portrait';
+    let size: number = width;
+    let template = `${width}x${height}_${orient.toLowerCase()}`;
+    if (width > height) {
+      label = `${height}"x${width}"`;
+      orient = 'Landscape';
+      template = `${height}x${width}_${orient.toLowerCase()}`;
+      size = height;
+    }
+    label += ` ${orient}`;
 
-      const layout = { label: label, template: template, size: size };
-      if (!templates.includes(layout.template)) {
-        layouts.push(layout);
-        templates.push(layout.template);
-      }
-    });
-    layouts.sort((a: Layout, b: Layout) => {
-      return a.size - b.size;
-    });
-    resolve(layouts);
-    //    })
-    //   .catch((reason) => {
-    //     reject(reason);
-    //    });
+    const layout = { label: label, template: template, size: size };
+    if (!templates.includes(layout.template)) {
+      layouts.push(layout);
+      templates.push(layout.template);
+    }
   });
+  layouts.sort((a: Layout, b: Layout) => {
+    return a.size - b.size;
+  });
+  return layouts;
 };
-export function getTemplateName(
+export const getTemplateName = (
   selectedLayout: any,
   showAttributes: boolean | undefined,
-  showLegend: boolean | undefined
-) {
+  showLegend: boolean | undefined,
+) => {
   //const graphics = (props.view as __esri.MapView).map.findLayerById('print-graphic') as __esri.GraphicsLayer;
   //graphics.visible = false;
   let selectedTemplate = selectedLayout.template
-    ? selectedLayout.template.replace(".", "")
-    : JSON.parse(selectedLayout).template.replace(".", "");
+    ? selectedLayout.template.replace('.', '')
+    : JSON.parse(selectedLayout).template.replace('.', '');
 
   if (showAttributes) {
-    selectedTemplate += "_attributes";
+    selectedTemplate += '_attributes';
   }
   if (showLegend) {
-    selectedTemplate += "_legend";
+    selectedTemplate += '_legend';
   }
   return selectedTemplate;
 }
@@ -179,7 +166,7 @@ export const getPrintTemplate = (
   title: string | undefined,
   customElements: any[],
   view: __esri.MapView,
-  selectedTemplate: string
+  selectedTemplate: string,
 ): __esri.PrintTemplate => {
   return new PrintTemplate({
     attributionVisible: false,
@@ -192,7 +179,7 @@ export const getPrintTemplate = (
     },
     layoutOptions: {
       titleText: title,
-      scalebarUnit: "Feet",
+      scalebarUnit: 'Feet',
       customTextElements: customElements,
       legendLayers: [],
     },
@@ -201,31 +188,20 @@ export const getPrintTemplate = (
 };
 
 const formatAttributes = (selectedFeature: __esri.Graphic): string => {
-  let text = "";
-  (
-    selectedFeature.layer as __esri.FeatureLayer
-  ).popupTemplate.fieldInfos.forEach((field) => {
+  let text = '';
+  (selectedFeature.layer as __esri.FeatureLayer).popupTemplate.fieldInfos.forEach((field) => {
     if (
-      !["OBJECTID", "PARCEL_PK", "PARCEL_STATUS"].includes(field.fieldName) &&
+      !['OBJECTID', 'PARCEL_PK', 'PARCEL_STATUS'].includes(field.fieldName) &&
       selectedFeature.getAttribute(field.fieldName)
     ) {
       if (selectedFeature.getAttribute(field.fieldName) !== null) {
-        if (field.fieldName.includes("DATE")) {
+        if (field.fieldName.includes('DATE')) {
           const date = new Date(selectedFeature.getAttribute(field.fieldName));
-          text += `${field.label}: ${
-            date.getUTCMonth() + 1
-          }/${date.getUTCDate()}/${date.getUTCFullYear()}\n`;
-        } else if (
-          field.fieldName.includes("PRICE") ||
-          field.fieldName.includes("VAL")
-        ) {
-          text += `${field.label}: $${selectedFeature.getAttribute(
-            field.fieldName
-          )}\n`;
+          text += `${field.label}: ${date.getUTCMonth() + 1}/${date.getUTCDate()}/${date.getUTCFullYear()}\n`;
+        } else if (field.fieldName.includes('PRICE') || field.fieldName.includes('VAL')) {
+          text += `${field.label}: $${selectedFeature.getAttribute(field.fieldName)}\n`;
         } else {
-          text += `${field.label}: ${selectedFeature.getAttribute(
-            field.fieldName
-          )}\n`;
+          text += `${field.label}: ${selectedFeature.getAttribute(field.fieldName)}\n`;
         }
       }
     }
@@ -237,20 +213,20 @@ export const getCustomElements = (
   size: number,
   mapScale: number,
   showAttributes: boolean | undefined,
-  selectedFeature: Graphic | undefined
+  selectedFeature: Graphic | undefined,
 ): any[] => {
   const customElements = [];
   customElements.push({ Scale: (mapScale / 12).toString() });
   if (size < 24) {
     customElements.push({ HalfScale: (mapScale / 12 / 2).toString() });
-    customElements.push({ "2xScale": (mapScale / 12) * 2 + " ft" });
+    customElements.push({ '2xScale': (mapScale / 12) * 2 + ' ft' });
   } else if (size < 36) {
-    customElements.push({ "2xScale": (mapScale / 12) * 2 });
-    customElements.push({ "4xScale": (mapScale / 12) * 4 + " ft" });
+    customElements.push({ '2xScale': (mapScale / 12) * 2 });
+    customElements.push({ '4xScale': (mapScale / 12) * 4 + ' ft' });
   } else {
-    customElements.push({ "2xScale": (mapScale / 12) * 2 });
-    customElements.push({ "4xScale": (mapScale / 12) * 4 });
-    customElements.push({ "6xScale": (mapScale / 12) * 6 + " ft" });
+    customElements.push({ '2xScale': (mapScale / 12) * 2 });
+    customElements.push({ '4xScale': (mapScale / 12) * 4 });
+    customElements.push({ '6xScale': (mapScale / 12) * 6 + ' ft' });
   }
   if (showAttributes) {
     const text = formatAttributes(selectedFeature as __esri.Graphic);
@@ -273,45 +249,23 @@ export const exportClicked = (
   showLegend: boolean | undefined,
   jobRef: any,
   jobs: any[],
-  setJobs: Function
+  setJobs: Function,
 ) => {
-  // let scale = scaleType === 'current' ? args?.view?.scale;
-  // scale = scaleType === 'custom' ?
-  // userDefined.current.value;
   if (view) {
     const scale: number = getPrintScale(
       scaleType,
       view?.scale,
       customScale,
-      userDefined ? parseInt(userDefined.value) : undefined
+      userDefined ? parseInt(userDefined.value) : undefined,
     );
-    const graphicsLayer: __esri.GraphicsLayer = view?.map.findLayerById(
-      "print-graphic"
-    ) as __esri.GraphicsLayer;
+    const graphicsLayer: __esri.GraphicsLayer = view?.map.findLayerById('print-graphic') as __esri.GraphicsLayer;
     if (graphicsLayer) {
       graphicsLayer.visible = false;
     }
-    //exportMap(args.exportUrl, args?.view, args?.view.scale);
-    const customElements: any[] = getCustomElements(
-      selectedLayout.size,
-      scale,
-      showAttributes,
-      selectedProperty
-    );
-    const template = getTemplateName(
-      selectedLayout,
-      showAttributes,
-      showLegend
-    );
+    const customElements: any[] = getCustomElements(selectedLayout.size, scale, showAttributes, selectedProperty);
+    const template = getTemplateName(selectedLayout, showAttributes, showLegend);
 
-    const printTemplate = getPrintTemplate(
-      scale,
-      selectedFormat,
-      title,
-      customElements,
-      view,
-      template
-    );
+    const printTemplate = getPrintTemplate(scale, selectedFormat, title, customElements, view, template);
     const job = {
       title: title,
       loading: true,
@@ -324,30 +278,10 @@ export const exportClicked = (
     // if (printTemplate.outScale !== view.scale) {
     //   view.scale = printTemplate.outScale;
     // }
-    setTimeout(() => {
-      exportMap(
-        exportUrl,
-        printTemplate,
-        view,
-        oldScale,
-        selectedFormat as string
-      )
-        .then((result) => {
-          setTimeout(() => {
-            //graphics.visible = true;
-            if (graphicsLayer) {
-              graphicsLayer.visible = true;
-            }
-            const index = jobRef.current.indexOf(job);
-            jobRef.current[index] = {
-              ...jobRef.current[index],
-              ...{ url: result.url, loading: false },
-            };
-            setJobs([...jobRef.current]);
-          });
-        })
-        .catch((reason) => {
-          console.log(reason);
+    setTimeout(async () => {
+      try {
+        const result = await exportMap(exportUrl, printTemplate, view, oldScale, selectedFormat as string);
+        setTimeout(() => {
           //graphics.visible = true;
           if (graphicsLayer) {
             graphicsLayer.visible = true;
@@ -355,46 +289,52 @@ export const exportClicked = (
           const index = jobRef.current.indexOf(job);
           jobRef.current[index] = {
             ...jobRef.current[index],
-            ...{ error: true, loading: false },
+            ...{ url: result?.url, loading: false },
           };
           setJobs([...jobRef.current]);
         });
+      } catch (error) {
+        console.log(error);
+        //graphics.visible = true;
+        if (graphicsLayer) {
+          graphicsLayer.visible = true;
+        }
+        const index = jobRef.current.indexOf(job);
+        jobRef.current[index] = {
+          ...jobRef.current[index],
+          ...{ error: true, loading: false },
+        };
+        setJobs([...jobRef.current]);
+      }
     }, 1000);
   }
 };
 
-const exportMap = (
+const exportMap = async (
   url: string,
   template: PrintTemplate,
   view: __esri.MapView,
   oldScale: number,
-  format: string
-): Promise<__esri.PrintResponse> => {
-  template.format = format as any;
-  return new Promise((resolve, reject) => {
-    print
-      .execute(
-        url,
-        new PrintParameters({
-          template: template,
-          view: view,
-          outSpatialReference: new SpatialReference({ wkid: 3632 }),
-        }),
-        {
-          timeout: 120000,
-          headers: { "Content-Type": "application/json;charset=UTF-8" },
-        }
-      )
-      .then((result: __esri.PrintResponse) => {
-        resolve(result);
-      })
-      .catch((reason) => {
-        reject(reason);
-      });
-    // setTimeout(() => {
-    //   view.scale = oldScale;
-    // }, 1000);
-  });
+  format: string,
+): Promise<__esri.PrintResponse | undefined> => {
+  try {
+    template.format = format as any;
+    const result = await print.execute(
+      url,
+      new PrintParameters({
+        template: template,
+        view: view,
+        outSpatialReference: new SpatialReference({ wkid: 3632 }),
+      }),
+      {
+        timeout: 120000,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      },
+    );
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
 };
 let mapViewStationary: any = null;
 export const showFrame = (
@@ -402,11 +342,11 @@ export const showFrame = (
   view: MapView,
   selectedLayout: any,
   scaleType: string,
-  customScaleSelect: any
+  customScaleSelect: any,
 ) => {
-  let graphics = view.map.findLayerById("print-graphic") as GraphicsLayer;
+  let graphics = view.map.findLayerById('print-graphic') as GraphicsLayer;
   if (!graphics) {
-    graphics = new GraphicsLayer({ id: "print-graphic", listMode: "hide" });
+    graphics = new GraphicsLayer({ id: 'print-graphic', listMode: 'hide' });
     view.map.add(graphics);
   }
   graphics.removeAll();
@@ -417,14 +357,13 @@ export const showFrame = (
   if (show) {
     addPrintGraphic(graphics, view, selectedLayout, scaleType, customScale);
 
-    mapViewStationary = view.watch("stationary", (stationary) => {
+    mapViewStationary = view.watch('stationary', (stationary) => {
       graphics.removeAll();
       if (customScaleSelect.current) {
         customScale = customScaleSelect.current.value;
       }
       addPrintGraphic(graphics, view, selectedLayout, scaleType, customScale);
     });
-    console.log((view as any).hasHandles());
   } else {
     if (mapViewStationary) {
       mapViewStationary.remove();
@@ -437,51 +376,45 @@ const addPrintGraphic = (
   view: MapView,
   selectedLayout: any,
   scaleType: string,
-  customScale: any
+  customScale: any,
 ) => {
-  setTimeout(() => {
-    projection.load().then(() => {
-      const center = projection.project(view.extent.center, {
-        wkid: 2264,
-      }) as __esri.Point;
-      const layout = selectedLayout.template
-        ? selectedLayout
-        : JSON.parse(selectedLayout);
-      const selectedTemplate = layout.template.replace(".", "");
-      const template = printTemplates.results[0].value.filter((value) => {
-        return value.layoutTemplate === selectedTemplate;
-      });
-      //        let mapScale = (props.view as __esri.MapView).scale / 12;
-
-      let mapScale =
-        scaleType === "current"
-          ? roundScale(view.scale)
-          : parseInt(customScale);
-      mapScale = mapScale / 12;
-      const width = template[0]?.webMapFrameSize[0] * mapScale;
-      const height = template[0]?.webMapFrameSize[1] * mapScale;
-      const xmax = center.x + width / 2;
-      const ymax = center.y + height / 2;
-      const xmin = center.x - width / 2;
-      const ymin = center.y - height / 2;
-      graphics.removeAll();
-
-      graphics.add(
-        new Graphic({
-          symbol: {
-            type: "simple-fill",
-            style: "cross",
-            outline: { width: 2, color: [149, 149, 149, 1] },
-          } as any,
-          geometry: new Extent({
-            xmax: xmax,
-            xmin: xmin,
-            ymax: ymax,
-            ymin: ymin,
-            spatialReference: { wkid: 2264 },
-          }),
-        })
-      );
+  setTimeout(async () => {
+    await projection.load();
+    const center = projection.project(view.extent.center, {
+      wkid: 2264,
+    }) as __esri.Point;
+    const layout = selectedLayout.template ? selectedLayout : JSON.parse(selectedLayout);
+    const selectedTemplate = layout.template.replace('.', '');
+    const template = printTemplates.results[0].value.filter((value) => {
+      return value.layoutTemplate === selectedTemplate;
     });
+    //        let mapScale = (props.view as __esri.MapView).scale / 12;
+
+    let mapScale = scaleType === 'current' ? roundScale(view.scale) : parseInt(customScale);
+    mapScale = mapScale / 12;
+    const width = template[0]?.webMapFrameSize[0] * mapScale;
+    const height = template[0]?.webMapFrameSize[1] * mapScale;
+    const xmax = center.x + width / 2;
+    const ymax = center.y + height / 2;
+    const xmin = center.x - width / 2;
+    const ymin = center.y - height / 2;
+    graphics.removeAll();
+
+    graphics.add(
+      new Graphic({
+        symbol: {
+          type: 'simple-fill',
+          style: 'cross',
+          outline: { width: 2, color: [149, 149, 149, 1] },
+        } as any,
+        geometry: new Extent({
+          xmax: xmax,
+          xmin: xmin,
+          ymax: ymax,
+          ymin: ymin,
+          spatialReference: { wkid: 2264 },
+        }),
+      }),
+    );
   });
 };

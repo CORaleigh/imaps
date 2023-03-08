@@ -13,7 +13,14 @@ import {
 } from "@esri/calcite-components-react";
 import React, { useEffect, useRef, useState } from "react";
 
-function ColorButton(props: any) {
+interface Props {
+  id: string;
+  label: string;
+  color: number[];
+  colorSet: Function;
+  hideTransparency?: boolean;
+}
+function ColorButton(props: Props) {
   const popover = useRef<HTMLCalcitePopoverElement>(null);
   const picker = useRef<HTMLCalciteColorPickerElement>(null);
   const [color, setColor] = useState<Color>();

@@ -3,24 +3,26 @@ import { useEffect, useRef } from "react";
 import { displayProperties, initializeMap } from "../utils/map";
 import { WebMapProps } from "./WebMapProps";
 
-const useWebMap = (args: WebMapProps) => {
+const useWebMap = (props: WebMapProps) => {
   const ref = useRef() as any;
   const loaded = useRef(false);
   const view = useRef<MapView | null>(null);
 
   useEffect(() => {
+    
+
     if (!loaded.current) {
+      debugger
       loaded.current = true;
       const mapView = initializeMap(
         ref.current,
-        args.mapId,
-        args.geometrySet,
-        args.widgetActivated
-      );
-      view.current = mapView;
-      args.mapViewSet(view.current);
-
-      window.addEventListener("unload", () => {});
+        props.mapId,
+        props.geometrySet,
+        props.widgetActivated
+      ).then(mapView => {
+        view.current = mapView;
+        props.mapViewSet(view.current);
+      });
     }
     return () => {
       // clean up the map view
@@ -32,10 +34,10 @@ const useWebMap = (args: WebMapProps) => {
     };
   }, []);
   useEffect(() => {
-    if (args.properties) {
-      displayProperties(args.properties, view.current as __esri.MapView);
+    if (props.properties) {
+      displayProperties(props.properties, view.current as __esri.MapView);
     }
-  }, [args.properties]);
+  }, [props.properties]);
   return { ref, loaded, view };
 };
 

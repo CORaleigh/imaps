@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { createTemplate } from "../popuptemplate";
+import { PropertyInfoProps } from "../PropertyInfo/PropertyInfoProps";
 import { initializeFeature, updateFeature } from "../utils/info";
-const usePropertyInfo = (props: any) => {
+const usePropertyInfo = (props: PropertyInfoProps) => {
   const loaded = useRef(false);
   const ref = useRef<any>(null);
   const [feature, setFeature] = useState<__esri.Feature>();
@@ -22,7 +23,7 @@ const usePropertyInfo = (props: any) => {
       const table = feature?.view.map.allTables.find((table: __esri.Layer) => {
         return table.title.includes("Condo");
       }) as __esri.FeatureLayer;
-      props.feature.view = feature.view;
+     // props.feature.view = feature.view;
       props.feature.layer = table;
       props.feature.popupTemplate = createTemplate(
         feature?.view as __esri.MapView,
@@ -48,7 +49,7 @@ const usePropertyInfo = (props: any) => {
     if (window.history.state?.pins !== pin) {
       window.history.pushState({ pins: pin }, "", url);
     }
-  }, [props.feature, props.table, props.featureTable]);
+  }, [props.feature, props.featureTable]);
 
   return {
     ref,

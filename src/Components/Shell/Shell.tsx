@@ -1,12 +1,8 @@
 import React, { lazy, Suspense } from "react";
 import {
-  CalciteAlert,
   CalciteScrim,
   CalciteShell,
   CalciteShellPanel,
-  CalciteTip,
-  CalciteTipGroup,
-  CalciteTipManager,
 } from "@esri/calcite-components-react";
 import WebMap from "../WebMap/WebMap";
 import Header from "../Header/Header";
@@ -16,6 +12,8 @@ import Property from "../Panels/Property/Property";
 
 import Toolbar from "./Toolbar";
 import useShell from "./utils/useShell";
+import AppTips from "./utils/AppTips";
+import AppAlert from "./AppAlert";
 
 const Location = lazy(() => import("../Panels/Location/Location"));
 const Layers = lazy(() => import("../Panels/Layers/Layers"));
@@ -42,7 +40,6 @@ function Shell() {
     loadedTools,
     toolDismissed,
     loading,
-    showAlert,
     alertSet,
     selectedProperty,
     mapCallback,
@@ -51,18 +48,12 @@ function Shell() {
     widgetCallback,
     alert,
     tipsCallback,
-    tips,
-    tipsHidden,
+    tips
   } = useShell();
   return (
     <div>
     <CalciteShell contentBehind={contentBehind ? true : undefined}>
       <Header></Header>
-      {/* <CalciteShellPanel
-        collapsed
-        slot="primary-panel"
-        position="start"
-      ></CalciteShellPanel> */}
       <CalciteShellPanel
         className="custom-width"
         slot="panel-end"
@@ -196,40 +187,9 @@ function Shell() {
         widgetActivated={widgetCallback}
       ></WebMap>
       <CalciteScrim loading hidden={!loading ? true : undefined}></CalciteScrim>
-      
-
     </CalciteShell>
-    <CalciteTipManager closed={tipsHidden ? true : undefined}>
-        <CalciteTipGroup group-title={tips?.title}>
-          {tips?.tips.map((tip: any) => {
-            return (
-              <CalciteTip heading={tip.title} key={tip.title}>
-                {tip.text}
-              </CalciteTip>
-            );
-          })}
-        </CalciteTipGroup>
-      </CalciteTipManager>
-      <CalciteAlert
-        open={alert?.show}
-        onCalciteAlertClose={() => {
-          if (alert) {
-            alert.show = false;
-          }
-        }}
-        kind={alert?.kind}
-        autoClose={alert?.autoDismiss ? true : undefined}
-        autoCloseDuration={alert?.duration}
-        label={""}
-      >
-        <div slot="title">{alert?.title}</div>
-        <div slot="message">{alert?.message}</div>
-        {alert?.link?.show && (
-          <a slot="link" href={alert?.link.url}>
-            {alert?.link.text}
-          </a>
-        )}
-      </CalciteAlert>      
+    <AppTips tips={tips}></AppTips>
+    <AppAlert alert={alert} ></AppAlert>
     </div>
   );
 }

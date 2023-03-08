@@ -1,15 +1,15 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { cancelSelect, initializeSelect } from "../utils/select";
-import SketchViewModel from "@arcgis/core/widgets/Sketch/SketchViewModel";
-import { tips } from "./tips";
-import { SelectProps } from "./SelectProps";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { cancelSelect, initializeSelect } from '../utils/select';
+import SketchViewModel from '@arcgis/core/widgets/Sketch/SketchViewModel';
+import { tips } from './tips';
+import { SelectProps } from './SelectProps';
 
 const useSelect = (props: SelectProps) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const loaded = useRef(false);
   const [isActive, setIsActive] = useState(false);
 
-  const [selectedTool, setSelectedTool] = useState("");
+  const [selectedTool, setSelectedTool] = useState('');
   const [distance, setDistance] = useState(0);
 
   const [sketchVm, setSketchVm] = useState<SketchViewModel>();
@@ -18,24 +18,19 @@ const useSelect = (props: SelectProps) => {
   useEffect(() => {
     if (!loaded.current) {
       loaded.current = true;
-      setSketchVm(
-        initializeSelect(props.view, props.geometrySet, setSelectedTool)
-      );
+      initializeSelect(props.view, props.geometrySet, setSelectedTool).then((sketchVm) => setSketchVm(sketchVm));
     }
     return () => {
       sketchVm && sketchVm.destroy();
     };
-  }, []); // only after first render
+  }, []);
   useEffect(() => {
-    //if (props.selectedProperty) {
-
     setSelectedProperty(props.selectedProperty);
-    // }
   }, [props.selectedProperty]);
   useEffect(() => {
     if (sketchVm && props.toolDismissed) {
       sketchVm.cancel();
-      setSelectedTool("");
+      setSelectedTool('');
     }
   }, [props.toolDismissed]);
   useEffect(() => {

@@ -1,7 +1,7 @@
-import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
-import PopupTemplate from "@arcgis/core/PopupTemplate";
-import FieldInfo from "@arcgis/core/popup/FieldInfo";
-import Graphic from "@arcgis/core/Graphic";
+import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
+import PopupTemplate from '@arcgis/core/PopupTemplate';
+import FieldInfo from '@arcgis/core/popup/FieldInfo';
+import Graphic from '@arcgis/core/Graphic';
 
 import {
   createDeedButtons,
@@ -12,15 +12,15 @@ import {
   getAddressTable,
   getDurhamPhoto,
   getServiceAccordion,
-} from "./customContent";
-import { arcadeExpressionInfos } from "./utils/arcadeExpressions";
+} from './customContent';
+import { arcadeExpressionInfos } from './utils/arcadeExpressions';
 
 export const createTemplate = (
   view: __esri.MapView,
   condoTable: FeatureLayer,
   feature: Graphic,
   condos: Graphic[],
-  featureTable: __esri.FeatureTable | undefined
+  featureTable: __esri.FeatureTable | undefined,
 ): PopupTemplate => {
   const popupTemplate = new PopupTemplate({
     expressionInfos: arcadeExpressionInfos,
@@ -28,13 +28,7 @@ export const createTemplate = (
       return {
         fieldName: field.fieldName,
         label: field.label,
-        visible: [
-          "SITE_ADDRESS",
-          "OWNER",
-          "PIN_NUM",
-          "PIN_EXT",
-          "REID",
-        ].includes(field.fieldName),
+        visible: ['SITE_ADDRESS', 'OWNER', 'PIN_NUM', 'PIN_EXT', 'REID'].includes(field.fieldName),
       };
     }),
     content: [
@@ -47,183 +41,183 @@ export const createTemplate = (
       createLinkButtons(),
       createEnvironmentalButtons(view),
       {
-        type: "text",
-        text: "<h2>General</h1>",
+        type: 'text',
+        text: '<h2>General</h1>',
       },
       {
-        type: "fields",
+        type: 'fields',
         fieldInfos: [
           {
-            fieldName: "expression/pin",
-            label: "PIN",
+            fieldName: 'expression/pin',
+            label: 'PIN',
           },
           {
-            fieldName: "REID",
-            label: "REID",
+            fieldName: 'REID',
+            label: 'REID',
           },
           {
-            fieldName: "expression/city",
-            label: "City",
+            fieldName: 'expression/city',
+            label: 'City',
           },
           {
-            fieldName: "expression/jurisdiction",
-            label: "Jurisdiction",
+            fieldName: 'expression/jurisdiction',
+            label: 'Jurisdiction',
           },
           {
-            fieldName: "expression/township",
-            label: "Township",
+            fieldName: 'expression/township',
+            label: 'Township',
           },
           {
-            fieldName: "MAP_NAME",
-            label: "Map Name",
+            fieldName: 'MAP_NAME',
+            label: 'Map Name',
           },
           {
-            fieldName: "LAND_CLASS_DECODE",
-            label: "Land Class",
+            fieldName: 'LAND_CLASS_DECODE',
+            label: 'Land Class',
           },
         ],
       },
       {
-        type: "text",
-        text: "<h2>Owner</h1>",
+        type: 'text',
+        text: '<h2>Owner</h1>',
       },
       {
-        type: "text",
-        text: "{OWNER}<br/>{expression/mailing-address}",
+        type: 'text',
+        text: '{OWNER}<br/>{expression/mailing-address}',
       },
       {
-        type: "text",
-        text: "<h2>Valuation</h1>",
+        type: 'text',
+        text: '<h2>Valuation</h1>',
       },
       {
-        type: "fields",
+        type: 'fields',
         fieldInfos: [
           {
-            fieldName: "expression/build_val",
+            fieldName: 'expression/build_val',
           },
           {
-            fieldName: "expression/land_val",
+            fieldName: 'expression/land_val',
           },
           {
-            fieldName: "expression/total_val",
+            fieldName: 'expression/total_val',
           },
           {
-            fieldName: "BILLING_CLASS_DECODE",
-            label: "Billing Class",
+            fieldName: 'BILLING_CLASS_DECODE',
+            label: 'Billing Class',
           },
         ],
       },
       {
-        type: "text",
-        text: "<h2>Last Sale</h1>",
+        type: 'text',
+        text: '<h2>Last Sale</h1>',
       },
       {
-        type: "fields",
+        type: 'fields',
         fieldInfos: [
           {
-            fieldName: "SALE_DATE",
+            fieldName: 'SALE_DATE',
             format: {
-              dateFormat: "short-date",
+              dateFormat: 'short-date',
             },
-            label: "Date Sold",
+            label: 'Date Sold',
           },
           {
-            fieldName: "expression/sale_price",
+            fieldName: 'expression/sale_price',
           },
         ],
       },
       {
-        type: "text",
-        text: "<h2>Deeds</h1>",
+        type: 'text',
+        text: '<h2>Deeds</h1>',
       },
       {
-        type: "fields",
+        type: 'fields',
         fieldInfos: [
           {
-            fieldName: "DEED_BOOK",
-            label: "Book",
+            fieldName: 'DEED_BOOK',
+            label: 'Book',
           },
           {
-            fieldName: "DEED_PAGE",
-            label: "Page",
+            fieldName: 'DEED_PAGE',
+            label: 'Page',
           },
           {
-            fieldName: "DEED_DATE",
+            fieldName: 'DEED_DATE',
             format: {
-              dateFormat: "short-date",
+              dateFormat: 'short-date',
             },
-            label: "Deed Date",
+            label: 'Deed Date',
           },
           {
-            fieldName: "DEED_ACRES",
+            fieldName: 'DEED_ACRES',
             format: {
               places: 2,
             },
-            label: "Deed Acres",
+            label: 'Deed Acres',
           },
           {
-            fieldName: "PROPDESC",
-            label: "Property Description",
+            fieldName: 'PROPDESC',
+            label: 'Property Description',
           },
         ],
       },
       createDeedButtons(),
-      feature.getAttribute("HEATEDAREA")
+      feature.getAttribute('HEATEDAREA')
         ? {
-            type: "text",
-            text: "<h2>Building</h1>",
+            type: 'text',
+            text: '<h2>Building</h1>',
           }
         : {
-            type: "text",
-            text: "",
+            type: 'text',
+            text: '',
           },
-      feature.getAttribute("HEATEDAREA")
+      feature.getAttribute('HEATEDAREA')
         ? {
-            type: "fields",
+            type: 'fields',
             fieldInfos: [
               {
-                fieldName: "HEATEDAREA",
+                fieldName: 'HEATEDAREA',
                 format: {
                   digitSeparator: true,
                 },
-                label: "Heated Area",
+                label: 'Heated Area',
               },
               {
-                fieldName: "YEAR_BUILT",
+                fieldName: 'YEAR_BUILT',
                 format: {
                   digitSeparator: false,
                 },
-                label: "Year Built",
+                label: 'Year Built',
               },
               {
-                fieldName: "DESIGN_STYLE_DECODE",
-                label: "Design/Style",
+                fieldName: 'DESIGN_STYLE_DECODE',
+                label: 'Design/Style',
               },
               {
-                fieldName: "TYPE_USE_DECODE",
-                label: "Use Type",
+                fieldName: 'TYPE_USE_DECODE',
+                label: 'Use Type',
               },
               {
-                fieldName: "TOTSTRUCTS",
-                label: "Total Structures",
+                fieldName: 'TOTSTRUCTS',
+                label: 'Total Structures',
               },
               {
-                fieldName: "TOTUNITS",
-                label: "Total Units",
+                fieldName: 'TOTUNITS',
+                label: 'Total Units',
               },
             ],
           }
         : {
-            type: "text",
-            text: "",
+            type: 'text',
+            text: '',
           },
       {
-        type: "media",
+        type: 'media',
         mediaInfos: [],
       },
       {
-        type: "text",
-        text: "<h2>Services</h1>",
+        type: 'text',
+        text: '<h2>Services</h1>',
       },
       getServiceAccordion(view),
       getAddressTable(view),
@@ -232,42 +226,34 @@ export const createTemplate = (
   return popupTemplate;
 };
 
-function getFieldInfos(condoTable: FeatureLayer): FieldInfo[] {
+const getFieldInfos = (condoTable: FeatureLayer): FieldInfo[] => {
   let fieldConfigs: FieldInfo[] = [];
   condoTable.fields.forEach((field) => {
     fieldConfigs.push(
       new FieldInfo({
         fieldName: field.name,
         label: field.alias,
-        visible: [
-          "SITE_ADDRESS",
-          "OWNER",
-          "PIN_NUM",
-          "PIN_EXT",
-          "REID",
-        ].includes(field.name),
-      })
+        visible: ['SITE_ADDRESS', 'OWNER', 'PIN_NUM', 'PIN_EXT', 'REID'].includes(field.name),
+      }),
     );
   });
   const ext = fieldConfigs.find((fc) => {
-    return fc.fieldName === "PIN_EXT";
+    return fc.fieldName === 'PIN_EXT';
   }) as FieldInfo;
   const pin = fieldConfigs.find((fc) => {
-    return fc.fieldName === "PIN_NUM";
+    return fc.fieldName === 'PIN_NUM';
   }) as FieldInfo;
   const reid = fieldConfigs.find((fc) => {
-    return fc.fieldName === "REID";
+    return fc.fieldName === 'REID';
   }) as FieldInfo;
   const owner = fieldConfigs.find((fc) => {
-    return fc.fieldName === "OWNER";
+    return fc.fieldName === 'OWNER';
   }) as FieldInfo;
   const address = fieldConfigs.find((fc) => {
-    return fc.fieldName === "SITE_ADDRESS";
+    return fc.fieldName === 'SITE_ADDRESS';
   }) as FieldInfo;
   fieldConfigs = fieldConfigs.filter((fc) => {
-    return !["SITE_ADDRESS", "OWNER", "PIN_NUM", "PIN_EXT", "REID"].includes(
-      fc.fieldName
-    );
+    return !['SITE_ADDRESS', 'OWNER', 'PIN_NUM', 'PIN_EXT', 'REID'].includes(fc.fieldName);
   });
   fieldConfigs.unshift(ext);
   fieldConfigs.unshift(pin);
@@ -275,55 +261,46 @@ function getFieldInfos(condoTable: FeatureLayer): FieldInfo[] {
   fieldConfigs.unshift(owner);
   fieldConfigs.unshift(address);
   return fieldConfigs;
-}
+};
 
-export const getPhotos = (
-  feature: __esri.Graphic
-): Promise<__esri.MediaInfo[]> => {
-  return new Promise(function (resolve) {
-    const relationship = (feature.layer as FeatureLayer)?.relationships.find(
-      (r) => {
-        return r.name === "CONDO_PHOTOS";
-      }
-    );
-    const mediaInfos: any[] = [];
-    const layer: FeatureLayer = feature.layer as FeatureLayer;
-    layer
-      ?.queryRelatedFeatures({
-        relationshipId: relationship?.id,
-        objectIds: [feature.getAttribute("OBJECTID")],
-        outFields: ["*"],
-        where: `STATUS = 'A'`,
-      })
-      .then(async (result) => {
-        for (const key in result) {
-          feature.setAttribute("OBJECTID", key);
-          result[key].features.reverse().forEach((feature: Graphic) => {
-            mediaInfos.push({
-              title: "",
-              type: "image",
-              caption: "",
-              value: {
-                sourceURL: `https://services.wakegov.com/realestate/photos/mvideo/${feature.getAttribute(
-                  "IMAGEDIR"
-                )}/${feature.getAttribute("IMAGENAME")}`,
-              },
-            });
-          });
-        }
-        if (feature.getAttribute("CITY_DECODE")?.includes("DURHAM COUNTY")) {
-          const photo = await getDurhamPhoto(feature);
-
-          mediaInfos.push({
-            title: "",
-            type: "image",
-            caption: "",
-            value: {
-              sourceURL: photo,
-            },
-          });
-        }
-        resolve(mediaInfos);
-      });
+export const getPhotos = async (feature: __esri.Graphic): Promise<__esri.MediaInfo[]> => {
+  const relationship = (feature.layer as FeatureLayer)?.relationships.find((r) => {
+    return r.name === 'CONDO_PHOTOS';
   });
+  const mediaInfos: any[] = [];
+  const layer: FeatureLayer = feature.layer as FeatureLayer;
+  const result = await layer?.queryRelatedFeatures({
+    relationshipId: relationship?.id,
+    objectIds: [feature.getAttribute('OBJECTID')],
+    outFields: ['*'],
+    where: `STATUS = 'A'`,
+  });
+  for (const key in result) {
+    feature.setAttribute('OBJECTID', key);
+    result[key].features.reverse().forEach((feature: Graphic) => {
+      mediaInfos.push({
+        title: '',
+        type: 'image',
+        caption: '',
+        value: {
+          sourceURL: `https://services.wakegov.com/realestate/photos/mvideo/${feature.getAttribute(
+            'IMAGEDIR',
+          )}/${feature.getAttribute('IMAGENAME')}`,
+        },
+      });
+    });
+  }
+  if (feature.getAttribute('CITY_DECODE')?.includes('DURHAM COUNTY')) {
+    const photo = await getDurhamPhoto(feature);
+
+    mediaInfos.push({
+      title: '',
+      type: 'image',
+      caption: '',
+      value: {
+        sourceURL: photo,
+      },
+    });
+  }
+  return mediaInfos;
 };

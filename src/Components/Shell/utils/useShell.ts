@@ -1,3 +1,4 @@
+import { Tip } from "@esri/calcite-components/dist/types/components/tip/tip";
 import { useState, useEffect, useRef, useCallback } from "react";
 import {
   getDistinctProperties,
@@ -14,7 +15,6 @@ const useShell = () => {
   const loaded = useRef(false);
   const [loading, setLoading] = useState(true);
   const [alert, setAlert] = useState<Alert>();
-  const [showAlert, setShowAlert] = useState(false);
   const [contentBehind, setContentBehind] = useState(false);
   const [loadedPanels, setLoadedPanels] = useState<string[]>(() => ["search"]);
   const [loadedTools, setLoadedTools] = useState<string[]>(() => []);
@@ -29,8 +29,6 @@ const useShell = () => {
   const [selectedProperty, setSelectedProperty] = useState<__esri.Graphic>();
 
   const [tips, setTips] = useState<any>();
-  const lastTips = useRef<any>();
-  const [tipsHidden, setTipsHidden] = useState<any>(true);
   useEffect(() => {
     if (properties) {
       setActivePanel("search");
@@ -52,34 +50,20 @@ const useShell = () => {
         setContentBehind(true);
       }
       loaded.current = true;
-      fetch("./config.json").then((response) => {
-        response.json().then((config) => {
-          let timeout = 0;
-          if (config.alert.duration === "fast") {
-            timeout = 6000;
-          }
-          if (config.alert.duration === "medium") {
-            timeout = 10000;
-          }
-          if (config.alert.duration === "slow") {
-            timeout = 14000;
-          }
-          setShowAlert(config.alert.show);
-          setAlert(config.alert);
-          setTimeout(() => {
-            if (config.alert.autoDismiss) {
-              setShowAlert(false);
-            }
-          }, timeout);
-        });
-      });
+      const loadConfig = async (file: string) => {
+        const response = await fetch(file);
+        const config = await response.json();
+        setAlert(config.alert);
+      }
+      loadConfig('./config.json');
+      
     }
   }, []);
 
   const mapCallback = useCallback((mapView: __esri.MapView) => {
     viewRef.current = mapView;
     addShortcuts(mapView, setGeometry);
-    mapViewSet(mapView, setView, setLoading, setShowAlert, setAlert);
+    mapViewSet(mapView, setView, setLoading, setAlert);
   }, []);
   const geometryCallback = useCallback((geometry: __esri.Geometry) => {
     setGeometry(geometry);
@@ -99,7 +83,7 @@ const useShell = () => {
   }, []);
   const activePanelChanged = useCallback(
     (panel: string) => {
-      setTipsHidden(true);
+      setTips(undefined);
       setActivePanel(panel);
       if (!loadedPanels.includes(panel)) {
         setLoadedPanels([...loadedPanels, panel]);
@@ -109,7 +93,7 @@ const useShell = () => {
   );
   const activeToolChanged = useCallback(
     (tool: string) => {
-      setTipsHidden(true);
+      setTips(undefined);
       setActiveTool(tool);
       if (!loadedTools.includes(tool)) {
         setLoadedTools([...loadedTools, tool]);
@@ -131,13 +115,16 @@ const useShell = () => {
     []
   );
   const tipsCallback = (newTips: any) => {
-    setTips(newTips);
-    setTipsHidden(lastTips.current === newTips);
-    lastTips.current = lastTips.current === newTips ? null : newTips;
+
+    setTips((oldTips: any) => {
+      if (oldTips?.title === newTips?.title) {
+        return undefined;
+      }
+      return {...tips, ...{title: newTips.title, tips: newTips.tips}}
+    });
+
   };
-  const alertSet = (alert: Alert) => {
-    
-    setShowAlert(true);
+  const alertSet = (alert: Alert) => {    
     setAlert(alert);
   }
   return {
@@ -154,7 +141,6 @@ const useShell = () => {
     loadedTools,
     toolDismissed,
     loading,
-    showAlert,
     alertSet,
     selectedProperty,
     mapCallback,
@@ -164,7 +150,6 @@ const useShell = () => {
     alert,
     tipsCallback,
     tips,
-    tipsHidden,
   };
 };
 

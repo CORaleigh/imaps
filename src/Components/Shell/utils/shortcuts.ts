@@ -7,7 +7,6 @@ export const addShortcuts = (mapView: __esri.MapView, setGeometry: Function) => 
         let active: boolean = false;
         let vm: SketchViewModel | undefined = undefined;
         window.addEventListener('keydown', (ev: KeyboardEvent) => {
-            console.log('keydown', ev.key);
             let shape: "point" | "multipoint" | "polyline" | "polygon" | "rectangle" | "circle" | undefined;
             if (ev.key === '‰' || ev.key === 'Ç' || ev.key === 'Å' || ev.key === 'Ò') {
                 ev.preventDefault();
@@ -79,7 +78,6 @@ export const addShortcuts = (mapView: __esri.MapView, setGeometry: Function) => 
             }                                          
             window.addEventListener('keyup', (ev: KeyboardEvent) => {
                 if (ev.key === '‰' || ev.key === 'Ç' || ev.key === 'Å' || ev.key === 'Ò' ) {
-                    console.log('keyup', keys)
                     vm?.cancel();
                     active = false;
                     vm?.destroy();

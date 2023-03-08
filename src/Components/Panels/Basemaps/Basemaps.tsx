@@ -22,7 +22,6 @@ function Basemaps(props: PanelProps) {
     basemapRef,
     imagesRef,
     esriRef,
-    showAlert,
     isActive,
     panelDismissed,
     tipsClicked,
@@ -80,24 +79,7 @@ function Basemaps(props: PanelProps) {
           <CalciteTab>
             <div ref={esriRef}></div>
           </CalciteTab>
-          {/* <CalciteTab>
-            <Blend
-              view={view}
-              mapGroup={mapGroup}
-              imageGroup={imageGroup}
-            ></Blend>
-          </CalciteTab> */}
         </CalciteTabs>
-        {/* <CalciteAlert
-          open={showAlert.show === true ? true : undefined}
-          autoClose
-          autoCloseDuration="medium"
-          kind="warning"
-          label="Imagery Year Changed"
-        >
-          <div slot="title">Imagery Not Available</div>
-          <div slot="message">{`Imagery for ${showAlert.from} only available inside Raleigh, base map has changed to ${showAlert.to}`}</div>
-        </CalciteAlert> */}
       </div>
     </CalcitePanel>
   );

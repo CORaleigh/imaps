@@ -1,14 +1,14 @@
 import MapView from "@arcgis/core/views/MapView";
 import * as reactiveUtils from "@arcgis/core/core/reactiveUtils";
 
-export function toolSelected(
+export const toolSelected = (
   tool: string,
   activeTool: string,
   setActiveTool: Function,
   setActivePanel: Function,
   activePanelChanged: Function,
   activeToolChanged: Function
-) {
+) => {
   const panel = document.getElementById(
     `${activeTool}-panel`
   ) as HTMLCalcitePanelElement;
@@ -30,14 +30,14 @@ export function toolSelected(
   }
 }
 
-export function panelSelected(
+export const panelSelected = (
   panel: string,
   activePanel: string,
   setActiveTool: Function,
   setActivePanel: Function,
   activePanelChanged: Function,
   activeToolChanged: Function
-) {
+) => {
   activePanel === panel ? setActivePanel("") : setActivePanel(panel);
 
   activePanelChanged(activePanel === panel ? "" : panel);
@@ -47,10 +47,10 @@ export function panelSelected(
   }
 }
 
-function collapse(
+const collapse = (
   panel: HTMLCalcitePanelElement,
   action: HTMLCalciteActionElement
-) {
+) => {
   if (action.icon === "chevron-up") {
     panel?.shadowRoot
       ?.querySelector(".content-container")
@@ -63,45 +63,39 @@ function collapse(
     action.icon = "chevron-up";
   }
 }
-export function collapsePanel(e: any) {
+export const  collapsePanel = (e: any) => {
   collapse(e.target.parentElement, e.target);
 }
 
-export function mapViewSet(
+export const mapViewSet = (
   view: MapView,
   setView: Function,
   setLoading: Function,
-  setShowAlert: Function,
   setAlert: Function
-) {
+) => {
   const start = Date.now();
 
   const topright = document.querySelector(".esri-ui-top-right");
   const tools = document.querySelector(".tools");
   topright?.append(tools as any);
-
   view.when(() => {
     setView(view);
-    checkForPropertyService(view, setLoading, start, setShowAlert, setAlert);
-    // reactiveUtils
-    //   .whenOnce(() => !view.updating)
-    //   .then(() => {
-    //     setLoading(false);
-    //     console.log(Date.now() - start);
-    //   });
+    
+
+    checkForPropertyService(view, setLoading, start, setAlert);
   });
   return view;
 }
 
-function checkForPropertyService(
+const checkForPropertyService = async (
   view: MapView,
   setLoading: Function,
   start: number,
-  setShowAlert: Function,
   setAlert: Function
-) {
+) => {
+
   const propertyLayer = view.map.allLayers.find((layer) => {
-    return layer.title.includes("Property");
+    return layer.title.includes("Property") && layer.type !== 'group';
   });
   const tables = view.map.allTables.filter((table) => {
     return (
@@ -111,29 +105,24 @@ function checkForPropertyService(
     );
   });
   if (!tables.length || !propertyLayer) {
-    sendAlert(setShowAlert, setAlert, setLoading);
+    sendAlert(setAlert, setLoading);
   } else {
-    view
-      .whenLayerView(propertyLayer)
-      .then((layerView) => {
-        reactiveUtils
-          .whenOnce(() => !layerView.updating)
-          .then(() => {
-            setLoading(false);
-            console.log(Date.now() - start);
-          });
-      })
-      .catch((reason) => {
-        sendAlert(setShowAlert, setAlert, setLoading);
-      });
+    try {
+      const layerView = await view.whenLayerView(propertyLayer);
+      await reactiveUtils.whenOnce(() => !layerView.updating);
+      setLoading(false);
+      console.log(Date.now() - start);
+    } catch (error) {
+      console.log(error);
+      sendAlert(setAlert, setLoading);
+    }
   }
 }
 
-function sendAlert(
-  setShowAlert: Function,
+const sendAlert = (
   setAlert: Function,
   setLoading: Function
-) {
+) => {
   const alert = {
     show: true,
     autoDismiss: false,
@@ -150,11 +139,10 @@ function sendAlert(
     },
   };
   setAlert(alert);
-  setShowAlert(true);
   setLoading(false);
 }
 
-export function widgetActivated(view: MapView, setActiveTool: Function) {
+export const widgetActivated = (view: MapView, setActiveTool: Function) => {
   (view as any).activeTool = null;
   setActiveTool("");
 }
