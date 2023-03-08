@@ -402,7 +402,6 @@ export const getProperty = async (oids: number[]): Promise<__esri.Graphic[]> => 
     returnGeometry: true,
     outSpatialReference: { wkid: 102100 },
   });
-
-  search.view.goTo({ target: result.features });
+  search.view.goTo({ target: propertiesResult.features });
   return propertiesResult.features;
 };

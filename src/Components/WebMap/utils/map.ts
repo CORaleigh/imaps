@@ -303,7 +303,7 @@ export const displayProperties = async (properties: Graphic[], view: MapView) =>
   await selectionLayer?.applyEdits({
     deleteFeatures: featureSet.features,
   });
-  await selectionLayer;
+  await selectionLayer.applyEdits({addFeatures: properties});
   updateClusters(properties);
 };
 

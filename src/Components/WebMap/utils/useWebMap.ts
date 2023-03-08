@@ -12,9 +12,9 @@ const useWebMap = (props: WebMapProps) => {
     
 
     if (!loaded.current) {
-      debugger
+
       loaded.current = true;
-      const mapView = initializeMap(
+      initializeMap(
         ref.current,
         props.mapId,
         props.geometrySet,
