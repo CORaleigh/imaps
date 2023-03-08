@@ -124,7 +124,7 @@ const viewExtentChanged = (extent: __esri.Extent, view: MapView, alertSet: Funct
           if (alertSet) {
             const alert: Alert = {
               show: true,
-              autoDismiss: true,
+              autoClose: true,
               duration: 'medium',
               kind: 'warning',
               title: 'Imagery Year Changed',
