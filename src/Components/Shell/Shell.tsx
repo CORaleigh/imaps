@@ -12,7 +12,7 @@ import Property from "../Panels/Property/Property";
 
 import Toolbar from "./Toolbar";
 import useShell from "./utils/useShell";
-import AppTips from "./utils/AppTips";
+import AppTips from "./AppTips";
 import AppAlert from "./AppAlert";
 
 const Location = lazy(() => import("../Panels/Location/Location"));

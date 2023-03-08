@@ -10,7 +10,7 @@ import React, { lazy, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import * as reactiveUtils from '@arcgis/core/core/reactiveUtils';
 
-const Overview = lazy(() => import('../Overview'));
+const Overview = lazy(() => import('../Overview/Overview'));
 const Coordinates = lazy(() => import('../Coordinates/Coodinates'));
 let streetviewClick: IHandle | null = null;
 

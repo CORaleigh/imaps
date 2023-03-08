@@ -1,6 +1,6 @@
 import React from "react";
 
-import "./WebMap.css";
+import "./Overview.css";
 import useOverview from "./utils/useOverview";
 interface Props {
   id: string;
