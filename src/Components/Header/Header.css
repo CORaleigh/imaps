@@ -41,10 +41,10 @@ calcite-switch {
   width: 50%;
 }
 .shortcuts-content table tr {
-  background-color: #ffffff;
+  background-color: var(--calcite-ui-foreground-1);
 }
 .shortcuts-content table tr:nth-child(even) {
-  background-color: #f8f8f8;
+  background-color: var(--calcite-ui-foreground-2);
 }
 
 .shortcuts-content table td, .shortcuts-content table th {
