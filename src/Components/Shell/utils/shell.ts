@@ -125,7 +125,7 @@ const sendAlert = (
 ) => {
   const alert = {
     show: true,
-    autoDismiss: false,
+    autoClose: false,
     duration: "long",
     color: "red",
     icon: "error",

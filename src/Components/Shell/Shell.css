@@ -1,12 +1,3 @@
-/* .tools {
-  position: absolute;
-  width: 300px;
-  right: 1em;
-  top: 1em;
-  overflow-y: hidden;
-  bottom: 2em;
-  z-index: 100;
-} */
 .tools {
   overflow-y: hidden;
   width: 336px;

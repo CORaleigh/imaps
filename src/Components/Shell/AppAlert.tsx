@@ -19,7 +19,7 @@ function AppAlert(props: Props) {
         }
       }}
       kind={alert?.kind}
-      autoClose={alert?.autoDismiss ? true : undefined}
+      autoClose={alert?.autoClose ? true : undefined}
       autoCloseDuration={alert?.duration}
       label={''}
     >

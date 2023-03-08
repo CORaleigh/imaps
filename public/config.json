@@ -1,7 +1,7 @@
 {
     "alert": {
         "show": false,
-        "autoDismiss": true,
+        "autoClose": true,
         "duration": "fast",
         "kind": "info",
         "icon": "information",
