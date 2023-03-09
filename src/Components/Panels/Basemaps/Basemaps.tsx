@@ -59,10 +59,10 @@ function Basemaps(props: PanelProps) {
             <CalciteTabTitle tab="esri"  selected={selectedTab === 'esri' ? true : undefined} onCalciteTabsActivate={_ => setSelectedTab('esri')}>Esri</CalciteTabTitle>
             {/* <CalciteTabTitle>Blend</CalciteTabTitle> */}
           </CalciteTabNav>
-          <CalciteTab  selected={selectedTab === 'maps' ? true : undefined}>
+          <CalciteTab tab="map" selected={selectedTab === 'maps' ? true : undefined}>
             <div ref={basemapRef}></div>
           </CalciteTab>
-          <CalciteTab  selected={selectedTab === 'images' ? true : undefined}>
+          <CalciteTab tab="images" selected={selectedTab === 'images' ? true : undefined}>
             <br />
             <CalciteLabel hidden={showBlend ? undefined : true} layout="inline" alignment="end">
               <CalciteSwitch
@@ -79,7 +79,7 @@ function Basemaps(props: PanelProps) {
             ></CalciteSlider>
             <div ref={imagesRef}></div>
           </CalciteTab>
-          <CalciteTab selected={selectedTab === 'esri' ? true : undefined}>
+          <CalciteTab tab="esri" selected={selectedTab === 'esri' ? true : undefined}>
             <div ref={esriRef}></div>
           </CalciteTab>
         </CalciteTabs>

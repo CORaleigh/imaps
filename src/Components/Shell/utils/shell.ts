@@ -10,8 +10,9 @@ export const toolSelected = (
   activeToolChanged: Function
 ) => {
   const panel = document.getElementById(
-    `${activeTool}-panel`
+    `${tool}-panel`
   ) as HTMLCalcitePanelElement;
+  debugger
   if (panel) {
     const action = panel.querySelector("calcite-action");
     if (action) {
