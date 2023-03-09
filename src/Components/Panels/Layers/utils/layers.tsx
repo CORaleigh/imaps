@@ -10,7 +10,11 @@ import DevPlanFilter from '../DevPlanFilter';
 const OpacitySlider = lazy(() => import('../OpacitySlider'));
 
 export const initializeLayers = async (ref: HTMLDivElement, view: MapView): Promise<LayerList> => {
-  await addLayersFromWebmap(view);
+  try {
+    await addLayersFromWebmap(view);}
+  catch {
+    
+  }
   const layers = new LayerList({
     view: view,
     container: ref,
@@ -31,8 +35,10 @@ const addLayersFromWebmap = async (view: MapView) => {
     },
   });
 
-  await map.loadAll();
-  const groups = view.map.allLayers
+  map.loadAll().catch(error => {
+    console.log(error);
+  }).then(() => {
+    const groups = view.map.allLayers
     .filter((layer) => {
       return layer.type === 'group';
     })
@@ -72,6 +78,8 @@ const addLayersFromWebmap = async (view: MapView) => {
     matchlayers.destroy();
   });
   return true;
+  });
+  
 };
 const setPropertyColor = (layer: FeatureLayer, light: boolean) => {
   const renderer = (layer.renderer as __esri.SimpleRenderer).clone();

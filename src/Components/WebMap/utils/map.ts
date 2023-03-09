@@ -25,7 +25,6 @@ export const initializeMap = async (
     constraints: constraints as any,
   });
   hideLogin();
-  debugger
   const webmap: WebMap = await getWebMap(mapId);
   view.map = webmap;
   addWidgets(view, widgetActivated);
@@ -352,6 +351,7 @@ const getBackgroundColor = async (basemap: Basemap): Promise<Color | null> => {
 };
 
 const hideLogin = () => {
+  
   IdentityManager.on('dialog-create', () => {
     const observer: MutationObserver = new MutationObserver((mutations) => {
       if (mutations.length) {

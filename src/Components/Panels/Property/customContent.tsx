@@ -87,14 +87,14 @@ const deedCreator = async (e: any) => {
       if (deed) {
         const deedBtn = createButton('file-text', 'Deeds');
         deedBtn.onclick = () => {
-          window.open('http://services.wakegov.com/booksweb/pdfview.aspx?docid=' + deed + '&RecordDate=', 'deedwindow');
+          window.open('https://rodcrpi.wakegov.com/booksweb/pdfview.aspx?docid=' + deed + '&RecordDate=', 'deedwindow');
         };
         div.append(deedBtn);
       }
       if (bom) {
         const bombtn = createButton('map', 'Book of Maps');
         bombtn.onclick = () => {
-          window.open('http://services.wakegov.com/booksweb/pdfview.aspx?docid=' + bom + '&RecordDate=', 'bomwindow');
+          window.open('https://rodcrpi.wakegov.com/booksweb/pdfview.aspx?docid=' + bom + '&RecordDate=', 'bomwindow');
         };
         div.append(bombtn);
       }
@@ -197,7 +197,7 @@ export const createLinkButtons = () => {
         var f= First(Filter(fs,"SITE_ADDRE = '" + $feature.SITE_ADDRESS + "'"));
         return Concatenate("https://property.spatialest.com/nc/durham/#/property/",f.PARCEL_ID);
       } else {
-        return Concatenate("https://services.wakegov.com/realestate/Account.asp?id=", $feature.REID);
+        return Concatenate("https://services.wake.gov/realestate/Account.asp?id=", $feature.REID);
       }`,
         e.graphic,
       );

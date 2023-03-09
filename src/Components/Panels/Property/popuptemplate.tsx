@@ -283,7 +283,7 @@ export const getPhotos = async (feature: __esri.Graphic): Promise<__esri.MediaIn
         type: 'image',
         caption: '',
         value: {
-          sourceURL: `https://services.wakegov.com/realestate/photos/mvideo/${feature.getAttribute(
+          sourceURL: `https://services.wake.gov/realestate/photos/mvideo/${feature.getAttribute(
             'IMAGEDIR',
           )}/${feature.getAttribute('IMAGENAME')}`,
         },

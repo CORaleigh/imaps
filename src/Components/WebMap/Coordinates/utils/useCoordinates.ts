@@ -99,7 +99,6 @@ const useCoordinates = (props: CoordinateProps) => {
       if (coords?.length === 2) {
         let lon = !isNaN(parseFloat(coords[1])) && parseFloat(coords[1]) < 0 ? parseFloat(coords[1]) :  !isNaN(parseFloat(coords[0])) && parseFloat(coords[0]) < 0 ? parseFloat(coords[0]) : NaN;
         let lat = !isNaN(parseFloat(coords[0])) && parseFloat(coords[0]) > 0 ? parseFloat(coords[0]) :  !isNaN(parseFloat(coords[1])) && parseFloat(coords[1]) > 0 ? parseFloat(coords[1]) : NaN;
-        debugger
         if (isNaN(lon) || isNaN(lat)) {
           coordInput.current?.setAttribute('status', 'invalid');
         } else {

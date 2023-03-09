@@ -14,6 +14,8 @@ const useBasemaps = (props: PanelProps) => {
   const [view, setView] = useState<MapView>();
   const [isActive, setIsActive] = useState(false);
   const [blendActive, setBlendActive] = useState(false);
+  const [showBlend, setShowBlend] = useState(false);
+  const [selectedTab, setSelectedTab] = useState("maps");
 
   const loaded = useRef(false);
   const basemapRef = useRef(null);
@@ -27,14 +29,16 @@ const useBasemaps = (props: PanelProps) => {
     setView(props.view);
     if (!loaded.current) {
       loaded.current = true;
-      initializeBasemaps(props.view, basemapRef.current as any, mapGroup);
+      initializeBasemaps(props.view, basemapRef.current as any, mapGroup, setSelectedTab);
       initializeImageMaps(
         props.view,
         imagesRef.current as any,
         imageGroup,
-        props.alertSet
+        props.alertSet,
+        setShowBlend,
+        setSelectedTab
       );
-      initializeEsriMaps(props.view, esriRef.current as any);
+      initializeEsriMaps(props.view, esriRef.current as any, setSelectedTab);
       setTimeout(() => {
         document
           .querySelector(".basemaps calcite-tab-nav")
@@ -54,7 +58,6 @@ const useBasemaps = (props: PanelProps) => {
   }, []);
   const blendUpdated = useCallback((e: any) => {
     setBlendActive(e.currentTarget.checked);
-    debugger;
     blendBasemap(
       e.currentTarget.checked,
       props.view,
@@ -84,6 +87,9 @@ const useBasemaps = (props: PanelProps) => {
     blendUpdated,
     blendOpacityChanged,
     blendActive,
+    showBlend,
+    selectedTab,
+    setSelectedTab
   };
 };
 export default useBasemaps;

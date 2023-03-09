@@ -23,7 +23,7 @@ const useMeasure = (props: ToolProps) => {
       });
     }
     return () => {
-      measurement.current && measurement.current?.destroy();
+      //measurement.current && measurement.current?.destroy();
     };
   }, []);
   useEffect(() => {

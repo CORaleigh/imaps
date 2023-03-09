@@ -35,7 +35,7 @@ const useSketch = (props: ToolProps) => {
       //props.view.highlightOptions = {fillOpacity: 0.25, color: '#00ffff', haloColor: '#00ffff', haloOpacity: 1} as any;
     } else {
       (props.view as __esri.MapView).popup.autoOpenEnabled = false;
-      sketchActivated();
+
     }
   }, [props.isActive]);
   const toolDismissed = useCallback(() => {

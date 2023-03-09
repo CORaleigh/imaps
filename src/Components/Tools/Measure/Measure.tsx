@@ -68,6 +68,7 @@ export const Measure = (props: ToolProps) => {
             active={selectedTool === "distance" ? true : undefined}
             onClick={() => {
               setSelectedTool("distance");
+              debugger
               if (measurement.current) {
                 measurement.current.activeTool = "distance";
               }

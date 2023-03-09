@@ -222,7 +222,6 @@ export const updateTable = async (features: Graphic[], featureTable: FeatureTabl
 
 const updateTableTitle = (featureTable: __esri.FeatureTable, grid: any) => {
   setTimeout(() => {
-    debugger
     const title = (featureTable.container as HTMLElement).querySelector('.esri-feature-table__title');
     if (title) {
       title.textContent = 'Selected Properties: ' + grid?.items?.length;

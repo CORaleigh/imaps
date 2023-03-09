@@ -140,13 +140,19 @@ const addGraphic = (e: any) => {
 };
 
 export const sketchActivated = () => {
-  pointSketchViewModel.updateOnGraphicClick = true;
-  polygonSketchViewModel.updateOnGraphicClick = true;
-  polylineSketchViewModel.updateOnGraphicClick = true;
-  textSketchViewModel.updateOnGraphicClick = true;
+  try {
+    pointSketchViewModel.updateOnGraphicClick = true;
+    polygonSketchViewModel.updateOnGraphicClick = true;
+    polylineSketchViewModel.updateOnGraphicClick = true;
+    textSketchViewModel.updateOnGraphicClick = true;
+  } catch (error) {
+
+  }
+
 };
 
 export const toolSelected = (tool: string, activeSketchTool: string, setActiveSketchTool: Function) => {
+  debugger
   sketchActivated();
   selectedTool = tool;
   tool === activeSketchTool ? setActiveSketchTool('') : setActiveSketchTool(tool);

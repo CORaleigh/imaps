@@ -123,8 +123,8 @@ function Header() {
           </CalciteDropdownGroup>
         </CalciteDropdown>
       </div>
-      <CalciteModal ref={disclaimer as any} aria-labelledby="modal-title">
-        <div slot="header" id="modal-title">
+      <CalciteModal ref={disclaimer as any} aria-labelledby="disclaimer-title">
+        <div slot="header" id="disclaimer-title">
           Disclaimer
         </div>
         <div slot="content">
@@ -147,8 +147,8 @@ function Header() {
           Close
         </CalciteButton>
       </CalciteModal>
-      {!isMobile && <CalciteModal ref={shortcuts as any} aria-labelledby="modal-title">
-        <div slot="header" id="modal-title">
+      {!isMobile && <CalciteModal ref={shortcuts as any} aria-labelledby="shortcuts-title">
+        <div slot="header" id="shortcuts-title">
           Keyboard Shortcuts
         </div>
         <div className="shortcuts-content " slot="content">

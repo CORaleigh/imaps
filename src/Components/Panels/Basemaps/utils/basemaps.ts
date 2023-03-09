@@ -11,7 +11,7 @@ import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
 import { Alert } from '../../../Shell/utils/alert';
 
-export const initializeBasemaps = async (view: MapView, ref: HTMLDivElement, id: string) => {
+export const initializeBasemaps = async (view: MapView, ref: HTMLDivElement, id: string, setSelectedTab: Function) => {
   const gallery = new BasemapGallery({
     container: ref,
     view: view,
@@ -25,6 +25,9 @@ export const initializeBasemaps = async (view: MapView, ref: HTMLDivElement, id:
     return basemap.portalItem.title === view.map.basemap.title;
   });
   if (basemap) {
+    
+    setSelectedTab('maps');
+    
     gallery.activeBasemap = basemap;
   }
 };
@@ -35,6 +38,8 @@ export const initializeImageMaps = async (
   ref: HTMLDivElement,
   id: string,
   alertSet: Function | undefined,
+  setShowBlend: Function, 
+  setSelectedTab: Function
 ) => {
   images = new BasemapGallery({
     container: ref,
@@ -47,22 +52,38 @@ export const initializeImageMaps = async (
       },
     }),
   });
+  images.watch('activeBasemap', (activeBasemap) => {
+    setShowBlend(activeBasemap.portalItem.tags.includes("imagery"));
+
+  });
   await reactiveUtils.whenOnce(() => images.source.basemaps.length > 0);
 
   const basemap = images.source.basemaps.find((basemap) => {
+    console.log(basemap.portalItem.title);
     return basemap.portalItem.title === view.map.basemap.title;
   });
+  console.log(view.map.basemap.title);
+
   if (basemap) {
+    setSelectedTab('images');
     images.activeBasemap = basemap;
   }
-
   await images.when();
-  images.source.basemaps.reverse();
+
+
+
   if (!imageryBoundary) {
     const boundary = await getBoundary(view);
     imageryBoundary = boundary;
     inRaleigh = checkBoundary(view.extent);
-    (images.source as PortalBasemapsSource).refresh();
+    try {
+      await (images.source as PortalBasemapsSource).refresh();
+    } catch {
+
+    } finally {
+
+    }
+
   }
   view.watch('extent', (extent: __esri.Extent) => viewExtentChanged(extent, view, alertSet));
 
@@ -72,7 +93,7 @@ export const initializeImageMaps = async (
   });
 };
 
-export const initializeEsriMaps = async (view: MapView, ref: HTMLDivElement) => {
+export const initializeEsriMaps = async (view: MapView, ref: HTMLDivElement, setSelectedTab: Function) => {
   const esri = new BasemapGallery({
     container: ref,
     view: view,
@@ -83,6 +104,9 @@ export const initializeEsriMaps = async (view: MapView, ref: HTMLDivElement) => 
     return basemap.portalItem.title === view.map.basemap.title;
   });
   if (basemap) {
+    
+
+    setSelectedTab('esri');
     esri.activeBasemap = basemap;
   }
 };
@@ -178,6 +202,7 @@ export const blendBasemap = (switched: boolean, view: __esri.MapView, streetMapI
     }
   }
   images.watch('activeBasemap', (activeBasemap) => {
+
     if (switched) {
       const layer = activeBasemap.baseLayers.find((layer: __esri.Layer) => {
         if (layer.type === 'vector-tile') {
