@@ -114,7 +114,12 @@ function Header() {
               iconStart="reset"
               onClick={() => {
                 window.localStorage.setItem('imaps_reset', 'true');
-                window.localStorage.removeItem('imaps_calcite');
+                const url = new URL(window.location as any);
+                let config: string = '';
+                if (url.searchParams.get('config')) {
+                  config += url.searchParams.get('config');
+                }
+                window.localStorage.removeItem(`imaps_calcite_${config}`);
                 window.location.reload();
               }}
             >

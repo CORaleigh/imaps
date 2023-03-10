@@ -29,6 +29,7 @@ export const initializeMap = async (
   view.map = webmap;
   addWidgets(view, widgetActivated);
   await view.when();
+  debugger
   removeGraphicsLayers(view);
   view.map.add(selectionLayer);
   view.map.add(selectionCluster);
@@ -75,12 +76,21 @@ const isSearchable = (layer: __esri.Layer, webmap: any) => {
   return found;
 };
 
+const getConfig = () => {
+  const url = new URL(window.location as any);
+  let config: string = '';
+  if (url.searchParams.get('config')) {
+    config += url.searchParams.get('config');
+  }
+  return config;
+}
+
 const getWebMap = async (mapId: string): Promise<WebMap> => {
   //return new Promise(async (resolve, reject) => {
   let webmap: any;
-
-  if (window.localStorage.getItem('imaps_calcite') && window.localStorage.getItem('imaps_reset') !== 'true') {
-    webmap = WebMap.fromJSON(JSON.parse(window?.localStorage?.getItem('imaps_calcite') as string));
+  const config = getConfig();
+  if (window.localStorage.getItem(`imaps_calcite_${config}`) && window.localStorage.getItem('imaps_reset') !== 'true') {
+    webmap = WebMap.fromJSON(JSON.parse(window?.localStorage?.getItem(`imaps_calcite_${config}`) as string));
     const url = new URL(window.location as any);
     if (url.searchParams.get('layers')) {
       const layers = url.searchParams.get('layers')?.split(',');
@@ -182,8 +192,8 @@ export const saveMap = (view: MapView) => {
     // );
     const json = (view.map as any).toJSON();
     json.initialState.viewpoint.targetGeometry = view.extent;
-
-    window.localStorage.setItem('imaps_calcite', JSON.stringify(json));
+    const config = getConfig();
+    window.localStorage.setItem(`imaps_calcite_${config}`, JSON.stringify(json));
     //window.localStorage.removeItem('imaps_calcite');
   }
 };
@@ -333,6 +343,8 @@ const updateClusters = async (properties: Graphic[]) => {
 };
 
 const getBackgroundColor = async (basemap: Basemap): Promise<Color | null> => {
+
+  
   const baseLayer = basemap.baseLayers.find((layer) => {
     return layer.type === 'vector-tile';
   });
@@ -350,21 +362,17 @@ const getBackgroundColor = async (basemap: Basemap): Promise<Color | null> => {
   }
 };
 
-const hideLogin = () => {
+export const hideLogin = () => {
   
-  IdentityManager.on('dialog-create', () => {
-    const observer: MutationObserver = new MutationObserver((mutations) => {
-      if (mutations.length) {
-        ((mutations[0]?.target as HTMLElement)?.querySelector('.esri-button--secondary') as HTMLElement)?.click();
-        observer.disconnect();
-      } else {
-        observer.disconnect();
-      }
-    });
-
-    const container = IdentityManager.dialog.container;
-
-    observer.observe(container as Node, { childList: true });
+  IdentityManager.on('dialog-create', async (e) => {
+    IdentityManager.dialog.visible = false;
+    setTimeout(() => {
+      (IdentityManager.dialog as any).content.emit('cancel',{});
+    }, 250);
+    // await IdentityManager.dialog.when();
+    // const container: any = IdentityManager.dialog.container;
+    // const cancelBtn: HTMLInputElement = container.querySelector('.esri-button--secondary');
+    // cancelBtn.click();
   });
 };
 

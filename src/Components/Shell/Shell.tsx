@@ -54,11 +54,12 @@ function Shell() {
     <div>
     <CalciteShell contentBehind={contentBehind ? true : undefined}>
       <Header></Header>
+      <CalciteShellPanel slot="panel-start" position="start" hidden></CalciteShellPanel>
       <CalciteShellPanel
         className="custom-width"
         slot="panel-end"
         position="end"
-        resizable={contentBehind ? undefined : true}
+        resizable
         collapsed={activePanel === ""}
       >
         {view && (

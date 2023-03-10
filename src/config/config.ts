@@ -35,7 +35,6 @@ export const services = [
         "Cary Zoning",
         "County Zoning",
         "Fuquay-Varina Zoning",
-        "Garner Zoning",
         "Holly Springs Zoning",
         "Morrisville Zoning",
         "Knightdale Zoning",

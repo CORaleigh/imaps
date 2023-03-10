@@ -79,11 +79,27 @@ export const mapViewSet = (
   const topright = document.querySelector(".esri-ui-top-right");
   const tools = document.querySelector(".tools");
   topright?.append(tools as any);
-  view.when(() => {
+  view.when(async () => {
     setView(view);
     
 
     checkForPropertyService(view, setLoading, start, setAlert);
+    const url = new URL(window.location as any);
+    if (url.searchParams.get('config')) {
+      const config = url.searchParams.get('config');
+      if (config === 'puma') {
+        const vpn: boolean = await checkVpn();
+        if (!vpn) {
+          sendAlert("To view utility layers, you must be connected to the city network or connected through VPN. You will be redirected to the public iMAPS.","Not on City Network or VPN.",setAlert, setLoading);
+          setTimeout(() => {
+            window.location.href = 'https://coraleigh.github.io/imaps';
+          }, 10000);
+    
+        }
+      }
+    }
+
+
   });
   return view;
 }
@@ -106,7 +122,7 @@ const checkForPropertyService = async (
     );
   });
   if (!tables.length || !propertyLayer) {
-    sendAlert(setAlert, setLoading);
+    sendAlert("The property layer did not load, please report this issue to the iMAPS Helpdesk.","Property Layer Did Not Load",setAlert, setLoading);
   } else {
     try {
       const layerView = await view.whenLayerView(propertyLayer);
@@ -115,12 +131,26 @@ const checkForPropertyService = async (
       console.log(Date.now() - start);
     } catch (error) {
       console.log(error);
-      sendAlert(setAlert, setLoading);
+      sendAlert("The property layer did not load, please report this issue to the iMAPS Helpdesk.","Property Layer Did Not Load",setAlert, setLoading);
     }
   }
 }
 
+const checkVpn = async () => {
+
+      try {
+        await fetch('https://gis.raleighnc.gov');
+        return true;
+      } catch (error) {
+        console.log(error);
+        return false;
+      }
+
+}
+
 const sendAlert = (
+  message: string,
+  title: string,
   setAlert: Function,
   setLoading: Function
 ) => {
@@ -128,11 +158,11 @@ const sendAlert = (
     show: true,
     autoClose: false,
     duration: "long",
-    color: "red",
+    kind: "danger",
     icon: "error",
-    title: "Property Layer Did Not Load",
+    title: title,
     message:
-      "The property layer did not load, please report this issue to the iMAPS Helpdesk.",
+      message,
     link: {
       text: "",
       url: "",

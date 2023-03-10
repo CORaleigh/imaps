@@ -28,7 +28,7 @@ function Toolbar(props: Props) {
     <CalciteActionBar
       slot="action-bar"
       position="end"
-      expandDisabled={props.expandable}
+     
     >
       <CalciteActionGroup>
         <CalciteAction

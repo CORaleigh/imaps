@@ -76,14 +76,13 @@ calcite-tip-manager {
     position: absolute;
     right: 50px;
   }
-  .custom-width {
-    width: 100%;
-  }
+
   calcite-action-bar {
     right: 0;
     position: absolute;
     bottom: 0;
     top: 0;
+    z-index: 1000;
   }
   calcite-tip-manager {
     left: 0;

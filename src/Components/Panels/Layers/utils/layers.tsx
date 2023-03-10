@@ -10,10 +10,13 @@ import DevPlanFilter from '../DevPlanFilter';
 const OpacitySlider = lazy(() => import('../OpacitySlider'));
 
 export const initializeLayers = async (ref: HTMLDivElement, view: MapView): Promise<LayerList> => {
-  try {
-    await addLayersFromWebmap(view);}
-  catch {
-    
+
+  await addLayersFromWebmap(view);
+  const url = new URL(window.location as any);
+  if (url.searchParams.get('config')) {
+    if (url.searchParams.get('config') === 'puma') {
+      await addUtilitiesLayers(view, 'a07528d1d37542b79fade50370f2305f');
+    }
   }
   const layers = new LayerList({
     view: view,
@@ -28,6 +31,58 @@ export const initializeLayers = async (ref: HTMLDivElement, view: MapView): Prom
   return layers;
 };
 
+const addUtilitiesLayers = async (view: MapView, id: string) => {
+  const map = new WebMap({
+    portalItem: {
+      id: 'a07528d1d37542b79fade50370f2305f',
+    },
+  });
+
+  await map.loadAll().catch((error) => {
+    console.log(error);
+  }).then(async () => {
+    if (map.layers.length) {
+      const group = view.map.layers.find(layer => {
+        return layer.id === map.layers.getItemAt(0)?.id;
+      });
+      if (group) {
+        await (map.layers.getItemAt(0) as __esri.GroupLayer).load();
+        const match = map.allLayers.find((layer) => {
+          return layer.type === 'group' && layer.title === group.title;
+        }) as __esri.GroupLayer;
+        if (match) {
+          const matchlayers = match.layers.slice();
+          const layers = match.layers.filter((layer) => {
+            const found = (group as __esri.GroupLayer).findLayerById(layer.id);
+            //attempting to update stored layer if updated in webmap (popup and renderer)
+            if (found !== undefined) {
+              if (found.type === 'feature') {
+                (found as __esri.FeatureLayer).popupTemplate = (layer as __esri.FeatureLayer).popupTemplate;
+                (found as __esri.FeatureLayer).renderer = (layer as __esri.FeatureLayer).renderer;
+              }
+            }
+      
+            return (group as __esri.GroupLayer).findLayerById(layer.id) === undefined;
+          });
+          (group as __esri.GroupLayer).addMany(layers.toArray());
+      
+          (group as __esri.GroupLayer).layers.forEach((layer1) => {
+            let index = matchlayers.findIndex((layer2) => {
+              return layer1.id === layer2.id;
+            });
+            (group as __esri.GroupLayer).reorder(layer1, index);
+          });
+          matchlayers.destroy();
+        }
+      } else {
+        view.map.addMany(map.layers.toArray());
+      }
+    }
+
+  })
+
+}
+
 const addLayersFromWebmap = async (view: MapView) => {
   const map = new WebMap({
     portalItem: {
@@ -35,7 +90,7 @@ const addLayersFromWebmap = async (view: MapView) => {
     },
   });
 
-  map.loadAll().catch(error => {
+  await map.loadAll().catch(error => {
     console.log(error);
   }).then(() => {
     const groups = view.map.allLayers
@@ -47,35 +102,31 @@ const addLayersFromWebmap = async (view: MapView) => {
     const match = map.allLayers.find((layer) => {
       return layer.type === 'group' && layer.title === group.title;
     }) as __esri.GroupLayer;
-
-    // match.layers.forEach((layer,i) => {
-    //   if ((group as __esri.GroupLayer).findLayerById(layer.id) ===
-    //   undefined) {
-    //     (group as __esri.GroupLayer).add(layer, i);
-    //   }
-    // });
-    const matchlayers = match.layers.slice();
-    const layers = match.layers.filter((layer) => {
-      const found = (group as __esri.GroupLayer).findLayerById(layer.id);
-      //attempting to update stored layer if updated in webmap (popup and renderer)
-      if (found !== undefined) {
-        if (found.type === 'feature') {
-          (found as __esri.FeatureLayer).popupTemplate = (layer as __esri.FeatureLayer).popupTemplate;
-          (found as __esri.FeatureLayer).renderer = (layer as __esri.FeatureLayer).renderer;
+    if (match) {
+      const matchlayers = match.layers.slice();
+      const layers = match.layers.filter((layer) => {
+        const found = (group as __esri.GroupLayer).findLayerById(layer.id);
+        //attempting to update stored layer if updated in webmap (popup and renderer)
+        if (found !== undefined) {
+          if (found.type === 'feature') {
+            (found as __esri.FeatureLayer).popupTemplate = (layer as __esri.FeatureLayer).popupTemplate;
+            (found as __esri.FeatureLayer).renderer = (layer as __esri.FeatureLayer).renderer;
+          }
         }
-      }
-
-      return (group as __esri.GroupLayer).findLayerById(layer.id) === undefined;
-    });
-    (group as __esri.GroupLayer).addMany(layers.toArray());
-
-    (group as __esri.GroupLayer).layers.forEach((layer1) => {
-      let index = matchlayers.findIndex((layer2) => {
-        return layer1.id === layer2.id;
+  
+        return (group as __esri.GroupLayer).findLayerById(layer.id) === undefined;
       });
-      (group as __esri.GroupLayer).reorder(layer1, index);
-    });
-    matchlayers.destroy();
+      (group as __esri.GroupLayer).addMany(layers.toArray());
+  
+      (group as __esri.GroupLayer).layers.forEach((layer1) => {
+        let index = matchlayers.findIndex((layer2) => {
+          return layer1.id === layer2.id;
+        });
+        (group as __esri.GroupLayer).reorder(layer1, index);
+      });
+      matchlayers.destroy();
+    }
+
   });
   return true;
   });
