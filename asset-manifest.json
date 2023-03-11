@@ -1,11 +1,11 @@
 {
   "files": {
     "main.css": "/imaps/static/css/main.4fd7699c.css",
-    "main.js": "/imaps/static/js/main.e5232dd8.js",
+    "main.js": "/imaps/static/js/main.2905d946.js",
     "static/css/9381.75063931.chunk.css": "/imaps/static/css/9381.75063931.chunk.css",
     "static/js/9381.a135ceb3.chunk.js": "/imaps/static/js/9381.a135ceb3.chunk.js",
     "static/css/4402.6043e8a5.chunk.css": "/imaps/static/css/4402.6043e8a5.chunk.css",
-    "static/js/4402.5bef7b1b.chunk.js": "/imaps/static/js/4402.5bef7b1b.chunk.js",
+    "static/js/4402.7c40edf6.chunk.js": "/imaps/static/js/4402.7c40edf6.chunk.js",
     "static/js/7626.0a68c20f.chunk.js": "/imaps/static/js/7626.0a68c20f.chunk.js",
     "static/css/5034.635a2fa4.chunk.css": "/imaps/static/css/5034.635a2fa4.chunk.css",
     "static/js/5034.f2ccd01e.chunk.js": "/imaps/static/js/5034.f2ccd01e.chunk.js",
@@ -300,11 +300,11 @@
     "static/js/5387.1416d29b.chunk.js": "/imaps/static/js/5387.1416d29b.chunk.js",
     "index.html": "/imaps/index.html",
     "main.4fd7699c.css.map": "/imaps/static/css/main.4fd7699c.css.map",
-    "main.e5232dd8.js.map": "/imaps/static/js/main.e5232dd8.js.map",
+    "main.2905d946.js.map": "/imaps/static/js/main.2905d946.js.map",
     "9381.75063931.chunk.css.map": "/imaps/static/css/9381.75063931.chunk.css.map",
     "9381.a135ceb3.chunk.js.map": "/imaps/static/js/9381.a135ceb3.chunk.js.map",
     "4402.6043e8a5.chunk.css.map": "/imaps/static/css/4402.6043e8a5.chunk.css.map",
-    "4402.5bef7b1b.chunk.js.map": "/imaps/static/js/4402.5bef7b1b.chunk.js.map",
+    "4402.7c40edf6.chunk.js.map": "/imaps/static/js/4402.7c40edf6.chunk.js.map",
     "7626.0a68c20f.chunk.js.map": "/imaps/static/js/7626.0a68c20f.chunk.js.map",
     "5034.635a2fa4.chunk.css.map": "/imaps/static/css/5034.635a2fa4.chunk.css.map",
     "5034.f2ccd01e.chunk.js.map": "/imaps/static/js/5034.f2ccd01e.chunk.js.map",
@@ -581,6 +581,6 @@
   },
   "entrypoints": [
     "static/css/main.4fd7699c.css",
-    "static/js/main.e5232dd8.js"
+    "static/js/main.2905d946.js"
   ]
 }
