@@ -1,0 +1,40 @@
+{
+    "alert": {
+        "show": false,
+        "autoClose": true,
+        "duration": "fast",
+        "kind": "info",
+        "icon": "information",
+        "title": "New Version",
+        "message": "This is the new version of iMAPS, the legacy version will be available for a limited time.",
+        "link": {
+          "text": "Legacy Version",
+          "url": "https://maps.raleighnc.gov/imaps",
+          "show": true
+        }
+      },    
+    "links": [
+        {
+          "title": "Help",
+          "links": [
+            { "title": "Feedback", "href": "https://arcg.is/CW1TL" },
+            { "title": "User Guide", "href": "https://maps.wakegov.com/imaps/iMAPShelpPDF.pdf" },
+            { "title": "Videos/FAQs", "href": "https://www.wakegov.com/departments-government/geographic-information-services-gis/maps-apps-data/imaps-information#video" }
+          ]
+        },
+        {
+          "title": "Data Download",
+          "links": [
+            { "title": "Wake County Open Data", "href": "https://data.wakegov.com/" },
+            { "title": "Raleigh Open Data", "href": "https://data.raleighnc.gov/" }
+          ]
+        },
+        {
+          "title": "Links",
+          "links": [
+            { "title": "Wake County", "href": "https://wakegov.com" },
+            { "title": "City of Raleigh", "href": "https://raleighnc.gov/" }
+          ]
+        }      
+      ]
+}
