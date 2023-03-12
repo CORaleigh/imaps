@@ -1,1 +1,0 @@
-import{r as t,o as l,X as s}from"./index-53e0d3f6.js";const c=e=>{const[a,r]=t.useState();return t.useEffect(()=>{e.layer&&r(e.layer)},[e.layer]),l(s,{value:e.value,max:1,min:0,step:.05,onCalciteSliderInput:i=>{requestAnimationFrame(()=>{a&&(a.opacity=i.target.value)})}})};export{c as OpacitySlider,c as default};
