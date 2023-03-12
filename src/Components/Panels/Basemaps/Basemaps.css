@@ -1,7 +1,0 @@
-.basemaps calcite-tabs {
-  height: calc(var(--app-height) - 49px - 53.5px);
-}
-
-.basemaps {
-  overflow: hidden;
-}
