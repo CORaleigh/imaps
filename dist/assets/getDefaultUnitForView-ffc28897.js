@@ -1,1 +1,0 @@
-import{as as i,aQ as l,c2 as u,gG as c}from"./index-84d82762.js";function p(e){var s,n;const t="metric";if(i(e))return t;const a=e.map,r=(a&&"portalItem"in a?(s=a.portalItem)==null?void 0:s.portal:null)??l.getDefault();switch(((n=r.user)==null?void 0:n.units)??r.units){case t:return t;case"english":return"imperial"}return u(c(e.spatialReference),t)}export{p as i};

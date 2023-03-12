@@ -17,7 +17,7 @@ export const Layers = (props: PanelProps) => {
   return (
     <CalcitePanel
       id="layers-panel"
-      heading="TEST"
+      heading="Layers"
       hidden={!isActive}
       closed={!isActive ? true : undefined}
       closable
