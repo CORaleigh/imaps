@@ -1,1 +1,0 @@
-{"version":3,"file":"static/css/3306.84e4ab9b.chunk.css","mappings":"AAAA,cAGI,yDAA2D,CAD3D,YAAa,CADb,WAGF","sources":["components/WebMap/Overview/Overview.css"],"sourcesContent":["#overview-map {\n    width: 250px;\n    height: 250px;\n    background-color: var(--calcite-ui-foreground-1) !important;\n  }\n  "],"names":[],"sourceRoot":""}

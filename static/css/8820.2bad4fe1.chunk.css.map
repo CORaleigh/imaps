@@ -1,1 +1,0 @@
-{"version":3,"file":"static/css/8820.2bad4fe1.chunk.css","mappings":"AAAA,gBACE,wCAA0C,CAC1C,eACF","sources":["components/Tools/Bookmarks/Bookmarks.css"],"sourcesContent":[".esri-bookmarks {\n  max-height: calc(100vh - 200px) !important;\n  overflow-y: auto;\n}\n"],"names":[],"sourceRoot":""}

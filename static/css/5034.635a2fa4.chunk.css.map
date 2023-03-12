@@ -1,1 +1,0 @@
-{"version":3,"file":"static/css/5034.635a2fa4.chunk.css","mappings":"AAAA,uBACE,wCACF,CAEA,UACE,eACF","sources":["components/Panels/Basemaps/Basemaps.css"],"sourcesContent":[".basemaps calcite-tabs {\n  height: calc(var(--app-height) - 49px - 53.5px);\n}\n\n.basemaps {\n  overflow: hidden;\n}\n"],"names":[],"sourceRoot":""}

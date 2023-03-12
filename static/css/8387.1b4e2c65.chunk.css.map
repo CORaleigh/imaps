@@ -1,1 +1,0 @@
-{"version":3,"file":"static/css/8387.1b4e2c65.chunk.css","mappings":"AAAA,kBACE,YACF,CACA,kBACE,UACF","sources":["components/Tools/Select/Select.css"],"sourcesContent":[".select-container {\n  display: flex;\n}\n.buffer-container {\n  margin: 1em;\n}\n"],"names":[],"sourceRoot":""}
