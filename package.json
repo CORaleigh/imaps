@@ -1,7 +1,7 @@
 {
-  "name": "imaps-vite",
+  "name": "imaps",
   "private": true,
-  "version": "0.0.0",
+  "version": "4.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
