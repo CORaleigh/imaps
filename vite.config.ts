@@ -1,13 +1,8 @@
 import { defineConfig } from "vite";
-
+import react from "@vitejs/plugin-react";
 const config = {
   base: '/imaps/',
-  build: {
-    chunkSizeWarningLimit: 1500
-  },
-  server: {
-    open: true
-  }
+  plugins: [react()],
 };
 
 export default defineConfig(config);
