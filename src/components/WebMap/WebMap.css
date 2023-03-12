@@ -1,0 +1,30 @@
+.map-tool.active {
+  background-color: var(--calcite-ui-brand);
+  color: white;
+}
+.map-tool.active:hover {
+  background-color: var(--calcite-ui-brand);
+  color: white;
+}
+
+.esri-expand--floating .esri-expand__content {
+  z-index: 1000;
+}
+
+.identify-widget {
+  position: absolute;
+  left: 50px;
+}
+
+.streetview-widget {
+  position: absolute;
+  left: 50px;
+  top: 40px;
+}
+
+
+@media only screen and (max-width: 500px) {
+  .esri-expand {
+    display: none;
+  }
+}

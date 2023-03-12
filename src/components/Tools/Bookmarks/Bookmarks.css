@@ -1,0 +1,4 @@
+.esri-bookmarks {
+  max-height: calc(100vh - 200px) !important;
+  overflow-y: auto;
+}

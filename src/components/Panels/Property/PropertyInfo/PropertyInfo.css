@@ -1,0 +1,15 @@
+.next-icon {
+  position: absolute;
+  top: 5px;
+  right: 0px;
+  z-index: 1000;
+  height: 50px;
+}
+
+.prev-icon {
+  position: absolute;
+  top: 5px;
+  left: 0px;
+  z-index: 1000;
+  height: 50px;
+}

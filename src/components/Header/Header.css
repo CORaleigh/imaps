@@ -1,0 +1,54 @@
+#header {
+  display: flex;
+  padding: 0 1rem;
+  background-color: var(--calcite-ui-foreground-1);
+  width: 100%;
+}
+#header-controls {
+  display: flex;
+  margin-inline-start: calc(100vw - 201px);
+}
+.label-wrapper {
+  display: flex;
+  margin-inline: 1rem;
+  cursor: pointer;
+}
+
+calcite-switch {
+  margin: 0 0.5rem;
+}
+
+.logo {
+  height: 36px;
+  margin: 0.5em;
+}
+
+/* :host .calcite-dropdown-wrapper {
+  max-height: 100px;
+} */
+
+@media only screen and (max-height: 400px) {
+  #header {
+    display: none;
+  }
+}
+
+.shortcuts-content table {
+  border-collapse: collapse;
+  width: 100%;
+}
+.shortcuts-content table td {
+  width: 50%;
+}
+.shortcuts-content table tr {
+  background-color: var(--calcite-ui-foreground-1);
+}
+.shortcuts-content table tr:nth-child(even) {
+  background-color: var(--calcite-ui-foreground-2);
+}
+
+.shortcuts-content table td, .shortcuts-content table th {
+  border: 1px solid #eaeaea;
+  border-radius: 3px;
+  padding: 0.5rem 0.75rem 0.5rem 0.75rem;
+}
