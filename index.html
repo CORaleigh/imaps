@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+    name="description"
+    content="Wake County GIS and Raleigh GIS developed the iMAPS online interactive mapping application to provide easy access to reliable property information.Wake County GIS and Raleigh GIS developed the iMAPS online interactive mapping application to provide easy access to reliable property information."
+  />
     <link
       id="jsapi-theme-light"
       rel="stylesheet"
@@ -15,10 +19,27 @@
       rel="stylesheet"
       href="/assets/themes/dark/main.css"
     />          
-    <title>Vite + React + TS</title>
-  
+    <title>iMAPS</title>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WS0FB3FN0T"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-WS0FB3FN0T');
+    </script>    
   </head>
   <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <script type="application/javascript">
+      if (/MSIE|Trident/.test(window.navigator.userAgent)) window.location.href = '/imaps/ie.html';
+      try {
+        new Function('import("")');
+      } catch (err) {
+        window.location.href = '/imaps/ie.html'
+      }      
+    </script>     
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
