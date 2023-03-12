@@ -24,7 +24,7 @@ const useLayers = (props: PanelProps) => {
       );
     }
     return () => {
-      layerList && layerList?.destroy();
+      //layerList && layerList?.destroy();
     };
   }, []); // only after first render
 

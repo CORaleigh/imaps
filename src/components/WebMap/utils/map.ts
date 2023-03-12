@@ -50,6 +50,7 @@ export const initializeMap = async (
     geometrySet(event.mapPoint);
   });
   await view.when();
+  saveMap(view);
   view.watch('extent', () => {
     const config = getConfig();
     const data = window.localStorage.getItem(`imaps_calcite_${config}`);
