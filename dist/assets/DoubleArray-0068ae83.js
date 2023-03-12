@@ -1,0 +1,1 @@
+import{kj as e}from"./index-7753bab1.js";function y(r,a=!1){return r<=e?a?new Array(r).fill(0):new Array(r):new Float64Array(r)}function n(r){return length<=e?Array.from(r):new Float64Array(r)}function i(r,a,t){return Array.isArray(r)?r.slice(a,a+t):r.subarray(a,a+t)}export{i as a,y as n,n as t};
