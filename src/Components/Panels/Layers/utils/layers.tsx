@@ -7,8 +7,9 @@ import { lazy, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import DevPlanFilter from '../DevPlanFilter';
+import { saveMap } from '../../../WebMap/utils/map';
 const OpacitySlider = lazy(() => import('../OpacitySlider'));
-
+let layers: LayerList
 export const initializeLayers = async (ref: HTMLDivElement, view: MapView): Promise<LayerList> => {
 
   await addLayersFromWebmap(view);
@@ -18,7 +19,7 @@ export const initializeLayers = async (ref: HTMLDivElement, view: MapView): Prom
       await addUtilitiesLayers(view, 'a07528d1d37542b79fade50370f2305f');
     }
   }
-  const layers = new LayerList({
+  layers = new LayerList({
     view: view,
     container: ref,
     listItemCreatedFunction: layerListItemCreated,
@@ -119,9 +120,15 @@ const addLayersFromWebmap = async (view: MapView) => {
       (group as __esri.GroupLayer).addMany(layers.toArray());
   
       (group as __esri.GroupLayer).layers.forEach((layer1) => {
+        if (layer1.title === 'Raleigh Zoning') {
+          debugger
+        }
         let index = matchlayers.findIndex((layer2) => {
           return layer1.id === layer2.id;
         });
+        if (layer1.title === 'Raleigh Zoning') {
+          console.log(index)
+        }
         (group as __esri.GroupLayer).reorder(layer1, index);
       });
       matchlayers.destroy();
@@ -311,6 +318,7 @@ const layerListItemCreated = (event: any): void => {
     // if (item.panel) {
     //   item.panel.open = visible;
     // }
+    saveMap(layers.view as __esri.MapView);
     item.open = visible;
     createPanel(item);
 

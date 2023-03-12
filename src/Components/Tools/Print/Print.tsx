@@ -20,7 +20,7 @@ import { getScales, exportClicked, showFrame } from "./utils/print";
 import { collapsePanel } from "../../Shell/utils/shell";
 import usePrint from "./utils/usePrint";
 import { PrintProps } from "./utils/PrintProps";
-function Print(props: PrintProps) {
+const Print = (props: PrintProps) => {
   const {
     isActive,
     title,

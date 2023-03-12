@@ -19,7 +19,7 @@ export const initializeMap = async (
   mapId: string,
   geometrySet: Function,
   widgetActivated: Function,
-) : Promise<MapView> => {
+): Promise<MapView> => {
   const view = new MapView({
     container: ref,
     constraints: constraints as any,
@@ -29,7 +29,7 @@ export const initializeMap = async (
   view.map = webmap;
   addWidgets(view, widgetActivated);
   await view.when();
-  debugger
+
   removeGraphicsLayers(view);
   view.map.add(selectionLayer);
   view.map.add(selectionCluster);
@@ -44,12 +44,37 @@ export const initializeMap = async (
   if (color) {
     view.background = { color: color } as __esri.ColorBackground;
   }
-  addUnloadListeners(view);
+  //addUnloadListeners(view);
 
   view.on('hold', (event) => {
     geometrySet(event.mapPoint);
   });
-  
+  await view.when();
+  view.watch('extent', () => {
+    const config = getConfig();
+    const data = window.localStorage.getItem(`imaps_calcite_${config}`);
+    if (data) {
+      const json = JSON.parse(window?.localStorage?.getItem(`imaps_calcite_${config}`) as string);
+
+      json.initialState = {
+        viewpoint: {
+          targetGeometry: view.extent,
+        },
+      };
+      window.localStorage.setItem(`imaps_calcite_${config}`, JSON.stringify(json));
+    }
+  });
+  view.map.watch('basemap', () => {
+    const config = getConfig();
+    const data = window.localStorage.getItem(`imaps_calcite_${config}`);
+    if (data) {
+      const json = JSON.parse(window?.localStorage?.getItem(`imaps_calcite_${config}`) as string);
+
+      json.baseMap = view.map.basemap;
+      window.localStorage.setItem(`imaps_calcite_${config}`, JSON.stringify(json));
+    }
+  });
+
   return view;
 };
 
@@ -70,7 +95,7 @@ const addUnloadListeners = (view: __esri.MapView) => {
   document.addEventListener('visibilitychange', handleVisibilityChange);
 };
 const isSearchable = (layer: __esri.Layer, webmap: any) => {
-  const found = webmap.applicationProperties.viewing.search.layers.toArray().find((searchLayer: __esri.SearchLayer) => {
+  const found = webmap.applicationProperties.viewing.search.layers.find((searchLayer: __esri.SearchLayer) => {
     return searchLayer.id === layer.id;
   });
   return found;
@@ -83,7 +108,7 @@ const getConfig = () => {
     config += url.searchParams.get('config');
   }
   return config;
-}
+};
 
 const getWebMap = async (mapId: string): Promise<WebMap> => {
   //return new Promise(async (resolve, reject) => {
@@ -158,27 +183,59 @@ const removeGraphicsLayers = (view: MapView) => {
       .toArray(),
   );
 };
-export const saveMap = (view: MapView) => {
+
+const getAllGroups = (layers: any) => {
+  return layers.reduce((acc: any, emp: any) => {
+    return acc.concat(emp.layerType === 'GroupLayer' ? [emp, ...getAllGroups(emp.layers)] : []);
+  }, []);
+};
+export const saveMap = async (view: MapView) => {
   if (view && view?.ready) {
-    const groups = view.map.allLayers
-      .filter((layer) => {
-        return layer.type === 'group';
-      })
-      .toArray();
-    groups.forEach((group) => {
-      (group as __esri.GroupLayer).removeMany(
-        (group as __esri.GroupLayer).allLayers
-          .filter((layer) => {
-            return (
-              !layer.visible &&
-              !layer.title.includes('Property') &&
-              !isSearchable(layer, view.map) &&
-              layer.type !== 'group'
-            );
-          })
-          .toArray(),
-      );
+    const map = (view.map as any).toJSON();
+    const groups = getAllGroups(map.operationalLayers);
+
+    groups.forEach((group: any) => {
+      if (group.layerType !== 'ArcGISMapServiceLayer') {
+        group.layers = group.layers.filter(function (layer: any) {
+          return (
+            layer.visibility || layer.title.includes('Property') || isSearchable(layer, map) || layer.type === 'group'
+          );
+        });
+      }
     });
+    map.initialState = {
+      viewpoint: {
+        targetGeometry: view.extent,
+      },
+    };
+    const config = getConfig();
+
+    window.localStorage.setItem(`imaps_calcite_${config}`, JSON.stringify(map));
+    // const map = WebMap.fromJSON(JSON.parse(JSON.stringify(a)));
+    // try {
+    //   await map.loadAll();
+
+    // } catch (error) {
+
+    // }
+    // const groups = map.allLayers
+    //   .filter((layer: any) => {
+    //     return layer.type === 'group';
+    //   }).toArray();
+    // groups.forEach((group: any) => {
+    //   (group as __esri.GroupLayer).removeMany(
+    //     (group as __esri.GroupLayer).allLayers
+    //       .filter((layer) => {
+    //         return (
+    //           !layer.visible &&
+    //           !layer.title.includes('Property') &&
+    //           !isSearchable(layer, map) &&
+    //           layer.type !== 'group'
+    //         );
+    //       })
+    //       .toArray(),
+    //   );
+    // });
     // view.map.removeMany([
     //   view.map.findLayerById("selection-layer"),
     //   view.map.findLayerById("feature-table"),
@@ -190,10 +247,9 @@ export const saveMap = (view: MapView) => {
     //     })
     //     .toArray()
     // );
-    const json = (view.map as any).toJSON();
-    json.initialState.viewpoint.targetGeometry = view.extent;
-    const config = getConfig();
-    window.localStorage.setItem(`imaps_calcite_${config}`, JSON.stringify(json));
+    // const json = (map as any).toJSON();
+    // json.initialState.viewpoint.targetGeometry = view.extent;
+
     //window.localStorage.removeItem('imaps_calcite');
   }
 };
@@ -312,7 +368,7 @@ export const displayProperties = async (properties: Graphic[], view: MapView) =>
   await selectionLayer?.applyEdits({
     deleteFeatures: featureSet.features,
   });
-  await selectionLayer.applyEdits({addFeatures: properties});
+  await selectionLayer.applyEdits({ addFeatures: properties });
   updateClusters(properties);
 };
 
@@ -343,15 +399,13 @@ const updateClusters = async (properties: Graphic[]) => {
 };
 
 const getBackgroundColor = async (basemap: Basemap): Promise<Color | null> => {
-
-  
   const baseLayer = basemap.baseLayers.find((layer) => {
     return layer.type === 'vector-tile';
   });
   if (!baseLayer) {
     return null;
   }
-  
+
   await reactiveUtils.whenOnce(() => baseLayer?.loaded);
   const background = (baseLayer as __esri.VectorTileLayer).getStyleLayer('background');
   if (background) {
@@ -363,11 +417,10 @@ const getBackgroundColor = async (basemap: Basemap): Promise<Color | null> => {
 };
 
 export const hideLogin = () => {
-  
   IdentityManager.on('dialog-create', async (e) => {
     IdentityManager.dialog.visible = false;
     setTimeout(() => {
-      (IdentityManager.dialog as any).content.emit('cancel',{});
+      (IdentityManager.dialog as any).content.emit('cancel', {});
     }, 250);
     // await IdentityManager.dialog.when();
     // const container: any = IdentityManager.dialog.container;

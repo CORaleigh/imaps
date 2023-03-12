@@ -8,7 +8,7 @@ import "./Measure.css";
 import { collapsePanel } from "../../Shell/utils/shell";
 import useMeasure from "./utils/useMeasure";
 import { ToolProps } from "../utils/ToolProps";
-export const Measure = (props: ToolProps) => {
+const Measure = (props: ToolProps) => {
   const {
     measureRef,
     measurement,
