@@ -272,6 +272,7 @@ export const createFeatureTitle = (
       })?.expression;
       if (arcade) {
         const title = await executeArcade(arcade, feature);
+        debugger
         const root = createRoot(div as HTMLDivElement);
         if (featureTable) {
           root.render(

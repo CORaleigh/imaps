@@ -44,7 +44,7 @@ const useShell = () => {
         } else {
           setContentBehind(false);
         }
-      });
+      }, {passive: true});
       if (window.innerWidth < 700) {
         setActivePanel("");
         setContentBehind(true);
@@ -62,7 +62,7 @@ const useShell = () => {
 
   const mapCallback = useCallback((mapView: __esri.MapView) => {
     viewRef.current = mapView;
-    addShortcuts(mapView, setGeometry);
+   // addShortcuts(mapView, setGeometry);
     mapViewSet(mapView, setView, setLoading, setAlert);
   }, []);
   const geometryCallback = useCallback((geometry: __esri.Geometry) => {

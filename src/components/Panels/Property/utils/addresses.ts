@@ -83,7 +83,7 @@ const initializeGrid = (featureTable: FeatureTable) => {
         //            featureTable.view.goTo(feature);
         featureTable.highlightIds.add(feature.getAttribute('OBJECTID'));
       }
-    });
+    }, {passive: true});
   }, 2000);
 }
 let addressLayer: FeatureLayer;

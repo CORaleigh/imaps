@@ -17,11 +17,11 @@ function Header() {
   const ref = useRef<HTMLElement>();
 
   const disclaimer = useRef<HTMLCalciteModalElement>();
-  const shortcuts = useRef<HTMLCalciteModalElement>();
+  // const shortcuts = useRef<HTMLCalciteModalElement>();
 
   const [links, setLinks] = useState<any[]>();
   const [theme, setTheme] = useState('light');
-  const altOptKey: string = navigator.userAgent.toUpperCase().includes('MAC') ? 'Option' : 'Alt';
+  //const altOptKey: string = navigator.userAgent.toUpperCase().includes('MAC') ? 'Option' : 'Alt';
   const isMobile: boolean =  window.matchMedia("(pointer:coarse)").matches;
   useEffect(() => {
     fetch('./config.json').then((response) => {
@@ -101,7 +101,7 @@ function Header() {
                 Dark
               </CalciteLabel>
             </CalciteDropdownItem>
-            {!isMobile && <CalciteDropdownItem
+            {/* {!isMobile && <CalciteDropdownItem
               onClick={() => {
                 if (shortcuts.current) {
                   shortcuts.current.open = !shortcuts.current.open;
@@ -109,7 +109,7 @@ function Header() {
               }}
             >
               Keyboard Shortcuts
-            </CalciteDropdownItem>}
+            </CalciteDropdownItem>} */}
             <CalciteDropdownItem
               iconStart="reset"
               onClick={() => {
@@ -152,7 +152,7 @@ function Header() {
           Close
         </CalciteButton>
       </CalciteModal>
-      {!isMobile && <CalciteModal ref={shortcuts as any} aria-labelledby="shortcuts-title">
+      {/* {!isMobile && <CalciteModal ref={shortcuts as any} aria-labelledby="shortcuts-title">
         <div slot="header" id="shortcuts-title">
           Keyboard Shortcuts
         </div>
@@ -242,7 +242,7 @@ function Header() {
         >
           Close
         </CalciteButton>
-      </CalciteModal>}
+      </CalciteModal>} */}
     </div>
   );
 }

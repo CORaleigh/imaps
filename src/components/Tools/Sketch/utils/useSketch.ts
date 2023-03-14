@@ -32,7 +32,6 @@ const useSketch = (props: ToolProps) => {
       cancelSketch();
       setActiveSketchTool("");
       setSelectedGraphics([...[], ...[]]);
-      //props.view.highlightOptions = {fillOpacity: 0.25, color: '#00ffff', haloColor: '#00ffff', haloOpacity: 1} as any;
     } else {
       (props.view as __esri.MapView).popup.autoOpenEnabled = false;
 
@@ -43,8 +42,6 @@ const useSketch = (props: ToolProps) => {
     cancelSketch();
     setActiveSketchTool("");
     setSelectedGraphics([...[], ...[]]);
-
-    //props.view.highlightOptions = {fillOpacity: 0.25, color: '#00ffff', haloColor: '#00ffff', haloOpacity: 1} as any;
   }, []);
   const tipsClicked = useCallback((e: any) => {
     props.showTips(tips);

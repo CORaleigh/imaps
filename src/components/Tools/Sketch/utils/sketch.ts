@@ -64,6 +64,7 @@ export const initializeSketchViewModel = async (
   selectedGraphics: Graphic[],
   setSelectedGraphics: Function,
 ) => {
+  debugger
   sketchLayer = new MapNotesLayer({
     listMode: 'hide',
     id: 'notes-layer',
@@ -141,10 +142,7 @@ const addGraphic = (e: any) => {
 
 export const sketchActivated = () => {
   try {
-    pointSketchViewModel.updateOnGraphicClick = true;
-    polygonSketchViewModel.updateOnGraphicClick = true;
-    polylineSketchViewModel.updateOnGraphicClick = true;
-    textSketchViewModel.updateOnGraphicClick = true;
+    setUpdateOnGraphicClick(true);
   } catch (error) {
 
   }
@@ -278,27 +276,16 @@ export const textSymbolUpdated = (
 };
 
 export const cancelSketch = () => {
-  pointSketchViewModel.cancel();
-  polylineSketchViewModel.cancel();
-  polygonSketchViewModel.cancel();
-  textSketchViewModel.cancel();
-  pointSketchViewModel.updateOnGraphicClick = false;
-  polygonSketchViewModel.updateOnGraphicClick = false;
-  polylineSketchViewModel.updateOnGraphicClick = false;
-  textSketchViewModel.updateOnGraphicClick = false;
+
+  setUpdateOnGraphicClick(false);
+  cancelAllViewModels();
 };
 
 export const clearSketch = (setActiveSketchTool: Function, setSelectedGraphics: Function) => {
   setActiveSketchTool('');
   setSelectedGraphics([...[], ...[]]);
-  pointSketchViewModel.cancel();
-  polygonSketchViewModel.cancel();
-  polylineSketchViewModel.cancel();
-  textSketchViewModel.cancel();
-  sketchLayer.polygonLayer.graphics.removeAll();
-  sketchLayer.pointLayer.graphics.removeAll();
-  sketchLayer.polylineLayer.graphics.removeAll();
-  sketchLayer.textLayer.graphics.removeAll();
+  cancelAllViewModels();
+  removeAllGraphics();
 };
 
 export const getSymbols = (ids: string[], url: string) => {
@@ -323,25 +310,41 @@ export const getSymbols = (ids: string[], url: string) => {
           items.push(item);
         });
       });
-      // items.concat(result.data.items);
-
       resolve(items);
     });
   });
 };
 
+const cancelAllViewModels = () => {
+  [pointSketchViewModel,polylineSketchViewModel,polygonSketchViewModel,textSketchViewModel].forEach(vm => {
+    vm.cancel();
+  });  
+}
+
+const removeAllGraphics = () => {
+  [sketchLayer.polygonLayer,sketchLayer.pointLayer,sketchLayer.polylineLayer,sketchLayer.textLayer].forEach(layer => {
+    layer.graphics.removeAll();
+  });
+}
+
+const removeGraphics = (selectedGraphics: Graphic[]) => {
+  [sketchLayer.polygonLayer,sketchLayer.pointLayer,sketchLayer.polylineLayer,sketchLayer.textLayer].forEach(layer => {
+    layer.graphics.removeAll();
+  });
+}
+
+const setUpdateOnGraphicClick = (update: boolean) => {
+  [pointSketchViewModel, polylineSketchViewModel, polygonSketchViewModel,textSketchViewModel].forEach(vm => {
+    vm.updateOnGraphicClick = update;
+  });
+}
+
 export const stopSketching = () => {
-  pointSketchViewModel.cancel();
-  polygonSketchViewModel.cancel();
-  polylineSketchViewModel.cancel();
-  textSketchViewModel.cancel();
+  cancelAllViewModels();
 };
 
 export const deleteSelectedGraphics = (selectedGraphics: Graphic[], setSelectedGraphics: Function) => {
-  pointLayer.removeMany(selectedGraphics);
-  polygonLayer.removeMany(selectedGraphics);
-  polylineLayer.removeMany(selectedGraphics);
-  textLayer.removeMany(selectedGraphics);
+  removeGraphics(selectedGraphics);
   requestAnimationFrame(() => {
     setSelectedGraphics((current: Graphic[]) => {
       return [];

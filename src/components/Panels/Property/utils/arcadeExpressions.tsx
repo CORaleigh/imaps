@@ -3,7 +3,7 @@ export const arcadeExpressionInfos = [
   {
     name: "mailing-address",
     title: "mailing-address",
-    expression: `When(
+    expression: `return When(
             IsEmpty($feature.ADDR3),$feature.ADDR1 + 
             TextFormatting.NewLine + 
             $feature.ADDR2,$feature.ADDR1 + 
@@ -15,9 +15,11 @@ export const arcadeExpressionInfos = [
   {
     name: "site-address",
     title: "site-address",
-    expression: `When(
+    expression: `return When(
             $feature.STMISC == '1/2', 
             replace($feature.SITE_ADDRESS, ' ', ' 1/2 ', false), 
+            !isEmpty($feature.STMISC),
+            Concatenate([$feature.SITE_ADDRESS,' ', $feature.STMISC]),
             $feature.SITE_ADDRESS
         )`,
   },

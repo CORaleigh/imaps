@@ -145,7 +145,7 @@ const createStreetviewButton = (view: MapView, widgetActivated: Function): any =
         window.open('https://maps.google.com?layer=c&cbll=' + cbll + '&cbp=0,0,0,0,0', 'streetview');
       });
     }
-  });
+  }, {passive: true});
   return button;
 };
 
@@ -179,6 +179,6 @@ export const createIdentifyButton = (view: MapView, widgetActivated: Function): 
     document.querySelector('.streetview-widget')?.classList.remove('active');
 
     widgetActivated(view);
-  });
+  }, {passive: true});
   return infoButton;
 };

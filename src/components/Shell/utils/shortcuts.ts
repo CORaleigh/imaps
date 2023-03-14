@@ -83,8 +83,8 @@ export const addShortcuts = (mapView: __esri.MapView, setGeometry: Function) => 
                     vm?.destroy();
                 }
     
-            });
+            }, {passive: true});
             
-        });
+        }, {passive: true});
     }
 }

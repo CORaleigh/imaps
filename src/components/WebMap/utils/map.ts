@@ -91,9 +91,9 @@ const addUnloadListeners = (view: __esri.MapView) => {
       saveMap(view);
     }
   };
-  window.addEventListener('beforeunload', handleBeforeUnload);
-  window.addEventListener('unload', handleUnload);
-  document.addEventListener('visibilitychange', handleVisibilityChange);
+  window.addEventListener('beforeunload', handleBeforeUnload, {passive: true});
+  window.addEventListener('unload', handleUnload, {passive: true});
+  document.addEventListener('visibilitychange', handleVisibilityChange, {passive: true});
 };
 const isSearchable = (layer: __esri.Layer, webmap: any) => {
   const found = webmap.applicationProperties.viewing.search.layers.find((searchLayer: __esri.SearchLayer) => {

@@ -4,16 +4,18 @@ import {
   CalciteShell,
   CalciteShellPanel,
 } from "@esri/calcite-components-react";
-import WebMap from "../WebMap/WebMap";
+// import WebMap from "../WebMap/WebMap";
 import Header from "../Header/Header";
 import "./Shell.css";
 
-import Property from "../Panels/Property/Property";
+//import Property from "../Panels/Property/Property";
 
 import Toolbar from "./Toolbar";
 import useShell from "./utils/useShell";
 import AppTips from "./AppTips";
 import AppAlert from "./AppAlert";
+const WebMap = lazy(() => import("../WebMap/WebMap"));
+const Property = lazy(() => import("../Panels/Property/Property"));
 
 const Location = lazy(() => import("../Panels/Location/Location"));
 const Layers = lazy(() => import("../Panels/Layers/Layers"));

@@ -45,7 +45,7 @@ export const initializeSearch = (ref: HTMLDivElement, view: MapView, setCondos: 
   getQueryParams(setCondos);
   window.addEventListener('popstate', (event) => {
     getQueryParams(setCondos);
-  });
+  }, {passive: true});
 
   return search;
 };

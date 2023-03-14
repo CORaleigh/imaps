@@ -19,6 +19,7 @@ export const updateFeature = async (
   featureTable: FeatureTable | undefined,
 ) => {
   const mediaInfos: __esri.MediaInfo[] = await getPhotos(graphic);
+  // debugger
   graphic.popupTemplate = createTemplate(
     feature.view as __esri.MapView,
     graphic.layer as __esri.FeatureLayer,

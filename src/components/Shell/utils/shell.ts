@@ -139,7 +139,13 @@ const checkForPropertyService = async (
 const checkVpn = async () => {
 
       try {
-        await fetch('https://gis.raleighnc.gov');
+        await fetch('https://gis.raleighnc.gov/arcgis/rest?f=json', {
+          method: 'GET',
+          mode: 'cors',
+          headers: {
+            "Content-Type": 'application/json'
+          }
+        });
         return true;
       } catch (error) {
         console.log(error);

@@ -53,7 +53,7 @@ export const initializeFeatureTable = async (
         window.localStorage.setItem('imaps_table_template', JSON.stringify(visibleFields));
       }
     },
-    false,
+    {passive: true}
   );
   await featureTable?.when();
 
@@ -112,7 +112,7 @@ const initializeGrid = (featureTable: FeatureTable) => {
 
       featureTable.highlightIds.add(e.detail.model.item.objectId);
       //featureTable.highlightIds.add(e.detail.model.index);
-    });
+    }, {passive: true});
   });
 }
 
