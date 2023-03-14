@@ -50,7 +50,7 @@ function Header() {
           width="l"
           type="click"
           onCalciteDropdownOpen={(e: any) => {
-            e.target.shadowRoot?.querySelector('.calcite-dropdown-content')?.setAttribute('style', `min-height: ${isMobile ? '590' : '620'}px`);
+            e.target.shadowRoot?.querySelector('.calcite-dropdown-content')?.setAttribute('style', `min-height: ${isMobile ? '590' : '590'}px`);
           }}
         >
           <CalciteButton id="menuButton" scale="m" slot="trigger" name="Menu" role="button" aria-label="Menu">
