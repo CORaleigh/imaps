@@ -141,7 +141,7 @@ const checkVpn = async () => {
       try {
         await fetch('https://gis.raleighnc.gov/arcgis/rest?f=json', {
           method: 'GET',
-          mode: 'cors',
+          mode: 'no-cors',
           headers: {
             "Content-Type": 'application/json'
           }

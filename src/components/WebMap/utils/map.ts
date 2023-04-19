@@ -344,12 +344,12 @@ const selectionCluster: FeatureLayer = new FeatureLayer({
     { name: 'selected', type: 'small-integer' },
     { name: 'PIN_NUM', type: 'string' },
   ],
-  effect: 'drop-shadow(3px, 3px, 4px)',
+  effect: 'drop-shadow(1px, 1px, 1px)',
   renderer: {
     type: 'simple',
     symbol: {
       type: 'simple-marker',
-      size: 4,
+      size: 8,
       color: '#ffe34c',
       outline: {
         color: 'rgba(153, 130, 0, 1)',
