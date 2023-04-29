@@ -34,11 +34,15 @@ export const initializeMap = async (
   view.map.add(selectionLayer);
   view.map.add(selectionCluster);
   customizePopup(view);
-  view.popup.on('trigger-action', (event) => {
-    if (event.action.title === 'Select') {
-      geometrySet(view.popup.location);
-    }
-  });
+  reactiveUtils.whenOnce(() => view.popup.actions != null).then(() => {
+    debugger
+    view.popup.on('trigger-action', (event) => {
+      if (event.action.title === 'Select') {
+        geometrySet(view.popup.location);
+      }
+    });
+  })
+
   await reactiveUtils.whenOnce(() => view.map.basemap.loaded);
   const color = await getBackgroundColor(view.map.basemap);
   if (color) {
