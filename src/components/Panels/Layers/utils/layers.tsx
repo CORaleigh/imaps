@@ -120,9 +120,6 @@ const addLayersFromWebmap = async (view: MapView) => {
       (group as __esri.GroupLayer).addMany(layers.toArray());
   
       (group as __esri.GroupLayer).layers.forEach((layer1) => {
-        if (layer1.title === 'Raleigh Zoning') {
-          debugger
-        }
         let index = matchlayers.findIndex((layer2) => {
           return layer1.id === layer2.id;
         });

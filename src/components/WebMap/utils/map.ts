@@ -13,6 +13,7 @@ import Basemap from '@arcgis/core/Basemap';
 import Color from '@arcgis/core/Color';
 import IdentityManager from '@arcgis/core/identity/IdentityManager';
 import Collection from '@arcgis/core/core/Collection';
+import esriConfig from "@arcgis/core/config";
 
 export const initializeMap = async (
   ref: HTMLDivElement,
@@ -24,7 +25,8 @@ export const initializeMap = async (
     container: ref,
     constraints: constraints as any,
   });
-  hideLogin();
+  //hideLogin();
+  esriConfig.request.useIdentity = false;
   const webmap: WebMap = await getWebMap(mapId);
   view.map = webmap;
   addWidgets(view, widgetActivated);
@@ -34,8 +36,8 @@ export const initializeMap = async (
   view.map.add(selectionLayer);
   view.map.add(selectionCluster);
   customizePopup(view);
+  //in preparation for lazying loading of popups at 4.27
   reactiveUtils.whenOnce(() => view.popup.actions != null).then(() => {
-    debugger
     view.popup.on('trigger-action', (event) => {
       if (event.action.title === 'Select') {
         geometrySet(view.popup.location);

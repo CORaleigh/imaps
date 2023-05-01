@@ -12,7 +12,6 @@ export const toolSelected = (
   const panel = document.getElementById(
     `${tool}-panel`
   ) as HTMLCalcitePanelElement;
-  debugger
   if (panel) {
     const action = panel.querySelector("calcite-action");
     if (action) {

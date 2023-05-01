@@ -64,7 +64,6 @@ export const initializeSketchViewModel = async (
   selectedGraphics: Graphic[],
   setSelectedGraphics: Function,
 ) => {
-  debugger
   sketchLayer = new MapNotesLayer({
     listMode: 'hide',
     id: 'notes-layer',
@@ -150,7 +149,6 @@ export const sketchActivated = () => {
 };
 
 export const toolSelected = (tool: string, activeSketchTool: string, setActiveSketchTool: Function) => {
-  debugger
   sketchActivated();
   selectedTool = tool;
   tool === activeSketchTool ? setActiveSketchTool('') : setActiveSketchTool(tool);
