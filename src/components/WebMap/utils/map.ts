@@ -11,7 +11,6 @@ import { addWidgets } from './widgets';
 import * as reactiveUtils from '@arcgis/core/core/reactiveUtils';
 import Basemap from '@arcgis/core/Basemap';
 import Color from '@arcgis/core/Color';
-import IdentityManager from '@arcgis/core/identity/IdentityManager';
 import Collection from '@arcgis/core/core/Collection';
 import esriConfig from "@arcgis/core/config";
 
@@ -25,7 +24,6 @@ export const initializeMap = async (
     container: ref,
     constraints: constraints as any,
   });
-  //hideLogin();
   esriConfig.request.useIdentity = false;
   const webmap: WebMap = await getWebMap(mapId);
   view.map = webmap;
@@ -421,19 +419,6 @@ const getBackgroundColor = async (basemap: Basemap): Promise<Color | null> => {
   } else {
     return null;
   }
-};
-
-export const hideLogin = () => {
-  IdentityManager.on('dialog-create', async (e) => {
-    IdentityManager.dialog.visible = false;
-    setTimeout(() => {
-      (IdentityManager.dialog as any).content.emit('cancel', {});
-    }, 250);
-    // await IdentityManager.dialog.when();
-    // const container: any = IdentityManager.dialog.container;
-    // const cancelBtn: HTMLInputElement = container.querySelector('.esri-button--secondary');
-    // cancelBtn.click();
-  });
 };
 
 const customizePopup = async (view: __esri.MapView) => {
