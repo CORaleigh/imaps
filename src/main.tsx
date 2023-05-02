@@ -53,6 +53,8 @@ import "@esri/calcite-components/dist/components/calcite-tooltip";
 import "@esri/calcite-components/dist/components/calcite-flow";
 import "@esri/calcite-components/dist/components/calcite-flow-item";
 import "@esri/calcite-components/dist/components/calcite-notice";
+import "@esri/calcite-components/dist/components/calcite-list";
+import "@esri/calcite-components/dist/components/calcite-list-item";
 
 
 // Local assets

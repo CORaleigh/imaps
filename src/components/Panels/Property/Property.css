@@ -17,6 +17,7 @@
 .row {
   display: flex;
   flex-direction: row;
+  width: 100%;
 }
 calcite-tab {
   padding: 0;

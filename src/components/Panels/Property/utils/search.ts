@@ -94,7 +94,7 @@ const getSuggestions = async (
     if (startsWith) {
       whereArray.push(`${field} LIKE '${term}%'`);
     } else {
-      whereArray.push(`${field} LIKE '%${term}%'`);
+      whereArray.push(`${field} LIKE '${term}%'`);
     }
   });
   const results = await layer.queryFeatures({
@@ -240,6 +240,7 @@ const searchComplete = async (event: __esri.SearchSearchCompleteEvent): Promise<
     } else {
       console.log('search term must be 3 or more characters');
     }
+    setSearchHistory(term);
   }
   if (event.numResults) {
     const result = await searchResultSelected(
@@ -248,6 +249,7 @@ const searchComplete = async (event: __esri.SearchSearchCompleteEvent): Promise<
       event.results[0].results,
       event.searchTerm,
     );
+    setSearchHistory(event.searchTerm);
     return result;
   }
 };
@@ -255,7 +257,7 @@ const searchComplete = async (event: __esri.SearchSearchCompleteEvent): Promise<
 const getWildcardSearchWhere = (searchFields: string[], term: string): string => {
   let where = '';
   if (!searchFields?.length) {
-    where = `SITE_ADDRESS like '%${term}%' OR FULL_STREET_NAME like '%${term}%' OR OWNER like '%${term}%' OR REID like '${term}%' OR PIN_NUM like '${term}%'`;
+    where = `SITE_ADDRESS like '${term}%' OR FULL_STREET_NAME like '${term}%' OR OWNER like '${term}%' OR REID like '${term}%' OR PIN_NUM like '${term}%'`;
   } else {
     if (searchFields.includes('OWNER')) {
       where = `OWNER like '_%${term}%'`;
@@ -405,3 +407,34 @@ export const getProperty = async (oids: number[]): Promise<__esri.Graphic[]> => 
   search.view.goTo({ target: propertiesResult.features });
   return propertiesResult.features;
 };
+
+export const getSearchHistory = (): Array<string> => {
+  const history = localStorage.getItem('imaps_calcite_history');
+  let historyItems: Array<string> = [];
+  if (history) {
+    historyItems = JSON.parse(history) as Array<string>;
+  }
+  return historyItems;
+}
+
+export const setSearchHistory = (term: string) => {
+  const history = localStorage.getItem('imaps_calcite_history');
+  let historyItems: Array<string> = [];
+  if (history) {
+    historyItems = JSON.parse(history) as Array<string>
+  }
+  historyItems = historyItems.filter(item => {
+    return item !== term;
+  })
+  if (term.length >=3) {
+    historyItems.unshift(term);
+  }
+  if (historyItems.length > 10) {
+    historyItems.pop();
+  }
+  localStorage.setItem('imaps_calcite_history', JSON.stringify(historyItems));
+}
+
+export const searchHistory = (term: string) => {
+  search.search(term);
+}

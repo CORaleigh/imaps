@@ -1,3 +1,7 @@
 .esri-search {
   width: 100% !important;
 }
+
+calcite-list {
+  min-width: 300px;
+}

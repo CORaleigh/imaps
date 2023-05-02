@@ -1,24 +1,35 @@
 import React, { useEffect, useRef } from "react";
-import { initializeSearch } from "../utils/search";
 import "./PropertySearch.css";
 import { PropertySearchProps } from "./PropertySearchProps";
+import usePropertySearch from "../utils/usePropertySearch";
+import { CalciteAction, CalciteButton, CalciteList, CalciteListItem, CalcitePopover } from "@esri/calcite-components-react";
+import { getSearchHistory } from "../utils/search";
 function PropertySearch(props: PropertySearchProps) {
-  const ref = useRef<HTMLDivElement>(null);
-  const loaded = useRef(false);
-  //const [view, setView] = useState<__esri.MapView>();
+  const {
+    ref,
+    historySelected
+  } = usePropertySearch(props)
+  return <div className="row">
+    <div ref={ref}></div>
+      <CalcitePopover heading="Recent searches" label={"Recent searches"} referenceElement={"searchHistory"} closable>
+        <CalciteList>
+          {getSearchHistory().map((term, i) => {
+            return <CalciteListItem key={`history_${i}`} label={term} onClick={() => historySelected(term)}>
+              <CalciteAction slot="actions-end" text={"Search"} icon="search"></CalciteAction>
+            </CalciteListItem>
+          })}
 
-  useEffect(() => {
-    //setView(props.view);
-    if (!loaded.current) {
-      loaded.current = true;
-      initializeSearch(
-        ref.current as HTMLDivElement,
-        props.view,
-        props.condosSelected
-      );
-    }
-  }, [props.view]);
-  return <div ref={ref}></div>;
+        </CalciteList>
+      </CalcitePopover>
+      <CalciteButton 
+        scale="s"
+        id="searchHistory"
+        iconEnd="clock"
+        appearance="transparent"
+        kind="neutral"        
+        >
+      </CalciteButton>
+    </div>;
 }
 
 export default React.memo(PropertySearch);
