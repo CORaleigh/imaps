@@ -3,3 +3,8 @@ export interface PropertySearchProps {
   searchingChanged: Function;
   condosSelected: Function;
 }
+
+export interface SearchHistoryItem {
+  term: string;
+  field: string;
+}

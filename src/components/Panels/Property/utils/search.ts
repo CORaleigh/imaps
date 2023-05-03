@@ -226,21 +226,25 @@ const checkPin = (searchTerm: string): string => {
 
 const searchComplete = async (event: __esri.SearchSearchCompleteEvent): Promise<any> => {
   if (!search.viewModel.selectedSuggestion) {
-    let searchFields: string[] = [];
-    if (search.activeSource) {
-      searchFields = (search.activeSource as LayerSearchSource)?.searchFields;
-    }
+    let searchFields: string[] = ['SITE_ADDRESS','OWNER','FULL_STREET_NAME','PIN_NUM', 'REID'];
+    // if ((search.activeSource as LayerSearchSource)?.searchFields) {
+    //   searchFields = (search.activeSource as LayerSearchSource)?.searchFields;
+    // } else {
+    //   search.allSources.forEach(source => {
+    //     searchFields.concat((source as LayerSearchSource)?.searchFields);
+    //   });
+    // }
     const term: string = event.searchTerm
       .toUpperCase()
       .replace(/'/g, "''")
       .replace(/[\u2018\u2019]/g, "''");
+      setSearchHistory(term);
     if (term.length > 2) {
       const where = getWildcardSearchWhere(searchFields, term);
-      return wildcardSearch(where, condos);
+      return wildcardSearch(searchFields, condos, term);
     } else {
       console.log('search term must be 3 or more characters');
     }
-    setSearchHistory(term);
   }
   if (event.numResults) {
     const result = await searchResultSelected(
@@ -249,6 +253,7 @@ const searchComplete = async (event: __esri.SearchSearchCompleteEvent): Promise<
       event.results[0].results,
       event.searchTerm,
     );
+    
     setSearchHistory(event.searchTerm);
     return result;
   }
@@ -272,10 +277,9 @@ const getWildcardSearchWhere = (searchFields: string[], term: string): string =>
   return where;
 };
 
-const wildcardSearch = async (where: string, condoTable: FeatureLayer): Promise<any> => {
-  document.querySelector('.esri-search__warning-menu')?.setAttribute('style', 'visibility: hidden');
-
+const searchByField = async (field: string, condoTable: FeatureLayer, term: string): Promise<Graphic[]> => {
   const oids: number[] = [];
+  const where = `${field} like '${field == 'OWNER' ? '%' : ''}${term}%'`;
   const result = await condoTable.queryFeatures({ where: where, outFields: ['*'] });
   result.features.forEach((f) => {
     oids.push(f.getAttribute('OBJECTID'));
@@ -292,7 +296,19 @@ const wildcardSearch = async (where: string, condoTable: FeatureLayer): Promise<
       }
     });
     return result.features;
+  } else {
+    return []
   }
+}
+
+const wildcardSearch = async (searchFields: string[], condoTable: FeatureLayer, term: string): Promise<any> => {
+  document.querySelector('.esri-search__warning-menu')?.setAttribute('style', 'visibility: hidden');
+  const promises = searchFields.map(async field => {
+    return await searchByField(field, condoTable, term);
+  });
+  const results = await Promise.all(promises);
+  return results.flat(1);
+
 };
 
 const searchResultSelected = async (layer: FeatureLayer, source: string, results: any, term: string) => {
@@ -417,7 +433,7 @@ export const getSearchHistory = (): Array<string> => {
   return historyItems;
 }
 
-export const setSearchHistory = (term: string) => {
+export const setSearchHistory = (term: string, field?: string) => {
   const history = localStorage.getItem('imaps_calcite_history');
   let historyItems: Array<string> = [];
   if (history) {
@@ -435,6 +451,6 @@ export const setSearchHistory = (term: string) => {
   localStorage.setItem('imaps_calcite_history', JSON.stringify(historyItems));
 }
 
-export const searchHistory = (term: string) => {
+export const searchHistory = (term: string, field?: string) => {
   search.search(term);
 }
