@@ -7,11 +7,12 @@ import { getSearchHistory } from "../utils/search";
 function PropertySearch(props: PropertySearchProps) {
   const {
     ref,
-    historySelected
+    historySelected,
+    popover
   } = usePropertySearch(props)
   return <div className="row">
     <div ref={ref}></div>
-      <CalcitePopover scale="s" heading="Recent searches" label={"Recent searches"} referenceElement={"searchHistory"} closable>
+      <CalcitePopover ref={popover} scale="s" heading="Recent searches" label={"Recent searches"} referenceElement={"searchHistory"} closable>
         <CalciteList>
           {getSearchHistory().map((term, i) => {
             return <CalciteListItem key={`history_${i}`} label={term} onClick={() => historySelected(term)}>
