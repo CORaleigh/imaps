@@ -42,6 +42,9 @@
 1. Reset to default button added.  This will reset iMAPS to the default extent, layers, and base  map.
    1. This was added in case there are issues with what is stored in local storage
 
+### Recent Searches
+1. New feature to the property search is a listing of your 10 most recent searches.  Clicking on the clock button next to the property search widget will display a popover with a list of your last 10 searches, selecting a value in the list will perform that search.  If you search and it is already in the list, that search will be moved to the top of the list.  Search history is still in the local storage of the browser, so it will persist when iMAPS is reloaded.
+
 ### Code
 1. React JS code has been refactored to follow best practices.
 2. Better separation of view and controller

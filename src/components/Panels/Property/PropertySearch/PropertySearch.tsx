@@ -11,11 +11,11 @@ function PropertySearch(props: PropertySearchProps) {
   } = usePropertySearch(props)
   return <div className="row">
     <div ref={ref}></div>
-      <CalcitePopover heading="Recent searches" label={"Recent searches"} referenceElement={"searchHistory"} closable>
+      <CalcitePopover scale="s" heading="Recent searches" label={"Recent searches"} referenceElement={"searchHistory"} closable>
         <CalciteList>
           {getSearchHistory().map((term, i) => {
             return <CalciteListItem key={`history_${i}`} label={term} onClick={() => historySelected(term)}>
-              <CalciteAction slot="actions-end" text={"Search"} icon="search"></CalciteAction>
+              <CalciteAction slot="actions-end" text={"Search"} icon="search" scale="s"></CalciteAction>
             </CalciteListItem>
           })}
 
