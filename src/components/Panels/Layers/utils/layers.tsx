@@ -39,7 +39,7 @@ const addUtilitiesLayers = async (view: MapView, id: string) => {
     },
   });
 
-  await map.loadAll().catch((error) => {
+  await map.load().catch((error) => {
     console.log(error);
   }).then(async () => {
     if (map.layers.length) {
@@ -91,7 +91,7 @@ const addLayersFromWebmap = async (view: MapView) => {
     },
   });
 
-  await map.loadAll().catch(error => {
+  await map.load().catch(error => {
     console.log(error);
   }).then(() => {
     const groups = view.map.allLayers
