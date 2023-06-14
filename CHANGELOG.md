@@ -90,4 +90,4 @@
 ### Code
 1. React JS code has been refactored to follow best practices.
 2. Better separation of view and controller
-3. Upgraded to 4.26 JS SDK and Calcite Design System 1.0
+3. Upgraded to ArcGIS Maps SDK for JavaScript 4.27 and Calcite Design System 1.4.2
