@@ -12,12 +12,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@esri/calcite-components-react": "^1.3.1",
+    "@esri/calcite-components": "^1.4.2",
+    "@esri/calcite-components-react": "^1.4.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@arcgis/core": "^4.26.5",
+    "@arcgis/core": "^4.27.0",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@vitejs/plugin-react": "^3.1.0",
