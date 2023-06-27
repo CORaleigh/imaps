@@ -17,7 +17,7 @@
         {
           "title": "Help",
           "links": [
-            { "title": "Feedback", "href": "https://arcg.is/CW1TL" },
+            { "title": "Feedback", "href": "https://arcg.is/CW1TL?field:beta=Yes" },
             { "title": "User Guide", "href": "https://maps.wakegov.com/imaps/iMAPShelpPDF.pdf" },
             { "title": "Videos/FAQs", "href": "https://www.wakegov.com/departments-government/geographic-information-services-gis/maps-apps-data/imaps-information#video" }
           ]

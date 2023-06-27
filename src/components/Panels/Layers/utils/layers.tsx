@@ -16,7 +16,7 @@ export const initializeLayers = async (ref: HTMLDivElement, view: MapView): Prom
   const url = new URL(window.location as any);
   if (url.searchParams.get('config')) {
     if (url.searchParams.get('config') === 'puma') {
-      await addUtilitiesLayers(view, 'a07528d1d37542b79fade50370f2305f');
+      //await addUtilitiesLayers(view, 'a07528d1d37542b79fade50370f2305f');
     }
   }
   layers = new LayerList({
@@ -85,9 +85,11 @@ const addUtilitiesLayers = async (view: MapView, id: string) => {
 }
 
 const addLayersFromWebmap = async (view: MapView) => {
+  const url = new URL(window.location.href);
+  const mapId = url.searchParams.get('id') ? url.searchParams.get('id') : '95092428774c4b1fb6a3b6f5fed9fbc4';
   const map = new WebMap({
     portalItem: {
-      id: '95092428774c4b1fb6a3b6f5fed9fbc4',
+      id: mapId as string,
     },
   });
 
