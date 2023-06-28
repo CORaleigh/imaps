@@ -4,6 +4,7 @@ import LayerSearchSource from '@arcgis/core/widgets/Search/LayerSearchSource';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import Collection from '@arcgis/core/core/Collection';
 import Graphic from '@arcgis/core/Graphic';
+import * as reactiveUtils from "@arcgis/core/core/reactiveUtils.js";
 
 let condos: FeatureLayer;
 let addresses: FeatureLayer;
@@ -225,6 +226,7 @@ const checkPin = (searchTerm: string): string => {
 };
 
 const searchComplete = async (event: __esri.SearchSearchCompleteEvent): Promise<any> => {
+  reactiveUtils.whenOnce(() => search?.view?.popup.visible).then(() => search?.view?.popup.close());
   if (!search.viewModel.selectedSuggestion) {
     let searchFields: string[] = ['SITE_ADDRESS','OWNER','FULL_STREET_NAME','PIN_NUM', 'REID'];
     // if ((search.activeSource as LayerSearchSource)?.searchFields) {
