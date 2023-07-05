@@ -77,6 +77,12 @@ calcite-tip-manager {
     right: 50px;
   }
 
+  .custom-width  {
+    --calcite-shell-panel-width: 100vw;
+    --calcite-shell-panel-max-width: 100vw;
+
+  }
+
   calcite-action-bar {
     right: 0;
     position: absolute;
