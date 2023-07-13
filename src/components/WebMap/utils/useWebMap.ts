@@ -10,8 +10,7 @@ const useWebMap = (props: WebMapProps) => {
 
   useEffect(() => {
     
-
-    if (!loaded.current) {
+    if (!loaded.current && props.mapId) {
 
       loaded.current = true;
       initializeMap(

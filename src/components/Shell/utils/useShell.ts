@@ -20,6 +20,7 @@ const useShell = () => {
   const [loadedTools, setLoadedTools] = useState<string[]>(() => []);
 
   const [view, setView] = useState<__esri.MapView>();
+
   const viewRef = useRef<__esri.MapView>();
 
   const [properties, setProperties] = useState<__esri.Graphic[]>([]);
@@ -36,7 +37,7 @@ const useShell = () => {
     }
   }, [properties]);
   useEffect(() => {
-    if (!loaded.current) {
+    if (!loaded.current) {   
       window.addEventListener("resize", () => {
         if (window.innerWidth < 700) {
           setActivePanel("");
@@ -127,6 +128,11 @@ const useShell = () => {
   const alertSet = (alert: Alert) => {    
     setAlert(alert);
   }
+  const getMapId = () => {
+    const url = new URL(window.location.href);
+    const mapId = url.searchParams.get('id') ? url.searchParams.get('id') : '95092428774c4b1fb6a3b6f5fed9fbc4';   
+    return mapId;    
+  }
   return {
     activePanel,
     activeTool,
@@ -150,6 +156,7 @@ const useShell = () => {
     alert,
     tipsCallback,
     tips,
+    getMapId
   };
 };
 

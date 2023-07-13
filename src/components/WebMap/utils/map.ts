@@ -25,6 +25,7 @@ export const initializeMap = async (
     constraints: constraints as any,
   });
   esriConfig.request.useIdentity = false;
+  debugger
   const webmap: WebMap = await getWebMap(mapId);
   view.map = webmap;
   addWidgets(view, widgetActivated);
@@ -109,8 +110,8 @@ const isSearchable = (layer: __esri.Layer, webmap: any) => {
 const getConfig = () => {
   const url = new URL(window.location as any);
   let config: string = '';
-  if (url.searchParams.get('config')) {
-    config += url.searchParams.get('config');
+  if (url.searchParams.get('id')) {
+    config += url.searchParams.get('id');
   }
   return config;
 };

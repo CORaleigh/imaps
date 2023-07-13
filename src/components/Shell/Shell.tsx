@@ -50,7 +50,8 @@ function Shell() {
     widgetCallback,
     alert,
     tipsCallback,
-    tips
+    tips,
+    getMapId
   } = useShell();
   return (
     <div>
@@ -183,7 +184,7 @@ function Shell() {
         )}
       </div>
       <WebMap
-        mapId="95092428774c4b1fb6a3b6f5fed9fbc4"
+        mapId={getMapId() as string}
         mapViewSet={mapCallback}
         geometrySet={geometryCallback}
         properties={properties}

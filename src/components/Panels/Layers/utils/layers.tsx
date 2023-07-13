@@ -101,6 +101,7 @@ const addLayersFromWebmap = async (view: MapView) => {
       return layer.type === 'group';
     })
     .toArray();
+
   groups.forEach((group) => {
     const match = map.allLayers.find((layer) => {
       return layer.type === 'group' && layer.title === group.title;
@@ -134,6 +135,9 @@ const addLayersFromWebmap = async (view: MapView) => {
     }
 
   });
+  const nongroup = map.layers.filter(layer => layer.type !== 'group');
+  view.map.addMany(nongroup.toArray());
+  nongroup.forEach(layer => layer.load());
   return true;
   });
   
@@ -253,7 +257,7 @@ const addPropertyLabelToggles = (item: any) => {
     toggles = new Collection();
     toggles.add(
       new ActionToggle({
-        value: item.layer.renderer.symbol.outline.color.isBright,
+        value: item.layer.renderer?.symbol?.outline?.color?.isBright,
         title: 'Light Outline',
         visible: true,
       }) as any,

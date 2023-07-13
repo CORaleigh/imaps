@@ -116,8 +116,8 @@ function Header() {
                 window.localStorage.setItem('imaps_reset', 'true');
                 const url = new URL(window.location as any);
                 let id: string = '';
-                if (url.searchParams.get('config')) {
-                  id += url.searchParams.get('config');
+                if (url.searchParams.get('id')) {
+                  id += url.searchParams.get('id');
                 }
                 window.localStorage.removeItem(`imaps_calcite_${id}`);
                 window.location.reload();
