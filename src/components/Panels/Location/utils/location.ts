@@ -28,7 +28,7 @@ export const intializeLocationSearch = async (view: MapView, container: HTMLDivE
   });
   
   search.sources.addMany(sources);
-  debugger
+  
   search.allSources.on('after-add', (event: any) => {
     if ((event.item as any).layer) {
       const item: __esri.LayerSearchSource = event.item as __esri.LayerSearchSource;

@@ -31,7 +31,6 @@ import "@esri/calcite-components/dist/components/calcite-combobox";
 import "@esri/calcite-components/dist/components/calcite-combobox-item";
 import "@esri/calcite-components/dist/components/calcite-slider";
 import "@esri/calcite-components/dist/components/calcite-input";
-
 import "@esri/calcite-components/dist/components/calcite-accordion";
 import "@esri/calcite-components/dist/components/calcite-accordion-item";
 import "@esri/calcite-components/dist/components/calcite-select";
@@ -55,6 +54,9 @@ import "@esri/calcite-components/dist/components/calcite-flow-item";
 import "@esri/calcite-components/dist/components/calcite-notice";
 import "@esri/calcite-components/dist/components/calcite-list";
 import "@esri/calcite-components/dist/components/calcite-list-item";
+import "@esri/calcite-components/dist/components/calcite-navigation";
+import "@esri/calcite-components/dist/components/calcite-navigation-logo";
+
 
 
 // Local assets

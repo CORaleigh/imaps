@@ -8,6 +8,8 @@ import {
   CalciteModal,
   CalciteSwitch,
   CalciteTooltip,
+  CalciteNavigation,
+  CalciteNavigationLogo
 } from '@esri/calcite-components-react';
 import React, { useEffect, useRef, useState } from 'react';
 import './Header.css';
@@ -38,12 +40,10 @@ function Header() {
     }
   }, []);
   return (
-    <div slot="header" id="header">
-      <div>
-        <img ref={logo} alt="imaps" src={theme === 'dark' ? 'logo_dark.svg' : 'logo.svg'} className="logo" />
-      </div>
-      <div id="header-controls">
+    <CalciteNavigation slot="header" label='header'>
+      <CalciteNavigationLogo slot="logo" heading="" thumbnail={theme === 'dark' ? 'logo_dark.svg' : 'logo.svg'} target="_blank" href="https://www.wake.gov/departments-government/geographic-information-services-gis/maps-apps-data/imaps-information" ></CalciteNavigationLogo>
         <CalciteDropdown
+        slot="content-end"
           ref={ref as any}
           placement="bottom-end"
           scale="m"
@@ -53,7 +53,7 @@ function Header() {
             e.target.shadowRoot?.querySelector('.calcite-dropdown-content')?.setAttribute('style', `min-height: ${isMobile ? '590' : '590'}px`);
           }}
         >
-          <CalciteButton id="menuButton" scale="m" slot="trigger" name="Menu" role="button" aria-label="Menu">
+          <CalciteButton id="menuButton" appearance="solid" scale="m" slot="trigger" name="Menu" role="button" aria-label="Menu">
             <CalciteIcon icon="hamburger" scale="m"></CalciteIcon>
           </CalciteButton>
           <CalciteTooltip label="Menu" referenceElement="menuButton" closeOnClick>
@@ -127,7 +127,6 @@ function Header() {
             </CalciteDropdownItem>
           </CalciteDropdownGroup>
         </CalciteDropdown>
-      </div>
       <CalciteModal ref={disclaimer as any} aria-labelledby="disclaimer-title">
         <div slot="header" id="disclaimer-title">
           Disclaimer
@@ -243,7 +242,7 @@ function Header() {
           Close
         </CalciteButton>
       </CalciteModal>} */}
-    </div>
+    </CalciteNavigation>
   );
 }
 export default React.memo(Header);

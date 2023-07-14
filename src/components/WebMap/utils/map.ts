@@ -25,18 +25,19 @@ export const initializeMap = async (
     constraints: constraints as any,
   });
   esriConfig.request.useIdentity = false;
-  debugger
+  
   const webmap: WebMap = await getWebMap(mapId);
   view.map = webmap;
   addWidgets(view, widgetActivated);
   await view.when();
-
   removeGraphicsLayers(view);
   view.map.add(selectionLayer);
   view.map.add(selectionCluster);
   customizePopup(view);
   //in preparation for lazying loading of popups at 4.27
   reactiveUtils.whenOnce(() => view.popup.actions != null).then(() => {
+    view.popup.dockOptions.position = 'top-left';
+
     view.popup.on('trigger-action', (event) => {
       if (event.action.title === 'Select') {
         geometrySet(view.popup.location);

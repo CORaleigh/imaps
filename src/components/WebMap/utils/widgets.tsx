@@ -29,7 +29,7 @@ export const addWidgets = (view: MapView, widgetActivated: Function) => {
   view.ui.add(track, 'top-left');
   addCoordinates(view, widgetActivated);
 
-  view.ui.add(new ScaleBar({ view: view }), 'bottom-left');
+  view.ui.add(new ScaleBar({ view: view, unit: 'imperial' }), 'bottom-left');
   const streetview = createStreetviewButton(view, widgetActivated);
   const identify = createIdentifyButton(view, widgetActivated);
   view.ui.add(identify, 'top-left');

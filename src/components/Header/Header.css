@@ -23,12 +23,16 @@ calcite-switch {
   margin: 0.5em;
 }
 
+calcite-dropdown {
+  align-items: normal;
+}
+
 /* :host .calcite-dropdown-wrapper {
   max-height: 100px;
 } */
 
 @media only screen and (max-height: 400px) {
-  #header {
+  calcite-navigation {
     display: none;
   }
 }
