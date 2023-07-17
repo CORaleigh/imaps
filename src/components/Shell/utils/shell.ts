@@ -41,10 +41,10 @@ export const panelSelected = (
   activePanel === panel ? setActivePanel("") : setActivePanel(panel);
 
   activePanelChanged(activePanel === panel ? "" : panel);
-  if (window.innerWidth < 735) {
-    setActiveTool("");
-    activeToolChanged("");
-  }
+  // if (window.innerWidth < 735) {
+  //   setActiveTool("");
+  //   activeToolChanged("");
+  // }
 }
 
 const collapse = (
