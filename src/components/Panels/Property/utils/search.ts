@@ -226,6 +226,7 @@ const checkPin = (searchTerm: string): string => {
 };
 
 const searchComplete = async (event: __esri.SearchSearchCompleteEvent): Promise<any> => {
+  search.blur();
   reactiveUtils.whenOnce(() => search?.view?.popup.visible).then(() => search?.view?.popup.close());
   if (!search.viewModel.selectedSuggestion) {
     let searchFields: string[] = ['SITE_ADDRESS','OWNER','FULL_STREET_NAME','PIN_NUM', 'REID'];

@@ -41,6 +41,7 @@ const useShell = () => {
       window.addEventListener("resize", () => {
         if (window.innerWidth < 700) {
           //setActivePanel("");
+          setActiveTool("");
           setContentBehind(true);
         } else {
           setContentBehind(false);
@@ -48,6 +49,8 @@ const useShell = () => {
       }, {passive: true});
       if (window.innerWidth < 700) {
        // setActivePanel("");
+       setActiveTool("");
+
         setContentBehind(true);
       }
       loaded.current = true;

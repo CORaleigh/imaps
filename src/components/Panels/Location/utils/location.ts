@@ -85,6 +85,7 @@ export const addSearchEvents = (
   feature: Feature,
 ) => {
   search.on('search-complete', async (result) => {
+    search.blur();
     (feature as any).graphic = null;
     setSearchTerm(result.searchTerm);
     setIsIntersection(result.results[0].source.name === 'Intersection');
