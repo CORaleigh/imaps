@@ -30,6 +30,9 @@ export const initializeBasemaps = async (view: MapView, ref: HTMLDivElement, id:
     
     gallery.activeBasemap = basemap;
   }
+  basemap.watch('activeBasemap', activeBasemap => {
+    removeBlendBasemap(view);
+  });
 };
 
 let images: BasemapGallery;
@@ -54,7 +57,7 @@ export const initializeImageMaps = async (
   });
   images.watch('activeBasemap', (activeBasemap) => {
     setShowBlend(activeBasemap.portalItem.tags.includes("imagery"));
-
+    
   });
   await reactiveUtils.whenOnce(() => images.source.basemaps.length > 0);
 
@@ -109,6 +112,9 @@ export const initializeEsriMaps = async (view: MapView, ref: HTMLDivElement, set
     setSelectedTab('esri');
     esri.activeBasemap = basemap;
   }
+  esri.watch('activeBasemap', activeBasemap => {
+    removeBlendBasemap(view);
+  });
 };
 
 let imageryBoundary: Polygon;
@@ -182,8 +188,15 @@ export const updateBlendOpacity = (
     layer.opacity = opacity;
   }
 };
+
+export const removeBlendBasemap = (view: MapView) => {
+  const layer = view.map.findLayerById('blend-basemap');
+  if (layer) {
+    view.map.basemap.baseLayers.remove(layer);
+  }
+}
 export const blendBasemap = (switched: boolean, view: __esri.MapView, streetMapId: string, opacity: number) => {
-  const streetMap = new VectorTileLayer({ portalItem: { id: streetMapId } });
+  const streetMap = new VectorTileLayer({ portalItem: { id: streetMapId }, id: 'blend-basemap'});
   if (switched) {
     streetMap.opacity = opacity;
     view.map.basemap.baseLayers.add(streetMap);

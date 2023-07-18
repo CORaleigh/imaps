@@ -6,6 +6,7 @@ import {
   initializeBasemaps,
   initializeEsriMaps,
   initializeImageMaps,
+  removeBlendBasemap,
   updateBlendOpacity,
 } from "./basemaps";
 import { tips } from "./tips";
@@ -21,7 +22,8 @@ const useBasemaps = (props: PanelProps) => {
   const basemapRef = useRef(null);
   const imagesRef = useRef(null);
   const esriRef = useRef(null);
-  const opacity = useRef(0.5);
+  //const opacity = useRef(0.5);
+  const [opacity, setOpacity] = useState<number>(0.5);
   const mapGroup = "f6329364e80c438a958ce74aadc3a89f";
   const imageGroup = "492386759d264d49948bf7f83957ddb9";
   const streetMapId = "02d50d24991747538e218e0a5806e9b3";
@@ -50,6 +52,7 @@ const useBasemaps = (props: PanelProps) => {
   useEffect(() => {
     setIsActive(props.isActive);
   }, [props.isActive]);
+
   const panelDismissed = useCallback((e: any) => {
     props.panelDismissed();
   }, []);
@@ -62,16 +65,16 @@ const useBasemaps = (props: PanelProps) => {
       e.currentTarget.checked,
       props.view,
       streetMapId,
-      opacity.current
+      opacity
     );
   }, []);
   const blendOpacityChanged = useCallback((e: any) => {
-    opacity.current = 1 - e.target.value / 100;
+    setOpacity(1 - e.target.value / 100);
     updateBlendOpacity(
       e.target.value / 100,
       props.view,
       streetMapId,
-      opacity.current
+      1 - e.target.value / 100
     );
   }, []);
   return {
