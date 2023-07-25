@@ -62,26 +62,34 @@ export const createDurhamButton = () => {
   });
 };
 
-export const createDeedButtons = () => {
+export const createDeedButtons = (feature: __esri.Graphic) => {
   return new CustomContent({
     outFields: ['OBJECTID', 'REID'],
     creator: deedCreator,
   });
 };
 const deedCreator = async (e: any) => {
+  console.log(e.graphic.attributes);
   const div = document.createElement('div');
   div.setAttribute('style', 'display: flex;flex-direction: row;justify-content: space-around;');
-  if (!e.graphic.getAttribute('CITY_DECODE')?.includes('DURHAM COUNTY')) {
-    const result = await (e.graphic.layer as FeatureLayer).queryRelatedFeatures({
-      relationshipId: (e.graphic.layer as FeatureLayer).relationships.find((r) => {
-        return r.name === 'CONDO_BOOKS';
-      })?.id,
-      objectIds: [e.graphic.getAttribute('OBJECTID')],
-      outFields: ['BOM_DOC_NUM', 'DEED_DOC_NUM'],
-    });
+  let deed: string | null = null;
+  let bom: string | null = null;
 
-    const deed = result[e.graphic.getAttribute('OBJECTID')].features[0].getAttribute('DEED_DOC_NUM');
-    const bom = result[e.graphic.getAttribute('OBJECTID')].features[0].getAttribute('BOM_DOC_NUM');
+  if (!e.graphic.getAttribute('CITY_DECODE')?.includes('DURHAM COUNTY')) {
+    const objectids = await (e.graphic.layer as FeatureLayer).queryObjectIds({where: `REID = '${e.graphic.getAttribute('REID')}'`});
+    if (objectids.length) {
+      const result = await (e.graphic.layer as FeatureLayer).queryRelatedFeatures({
+        relationshipId: (e.graphic.layer as FeatureLayer).relationships.find((r) => {
+          return r.name === 'CONDO_BOOKS';
+        })?.id,
+        objectIds: [objectids[0]],
+        outFields: ['BOM_DOC_NUM', 'DEED_DOC_NUM'],
+      });
+  
+      deed = result[objectids[0]].features[0].getAttribute('DEED_DOC_NUM');
+      bom = result[objectids[0]].features[0].getAttribute('BOM_DOC_NUM');
+    }
+
 
     if (!e.graphic.getAttribute('CITY_DECODE')?.includes('DURHAM COUNTY') || !e.graphic.getAttribute('CITY_DECODE')) {
       if (deed) {
