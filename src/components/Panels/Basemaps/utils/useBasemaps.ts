@@ -7,6 +7,7 @@ import {
   initializeEsriMaps,
   initializeImageMaps,
   removeBlendBasemap,
+  tabChanged,
   updateBlendOpacity,
 } from "./basemaps";
 import { tips } from "./tips";
@@ -52,7 +53,9 @@ const useBasemaps = (props: PanelProps) => {
   useEffect(() => {
     setIsActive(props.isActive);
   }, [props.isActive]);
-
+  useEffect(() => {
+    tabChanged(selectedTab);
+  }, [selectedTab]);
   const panelDismissed = useCallback((e: any) => {
     props.panelDismissed();
   }, []);
@@ -60,6 +63,7 @@ const useBasemaps = (props: PanelProps) => {
     props.showTips(tips);
   }, []);
   const blendUpdated = useCallback((e: any) => {
+    debugger
     setBlendActive(e.currentTarget.checked);
     blendBasemap(
       e.currentTarget.checked,
