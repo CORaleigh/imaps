@@ -66,6 +66,7 @@ function Basemaps(props: PanelProps) {
             <br />
             <CalciteLabel hidden={showBlend ? undefined : true} layout="inline" alignment="end">
               <CalciteSwitch
+                checked={blendActive ? true : undefined}
                 onCalciteSwitchChange={blendUpdated}
               ></CalciteSwitch>
               Blend

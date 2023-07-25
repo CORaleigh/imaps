@@ -11,7 +11,7 @@ import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
 import { Alert } from '../../../Shell/utils/alert';
 
-export const initializeBasemaps = async (view: MapView, ref: HTMLDivElement, id: string, setSelectedTab: Function) => {
+export const initializeBasemaps = async (view: MapView, ref: HTMLDivElement, id: string, setSelectedTab: Function, setBlendActive: Function) => {
   const gallery = new BasemapGallery({
     container: ref,
     view: view,
@@ -30,12 +30,17 @@ export const initializeBasemaps = async (view: MapView, ref: HTMLDivElement, id:
     
     gallery.activeBasemap = basemap;
   }
-  basemap?.watch('activeBasemap', () => {
+  debugger
+  gallery?.watch('activeBasemap', () => {
+
+    setBlendActive(false);
     removeBlendBasemap(view);
   });
 };
 
+
 let images: BasemapGallery;
+
 export const initializeImageMaps = async (
   view: MapView,
   ref: HTMLDivElement,
@@ -96,7 +101,7 @@ export const initializeImageMaps = async (
   });
 };
 
-export const initializeEsriMaps = async (view: MapView, ref: HTMLDivElement, setSelectedTab: Function) => {
+export const initializeEsriMaps = async (view: MapView, ref: HTMLDivElement, setSelectedTab: Function, setBlendActive: Function) => {
   const esri = new BasemapGallery({
     container: ref,
     view: view,
@@ -113,6 +118,8 @@ export const initializeEsriMaps = async (view: MapView, ref: HTMLDivElement, set
     esri.activeBasemap = basemap;
   }
   esri.watch('activeBasemap', activeBasemap => {
+
+    setBlendActive(false);
     removeBlendBasemap(view);
   });
 };
@@ -190,7 +197,6 @@ export const updateBlendOpacity = (
 };
 
 export const removeBlendBasemap = (view: MapView) => {
-  debugger
   const layer = view.map.findLayerById('blend-basemap');
   if (layer) {
     view.map.basemap.baseLayers.remove(layer);
@@ -222,7 +228,8 @@ export const blendBasemap = (switched: boolean, view: __esri.MapView, streetMapI
       view.map.basemap.baseLayers.remove(layer);
     }
   }
-  imageActiveBasemapHandle = images.watch('activeBasemap', (activeBasemap) => {
+  debugger
+  imageActiveBasemapHandle = images?.watch('activeBasemap', (activeBasemap) => {
 
     if (switched) {
       const layer = activeBasemap.baseLayers.find((layer: __esri.Layer) => {
