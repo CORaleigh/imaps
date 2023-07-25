@@ -62,7 +62,7 @@ export const createDurhamButton = () => {
   });
 };
 
-export const createDeedButtons = (feature: __esri.Graphic) => {
+export const createDeedButtons = () => {
   return new CustomContent({
     outFields: ['OBJECTID', 'REID'],
     creator: deedCreator,
