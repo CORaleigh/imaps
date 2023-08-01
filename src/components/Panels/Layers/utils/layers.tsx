@@ -135,9 +135,11 @@ const addLayersFromWebmap = async (view: MapView) => {
     }
 
   });
-  const nongroup = map.layers.filter(layer => layer.type !== 'group');
-  view.map.addMany(nongroup.toArray());
-  nongroup.forEach(layer => layer.load());
+  view.map.layers.forEach(layer => console.log(layer.title));
+  const nongroup = map.layers.filter(layer => layer.type !== 'group' && !layer.visible && !view.map.findLayerById(layer.id));
+  // view.map.addMany(nongroup.toArray());
+   //console.log(nongroup.toArray().length)
+  // nongroup.forEach(layer => console.log(layer.title));
   return true;
   });
   

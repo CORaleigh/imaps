@@ -176,6 +176,9 @@ const getWebMap = async (mapId: string): Promise<WebMap> => {
           .toArray(),
       );
     });
+    webmap.layers.removeMany(webmap.layers.filter((layer: __esri.Layer) => {
+      return layer.type !== 'group' && !layer.visible;
+    }));
     return webmap;
   }
   // });
