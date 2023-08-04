@@ -11,6 +11,8 @@ import MapView from '@arcgis/core/views/MapView';
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 import Extent from '@arcgis/core/geometry/Extent';
 import * as projection from '@arcgis/core/geometry/projection';
+import LegendLayer from "@arcgis/core/rest/support/LegendLayer.js";
+
 
 type MapScale = {
   scale: number;
@@ -168,6 +170,13 @@ export const getPrintTemplate = (
   view: __esri.MapView,
   selectedTemplate: string,
 ): __esri.PrintTemplate => {
+  const legendLayers = view.map.allLayers
+  .filter((layer) => {
+    return layer.type !== 'imagery' && layer.type !== 'imagery-tile' && layer.id !== 'selection-layer' && layer.type !== 'graphics' && layer.type !== 'vector-tile';
+  })
+  .map((layer) => {
+    return new LegendLayer({ layerId: layer.id, title: layer.title });
+  }) as any;
   return new PrintTemplate({
     attributionVisible: false,
     outScale: mapScale,
@@ -181,7 +190,7 @@ export const getPrintTemplate = (
       titleText: title,
       scalebarUnit: 'Feet',
       customTextElements: customElements,
-      legendLayers: [],
+      legendLayers: legendLayers,
     },
     layout: selectedTemplate as any,
   });
@@ -262,6 +271,11 @@ export const exportClicked = (
     if (graphicsLayer) {
       graphicsLayer.visible = false;
     }
+    const clusterLayer = view?.map.findLayerById('selection-cluster');
+    if (clusterLayer) {
+      clusterLayer.visible = false;
+    }
+    
     const customElements: any[] = getCustomElements(selectedLayout.size, scale, showAttributes, selectedProperty);
     const template = getTemplateName(selectedLayout, showAttributes, showLegend);
 
@@ -286,6 +300,9 @@ export const exportClicked = (
           if (graphicsLayer) {
             graphicsLayer.visible = true;
           }
+          if (clusterLayer) {
+            clusterLayer.visible = true;
+          }          
           const index = jobRef.current.indexOf(job);
           jobRef.current[index] = {
             ...jobRef.current[index],
@@ -299,6 +316,10 @@ export const exportClicked = (
         if (graphicsLayer) {
           graphicsLayer.visible = true;
         }
+        if (clusterLayer) {
+          clusterLayer.visible = true;
+        }
+                
         const index = jobRef.current.indexOf(job);
         jobRef.current[index] = {
           ...jobRef.current[index],
