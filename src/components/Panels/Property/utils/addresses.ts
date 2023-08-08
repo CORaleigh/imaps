@@ -194,7 +194,7 @@ const exportTable = async (table: FeatureTable) => {
     );
     csv += '\r\n';
   });
-  let datestr = new Date().toISOString();
+  let datestr = new Date().toISOString().split('.')[0];
   datestr = datestr.replaceAll(':', '').replaceAll('-', '');
   const exportedFilename = `imaps_addresses_export_${datestr}.csv`;
 

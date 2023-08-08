@@ -255,12 +255,12 @@ const exportTable = async (table: FeatureTable) => {
     );
     csv += '\r\n';
   });
-  let datestr = new Date().toISOString();
+  let datestr = new Date().toISOString().split('.')[0];
   datestr = datestr.replaceAll(':', '').replaceAll('-', '');
-  const exportedFilenmae = `imaps_export_${datestr}.csv`;
+  const exportedFilename = `imaps_export_${datestr}.txt`;
 
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  saveAs(blob, exportedFilenmae);
+  const blob = new Blob([csv], { type: 'text/plain;charset=utf-8;' });
+  saveAs(blob, exportedFilename);
   table.menu.open = false;
   // const link = document.createElement('a');
   // if (link.download !== undefined) {
