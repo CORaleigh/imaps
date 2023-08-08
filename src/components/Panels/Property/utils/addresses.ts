@@ -196,9 +196,9 @@ const exportTable = async (table: FeatureTable) => {
   });
   let datestr = new Date().toISOString().split('.')[0];
   datestr = datestr.replaceAll(':', '').replaceAll('-', '');
-  const exportedFilename = `imaps_addresses_export_${datestr}.csv`;
+  const exportedFilename = `imaps_addresses_export_${datestr}.txt`;
 
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const blob = new Blob([csv], { type: 'text/plain;charset=utf-8;' });
   saveAs(blob, exportedFilename);
   table.menu.open = false;
   // const link = document.createElement('a');
