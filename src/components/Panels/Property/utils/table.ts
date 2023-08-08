@@ -6,6 +6,7 @@ import TableTemplate from '@arcgis/core/widgets/FeatureTable/support/TableTempla
 import FeatureSet from '@arcgis/core/rest/support/FeatureSet';
 import Graphic from '@arcgis/core/Graphic';
 import ButtonMenuItem from '@arcgis/core/widgets/FeatureTable/Grid/support/ButtonMenuItem';
+import {saveAs} from 'file-saver';
 
 import '../PropertyTable/PropertyTable.css';
 import { getProperty } from './search';
@@ -259,14 +260,16 @@ const exportTable = async (table: FeatureTable) => {
   const exportedFilenmae = `imaps_export_${datestr}.csv`;
 
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  const link = document.createElement('a');
-  if (link.download !== undefined) {
-    const url = URL.createObjectURL(blob);
-    link.setAttribute('href', url);
-    link.setAttribute('download', exportedFilenmae);
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
+  saveAs(blob, exportedFilenmae);
+  table.menu.open = false;
+  // const link = document.createElement('a');
+  // if (link.download !== undefined) {
+  //   const url = URL.createObjectURL(blob);
+  //   link.setAttribute('href', url);
+  //   link.setAttribute('download', exportedFilenmae);
+  //   link.style.visibility = 'hidden';
+  //   document.body.appendChild(link);
+  //   link.click();
+  //   document.body.removeChild(link);
+  // }
 };

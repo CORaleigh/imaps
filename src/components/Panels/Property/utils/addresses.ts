@@ -8,6 +8,7 @@ import Graphic from '@arcgis/core/Graphic';
 import ButtonMenuItem from '@arcgis/core/widgets/FeatureTable/Grid/support/ButtonMenuItem';
 
 import PictureMarkerSymbol from '@arcgis/core/symbols/PictureMarkerSymbol';
+import {saveAs} from 'file-saver'
 import { clearAddressPoints } from './property';
 let featureTable: FeatureTable;
 export const initializeFeatureTable = async (ref: HTMLDivElement, view: MapView): Promise<FeatureTable> => {
@@ -198,14 +199,16 @@ const exportTable = async (table: FeatureTable) => {
   const exportedFilename = `imaps_addresses_export_${datestr}.csv`;
 
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  const link = document.createElement('a');
-  if (link.download !== undefined) {
-    const url = URL.createObjectURL(blob);
-    link.setAttribute('href', url);
-    link.setAttribute('download', exportedFilename);
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
+  saveAs(blob, exportedFilename);
+  table.menu.open = false;
+  // const link = document.createElement('a');
+  // if (link.download !== undefined) {
+  //   const url = URL.createObjectURL(blob);
+  //   link.setAttribute('href', url);
+  //   link.setAttribute('download', exportedFilename);
+  //   link.style.visibility = 'hidden';
+  //   document.body.appendChild(link);
+  //   link.click();
+  //   document.body.removeChild(link);
+  // }
 };
