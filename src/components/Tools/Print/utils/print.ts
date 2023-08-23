@@ -225,17 +225,17 @@ export const getCustomElements = (
   selectedFeature: Graphic | undefined,
 ): any[] => {
   const customElements = [];
-  customElements.push({ Scale: (mapScale / 12).toString() });
+  customElements.push({ Scale: (mapScale / 12).toLocaleString() });
   if (size < 24) {
-    customElements.push({ HalfScale: (mapScale / 12 / 2).toString() });
-    customElements.push({ '2xScale': (mapScale / 12) * 2 + ' ft' });
+    customElements.push({ HalfScale: (mapScale / 12 / 2).toLocaleString() });
+    customElements.push({ '2xScale': ((mapScale / 12) * 2).toLocaleString() + ' ft' });
   } else if (size < 36) {
-    customElements.push({ '2xScale': (mapScale / 12) * 2 });
-    customElements.push({ '4xScale': (mapScale / 12) * 4 + ' ft' });
+    customElements.push({ '2xScale': ((mapScale / 12) * 2).toLocaleString() });
+    customElements.push({ '4xScale': ((mapScale / 12) * 4).toLocaleString() + ' ft' });
   } else {
-    customElements.push({ '2xScale': (mapScale / 12) * 2 });
-    customElements.push({ '4xScale': (mapScale / 12) * 4 });
-    customElements.push({ '6xScale': (mapScale / 12) * 6 + ' ft' });
+    customElements.push({ '2xScale': ((mapScale / 12) * 2).toLocaleString() });
+    customElements.push({ '4xScale': ((mapScale / 12) * 4).toLocaleString() });
+    customElements.push({ '6xScale': ((mapScale / 12) * 6).toLocaleString() + ' ft' });
   }
   if (showAttributes) {
     const text = formatAttributes(selectedFeature as __esri.Graphic);
