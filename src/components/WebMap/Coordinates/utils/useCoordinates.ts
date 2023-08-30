@@ -274,6 +274,7 @@ const useCoordinates = (props: CoordinateProps) => {
             if (!expanded) {
               moveHandler?.remove();
               clickHandler?.remove();
+              layer.removeAll();
             } else {
               if (modeActionRef.current.getAttribute("active")) {
                 addMoveHandler();

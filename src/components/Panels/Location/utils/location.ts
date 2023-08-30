@@ -162,7 +162,6 @@ const addGraphics = (view: __esri.MapView, geometry: __esri.Geometry): void => {
   }
 };
 const removeGraphics = (view: __esri.MapView): void => {
-  //layer.graphics.removeAll();
   view.graphics.removeMany(
     view.graphics.filter((graphic: __esri.Graphic) => {
       return graphic.getAttribute('type') === 'location';
