@@ -9,6 +9,7 @@ import Graphic from '@arcgis/core/Graphic';
 import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 import Color from '@arcgis/core/Color';
 import Feature from '@arcgis/core/widgets/Feature';
+import * as reactiveUtils from "@arcgis/core/core/reactiveUtils.js";
 
 const marker: PictureMarkerSymbol = new PictureMarkerSymbol({
   url: "assets/pin.svg",
@@ -90,6 +91,7 @@ export const addSearchEvents = (
 ) => {
   search.on('search-complete', async (result) => {
     search.blur();
+    reactiveUtils.whenOnce(() => search?.view?.popup.visible).then(() => search?.view?.popup.close());
     (feature as any).graphic = null;
     setSearchTerm(result.searchTerm);
     setIsIntersection(result.results[0].source.name === 'Intersection');
