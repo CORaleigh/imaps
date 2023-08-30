@@ -192,6 +192,11 @@ export const Select = (props: SelectProps) => {
             text="Clear"
             onClick={() => {
               props.geometrySet(undefined);
+              const layer = props.view.map.findLayerById('select-graphics');
+              if (layer) {
+                (layer as __esri.GraphicsLayer).removeAll();
+              }
+
             }}
           ></CalciteAction>
           <CalciteTooltip

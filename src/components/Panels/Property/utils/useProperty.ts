@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import MapView from "@arcgis/core/views/MapView";
-import { clearAddressPoints, getPropertyByGeometry } from "../utils/property";
+import { clearAddressPoints, getPropertyByGeometry, clearSelectionGraphics } from "../utils/property";
 import { tips } from "./tips";
 import { PropertyProps } from "./PropertyProps";
 
@@ -79,6 +79,8 @@ const useProperty = (props: PropertyProps) => {
       props.selected(selectedFeature, condoRef.current);
       setActiveTab("info");
       setInfoDisabled(false);
+      clearAddressPoints(props.view);
+      clearSelectionGraphics(props.view);
     },
     [props.selected, feature]
   );
@@ -95,6 +97,7 @@ const useProperty = (props: PropertyProps) => {
     setInfoDisabled(true);
     props.selected(null, []);
     clearAddressPoints(view);
+    clearSelectionGraphics(view);
   }, []);
 
   useEffect(() => {

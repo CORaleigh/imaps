@@ -77,3 +77,10 @@ export const clearAddressPoints = (view: MapView) => {
     }),
   );
 };
+
+export const clearSelectionGraphics = (view: MapView) => {
+  const layer = view.map.findLayerById('select-graphics');
+  if (layer) {
+    (layer as __esri.GraphicsLayer).removeAll();
+  }
+}

@@ -19,6 +19,7 @@ export const cancelSelect = () => {
 export const initializeSelect = async (view: MapView, geometrySet: Function, setSelectedTool: Function) => {
   layer = new GraphicsLayer({
     listMode: 'hide',
+    id: 'select-graphics'
   });
   view.map.add(layer);
   sketchVm = new SketchViewModel({
@@ -48,14 +49,19 @@ export const initializeSelect = async (view: MapView, geometrySet: Function, set
     if (event.state === 'complete') {
       if (distance > 0) {
         geometrySet(buffer(distance, event.graphic));
+        if (layer.graphics.length > 1) {
+          layer.graphics.removeAt(1);
+        }
       } else {
         geometrySet(event.graphic.geometry);
+        layer.graphics.removeAll();
       }
       sketchVm.create(event.tool);
       if (highlight) {
         highlight.remove();
       }
-      layer.graphics.removeAll();
+      
+      
     }
     if (event.state === 'active') {
       if (distance === 0) {
@@ -70,8 +76,14 @@ export const initializeSelect = async (view: MapView, geometrySet: Function, set
         sketchVm.layer.removeAll();
         const symbol = {
           type: 'simple-fill',
-          color: [255, 255, 0, 0.2],
+          color: [255, 255, 0, 0],
           style: 'solid',
+          outline: {
+            type: 'simple-line',
+            color: [0,0,0,1],
+            width: 2,
+            style: 'dash'
+          }
         };
         sketchVm.layer.add(new Graphic({ geometry: geom, symbol: symbol }));
         const newHighlight = await highlightProperties(view, geom);
