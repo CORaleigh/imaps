@@ -48,7 +48,7 @@ const useCoordinates = (props: CoordinateProps) => {
       addClickHandler(props.view, props.clickActivated);
     } else {
       clickHandler?.remove();
-      (props.view as __esri.MapView).popup.autoOpenEnabled = true;
+      props.view.popupEnabled = true;
       document.querySelector(".identify-widget")?.classList.add("active");
       addMoveHandler();
     }
@@ -235,7 +235,7 @@ const useCoordinates = (props: CoordinateProps) => {
   };
   const addClickHandler = (view: __esri.MapView, clickActivated: Function) => {
     clickActivated(view);
-    (props.view as __esri.MapView).popup.autoOpenEnabled = false;
+    props.view.popupEnabled = false;
     document.querySelector(".identify-widget")?.classList.remove("active");
     clickHandler = (props.view as __esri.MapView).on("click", (e: any) => {
       displayCoordinates(e);

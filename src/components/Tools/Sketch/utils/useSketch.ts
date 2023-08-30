@@ -33,7 +33,7 @@ const useSketch = (props: ToolProps) => {
       setActiveSketchTool("");
       setSelectedGraphics([...[], ...[]]);
     } else {
-      (props.view as __esri.MapView).popup.autoOpenEnabled = false;
+      props.view.popupEnabled = false;
 
     }
   }, [props.isActive]);

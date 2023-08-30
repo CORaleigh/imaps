@@ -169,7 +169,7 @@ function Sketch(props: ToolProps) {
                 stopSketching();
                 toolSelected("select", activeSketchTool, setActiveSketchTool);
                 setTimeout(() => {
-                  (props.view as __esri.MapView).popup.autoOpenEnabled = false;
+                  props.view.popupEnabled = false;
                 }, 1000);
               }}
             ></CalciteAction>

@@ -38,12 +38,12 @@ export const addWidgets = (view: MapView, widgetActivated: Function) => {
 
   view.watch('activeTool', (activeTool) => {
     if (activeTool) {
-      view.popup.autoOpenEnabled = false;
+      view.popupEnabled = false;
       streetviewClick?.remove();
       document.querySelector('.identify-widget')?.classList.remove('active');
       document.querySelector('.streetview-widget')?.classList.remove('active');
     } else {
-      view.popup.autoOpenEnabled = true;
+      view.popupEnabled = true;
       document.querySelector('.identify-widget')?.classList.add('active');
     }
   });
@@ -130,7 +130,7 @@ const createStreetviewButton = (view: MapView, widgetActivated: Function): any =
   button.addEventListener('click', () => {
     widgetActivated(view);
 
-    view.popup.autoOpenEnabled = false;
+    view.popupEnabled = false;
     if (document.querySelector('.streetview-widget')?.classList.contains('active')) {
       document.querySelector('.streetview-widget')?.classList.remove('active');
       streetviewClick?.remove();
@@ -171,9 +171,9 @@ export const createIdentifyButton = (view: MapView, widgetActivated: Function): 
   text.textContent = 'Idenfity features';
   infoButton.appendChild(icon);
   infoButton.appendChild(text);
-  view.popup.autoOpenEnabled = true;
+  view.popupEnabled = true;
   infoButton.addEventListener('click', () => {
-    view.popup.autoOpenEnabled = true;
+    view.popupEnabled = true;
     streetviewClick?.remove();
     document.querySelector('.identify-widget')?.classList.add('active');
     document.querySelector('.streetview-widget')?.classList.remove('active');
