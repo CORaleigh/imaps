@@ -43,6 +43,7 @@ const useCoordinates = (props: CoordinateProps) => {
   }, []);
   const modeClicked = useCallback((e: any) => {
     e.target.active = !e.target.active;
+    layer.removeAll();
     if (e.target.active) {
       moveHandler?.remove();
       addClickHandler(props.view, props.clickActivated);
@@ -161,6 +162,7 @@ const useCoordinates = (props: CoordinateProps) => {
       if (!props.view.map.findLayerById("coordinate-widget")) {
         props.view.map.add(layer);
       }
+  
       layer.removeAll();
       layer.add({
         geometry: point as __esri.Geometry,
@@ -238,6 +240,15 @@ const useCoordinates = (props: CoordinateProps) => {
     props.view.popupEnabled = false;
     document.querySelector(".identify-widget")?.classList.remove("active");
     clickHandler = (props.view as __esri.MapView).on("click", (e: any) => {
+      if (!props.view.map.findLayerById("coordinate-widget")) {
+        props.view.map.add(layer);
+      }      
+      layer.removeAll();
+      layer.add({
+        geometry: e.mapPoint,
+        attributes: null,
+        symbol: marker,
+      } as any);      
       displayCoordinates(e);
     });
   };
