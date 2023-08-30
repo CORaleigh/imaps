@@ -23,7 +23,7 @@ const useLocation = (props: PanelProps) => {
   useEffect(() => {
     if (!loaded.current && searchDiv.current) {
       loaded.current = true;
-      intializeLocationSearch(props.view, searchDiv.current).then(
+      intializeLocationSearch(props.view, searchDiv.current, setIsIntersection).then(
         (searchWidget: __esri.widgetsSearch) => {
           search.current = searchWidget;
           addSearchEvents(
