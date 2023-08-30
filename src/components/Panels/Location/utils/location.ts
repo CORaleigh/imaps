@@ -10,6 +10,12 @@ import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 import Color from '@arcgis/core/Color';
 import Feature from '@arcgis/core/widgets/Feature';
 
+const marker: PictureMarkerSymbol = new PictureMarkerSymbol({
+  url: "assets/pin.svg",
+  height: 36,
+  width: 36,
+});
+
 export const intializeLocationSearch = async (view: MapView, container: HTMLDivElement): Promise<widgetSearch> => {
   const sources: any[] = [];
   const source = await addLocationSearch();
@@ -26,7 +32,9 @@ export const intializeLocationSearch = async (view: MapView, container: HTMLDivE
       view.goTo({ target: params.target.target, zoom: 17 }, { duration: 1000, easing: 'ease' as any });
     },
   });
-  
+  search.on('search-clear', () => {
+    removeGraphics(search.view as MapView);
+  });
   search.sources.addMany(sources);
   
   search.allSources.on('after-add', (event: any) => {
@@ -67,11 +75,7 @@ const addLocationSearch = (): LocatorSearchSource => {
     placeholder: 'Enter an address',
     url: 'https://maps.raleighnc.gov/arcgis/rest/services/Locators/Locator/GeocodeServer',
     autoNavigate: true,
-    resultSymbol: new PictureMarkerSymbol({
-      url: 'assets/pin.svg',
-      height: 36,
-      width: 36,
-    }),
+    resultSymbol: marker,
   });
   return source;
 };
@@ -138,11 +142,7 @@ const addGraphics = (view: __esri.MapView, geometry: __esri.Geometry): void => {
       new Graphic({
         geometry: geometry,
         attributes: { type: 'location' },
-        symbol: new PictureMarkerSymbol({
-          url: 'assets/pin.svg',
-          height: 36,
-          width: 36,
-        }), //new CIMSymbol(pinSymbol as any),
+        symbol: marker
       }),
     );
   } else {
@@ -162,6 +162,7 @@ const addGraphics = (view: __esri.MapView, geometry: __esri.Geometry): void => {
   }
 };
 const removeGraphics = (view: __esri.MapView): void => {
+  //layer.graphics.removeAll();
   view.graphics.removeMany(
     view.graphics.filter((graphic: __esri.Graphic) => {
       return graphic.getAttribute('type') === 'location';
