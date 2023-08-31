@@ -207,7 +207,17 @@ export const updateTable = async (features: Graphic[], featureTable: FeatureTabl
         where: '1=1',
         returnGeometry: true,
       });
+      console.log(features);
+      features.forEach(feature => {
+        let address = feature.getAttribute('SITE_ADDRESS');
+        if (feature.getAttribute('STMISC') === '1/2') {
+          address = address.replace(' ', ` 1/2 `);
+        } else if (feature.getAttribute('STMISC')) {
+          address = `${address} ${feature.getAttribute('STMISC')}`;
+        }
+        feature.setAttribute('SITE_ADDRESS', address);
 
+      })
       await (featureTable.layer as __esri.FeatureLayer).applyEdits({ deleteFeatures: result.features });
       await (featureTable.layer as __esri.FeatureLayer).applyEdits({ addFeatures: features });
 
