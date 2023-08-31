@@ -333,8 +333,7 @@ const selectionLayer: FeatureLayer = new FeatureLayer({
         },
       } as any,
     ],
-  } as UniqueValueRenderer,
-  minScale: 20000,
+  } as UniqueValueRenderer
 });
 
 const selectionCluster: FeatureLayer = new FeatureLayer({
