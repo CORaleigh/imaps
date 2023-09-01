@@ -219,7 +219,7 @@ export const togglePropertyLabels = (event: __esri.LayerListTriggerActionEvent) 
 };
 const propertyLabelExpressions: any[] = [
   {
-    expression: `First(Split($feature['SITE_ADDRESS'], ' '))`,
+    expression: `First(Split($feature['SITE_ADDRESS'], ' ')) + ' ' + $feature.STMISC`,
     title: 'Address',
   },
   {

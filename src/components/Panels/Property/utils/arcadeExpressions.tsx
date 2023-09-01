@@ -17,9 +17,9 @@ export const arcadeExpressionInfos = [
     title: "site-address",
     expression: `return When(
             $feature.STMISC == '1/2', 
-            replace($feature.SITE_ADDRESS, ' ', ' 1/2 ', false), 
+            replace(replace($feature.SITE_ADDRESS, ' ', ' 1/2 ', false), ' 1/2 1/2 ', ' 1/2 '), 
             !isEmpty($feature.STMISC),
-            Concatenate([$feature.SITE_ADDRESS,' ', $feature.STMISC]),
+            Replace(Concatenate([$feature.SITE_ADDRESS,' ', $feature.STMISC]),' ' + $feature.STMISC + ' ' + $feature.STMISC, ' ' + $feature.STMISC),
             $feature.SITE_ADDRESS
         )`,
   },
