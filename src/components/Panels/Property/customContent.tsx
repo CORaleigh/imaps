@@ -41,11 +41,8 @@ export const createDurhamButton = () => {
       div.setAttribute('style', 'display: flex;flex-direction: row;justify-content: space-around;');
 
       const durham = await executeArcade(
-        `var portal = Portal("https://ral.maps.arcgis.com"); 
-      if (Find("DURHAM COUNTY",$feature.CITY_DECODE) > -1) { 
-        var fs = FeatureSetByPortalItem(portal, "ed698c7ae43c4394b517990b1922aaba"); 
-        var f= First(Filter(fs,"SITE_ADDRE = '" + $feature.SITE_ADDRESS + "'"));
-        return Concatenate("https://maps.durhamnc.gov/?pid=",f.PARCEL_ID);}`,
+        `if (Find("DURHAM COUNTY",$feature.CITY_DECODE) > -1) { 
+        return Concatenate("https://maps.durhamnc.gov/?pid=",$feature.REID);}`,
         e.graphic,
       );
       if (durham) {
@@ -198,11 +195,8 @@ export const createLinkButtons = () => {
       const tax = createButton('home', 'Tax Page');
 
       const taxUrl = await executeArcade(
-        `var portal = Portal("https://ral.maps.arcgis.com"); 
-      if ($feature.CITY_DECODE == "RALEIGH - DURHAM COUNTY") { 
-        var fs = FeatureSetByPortalItem(portal, "ed698c7ae43c4394b517990b1922aaba"); 
-        var f= First(Filter(fs,"SITE_ADDRE = '" + $feature.SITE_ADDRESS + "'"));
-        return Concatenate("https://property.spatialest.com/nc/durham/#/property/",f.PARCEL_ID);
+      `if ($feature.CITY_DECODE == "RALEIGH - DURHAM COUNTY") { 
+        return Concatenate("https://property.spatialest.com/nc/durham/#/property/",$feature.REID);
       } else {
         return Concatenate("https://services.wake.gov/realestate/Account.asp?id=", $feature.REID);
       }`,
@@ -221,11 +215,8 @@ export const createLinkButtons = () => {
 
 export const getDurhamPhoto = async (feature: Graphic) => {
   const photo = await executeArcade(
-    `var portal = Portal("https://ral.maps.arcgis.com"); 
-    if ($feature.CITY_DECODE == "RALEIGH - DURHAM COUNTY") { 
-      var fs = FeatureSetByPortalItem(portal, "ed698c7ae43c4394b517990b1922aaba"); 
-      var f= First(Filter(fs,"SITE_ADDRE = '" + $feature.SITE_ADDRESS + "'"));
-      return Concatenate("https://image-cdn.spatialest.com/image/durham-images/lrg/",f.PARCEL_ID,".JPG");}`,
+    `if ($feature.CITY_DECODE == "RALEIGH - DURHAM COUNTY") { 
+      return Concatenate("https://image-cdn.spatialest.com/image/durham-images/lrg/",$feature.REID,".JPG");}`,
     feature,
   );
   const request = new Request(photo);
