@@ -207,7 +207,6 @@ export const updateTable = async (features: Graphic[], featureTable: FeatureTabl
         where: '1=1',
         returnGeometry: true,
       });
-      console.log(features);
       features.forEach(feature => {
         let address = feature.getAttribute('SITE_ADDRESS');
         if (feature.getAttribute('STMISC') === '1/2') {

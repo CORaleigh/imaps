@@ -69,7 +69,6 @@ export const createDeedButtons = () => {
   });
 };
 const deedCreator = async (e: any) => {
-  console.log(e.graphic.attributes);
   const div = document.createElement('div');
   div.setAttribute('style', 'display: flex;flex-direction: row;justify-content: space-around;');
   let deed: string | null = null;

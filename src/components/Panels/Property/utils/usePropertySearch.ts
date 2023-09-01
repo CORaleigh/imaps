@@ -24,7 +24,6 @@ const usePropertySearch = (props: PropertySearchProps) => {
     const historySelected = useCallback((term: string) => {
       
       if (popover.current) {
-        console.log(popover.current.open)
         popover.current.open = false;
       }
       searchHistory(term)

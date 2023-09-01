@@ -126,16 +126,12 @@ const addLayersFromWebmap = async (view: MapView) => {
         let index = matchlayers.findIndex((layer2) => {
           return layer1.id === layer2.id;
         });
-        if (layer1.title === 'Raleigh Zoning') {
-          console.log(index)
-        }
         (group as __esri.GroupLayer).reorder(layer1, index);
       });
       matchlayers.destroy();
     }
 
   });
-  view.map.layers.forEach(layer => console.log(layer.title));
   const nongroup = map.layers.filter(layer => layer.type !== 'group' && !layer.visible && !view.map.findLayerById(layer.id));
   view.map.addMany(nongroup.toArray());
    //console.log(nongroup.toArray().length)

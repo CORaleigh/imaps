@@ -67,10 +67,8 @@ export const initializeImageMaps = async (
   await reactiveUtils.whenOnce(() => images.source.basemaps.length > 0);
 
   const basemap = images.source.basemaps.find((basemap) => {
-    console.log(basemap.portalItem.title);
     return basemap.portalItem.title === view.map.basemap.title;
   });
-  console.log(view.map.basemap.title);
 
   if (basemap) {
     setSelectedTab('images');
