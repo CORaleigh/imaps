@@ -77,7 +77,9 @@ export const arcadeExpressionInfos = [
   {
     name: "jurisdiction",
     title: "Jurisdiction",
-    expression: `var juris = $feature.PLANNING_JURISDICTION;When(" +
+   // expression: `$feature.PLANNING_JURISDICTION`,
+
+    expression: `var juris = $feature.PLANNING_JURISDICTION;When(
         juris == 'RA', 'Raleigh',
         juris == 'CA', 'Cary',
         juris == 'AP', 'Apex',
@@ -94,7 +96,7 @@ export const arcadeExpressionInfos = [
         juris == 'WE', 'Wendell',
         juris == 'ZB', 'Zebulon',
         juris == 'WC', 'Wake County',
-        " '');`,
+        '');`,
   },
   {
     name: "general",

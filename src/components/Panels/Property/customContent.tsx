@@ -42,7 +42,7 @@ export const createDurhamButton = () => {
 
       const durham = await executeArcade(
         `var portal = Portal("https://ral.maps.arcgis.com"); 
-      if ($feature.CITY_DECODE == "RALEIGH - DURHAM COUNTY") { 
+      if (Find("DURHAM COUNTY",$feature.CITY_DECODE) > -1) { 
         var fs = FeatureSetByPortalItem(portal, "ed698c7ae43c4394b517990b1922aaba"); 
         var f= First(Filter(fs,"SITE_ADDRE = '" + $feature.SITE_ADDRESS + "'"));
         return Concatenate("https://maps.durhamnc.gov/?pid=",f.PARCEL_ID);}`,
