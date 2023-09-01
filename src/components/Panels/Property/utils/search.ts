@@ -428,7 +428,7 @@ export const getProperty = async (oids: number[]): Promise<__esri.Graphic[]> => 
 };
 
 export const getSearchHistory = (): Array<string> => {
-  const history = localStorage.getItem('imaps_calcite_history');
+  const history = localStorage.getItem('imaps_history');
   let historyItems: Array<string> = [];
   if (history) {
     historyItems = JSON.parse(history) as Array<string>;
@@ -437,7 +437,7 @@ export const getSearchHistory = (): Array<string> => {
 }
 
 export const setSearchHistory = (term: string, field?: string) => {
-  const history = localStorage.getItem('imaps_calcite_history');
+  const history = localStorage.getItem('imaps_history');
   let historyItems: Array<string> = [];
   if (history) {
     historyItems = JSON.parse(history) as Array<string>
@@ -451,7 +451,7 @@ export const setSearchHistory = (term: string, field?: string) => {
   if (historyItems.length > 10) {
     historyItems.pop();
   }
-  localStorage.setItem('imaps_calcite_history', JSON.stringify(historyItems));
+  localStorage.setItem('imaps_history', JSON.stringify(historyItems));
 }
 
 export const searchHistory = (term: string, field?: string) => {

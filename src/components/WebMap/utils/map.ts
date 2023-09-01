@@ -59,26 +59,26 @@ export const initializeMap = async (
   saveMap(view);
   view.watch('extent', () => {
     const config = getConfig();
-    const data = window.localStorage.getItem(`imaps_calcite_${config}`);
+    const data = window.localStorage.getItem(`imaps_webmap_${config}`);
     if (data) {
-      const json = JSON.parse(window?.localStorage?.getItem(`imaps_calcite_${config}`) as string);
+      const json = JSON.parse(window?.localStorage?.getItem(`imaps_webmap_${config}`) as string);
 
       json.initialState = {
         viewpoint: {
           targetGeometry: view.extent,
         },
       };
-      window.localStorage.setItem(`imaps_calcite_${config}`, JSON.stringify(json));
+      window.localStorage.setItem(`imaps_webmap_${config}`, JSON.stringify(json));
     }
   });
   view.map.watch('basemap', () => {
     const config = getConfig();
-    const data = window.localStorage.getItem(`imaps_calcite_${config}`);
+    const data = window.localStorage.getItem(`imaps_webmap_${config}`);
     if (data) {
-      const json = JSON.parse(window?.localStorage?.getItem(`imaps_calcite_${config}`) as string);
+      const json = JSON.parse(window?.localStorage?.getItem(`imaps_webmap_${config}`) as string);
 
       json.baseMap = view.map.basemap;
-      window.localStorage.setItem(`imaps_calcite_${config}`, JSON.stringify(json));
+      window.localStorage.setItem(`imaps_webmap_${config}`, JSON.stringify(json));
     }
   });
 
@@ -121,8 +121,8 @@ const getWebMap = async (mapId: string): Promise<WebMap> => {
   //return new Promise(async (resolve, reject) => {
   let webmap: any;
   const config = getConfig();
-  if (window.localStorage.getItem(`imaps_calcite_${config}`) && window.localStorage.getItem('imaps_reset') !== 'true') {
-    webmap = WebMap.fromJSON(JSON.parse(window?.localStorage?.getItem(`imaps_calcite_${config}`) as string));
+  if (window.localStorage.getItem(`imaps_webmap_${config}`) && window.localStorage.getItem('imaps_reset') !== 'true') {
+    webmap = WebMap.fromJSON(JSON.parse(window?.localStorage?.getItem(`imaps_webmap_${config}`) as string));
     const url = new URL(window.location as any);
     if (url.searchParams.get('layers')) {
       const layers = url.searchParams.get('layers')?.split(',');
@@ -220,7 +220,7 @@ export const saveMap = async (view: MapView) => {
     };
     const config = getConfig();
 
-    window.localStorage.setItem(`imaps_calcite_${config}`, JSON.stringify(map));
+    window.localStorage.setItem(`imaps_webmap_${config}`, JSON.stringify(map));
     // const map = WebMap.fromJSON(JSON.parse(JSON.stringify(a)));
     // try {
     //   await map.loadAll();
@@ -260,7 +260,7 @@ export const saveMap = async (view: MapView) => {
     // const json = (map as any).toJSON();
     // json.initialState.viewpoint.targetGeometry = view.extent;
 
-    //window.localStorage.removeItem('imaps_calcite');
+    //window.localStorage.removeItem('imaps_webmap');
   }
 };
 const clusterConfig = {
