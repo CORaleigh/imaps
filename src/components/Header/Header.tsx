@@ -119,7 +119,7 @@ function Header() {
                 if (url.searchParams.get('id')) {
                   id += url.searchParams.get('id');
                 }
-                window.localStorage.removeItem(`imaps_calcite_${id}`);
+                window.localStorage.removeItem(`imaps_webmap_${id}`);
                 window.location.reload();
               }}
             >
