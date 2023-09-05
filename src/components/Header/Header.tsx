@@ -120,6 +120,9 @@ function Header() {
                   id += url.searchParams.get('id');
                 }
                 window.localStorage.removeItem(`imaps_webmap_${id}`);
+                window.localStorage.removeItem('imaps_alert_read');
+                window.localStorage.removeItem('imaps_history');
+                window.localStorage.removeItem('imaps_table_template');
                 window.location.reload();
               }}
             >

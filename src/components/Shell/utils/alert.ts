@@ -8,6 +8,7 @@ export interface Alert {
     title: string;
     message: string;
     link?: link;
+    optOut?: boolean;
 }
 
 interface link {

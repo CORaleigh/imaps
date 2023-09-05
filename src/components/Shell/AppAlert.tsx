@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
-import { CalciteAlert } from '@esri/calcite-components-react';
+import { CalciteAlert, CalciteLink } from '@esri/calcite-components-react';
 import { Alert } from './utils/alert';
 
 interface Props {
@@ -8,6 +8,12 @@ interface Props {
 function AppAlert(props: Props) {
   const [alert, setAlert] = useState<Alert>();
   useEffect(() => {
+    if (localStorage.getItem('imaps_alert_read')) {
+      if (props.alert?.optOut && JSON.parse(localStorage.getItem('imaps_alert_read') as string).title === props?.alert?.title) {
+        props.alert.show = false;
+      }
+    }
+
     setAlert(props.alert);
   }, [props.alert]);
   return (
@@ -16,6 +22,9 @@ function AppAlert(props: Props) {
       onCalciteAlertClose={() => {
         if (alert) {
           alert.show = false;
+          if (alert.optOut) {
+            localStorage.setItem('imaps_alert_read', JSON.stringify(alert));
+          }
         }
       }}
       kind={alert?.kind}
@@ -26,9 +35,9 @@ function AppAlert(props: Props) {
       <div slot="title">{alert?.title}</div>
       <div slot="message">{alert?.message}</div>
       {alert?.link?.show && (
-        <a slot="link" href={alert?.link.url}>
+        <CalciteLink slot="link" href={alert?.link.url} target="_blank">
           {alert?.link.text}
-        </a>
+        </CalciteLink>
       )}
     </CalciteAlert>
   );

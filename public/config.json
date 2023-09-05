@@ -1,15 +1,16 @@
 {
     "alert": {
-        "show": false,
-        "autoClose": true,
+        "show": true,
+        "autoClose": false,
         "duration": "fast",
         "kind": "info",
         "icon": "information",
-        "title": "New Version",
-        "message": "This is the new version of iMAPS, the legacy version will be available for a limited time.",
+        "title": "iMAPS has been updated!",
+        "message": "See a list of what's news at the link below. Questions? Please email gis@wake.gov.",
+        "optOut": true,
         "link": {
-          "text": "Legacy Version",
-          "url": "https://maps.raleighnc.gov/imaps",
+          "text": "What's New",
+          "url": "https://maps.wake.gov/imaps/iMAPShelpPDF.pdf#page=3",
           "show": true
         }
       },    
