@@ -29,6 +29,8 @@ const useCoordinates = (props: CoordinateProps) => {
     { value: "usng", label: "US National Grid", placeholder: '17S PV 98178 59368'}
   ];
 
+  let currentPoint: Point | null = null;
+
   const [selectedFormat, setSelectedFormat] = useState<CoordinateFormats>(formats[0]);
   const formatRef = useRef<CoordinateFormats>(formats[0]);
   const settingsClicked = useCallback((e: any) => {
@@ -63,9 +65,12 @@ const useCoordinates = (props: CoordinateProps) => {
         return format.value === e.target.value;
       });
       if (format) {
-        setSelectedFormat(format);
-        formatRef.current.value = format.value;
+          setSelectedFormat(format);
+          formatRef.current = format;
+          console.log(formatRef.current.value);
+
       }
+      displayCoordinates(currentPoint as any);
     },
     [formatRef]
   );
@@ -92,6 +97,7 @@ const useCoordinates = (props: CoordinateProps) => {
       await projection.load();
     }    
     let point: __esri.Point = new Point();
+    console.log(formatRef.current.value);
     if (formatRef.current.value === "dd") {
       let coords = coordInput.current?.value.replace(',', ' ').split(' ');
       if (coords?.length !== 2) {
@@ -199,6 +205,8 @@ const useCoordinates = (props: CoordinateProps) => {
       y: point.latitude,
       spatialReference: { wkid: 4326 },
     });
+    console.log(formatRef.current.value);
+
     if (formatRef.current.value === "dd") {
       let dd = coordinateFormatter
         .toLatitudeLongitude(wgs84, "dd", 7)
@@ -248,7 +256,8 @@ const useCoordinates = (props: CoordinateProps) => {
         geometry: e.mapPoint,
         attributes: null,
         symbol: marker,
-      } as any);      
+      } as any);
+      currentPoint = e;
       displayCoordinates(e);
     });
   };
@@ -256,10 +265,12 @@ const useCoordinates = (props: CoordinateProps) => {
     if (!coordinateFormatter.isLoaded()) {
       await coordinateFormatter.load();
     }
+    currentPoint = props.view.extent.center;
     displayCoordinates(props.view.extent.center);
     moveHandler = (props.view as __esri.MapView).on(
       "pointer-move",
       (e: any) => {
+        currentPoint = e;
         displayCoordinates(e);
       }
     );
