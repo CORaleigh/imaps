@@ -278,7 +278,7 @@ const addPropertyLabelToggles = (item: any) => {
 
 const addDevPlanFilters = (item: any) => {
   if (
-    item.layer.title.includes('Development Plans') &&
+    item.layer.title?.includes('Development Plans') &&
     item.layer.type !== 'group' &&
     item.actionsSections.length === 0
   ) {
@@ -307,7 +307,7 @@ const createPanel = (item: __esri.ListItem) => {
       content: [slider, 'legend'],
       open: false,
     } as __esri.ListItemPanel;
-    addDevPlanFilters(item);
+    //addDevPlanFilters(item);
   }
 };
 
