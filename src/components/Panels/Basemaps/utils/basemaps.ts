@@ -30,7 +30,6 @@ export const initializeBasemaps = async (view: MapView, ref: HTMLDivElement, id:
     
     gallery.activeBasemap = basemap;
   }
-  debugger
   gallery?.watch('activeBasemap', () => {
 
     setBlendActive(false);
@@ -226,7 +225,6 @@ export const blendBasemap = (switched: boolean, view: __esri.MapView, streetMapI
       view.map.basemap.baseLayers.remove(layer);
     }
   }
-  debugger
   imageActiveBasemapHandle = images?.watch('activeBasemap', (activeBasemap) => {
 
     if (switched) {

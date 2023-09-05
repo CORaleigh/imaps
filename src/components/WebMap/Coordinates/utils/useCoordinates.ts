@@ -67,8 +67,6 @@ const useCoordinates = (props: CoordinateProps) => {
       if (format) {
           setSelectedFormat(format);
           formatRef.current = format;
-          console.log(formatRef.current.value);
-
       }
       displayCoordinates(currentPoint as any);
     },
@@ -97,7 +95,6 @@ const useCoordinates = (props: CoordinateProps) => {
       await projection.load();
     }    
     let point: __esri.Point = new Point();
-    console.log(formatRef.current.value);
     if (formatRef.current.value === "dd") {
       let coords = coordInput.current?.value.replace(',', ' ').split(' ');
       if (coords?.length !== 2) {
@@ -205,8 +202,6 @@ const useCoordinates = (props: CoordinateProps) => {
       y: point.latitude,
       spatialReference: { wkid: 4326 },
     });
-    console.log(formatRef.current.value);
-
     if (formatRef.current.value === "dd") {
       let dd = coordinateFormatter
         .toLatitudeLongitude(wgs84, "dd", 7)
