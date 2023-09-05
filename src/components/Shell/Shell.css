@@ -1,3 +1,7 @@
+:root {
+  --calcite-app-z-index-toast: 1000;
+}
+
 .tools {
   overflow-y: hidden;
   width: 336px;
