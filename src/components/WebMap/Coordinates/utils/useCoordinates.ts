@@ -13,7 +13,7 @@ const marker: PictureMarkerSymbol = new PictureMarkerSymbol({
   height: 36,
   width: 36,
 });
-const layer: GraphicsLayer = new GraphicsLayer({ id: "coordinate-widget" });
+const layer: GraphicsLayer = new GraphicsLayer({ id: "coordinate-widget", listMode: 'hide' });
 const useCoordinates = (props: CoordinateProps) => {
   const loaded = useRef(false);
   const coordInput = useRef<HTMLCalciteInputElement>(null);
