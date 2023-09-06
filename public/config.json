@@ -6,7 +6,7 @@
         "kind": "info",
         "icon": "information",
         "title": "iMAPS has been updated!",
-        "message": "See a list of what's news at the link below. Questions? Please email gis@wake.gov.",
+        "message": "See a list of what's new at the link below. Questions? Please email gis@wake.gov.",
         "optOut": true,
         "link": {
           "text": "What's New",
