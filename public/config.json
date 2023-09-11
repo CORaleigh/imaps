@@ -18,7 +18,7 @@
         {
           "title": "Help",
           "links": [
-            { "title": "Feedback", "href": "https://survey123.arcgis.com/share/433f05ff71ed4db5b8fc2c4aa306b12d?field:beta=Yes" },
+            { "title": "Feedback", "href": "https://survey123.arcgis.com/share/433f05ff71ed4db5b8fc2c4aa306b12d" },
             { "title": "User Guide", "href": "https://maps.wakegov.com/imaps/iMAPShelpPDF.pdf" },
             { "title": "Videos/FAQs", "href": "https://www.wakegov.com/departments-government/geographic-information-services-gis/maps-apps-data/imaps-information#video" }
           ]
