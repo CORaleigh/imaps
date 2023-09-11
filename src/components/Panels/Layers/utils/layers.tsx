@@ -113,8 +113,12 @@ const addLayersFromWebmap = async (view: MapView) => {
         //attempting to update stored layer if updated in webmap (popup and renderer)
         if (found !== undefined) {
           if (found.type === 'feature') {
-            (found as __esri.FeatureLayer).popupTemplate = (layer as __esri.FeatureLayer).popupTemplate;
-            (found as __esri.FeatureLayer).renderer = (layer as __esri.FeatureLayer).renderer;
+            if ((layer as __esri.FeatureLayer).popupTemplate) {
+              (found as __esri.FeatureLayer).popupTemplate = (layer as __esri.FeatureLayer).popupTemplate;
+            }
+            if ((layer as __esri.FeatureLayer).renderer) {
+              (found as __esri.FeatureLayer).renderer = (layer as __esri.FeatureLayer).renderer;
+            }
           }
         }
   
