@@ -266,7 +266,7 @@ export const exportClicked = (
       scaleType,
       view?.scale,
       customScale,
-      userDefined ? parseInt(userDefined.value) : undefined,
+      userDefined ? parseInt(userDefined) : undefined,
     );
     console.log(scale);
     const graphicsLayer: __esri.GraphicsLayer = view?.map.findLayerById('print-graphic') as __esri.GraphicsLayer;

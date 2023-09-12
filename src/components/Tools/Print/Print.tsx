@@ -178,7 +178,7 @@ const Print = (props: PrintProps) => {
         </CalciteRadioButtonGroup>
         {scaleType === "custom" && (
           <CalciteLabel>
-            Scale {customScale}
+            Scale
             <CalciteSelect
               ref={customScaleSelect}
               label={""}
