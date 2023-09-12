@@ -45,6 +45,7 @@ const Print = (props: PrintProps) => {
     tipsClicked,
     showFrameChanged,
     frame,
+    scales
   } = usePrint(props);
   const toolDismissed = useCallback((e: any) => {
     props.toolDismissed();
@@ -177,10 +178,11 @@ const Print = (props: PrintProps) => {
         </CalciteRadioButtonGroup>
         {scaleType === "custom" && (
           <CalciteLabel>
-            Scale
+            Scale {customScale}
             <CalciteSelect
               ref={customScaleSelect}
               label={""}
+              value={customScale}
               onCalciteSelectChange={(e) => {
                 setCustomScale(e.target.selectedOption.value);
                 if (frame.current) {
@@ -195,12 +197,13 @@ const Print = (props: PrintProps) => {
               }}
             >
               {props?.view &&
-                getScales(props?.view).map((scale, i) => {
+                scales.map((scale, i) => {
                   return (
                     <CalciteOption
                       key={i}
                       label={scale.label}
                       value={scale.scale}
+                      selected={scale.scale === customScale}
                     ></CalciteOption>
                   );
                 })}

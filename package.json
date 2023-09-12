@@ -2,7 +2,7 @@
   "name": "imaps",
   "private": true,
   "version": "4.1.0",
-  "homepage": "https://coraleigh.github.io/imaps/",
+  "homepage": "https://coraleigh.raleighnc.gov/imaps/",
   "type": "module",
   "scripts": {
     "dev": "vite",

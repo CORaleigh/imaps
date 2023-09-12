@@ -120,6 +120,9 @@ const addLayersFromWebmap = async (view: MapView) => {
               (found as __esri.FeatureLayer).renderer = (layer as __esri.FeatureLayer).renderer;
             }
           }
+          if (found.type === 'map-image') {
+            debugger
+          }
         }
   
         return (group as __esri.GroupLayer).findLayerById(layer.id) === undefined;

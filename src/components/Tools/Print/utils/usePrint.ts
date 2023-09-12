@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { getFormats, getLayouts, showFrame } from "../utils/print";
+import { getFormats, getLayouts, getScales, showFrame } from "../utils/print";
 import { PrintProps } from "./PrintProps";
 import { tips } from "./tips";
 
@@ -20,6 +20,8 @@ const usePrint = (props: PrintProps) => {
 
   const [layouts, setLayouts] = useState<any[]>([]);
   const [formats, setFormats] = useState<string[]>([]);
+  const [scales, setScales] = useState<any[]>([]);
+
   const [scaleType, setScaleType] = useState<string>("current");
   const [customScale, setCustomScale] = useState<any>();
   const [selectedProperty, setSelectedProperty] = useState<__esri.Graphic>();
@@ -37,6 +39,9 @@ const usePrint = (props: PrintProps) => {
         setFormats(formats);
         setSelectedFormat(formats[0]);
       });
+      const scales = getScales(props.view);
+      setScales(scales);
+      setCustomScale(scales[0].scale)
     }
   }, []);
   const tipsClicked = useCallback((e: any) => {
@@ -85,6 +90,7 @@ const usePrint = (props: PrintProps) => {
     showFrameChanged,
     frame,
     scale,
+    scales
   };
 };
 

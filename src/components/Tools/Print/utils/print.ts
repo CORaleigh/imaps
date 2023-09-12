@@ -35,6 +35,7 @@ export const getFormats = async (url: string): Promise<string[]> => {
 };
 
 const roundScale = (mapScale: number): number => {
+  debugger
   const newScale = Math.round((mapScale * 600) / 564.248588);
   if (newScale <= 75) {
     return 75;
@@ -106,11 +107,11 @@ export const getPrintScale = (
   customScale: string | number,
   userScale: number | undefined,
 ): number => {
-  let mapScale = scaleType === 'current' ? currentScale : customScale;
+  let mapScale: number = scaleType === 'current' ? roundScale(currentScale as number) : customScale as number;
   if (customScale === 'custom' && userScale) {
     mapScale = userScale * 12;
   }
-  return roundScale(mapScale as number);
+  return mapScale;
 }
 
 export const getLayouts = async (): Promise<Layout[]> => {
@@ -267,6 +268,7 @@ export const exportClicked = (
       customScale,
       userDefined ? parseInt(userDefined.value) : undefined,
     );
+    console.log(scale);
     const graphicsLayer: __esri.GraphicsLayer = view?.map.findLayerById('print-graphic') as __esri.GraphicsLayer;
     if (graphicsLayer) {
       graphicsLayer.visible = false;
@@ -372,17 +374,17 @@ export const showFrame = (
   }
   graphics.removeAll();
   let customScale: any = null;
-  if (customScaleSelect.current) {
-    customScale = customScaleSelect.current.value;
-  }
+  // if (customScaleSelect.current) {
+  //   customScale = customScaleSelect.current.value;
+  // }
   if (show) {
     addPrintGraphic(graphics, view, selectedLayout, scaleType, customScale);
 
     mapViewStationary = view.watch('stationary', (stationary) => {
       graphics.removeAll();
-      if (customScaleSelect.current) {
-        customScale = customScaleSelect.current.value;
-      }
+      // if (customScaleSelect.current) {
+      //   customScale = customScaleSelect.current.value;
+      // }
       addPrintGraphic(graphics, view, selectedLayout, scaleType, customScale);
     });
   } else {
