@@ -341,6 +341,7 @@ const exportMap = async (
   format: string,
 ): Promise<__esri.PrintResponse | undefined> => {
   try {
+    console.log(JSON.stringify(view.map));
     template.format = format as any;
     const result = await print.execute(
       url,

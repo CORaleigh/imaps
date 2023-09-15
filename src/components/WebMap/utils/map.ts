@@ -13,6 +13,7 @@ import Basemap from '@arcgis/core/Basemap';
 import Color from '@arcgis/core/Color';
 import Collection from '@arcgis/core/core/Collection';
 import esriConfig from "@arcgis/core/config";
+import * as geometryEngine from '@arcgis/core/geometry/geometryEngine';
 
 export const initializeMap = async (
   ref: HTMLDivElement,
@@ -56,6 +57,7 @@ export const initializeMap = async (
     geometrySet(event.mapPoint);
   });
   await view.when();
+  addStreets(view);
   saveMap(view);
   view.watch('extent', () => {
     const config = getConfig();
@@ -171,7 +173,7 @@ const getWebMap = async (mapId: string): Promise<WebMap> => {
       (group as __esri.GroupLayer).removeMany(
         (group as __esri.GroupLayer).allLayers
           .filter((layer) => {
-            return !layer.visible && !layer.title.includes('Property') && !isSearchable(layer, webmap);
+            return !layer.visible && !layer.title.includes('Property') && layer.title !== 'Streets' && !isSearchable(layer, webmap);
           })
           .toArray(),
       );
@@ -442,3 +444,23 @@ const customizePopup = async (view: __esri.MapView) => {
     }
   }
 };
+
+const addStreets = (view: MapView) => {
+  try {
+    debugger
+    let streets = view.map.findLayerById('streets-popup-layer');
+    if (!streets) {
+      streets = new FeatureLayer({
+        portalItem: {
+          id: '0dd28958f9a344dba14d1c4500b4842d'
+        }, id: 'streets-popup-layer',
+        opacity: 0,
+        visible: true
+      });
+      view.map.add(streets);
+    }
+  } catch {
+    console.log('cannot add streets layer');
+  }
+
+}

@@ -19,21 +19,21 @@
           "title": "Help",
           "links": [
             { "title": "Feedback", "href": "https://survey123.arcgis.com/share/433f05ff71ed4db5b8fc2c4aa306b12d" },
-            { "title": "User Guide", "href": "https://maps.wakegov.com/imaps/iMAPShelpPDF.pdf" },
-            { "title": "Videos/FAQs", "href": "https://www.wakegov.com/departments-government/geographic-information-services-gis/maps-apps-data/imaps-information#video" }
+            { "title": "User Guide", "href": "https://maps.wake.gov/imaps/iMAPShelpPDF.pdf" },
+            { "title": "FAQs", "href": "https://www.wake.gov/departments-government/geographic-information-services-gis/maps-apps-data/imaps-information#video" }
           ]
         },
         {
           "title": "Data Download",
           "links": [
-            { "title": "Wake County Open Data", "href": "https://data.wakegov.com/" },
+            { "title": "Wake County Open Data", "href": "https://data.wake.gov/" },
             { "title": "Raleigh Open Data", "href": "https://data.raleighnc.gov/" }
           ]
         },
         {
           "title": "Links",
           "links": [
-            { "title": "Wake County", "href": "https://wakegov.com" },
+            { "title": "Wake County", "href": "https://wake.gov" },
             { "title": "City of Raleigh", "href": "https://raleighnc.gov/" }
           ]
         }      

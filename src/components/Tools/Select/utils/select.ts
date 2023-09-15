@@ -73,19 +73,7 @@ export const initializeSelect = async (view: MapView, geometrySet: Function, set
         highlight = newHighlight;
       } else {
         const geom = buffer(distance, event.graphic) as __esri.Geometry;
-        sketchVm.layer.removeAll();
-        const symbol = {
-          type: 'simple-fill',
-          color: [255, 255, 0, 0],
-          style: 'solid',
-          outline: {
-            type: 'simple-line',
-            color: [0,0,0,1],
-            width: 2,
-            style: 'dash'
-          }
-        };
-        sketchVm.layer.add(new Graphic({ geometry: geom, symbol: symbol }));
+        addBufferGraphic(geom);
         const newHighlight = await highlightProperties(view, geom);
         if (highlight) {
           highlight.remove();
@@ -100,6 +88,21 @@ export const initializeSelect = async (view: MapView, geometrySet: Function, set
 const buffer = (distance: number, graphic: Graphic) => {
   return geometryEngine.buffer(graphic.geometry, distance, 'feet');
 };
+const addBufferGraphic = (geom: __esri.Geometry) => {
+  sketchVm.layer.removeAll();
+  const symbol = {
+    type: 'simple-fill',
+    color: [255, 255, 0, 0],
+    style: 'solid',
+    outline: {
+      type: 'simple-line',
+      color: [0,0,0,1],
+      width: 2,
+      style: 'dash'
+    }
+  };
+  sketchVm.layer.add(new Graphic({ geometry: geom, symbol: symbol }));  
+}
 
 const highlightProperties = async (view: MapView, geometry: __esri.Geometry): Promise<__esri.Handle> => {
   const result = await propertyLayerView.queryFeatures({
@@ -125,6 +128,9 @@ export const createSketch = (
   sketchVm.create(tool);
 };
 
-export const bufferProperty = (property: Graphic, distance: number, geometrySet: Function) => {
-  geometrySet(geometryEngine.buffer(property.geometry, distance, 'feet'));
+export const bufferProperty = (property: Graphic, distance: number, geometrySet: Function, view: MapView) => {
+  const geom = buffer(distance, property) as __esri.Geometry;
+  geometrySet(geom);
+  addBufferGraphic(geom);  
+  view.goTo(geom);
 };

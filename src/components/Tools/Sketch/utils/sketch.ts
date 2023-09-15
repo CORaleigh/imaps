@@ -40,12 +40,7 @@ let textSymbol = new TextSymbol({
   text: '',
   xoffset: 3,
   yoffset: 3,
-  font: {
-    // autocasts as new Font()
-    size: 10,
-    family: 'Aerial',
-    weight: 'bold',
-  },
+  font: { size: 10, family: 'Avenir Next LT Pro', style: 'normal', weight: 'bold' }  
 });
 let pointSymbol: CIMSymbol;
 let pointSketchViewModel: SketchViewModel;
@@ -172,6 +167,7 @@ let updatingPolygonSymbol = false;
 export const polygonSymbolUpdated = async (fillColor: Color, outlineColor: Color, width: number) => {
   const preview = document.getElementById('polygon-preview');
   if (preview && !updatingPolygonSymbol) {
+    fillSymbol = fillSymbol.clone();
     fillSymbol.color = fillColor;
     fillSymbol.outline.color = outlineColor;
     fillSymbol.outline.width = width;
@@ -231,6 +227,7 @@ export const pointSymbolUpdated = async (symbol: any, color: Color, size: number
 };
 
 export const polylineSymbolUpdated = (lineColor: Color, width: number) => {
+  lineSymbol = lineSymbol.clone();
   lineSymbol.color = lineColor;
   lineSymbol.width = width;
   if (polylineSketchViewModel) {
@@ -262,6 +259,7 @@ export const textSymbolUpdated = (
   showHalo: boolean,
   textContent: string,
 ) => {
+  textSymbol = textSymbol.clone();
   textSymbol.color = fontColor;
   textSymbol.font.size = fontSize;
   textSymbol.haloColor = haloColor;

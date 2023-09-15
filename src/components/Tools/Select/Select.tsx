@@ -228,7 +228,7 @@ export const Select = (props: SelectProps) => {
             hidden={distance <= 0}
             width="full"
             onClick={() =>
-              bufferProperty(selectedProperty, distance, props.geometrySet)
+              bufferProperty(selectedProperty, distance, props.geometrySet, props.view)
             }
           >
             Buffer Property
