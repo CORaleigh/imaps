@@ -447,7 +447,6 @@ const customizePopup = async (view: __esri.MapView) => {
 
 const addStreets = (view: MapView) => {
   try {
-    debugger
     let streets = view.map.findLayerById('streets-popup-layer');
     if (!streets) {
       streets = new FeatureLayer({

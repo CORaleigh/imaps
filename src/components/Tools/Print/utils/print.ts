@@ -35,7 +35,6 @@ export const getFormats = async (url: string): Promise<string[]> => {
 };
 
 const roundScale = (mapScale: number): number => {
-  debugger
   const newScale = Math.round((mapScale * 600) / 564.248588);
   if (newScale <= 75) {
     return 75;

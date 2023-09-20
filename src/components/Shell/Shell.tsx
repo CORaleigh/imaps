@@ -83,6 +83,7 @@ function Shell() {
             isActive={activePanel === "search"}
             panelDismissed={panelDismissed}
             showTips={tipsCallback}
+            alertSet={alertSet}
           ></Property>
         )}
         {view && loadedPanels.includes("location") && (

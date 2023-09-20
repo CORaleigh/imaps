@@ -48,7 +48,9 @@ export const initializeSelect = async (view: MapView, geometrySet: Function, set
     }
     if (event.state === 'complete') {
       if (distance > 0) {
-        geometrySet(buffer(distance, event.graphic));
+        const geom = buffer(distance, event.graphic) as __esri.Geometry;
+        geometrySet(geom);
+        addBufferGraphic(geom);
         if (layer.graphics.length > 1) {
           layer.graphics.removeAt(1);
         }
@@ -117,6 +119,9 @@ export const bufferDistanceChanged = (event: any, setDistance: Function) => {
     distance = 0;
   } else {
     distance = parseInt(event.target.value);
+  }
+  if (parseInt(event.target.value) > 5280) {
+    distance = 5280;
   }
   setDistance(distance);
 };

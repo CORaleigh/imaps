@@ -2,6 +2,8 @@ import Geometry from '@arcgis/core/geometry/Geometry';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import FeatureSet from '@arcgis/core/rest/support/FeatureSet';
 import MapView from '@arcgis/core/views/MapView';
+import { Alert } from '../../../Shell/utils/alert';
+import Graphic from '@arcgis/core/Graphic';
 
 export const getPropertyByGeometry = async (geometry: Geometry, view: MapView) => {
   const layer = view.map.allLayers.find((layer: __esri.Layer) => {
@@ -83,4 +85,18 @@ export const clearSelectionGraphics = (view: MapView) => {
   if (layer) {
     (layer as __esri.GraphicsLayer).removeAll();
   }
+}
+
+export const checkMaximumRecordCount = (features: Graphic[], alertSet: Function) => {
+  if (features.length >= 2000) {
+    const alert: Alert = {
+      show: true,
+      autoClose: true,
+      duration: 'fast',
+      kind: 'warning',
+      title: 'Maximum Records Returned',
+      message: `The maximum number of records have been returned.  Not all records may be returned, please limit your search.`,
+    };
+    alertSet(alert);
+  }    
 }

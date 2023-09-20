@@ -5,4 +5,6 @@ export interface PropertyProps {
   showTips: Function;
   panelDismissed: Function;
   isActive: boolean;
+  alertSet?: Function;
+
 }

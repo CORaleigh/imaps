@@ -218,7 +218,7 @@ export const Select = (props: SelectProps) => {
               max={5280}
               value={distance.toString()}
               clearable
-              onCalciteInputChange={(event) =>
+              onCalciteInputInput={(event) =>
                 bufferDistanceChanged(event, setDistance)
               }
             ></CalciteInput>

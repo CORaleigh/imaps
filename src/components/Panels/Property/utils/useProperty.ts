@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import MapView from "@arcgis/core/views/MapView";
-import { clearAddressPoints, getPropertyByGeometry, clearSelectionGraphics } from "../utils/property";
+import { clearAddressPoints, getPropertyByGeometry, clearSelectionGraphics, checkMaximumRecordCount } from "../utils/property";
 import { tips } from "./tips";
 import { PropertyProps } from "./PropertyProps";
+import { Alert } from "../../../Shell/utils/alert";
 
 const useProperty = (props: PropertyProps) => {
   const [condos, setCondos] = useState<__esri.Graphic[]>([]);
@@ -43,6 +44,9 @@ const useProperty = (props: PropertyProps) => {
             setFeature(undefined);
             props.selected(undefined, result.features);
           }
+          if (props.alertSet) {
+            checkMaximumRecordCount(result.features, props.alertSet)      
+          }
         }
       );
     } else {
@@ -68,6 +72,9 @@ const useProperty = (props: PropertyProps) => {
         setFeature(undefined);
         props.selected(undefined, selectedCondos);
       }
+      if (props.alertSet) {
+        checkMaximumRecordCount(selectedCondos, props.alertSet)      
+      }      
     },
     [condoRef.current, condos, props.selected]
   );
@@ -75,7 +82,6 @@ const useProperty = (props: PropertyProps) => {
   const featureSelected = useCallback(
     (selectedFeature: __esri.Graphic) => {
       setFeature(selectedFeature);
-      //props.featureSelected(feature);
       props.selected(selectedFeature, condoRef.current);
       setActiveTab("info");
       setInfoDisabled(false);
