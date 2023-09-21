@@ -125,6 +125,13 @@ const getWebMap = async (mapId: string): Promise<WebMap> => {
   const config = getConfig();
   if (window.localStorage.getItem(`imaps_webmap_${config}`) && window.localStorage.getItem('imaps_reset') !== 'true') {
     webmap = WebMap.fromJSON(JSON.parse(window?.localStorage?.getItem(`imaps_webmap_${config}`) as string));
+
+    try {
+      await webmap.load();
+    } catch {
+      return loadWebMapFromPortal(mapId);
+
+    }
     const url = new URL(window.location as any);
     if (url.searchParams.get('layers')) {
       const layers = url.searchParams.get('layers')?.split(',');
@@ -156,35 +163,41 @@ const getWebMap = async (mapId: string): Promise<WebMap> => {
       }
     }
     return webmap;
+
+
   } else {
-    window.localStorage.removeItem('imaps_reset');
-    webmap = new WebMap({
-      portalItem: {
-        id: mapId,
-      },
-    });
-    await webmap.load();
-    const groups = webmap.allLayers
-      .filter((layer: __esri.Layer) => {
-        return layer.type === 'group';
-      })
-      .toArray();
-    groups.forEach((group: __esri.Layer) => {
-      (group as __esri.GroupLayer).removeMany(
-        (group as __esri.GroupLayer).allLayers
-          .filter((layer) => {
-            return !layer.visible && !layer.title.includes('Property') && layer.title !== 'Streets' && !isSearchable(layer, webmap);
-          })
-          .toArray(),
-      );
-    });
-    webmap.layers.removeMany(webmap.layers.filter((layer: __esri.Layer) => {
-      return layer.type !== 'group' && !layer.visible;
-    }));
-    return webmap;
+    return loadWebMapFromPortal(mapId);
   }
   // });
 };
+
+const loadWebMapFromPortal = async (mapId: string) => {
+  window.localStorage.removeItem('imaps_reset');
+  const webmap = new WebMap({
+    portalItem: {
+      id: mapId,
+    },
+  });
+  await webmap.load();
+  const groups = webmap.allLayers
+    .filter((layer: __esri.Layer) => {
+      return layer.type === 'group';
+    })
+    .toArray();
+  groups.forEach((group: __esri.Layer) => {
+    (group as __esri.GroupLayer).removeMany(
+      (group as __esri.GroupLayer).allLayers
+        .filter((layer) => {
+          return !layer.visible && !layer.title.includes('Property') && !isSearchable(layer, webmap);
+        })
+        .toArray(),
+    );
+  });
+  webmap.layers.removeMany(webmap.layers.filter((layer: __esri.Layer) => {
+    return layer.type !== 'group' && !layer.visible;
+  }));  
+  return webmap;
+}
 const removeGraphicsLayers = (view: MapView) => {
   view.map.removeMany([view.map.findLayerById('selection-layer'), view.map.findLayerById('feature-table')]);
   view.map.removeMany(
@@ -454,9 +467,12 @@ const addStreets = (view: MapView) => {
           id: '0dd28958f9a344dba14d1c4500b4842d'
         }, id: 'streets-popup-layer',
         opacity: 0,
-        visible: true
+        visible: true,
+        listMode: 'hide'
       });
       view.map.add(streets);
+    } else {
+      streets.listMode = 'hide';
     }
   } catch {
     console.log('cannot add streets layer');
