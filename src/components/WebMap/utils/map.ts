@@ -120,7 +120,6 @@ const getConfig = () => {
 };
 
 const getWebMap = async (mapId: string): Promise<WebMap> => {
-  //return new Promise(async (resolve, reject) => {
   let webmap: any;
   const config = getConfig();
   if (window.localStorage.getItem(`imaps_webmap_${config}`) && window.localStorage.getItem('imaps_reset') !== 'true') {
@@ -130,7 +129,6 @@ const getWebMap = async (mapId: string): Promise<WebMap> => {
       await webmap.load();
     } catch {
       return loadWebMapFromPortal(mapId);
-
     }
     const url = new URL(window.location as any);
     if (url.searchParams.get('layers')) {
@@ -168,7 +166,6 @@ const getWebMap = async (mapId: string): Promise<WebMap> => {
   } else {
     return loadWebMapFromPortal(mapId);
   }
-  // });
 };
 
 const loadWebMapFromPortal = async (mapId: string) => {

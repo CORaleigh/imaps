@@ -18,7 +18,7 @@ export const toolSelected = (
       action.icon = "chevron-up";
     }
     panel?.shadowRoot
-      ?.querySelector(".content-container")
+      ?.querySelector(".content-wrapper")
       ?.setAttribute("style", "display:flex");
   }
   activeTool === tool ? setActiveTool("") : setActiveTool(tool);
@@ -41,6 +41,7 @@ export const panelSelected = (
   activePanel === panel ? setActivePanel("") : setActivePanel(panel);
 
   activePanelChanged(activePanel === panel ? "" : panel);
+  
   if (window.innerWidth < 735) {
     setActiveTool("");
     activeToolChanged("");
@@ -53,12 +54,12 @@ const collapse = (
 ) => {
   if (action.icon === "chevron-up") {
     panel?.shadowRoot
-      ?.querySelector(".content-container")
+      ?.querySelector(".content-wrapper")
       ?.setAttribute("style", "display:none");
     action.icon = "chevron-down";
   } else if (action.icon === "chevron-down") {
     panel?.shadowRoot
-      ?.querySelector(".content-container")
+      ?.querySelector(".content-wrapper")
       ?.setAttribute("style", "display:flex");
     action.icon = "chevron-up";
   }

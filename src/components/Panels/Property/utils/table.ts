@@ -251,7 +251,10 @@ const exportTable = async (table: FeatureTable) => {
       (field: __esri.FieldColumnTemplate) => {
         if (feature.attributes[field.fieldName]) {
           if (field.fieldName.toLowerCase().includes('date')) {
-            csv += `"${new Date(feature.attributes[field.fieldName]).toDateString()}",`;
+            csv += `"${new Intl.DateTimeFormat("en-US", { year: "numeric",
+              month: "2-digit",
+              day: "2-digit"
+            }).format(new Date(feature.attributes[field.fieldName]))}",`;            
           } else if (field.fieldName.toLowerCase().includes('acres')) {
             csv += `"${parseFloat(feature.attributes[field.fieldName]).toFixed(2)}",`;
           } else {
