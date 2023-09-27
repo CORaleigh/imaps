@@ -1,3 +1,4 @@
+## Version 4.1.0
 ### Layout
 1. Removal of left toolbar, tools now appear in the right toolbar 
 
@@ -86,3 +87,15 @@
 1. New feature to the property search is a listing of your 10 most recent searches.  Clicking on the clock button next to the property search widget will display a popover with a list of your last 10 searches, selecting a value in the list will perform that search.  If you search and it is already in the list, that search will be moved to the top of the list.  Search history is still in the local storage of the browser, so it will persist when iMAPS is reloaded.
 
 ![image](https://github.com/CORaleigh/imaps/assets/6587288/625ce64a-9d6f-415b-b2a8-2acf7e4c1dff)
+
+## Version 4.1.1 (9/27/2023)
+### Bug Fixes
+1. Fixed issue with scales incorrectly rounding when a custom scale was selected while printing.
+2. Fixed state issue with the print tool that was reverting the custom scale option.
+3. Fixed issue with sketch tool where the symbology of the last graphic drawn was being set to all graphics after printing.
+4. Fixed issue with the collapse button on the tool panels not collapsing the panel.
+
+### Enhancements
+1. In the event there is an issue with the map loading, the dropdown menu wasn't accessible for user to either submit feedback or use the reset to default button.
+2. If there is an issue with the web map JSON that is stored in local storage, a fresh web map will be retrieved from ArcGIS Online.
+3. Changed the date columns on the CSV export to display in MM/DD/YYYY format.
