@@ -99,3 +99,7 @@
 1. In the event there is an issue with the map loading, the dropdown menu wasn't accessible for user to either submit feedback or use the reset to default button.
 2. If there is an issue with the web map JSON that is stored in local storage, a fresh web map will be retrieved from ArcGIS Online.
 3. Changed the date columns on the CSV export to display in MM/DD/YYYY format.
+
+## Version 4.1.2 (9/28/2023)
+1. Fixed bug where image basemap gallery is not filtering properly when map extent changes from inside Raleigh to outside Raleigh.
+2. Fixed bug where map does not load if the basemap is not set in the local storage basemap.

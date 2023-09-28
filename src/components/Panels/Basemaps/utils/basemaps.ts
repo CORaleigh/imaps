@@ -129,6 +129,7 @@ const checkBoundary = (extent: __esri.Extent): Boolean => {
 };
 
 export const filterBasemaps = (item: __esri.Basemap): boolean => {
+  
   if (inRaleigh) {
     return true;
   } else {
@@ -144,31 +145,35 @@ const getBoundary = async (view: __esri.MapView): Promise<Polygon> => {
 };
 
 const viewExtentChanged = (extent: __esri.Extent, view: MapView, alertSet: Function | undefined) => {
-  if (imageryBoundary && images.source.basemaps.find((basemap) => images.activeBasemap.title === basemap.title)) {
+
+  if (imageryBoundary) {// && images.source.basemaps.find((basemap) => images.activeBasemap.title === basemap.title)) {
     wasRaleigh = inRaleigh;
     inRaleigh = checkBoundary(view.extent);
     if (wasRaleigh !== inRaleigh) {
       (images.source as PortalBasemapsSource).refresh();
       setTimeout(() => {
-        const match = images.source.basemaps.find((basemap) => view.map.basemap.title === basemap.title);
-        if (!match) {
-          const from = images.activeBasemap.title;
-          images.activeBasemap = images.source.basemaps.at(0);
-          const to = images.activeBasemap.title;
-          if (alertSet) {
-            const alert: Alert = {
-              show: true,
-              autoClose: true,
-              duration: 'medium',
-              kind: 'warning',
-              title: 'Imagery Year Changed',
-              message: `Imagery for ${from} only available inside Raleigh, base map has changed to ${to}`,
-            };
-            alertSet(alert);
+        if (view.map.basemap.portalItem.tags.includes('imagery')) {
+          const match = images.source.basemaps.find((basemap) => view.map.basemap.title === basemap.title);
+          if (!match) {
+            const from = images.activeBasemap.title;
+            images.activeBasemap = images.source.basemaps.at(0);
+            const to = images.activeBasemap.title;
+            if (alertSet) {
+              const alert: Alert = {
+                show: true,
+                autoClose: true,
+                duration: 'medium',
+                kind: 'warning',
+                title: 'Imagery Year Changed',
+                message: `Imagery for ${from} only available inside Raleigh, base map has changed to ${to}`,
+              };
+              alertSet(alert);
+            }
+          } else {
+            images.activeBasemap = match;
           }
-        } else {
-          images.activeBasemap = match;
         }
+        
       }, 1000);
     }
   }

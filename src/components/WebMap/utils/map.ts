@@ -127,6 +127,9 @@ const getWebMap = async (mapId: string): Promise<WebMap> => {
 
     try {
       await webmap.load();
+      if (!webmap.basemap) {
+        return loadWebMapFromPortal(mapId);
+      }
     } catch {
       return loadWebMapFromPortal(mapId);
     }
