@@ -103,3 +103,6 @@
 ## Version 4.1.2 (9/28/2023)
 1. Fixed bug where image basemap gallery is not filtering properly when map extent changes from inside Raleigh to outside Raleigh.
 2. Fixed bug where map does not load if the basemap is not set in the local storage basemap.
+
+## Version 4.1.3 (9/29/2023)
+1. Fixed bug where bookmarks were not being stored with the web map

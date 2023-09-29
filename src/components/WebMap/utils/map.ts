@@ -123,14 +123,14 @@ const getWebMap = async (mapId: string): Promise<WebMap> => {
   let webmap: any;
   const config = getConfig();
   if (window.localStorage.getItem(`imaps_webmap_${config}`) && window.localStorage.getItem('imaps_reset') !== 'true') {
-    webmap = WebMap.fromJSON(JSON.parse(window?.localStorage?.getItem(`imaps_webmap_${config}`) as string));
-
     try {
+      webmap = WebMap.fromJSON(JSON.parse(window?.localStorage?.getItem(`imaps_webmap_${config}`) as string));
       await webmap.load();
       if (!webmap.basemap) {
         return loadWebMapFromPortal(mapId);
       }
-    } catch {
+    } catch (error) {
+      console.log(error);
       return loadWebMapFromPortal(mapId);
     }
     const url = new URL(window.location as any);
@@ -215,6 +215,7 @@ const getAllGroups = (layers: any) => {
   }, []);
 };
 export const saveMap = async (view: MapView) => {
+  debugger
   if (view && view?.ready) {
     const map = (view.map as any).toJSON();
     const groups = getAllGroups(map.operationalLayers);
