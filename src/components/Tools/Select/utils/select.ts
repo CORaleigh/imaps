@@ -88,7 +88,7 @@ export const initializeSelect = async (view: MapView, geometrySet: Function, set
 };
 
 const buffer = (distance: number, graphic: Graphic) => {
-  return geometryEngine.buffer(graphic.geometry, distance, 'feet');
+  return geometryEngine.geodesicBuffer(graphic.geometry, distance, 'feet');
 };
 const addBufferGraphic = (geom: __esri.Geometry) => {
   sketchVm.layer.removeAll();

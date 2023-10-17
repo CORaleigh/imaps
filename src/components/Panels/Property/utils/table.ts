@@ -25,6 +25,10 @@ export const initializeFeatureTable = async (
     multiSortEnabled: true,
     visibleElements: {
       selectionColumn: false,
+      menuItems: {
+        refreshData: false,
+        toggleColumns: true
+      },
     },
     menuConfig: {
       items: [
@@ -57,6 +61,7 @@ export const initializeFeatureTable = async (
     {passive: true}
   );
   await featureTable?.when();
+  featureTable.menu.items = featureTable.menu.items.reverse();
 
   featureTable.highlightIds.on('change', async (e) => {
     if (e.added.length) {
