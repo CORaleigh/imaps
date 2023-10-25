@@ -49,7 +49,7 @@ calcite-loader {
   top: 0;
 }
 
-calcite-action-bar {
+calcite-shell-panel > calcite-action-bar {
   min-width: 50px;
 }
 
@@ -89,7 +89,7 @@ calcite-tip-manager {
 
   }
 
-  calcite-action-bar {
+  calcite-shell-panel > calcite-action-bar {
     right: 0;
     position: absolute;
     bottom: 0;

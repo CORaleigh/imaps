@@ -41,7 +41,7 @@ export const initializeMap = async (
 
     view.popup.on('trigger-action', (event) => {
       if (event.action.title === 'Select') {
-        geometrySet(view.popup.location);
+        geometrySet(geometryEngine.geodesicBuffer(view.popup.selectedFeature.geometry, -2, 'feet'));
       }
     });
   })
