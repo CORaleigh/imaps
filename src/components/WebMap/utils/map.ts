@@ -57,7 +57,7 @@ export const initializeMap = async (
     geometrySet(event.mapPoint);
   });
   await view.when();
-  addStreets(view);
+  //addStreets(view);
   saveMap(view);
   view.watch('extent', () => {
     const config = getConfig();

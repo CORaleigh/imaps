@@ -23,9 +23,9 @@ calcite-tab {
   padding: 0;
 }
 
-/* .esri-widget calcite-button {
+.property .esri-widget calcite-button {
   margin: 0 1em 0 1em;
-} */
+}
 
 .esri-feature__content-element {
   margin-bottom: 1em;
@@ -46,3 +46,4 @@ calcite-tab {
 .feature-title h2 {
   width: 100%;
 }
+
