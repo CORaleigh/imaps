@@ -57,19 +57,25 @@ export const initializeMap = async (
     geometrySet(event.mapPoint);
   });
   await view.when();
-  //addStreets(view);
+  addStreets(view);
   saveMap(view);
   view.watch('extent', () => {
     const config = getConfig();
     const data = window.localStorage.getItem(`imaps_webmap_${config}`);
     if (data) {
       const json = JSON.parse(window?.localStorage?.getItem(`imaps_webmap_${config}`) as string);
+      if (view.extent) {
+        json.initialState = {
+          viewpoint: {
+            targetGeometry: view.extent,
+          },
+        };
+      } else {
+        json.initialState = {
 
-      json.initialState = {
-        viewpoint: {
-          targetGeometry: view.extent,
-        },
-      };
+        };
+      }
+
       window.localStorage.setItem(`imaps_webmap_${config}`, JSON.stringify(json));
     }
   });
@@ -215,7 +221,6 @@ const getAllGroups = (layers: any) => {
   }, []);
 };
 export const saveMap = async (view: MapView) => {
-  debugger
   if (view && view?.ready) {
     const map = (view.map as any).toJSON();
     const groups = getAllGroups(map.operationalLayers);
@@ -229,11 +234,19 @@ export const saveMap = async (view: MapView) => {
         });
       }
     });
-    map.initialState = {
-      viewpoint: {
-        targetGeometry: view.extent,
-      },
-    };
+    if (view.extent) {
+      map.initialState = {
+        viewpoint: {
+          targetGeometry: view.extent,
+        },
+      };
+    } else {
+      map.initialState = {
+
+      };
+    }
+
+
     const config = getConfig();
 
     window.localStorage.setItem(`imaps_webmap_${config}`, JSON.stringify(map));

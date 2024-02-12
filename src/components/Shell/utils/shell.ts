@@ -131,6 +131,7 @@ const checkForPropertyService = async (
       console.log(Date.now() - start);
     } catch (error) {
       console.log(error);
+      setLoading(false);
       sendAlert("The property layer did not load, please report this issue to the iMAPS Helpdesk.","Property Layer Did Not Load",setAlert, setLoading);
     }
   }

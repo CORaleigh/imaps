@@ -29,7 +29,7 @@ function AppTips(props: Props) {
     }, 100);
   }, [props.tips]);
   return (
-    <CalciteTipManager ref={manager} closed={tips === undefined ? true : undefined}>
+    <CalciteTipManager ref={manager} closed={tips === undefined ? true : undefined} onCalciteTipManagerClose={() => setTips(undefined)}>
       <CalciteTipGroup>
         {props.tips?.tips.map((tip: any) => {
           return (
