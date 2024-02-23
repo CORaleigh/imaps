@@ -11,6 +11,7 @@ import PictureMarkerSymbol from '@arcgis/core/symbols/PictureMarkerSymbol';
 import {saveAs} from 'file-saver'
 import { clearAddressPoints } from './property';
 let featureTable: FeatureTable;
+let selectedProperty: Graphic;
 export const initializeFeatureTable = async (ref: HTMLDivElement, view: MapView): Promise<FeatureTable> => {
   const table: any = await getTableLayer(view);
   featureTable = new FeatureTable({
@@ -148,6 +149,7 @@ const getTableTemplate = (): TableTemplate => {
 export const updateTable = async (property: Graphic, featureTable: FeatureTable) => {
   if (featureTable) {
     try {
+      selectedProperty = property;
       clearAddressPoints(featureTable.view as __esri.MapView);
       const featureSet: FeatureSet = await addressLayer?.queryFeatures({
         geometry: property.geometry,
@@ -181,6 +183,7 @@ const exportTable = async (table: FeatureTable) => {
   (table.tableTemplate.columnTemplates as __esri.FieldColumnTemplate[]).forEach((field: __esri.FieldColumnTemplate) => {
     csv += `${field.label},`;
   });
+  csv += `PIN_NUM, REID,`
   csv += '\r\n';
   result.features.forEach((feature) => {
     (table.tableTemplate.columnTemplates as __esri.FieldColumnTemplate[]).forEach(
@@ -192,7 +195,7 @@ const exportTable = async (table: FeatureTable) => {
         }
       },
     );
-    csv += '\r\n';
+    csv += `""${selectedProperty.getAttribute('PIN_NUM')}"",""${selectedProperty.getAttribute('REID')}"",\r\n`;
   });
   let datestr = new Date().toISOString().split('.')[0];
   datestr = datestr.replaceAll(':', '').replaceAll('-', '');
