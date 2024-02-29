@@ -36,8 +36,8 @@ const Location = (props: PanelProps) => {
       closable
       onCalcitePanelClose={panelDismissed}
     >
-      <CalciteAction id="tip" icon="lightbulb"  text="Tips" slot="header-actions-end" onClick={tipsClicked}></CalciteAction>
-      <CalciteTooltip label="Show Tip" referenceElement="tip" closeOnClick>Show Tip</CalciteTooltip>
+      <CalciteAction id="locationTip" icon="lightbulb"  text="Tips" slot="header-actions-end" onClick={tipsClicked}></CalciteAction>
+      <CalciteTooltip referenceElement="locationTip" closeOnClick>Show Tip</CalciteTooltip>
       <div id="location-search">
         <div ref={searchDiv}></div>
         {isIntersection && (

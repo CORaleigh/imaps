@@ -43,13 +43,13 @@ function Basemaps(props: PanelProps) {
       onCalcitePanelClose={panelDismissed}
     >
       <CalciteAction
-        id="tip"
+        id="basemapsTip"
         icon="lightbulb"
         text="Tips"
         slot="header-actions-end"
         onClick={tipsClicked}
       ></CalciteAction>
-      <CalciteTooltip label="Show Tip" referenceElement="tip" closeOnClick>
+      <CalciteTooltip referenceElement="basemapsTip" closeOnClick>
         Show Tip
       </CalciteTooltip>
       <div className="basemaps">

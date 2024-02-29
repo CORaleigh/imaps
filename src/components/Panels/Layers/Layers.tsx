@@ -25,6 +25,7 @@ export const Layers = (props: PanelProps) => {
     >
       {layerList && 
       (<><CalciteAction
+        id="layerReset"
         text="Reset Layers"
         icon="reset"
         scale="s"
@@ -37,13 +38,13 @@ export const Layers = (props: PanelProps) => {
       )
       }
       <CalciteAction
-        id="tip"
+        id="layerTip"
         icon="lightbulb"
         text="Tips"
         slot="header-actions-end"
         onClick={tipsClicked}
       ></CalciteAction>
-      <CalciteTooltip referenceElement="tip" closeOnClick>
+      <CalciteTooltip referenceElement="layerTip" closeOnClick>
         Show Tip
       </CalciteTooltip>
       <div className="layers">

@@ -159,7 +159,6 @@ function Coordinates(props: CoordinateProps) {
         ></CalciteAction>
         <CalciteTooltip
           closeOnClick
-          label="Search Coordinates"
           referenceElement="coordinateSearch"
         >
           Search Coordinates
@@ -173,7 +172,6 @@ function Coordinates(props: CoordinateProps) {
         ></CalciteAction>
         <CalciteTooltip
           closeOnClick
-          label="Set Units"
           referenceElement="coordinateUnits"
         >
           Set Units
@@ -187,7 +185,6 @@ function Coordinates(props: CoordinateProps) {
         ></CalciteAction>
         <CalciteTooltip
           closeOnClick
-          label="Set Mode"
           referenceElement="coordinateMode"
         >
           Set Mode

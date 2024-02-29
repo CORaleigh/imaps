@@ -50,7 +50,6 @@ function Toolbar(props: Props) {
         <CalciteTooltip
           closeOnClick
           referenceElement="propertySearch"
-          label="Property Search"
         >
           Property Search
         </CalciteTooltip>
@@ -73,7 +72,6 @@ function Toolbar(props: Props) {
         <CalciteTooltip
           closeOnClick
           referenceElement="locationSearch"
-          label="Location Search"
         >
           Location Search
         </CalciteTooltip>
@@ -96,7 +94,6 @@ function Toolbar(props: Props) {
         <CalciteTooltip
           closeOnClick
           referenceElement="layerList"
-          label="Layer List"
         >
           Layers
         </CalciteTooltip>
@@ -116,7 +113,7 @@ function Toolbar(props: Props) {
             );
           }}
         ></CalciteAction>
-        <CalciteTooltip closeOnClick referenceElement="legend" label="Legend">
+        <CalciteTooltip closeOnClick referenceElement="legend">
           Legend
         </CalciteTooltip>
         <CalciteAction
@@ -163,7 +160,6 @@ function Toolbar(props: Props) {
         <CalciteTooltip
           closeOnClick
           referenceElement="propertySelect"
-          label="Property Select"
         >
           Property Select
         </CalciteTooltip>
@@ -183,7 +179,7 @@ function Toolbar(props: Props) {
             );
           }}
         ></CalciteAction>
-        <CalciteTooltip closeOnClick referenceElement="measure" label="Measure">
+        <CalciteTooltip closeOnClick referenceElement="measure">
           Measure
         </CalciteTooltip>
         <CalciteAction
@@ -202,7 +198,7 @@ function Toolbar(props: Props) {
             );
           }}
         ></CalciteAction>
-        <CalciteTooltip closeOnClick referenceElement="sketch" label="Sketch">
+        <CalciteTooltip closeOnClick referenceElement="sketch">
           Sketch
         </CalciteTooltip>
         <CalciteAction
@@ -224,7 +220,6 @@ function Toolbar(props: Props) {
         <CalciteTooltip
           closeOnClick
           referenceElement="bookmarks"
-          label="Bookmarks"
         >
           Bookmarks
         </CalciteTooltip>
@@ -244,7 +239,7 @@ function Toolbar(props: Props) {
             )
           }
         ></CalciteAction>
-        <CalciteTooltip closeOnClick referenceElement="print" label="Print">
+        <CalciteTooltip closeOnClick referenceElement="print">
           Print
         </CalciteTooltip>
       </CalciteActionGroup>

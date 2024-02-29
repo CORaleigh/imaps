@@ -20,13 +20,13 @@ export const Legend = (props: PanelProps) => {
       onCalcitePanelClose={panelDismissed}
     >
       <CalciteAction
-        id="tip"
+        id="legendTip"
         icon="lightbulb"
         text="Tips"
         slot="header-actions-end"
         onClick={tipsClicked}
       ></CalciteAction>
-      <CalciteTooltip label="Show Tip" referenceElement="tip" closeOnClick>
+      <CalciteTooltip referenceElement="legendTip" closeOnClick>
         Show Tip
       </CalciteTooltip>
       <div ref={ref}></div>
