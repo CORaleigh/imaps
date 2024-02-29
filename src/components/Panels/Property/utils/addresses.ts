@@ -18,7 +18,7 @@ export const initializeFeatureTable = async (ref: HTMLDivElement, view: MapView)
     container: ref,
     view: view,
     editingEnabled: false,
-    multiSortEnabled: true,
+    multiSortEnabled: false,
     visibleElements: {
       selectionColumn: false,
       menuItems: {
