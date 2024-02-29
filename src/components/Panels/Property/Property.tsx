@@ -75,7 +75,6 @@ function Property(props: PropertyProps) {
             ></CalciteButton>
             <CalciteTooltip
               referenceElement="clearSelection"
-              label="Clear Selection"
               closeOnClick
             >
               Clear Selection
