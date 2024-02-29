@@ -4,6 +4,8 @@ calcite-color-picker-swatch {
 }
 .sticky {
   display: sticky;
+  display: flex;
+  flex-direction: column;
 }
 .symbol {
   padding: 1em;

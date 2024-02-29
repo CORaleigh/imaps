@@ -135,7 +135,6 @@ function Toolbar(props: Props) {
         <CalciteTooltip
           closeOnClick
           referenceElement="basemaps"
-          label="Basemaps"
         >
           Basemaps
         </CalciteTooltip>
