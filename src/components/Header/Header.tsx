@@ -47,7 +47,6 @@ function Header() {
           ref={ref as any}
           placement="bottom-end"
           scale="m"
-          width="l"
           type="click"
           onCalciteDropdownOpen={(e: any) => {
             e.target.shadowRoot?.querySelector('.calcite-dropdown-content')?.setAttribute('style', `min-height: ${isMobile ? '590' : '590'}px`);
