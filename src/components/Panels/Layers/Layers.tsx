@@ -23,6 +23,19 @@ export const Layers = (props: PanelProps) => {
       closable 
       onCalcitePanelClose={panelDismissed}
     >
+      {layerList && 
+      (<><CalciteAction
+        text="Reset Layers"
+        icon="reset"
+        scale="s"
+        slot="header-actions-end"
+        onClick={() => resetLayers(layerList)}
+      ></CalciteAction>
+        <CalciteTooltip referenceElement="layerReset" closeOnClick>
+          Reset Layers
+        </CalciteTooltip></>   
+      )
+      }
       <CalciteAction
         id="tip"
         icon="lightbulb"
@@ -30,30 +43,10 @@ export const Layers = (props: PanelProps) => {
         slot="header-actions-end"
         onClick={tipsClicked}
       ></CalciteAction>
-      <CalciteTooltip label="Show Tip" referenceElement="tip" closeOnClick>
+      <CalciteTooltip referenceElement="tip" closeOnClick>
         Show Tip
       </CalciteTooltip>
       <div className="layers">
-        {layerList && (
-          <div className="row sticky">
-            <CalciteInput
-              clearable
-              placeholder="Filter by layer name"
-              scale="m"
-              onCalciteInputInput={(e) => {
-                if (layerList) {
-                  filterLayers(e.target.value, layerList);
-                }
-              }}
-            ></CalciteInput>
-            <CalciteAction
-              text="clear"
-              icon="viewHide"
-              scale="s"
-              onClick={() => resetLayers(layerList)}
-            ></CalciteAction>
-          </div>
-        )}
         <div ref={ref}></div>
         <CalciteScrim
           loading

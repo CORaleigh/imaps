@@ -22,7 +22,7 @@ export const initializeFeatureTable = async (
     container: ref,
     view: view,
     editingEnabled: false,
-    multiSortEnabled: true,
+    multiSortEnabled: false,
     visibleElements: {
       selectionColumn: false,
       menuItems: {
@@ -99,7 +99,7 @@ export const initializeFeatureTable = async (
   return featureTable;
 };
 const initializeGrid = (featureTable: FeatureTable) => {
-  (featureTable.findColumn('REID') as any).width = 100;
+  (featureTable.findColumn('REID') as any).width = 110;
   (featureTable.findColumn('SITE_ADDRESS') as any).width = 130;
   (featureTable.findColumn('PIN_NUM') as any).width = 100;
   (featureTable.findColumn('OWNER') as any).width = 150;
@@ -107,7 +107,7 @@ const initializeGrid = (featureTable: FeatureTable) => {
 
   requestAnimationFrame(() => {
     const grid = (featureTable.container as HTMLElement).querySelector('vaadin-grid') as any;
-    updateTableTitle(featureTable, grid);
+    updateTableTitle(featureTable, 0);
     //set tabpanel to 100% in shadowRoot
     (featureTable.container as HTMLElement).parentElement?.shadowRoot
       ?.querySelector('[role="tabpanel"]')
@@ -206,6 +206,8 @@ const  getTableTemplate = (layer: __esri.FeatureLayer): TableTemplate => {
 }
 
 export const updateTable = async (features: Graphic[], featureTable: FeatureTable) => {
+  console.log(featureTable)
+
   if (featureTable) {
     try {
       const result: FeatureSet = await (featureTable.layer as __esri.FeatureLayer).queryFeatures({
@@ -228,18 +230,20 @@ export const updateTable = async (features: Graphic[], featureTable: FeatureTabl
       requestAnimationFrame(() => {
         featureTable.refresh();
       });
-      updateTableTitle(featureTable, (featureTable as any).grid._grid);
+      updateTableTitle(featureTable, features.length);
     } catch (error) {
       console.log(error);
     }
   }
 };
 
-const updateTableTitle = (featureTable: __esri.FeatureTable, grid: any) => {
+const updateTableTitle = (featureTable: __esri.FeatureTable, featureCount: number) => {
+  
   setTimeout(() => {
     const title = (featureTable.container as HTMLElement).querySelector('.esri-feature-table__title');
     if (title) {
-      title.textContent = 'Selected Properties: ' + grid?.items?.length;
+      
+      title.textContent = 'Selected Properties: ' + featureCount;
     }
   }, 100);
 };

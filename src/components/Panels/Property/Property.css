@@ -21,11 +21,12 @@
 }
 calcite-tab {
   padding: 0;
+  --calcite-tab-content-block-padding: 0;
 }
 
-.property .esri-widget calcite-button {
+/* .property .esri-widget calcite-button {
   margin: 0 1em 0 1em;
-}
+} */
 
 .esri-feature__content-element {
   margin-bottom: 1em;

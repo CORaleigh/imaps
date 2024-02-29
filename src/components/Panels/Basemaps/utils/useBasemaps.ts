@@ -8,7 +8,7 @@ import {
   initializeImageMaps,
   removeBlendBasemap,
   tabChanged,
-  updateBlendOpacity,
+  updateBlendOpacity
 } from "./basemaps";
 import { tips } from "./tips";
 
@@ -95,7 +95,8 @@ const useBasemaps = (props: PanelProps) => {
     blendActive,
     showBlend,
     selectedTab,
-    setSelectedTab
+    setSelectedTab,
+    opacity
   };
 };
 export default useBasemaps;

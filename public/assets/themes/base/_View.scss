@@ -1,11 +1,12 @@
 .esri-view {
-  --esri-view-outline-color: var(--calcite-ui-brand);
+  --esri-view-outline-color: var(--calcite-color-brand);
   --esri-view-outline: 2px solid var(--esri-view-outline-color);
   --esri-view-outline-offset: -2px;
 
   display: flex;
   margin: 0;
   padding: 0;
+  font-family: $font-family;
 
   .esri-view-user-storage {
     overflow: hidden;
