@@ -5,3 +5,7 @@
 .basemaps {
   overflow: hidden;
 }
+
+.esri-basemap-gallery:focus-within {
+  outline: none;
+}
