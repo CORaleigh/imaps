@@ -26,3 +26,11 @@ export const toggleTheme = (isDark: boolean) => {
 
   return document.body.classList.contains("calcite-mode-dark");
 }
+
+export const reopenDropdown = (e: any) => {
+  requestAnimationFrame(() => {
+    if (e.target.closest('calcite-dropdown')) {
+      e.target.closest('calcite-dropdown').open = true;
+    }
+  });
+}

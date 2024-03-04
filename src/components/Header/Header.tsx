@@ -12,10 +12,10 @@ import {
 } from '@esri/calcite-components-react';
 import React, { useEffect, useRef, useState } from 'react';
 import './Header.css';
-import { toggleTheme } from './utils/header';
+import { reopenDropdown, toggleTheme } from './utils/header';
 function Header(props: {disclaimerClicked: Function}) {
   const logo = useRef<HTMLImageElement>(null);
-  const ref = useRef<HTMLElement>();
+  const ref = useRef<HTMLCalciteDropdownElement>();
 
   // const shortcuts = useRef<HTMLCalciteModalElement>();
 
@@ -58,8 +58,8 @@ function Header(props: {disclaimerClicked: Function}) {
           </CalciteTooltip>
           <CalciteDropdownGroup selection-mode="none" group-title="About" key="disclaimer">
             <CalciteDropdownItem
-              onClick={() => {
-                props.disclaimerClicked();
+              onClick={(e: any) => {
+                props.disclaimerClicked();               
               }}
             >
               Disclaimer
@@ -71,7 +71,8 @@ function Header(props: {disclaimerClicked: Function}) {
                 <CalciteDropdownGroup selection-mode="none" group-title={group.title} key={group.title}>
                   {group.links.map((link: any) => {
                     return (
-                      <CalciteDropdownItem rel="noreferrer" href={link.href} target="_blank" key={link.title}>
+                      <CalciteDropdownItem rel="noreferrer" href={link.href} target="_blank" key={link.title}
+                      onClick={reopenDropdown}>
                         {link.title}
                       </CalciteDropdownItem>
                     );
@@ -80,7 +81,7 @@ function Header(props: {disclaimerClicked: Function}) {
               );
             })}
           <CalciteDropdownGroup selectionMode="none" group-title="Settings">
-            <CalciteDropdownItem>
+            <CalciteDropdownItem onClick={reopenDropdown}>
               <CalciteLabel layout="inline" className="label-wrapper">
                 Light
                 <CalciteIcon icon="brightness" scale="s"></CalciteIcon>
