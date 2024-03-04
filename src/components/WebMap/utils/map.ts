@@ -482,7 +482,8 @@ const addStreets = (view: MapView) => {
         }, id: 'streets-popup-layer',
         opacity: 0,
         visible: true,
-        listMode: 'hide'
+        listMode: 'hide',
+        legendEnabled: false
       });
       view.map.add(streets);
     } else {
