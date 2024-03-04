@@ -5,7 +5,6 @@ import {
   CalciteDropdownItem,
   CalciteIcon,
   CalciteLabel,
-  CalciteModal,
   CalciteSwitch,
   CalciteTooltip,
   CalciteNavigation,
@@ -14,11 +13,10 @@ import {
 import React, { useEffect, useRef, useState } from 'react';
 import './Header.css';
 import { toggleTheme } from './utils/header';
-function Header() {
+function Header(props: {disclaimerClicked: Function}) {
   const logo = useRef<HTMLImageElement>(null);
   const ref = useRef<HTMLElement>();
 
-  const disclaimer = useRef<HTMLCalciteModalElement>();
   // const shortcuts = useRef<HTMLCalciteModalElement>();
 
   const [links, setLinks] = useState<any[]>();
@@ -61,9 +59,7 @@ function Header() {
           <CalciteDropdownGroup selection-mode="none" group-title="About" key="disclaimer">
             <CalciteDropdownItem
               onClick={() => {
-                if (disclaimer.current) {
-                  disclaimer.current.open = !disclaimer.current.open;
-                }
+                props.disclaimerClicked();
               }}
             >
               Disclaimer
@@ -129,30 +125,6 @@ function Header() {
             </CalciteDropdownItem>
           </CalciteDropdownGroup>
         </CalciteDropdown>
-      <CalciteModal ref={disclaimer as any} aria-labelledby="disclaimer-title">
-        <div slot="header" id="disclaimer-title">
-          Disclaimer
-        </div>
-        <div slot="content">
-          iMAPS makes every effort to produce and publish the most current and accurate information possible. However,
-          the maps are productions for information purposed, and are NOT surveys. No warranties, expressed or implied,
-          are provided for the data therein, its use, or its interpretation. Register of Deeds documents accessed
-          through this site are unofficial. The official records are maintained at the Wake County Register of Deeds
-          office. The Wake County Register of Deeds assumes no responsibility or liability associated with the use or
-          misused of this data.
-        </div>
-        <CalciteButton
-          slot="primary"
-          width="full"
-          onClick={() => {
-            if (disclaimer.current) {
-              disclaimer.current.open = !disclaimer.current.open;
-            }
-          }}
-        >
-          Close
-        </CalciteButton>
-      </CalciteModal>
       {/* {!isMobile && <CalciteModal ref={shortcuts as any} aria-labelledby="shortcuts-title">
         <div slot="header" id="shortcuts-title">
           Keyboard Shortcuts

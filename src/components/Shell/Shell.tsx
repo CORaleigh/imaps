@@ -1,5 +1,7 @@
 import React, { lazy, Suspense } from "react";
 import {
+  CalciteButton,
+  CalciteModal,
   CalciteScrim,
   CalciteShell,
   CalciteShellPanel,
@@ -51,12 +53,14 @@ function Shell() {
     alert,
     tipsCallback,
     tips,
-    getMapId
+    getMapId,
+    showDisclaimer, 
+    setShowDisclaimer
   } = useShell();
   return (
     <div>
     <CalciteShell contentBehind={contentBehind ? true : undefined}>
-      <Header></Header>
+      <Header disclaimerClicked={() => setShowDisclaimer(true)}></Header>
       <CalciteShellPanel slot="panel-start" position="start" hidden></CalciteShellPanel>
       <CalciteShellPanel
         className="custom-width"
@@ -195,6 +199,28 @@ function Shell() {
     </CalciteShell>
     <AppTips tips={tips}></AppTips>
     <AppAlert alert={alert} ></AppAlert>
+    <CalciteModal open={showDisclaimer} onCalciteModalClose={() => setShowDisclaimer(false)} aria-labelledby="disclaimer-title">
+        <div slot="header" id="disclaimer-title">
+          Disclaimer
+        </div>
+        <div slot="content">
+          iMAPS makes every effort to produce and publish the most current and accurate information possible. However,
+          the maps are productions for information purposed, and are NOT surveys. No warranties, expressed or implied,
+          are provided for the data therein, its use, or its interpretation. Register of Deeds documents accessed
+          through this site are unofficial. The official records are maintained at the Wake County Register of Deeds
+          office. The Wake County Register of Deeds assumes no responsibility or liability associated with the use or
+          misused of this data.
+        </div>
+        <CalciteButton
+          slot="primary"
+          width="full"
+          onClick={() => {
+            setShowDisclaimer(false)
+          }}
+        >
+          Close
+        </CalciteButton>
+      </CalciteModal>    
     </div>
   );
 }
