@@ -22,7 +22,7 @@ export const initializeFeatureTable = async (
     container: ref,
     view: view,
     editingEnabled: false,
-    multiSortEnabled: false,
+    multiSortEnabled: true,
     visibleElements: {
       selectionColumn: false,
       menuItems: {
@@ -100,8 +100,8 @@ export const initializeFeatureTable = async (
 };
 const initializeGrid = (featureTable: FeatureTable) => {
   (featureTable.findColumn('REID') as any).width = 110;
-  (featureTable.findColumn('SITE_ADDRESS') as any).width = 130;
-  (featureTable.findColumn('PIN_NUM') as any).width = 100;
+  (featureTable.findColumn('SITE_ADDRESS') as any).width = 140;
+  (featureTable.findColumn('PIN_NUM') as any).width = 110;
   (featureTable.findColumn('OWNER') as any).width = 150;
   featureTable.refresh();
 
