@@ -41,16 +41,17 @@ export const initializeFeatureTable = async (ref: HTMLDivElement, view: MapView)
     layer: table,
   });
   await featureTable?.when();
-  featureTable.on('selection-change', selectionChanged);
+  featureTable.highlightIds.on('change',selectionChanged);
   initializeGrid(featureTable);
   return featureTable;
 };
 
 const selectionChanged = async (e: any) => {
+  debugger
   if (e.added.length) {
     const featureSet: FeatureSet = await (featureTable.layer as __esri.FeatureLayer)
       .queryFeatures({
-        objectIds: [e.added[0].feature.getObjectId()],
+        objectIds: [e.added[0]],
         returnGeometry: true,
       });
 
@@ -195,7 +196,7 @@ const exportTable = async (table: FeatureTable) => {
         }
       },
     );
-    csv += `""${selectedProperty.getAttribute('PIN_NUM')}"",""${selectedProperty.getAttribute('REID')}"",\r\n`;
+    csv += `="${selectedProperty.getAttribute('PIN_NUM')}",="${selectedProperty.getAttribute('REID')}",\r\n`;
   });
   let datestr = new Date().toISOString().split('.')[0];
   datestr = datestr.replaceAll(':', '').replaceAll('-', '');
