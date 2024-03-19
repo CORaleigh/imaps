@@ -47,7 +47,6 @@ export const initializeFeatureTable = async (ref: HTMLDivElement, view: MapView)
 };
 
 const selectionChanged = async (e: any) => {
-  debugger
   if (e.added.length) {
     const featureSet: FeatureSet = await (featureTable.layer as __esri.FeatureLayer)
       .queryFeatures({
