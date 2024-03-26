@@ -2,6 +2,7 @@ import React from "react";
 
 import {
   CalciteAction,
+  CalciteActionBar,
   CalciteActionGroup,
   CalciteButton,
   CalcitePanel,
@@ -47,7 +48,7 @@ function Sketch(props: ToolProps) {
       onCalcitePanelClose={toolDismissed}
     >
       <CalciteAction
-        id="tip"
+        id="sketchTip"
         icon="lightbulb"
         text="Tips"
         slot="header-actions-end"
@@ -60,21 +61,21 @@ function Sketch(props: ToolProps) {
         slot="header-actions-end"
         onClick={collapsePanel}
       ></CalciteAction>
-      <CalciteTooltip closeOnClick label="Show Tip" referenceElement="tip">
+      <CalciteTooltip closeOnClick label="Show Tip" referenceElement="sketchTip">
         Show Tip
       </CalciteTooltip>
       <CalciteTooltip
         closeOnClick
-        label="Collapse"
         referenceElement="collapseTool"
       >
         Collapse
       </CalciteTooltip>
       <div id="sketch-tools">
-        <div className="sticky">
-          <CalciteActionGroup layout="horizontal">
+        <div className="sticky" >
+          <CalciteActionBar layout="horizontal" expandDisabled overflowActionsDisabled>
+          <CalciteActionGroup>
             <CalciteAction
-              id="point"
+              id="sketchPointTip"
               active={activeSketchTool === "point" ? true : undefined}
               icon="pin"
               text={""}
@@ -82,12 +83,12 @@ function Sketch(props: ToolProps) {
                 toolSelected("point", activeSketchTool, setActiveSketchTool)
               }
             ></CalciteAction>
-            <CalciteTooltip closeOnClick label="Point" referenceElement="point">
+            <CalciteTooltip closeOnClick referenceElement="sketchPointTip">
               Point
             </CalciteTooltip>
 
             <CalciteAction
-              id="line"
+              id="sketchLineTip"
               active={activeSketchTool === "polyline" ? true : undefined}
               icon="line"
               text={""}
@@ -95,11 +96,11 @@ function Sketch(props: ToolProps) {
                 toolSelected("polyline", activeSketchTool, setActiveSketchTool)
               }
             ></CalciteAction>
-            <CalciteTooltip closeOnClick label="Line" referenceElement="line">
+            <CalciteTooltip closeOnClick referenceElement="sketchLineTip">
               Line
             </CalciteTooltip>
             <CalciteAction
-              id="polygon"
+              id="sketchPolygonTip"
               active={activeSketchTool === "polygon" ? true : undefined}
               icon="polygon"
               text={""}
@@ -109,13 +110,12 @@ function Sketch(props: ToolProps) {
             ></CalciteAction>
             <CalciteTooltip
               closeOnClick
-              label="Polygon"
-              referenceElement="polygon"
+              referenceElement="sketchPolygonTip"
             >
               Polygon
             </CalciteTooltip>
             <CalciteAction
-              id="rectangle"
+              id="sketchRectangleTip"
               active={activeSketchTool === "rectangle" ? true : undefined}
               icon="rectangle"
               text={""}
@@ -125,13 +125,12 @@ function Sketch(props: ToolProps) {
             ></CalciteAction>
             <CalciteTooltip
               closeOnClick
-              label="Rectangle"
-              referenceElement="rectangle"
+              referenceElement="sketchRectangleTip"
             >
               Rectangle
             </CalciteTooltip>
             <CalciteAction
-              id="circle"
+              id="sketchCircleTip"
               active={activeSketchTool === "circle" ? true : undefined}
               icon="circle"
               text={""}
@@ -141,13 +140,12 @@ function Sketch(props: ToolProps) {
             ></CalciteAction>
             <CalciteTooltip
               closeOnClick
-              label="Circle"
-              referenceElement="circle"
+              referenceElement="sketchCircleTip"
             >
               Circle
             </CalciteTooltip>
             <CalciteAction
-              id="text"
+              id="sketchTextTip"
               active={activeSketchTool === "text" ? true : undefined}
               icon="text"
               text={""}
@@ -155,13 +153,15 @@ function Sketch(props: ToolProps) {
                 toolSelected("text", activeSketchTool, setActiveSketchTool)
               }
             ></CalciteAction>
-            <CalciteTooltip closeOnClick label="Text" referenceElement="text">
+            <CalciteTooltip closeOnClick referenceElement="sketchTextTip">
               Text
             </CalciteTooltip>
           </CalciteActionGroup>
-          <CalciteActionGroup layout="horizontal">
+          </CalciteActionBar>
+          <CalciteActionBar layout="horizontal"  expandDisabled overflowActionsDisabled>
+          <CalciteActionGroup>
             <CalciteAction
-              id="selectSketch"
+              id="selectSketchTip"
               icon="cursor"
               text={""}
               active={activeSketchTool === "select" ? true : undefined}
@@ -176,7 +176,7 @@ function Sketch(props: ToolProps) {
             <CalciteTooltip
               closeOnClick
               label="Select Sketch"
-              referenceElement="selectSketch"
+              referenceElement="selectSketchTip"
             >
               Select Sketch
             </CalciteTooltip>
@@ -196,6 +196,7 @@ function Sketch(props: ToolProps) {
               Clear Sketches
             </CalciteTooltip>
           </CalciteActionGroup>
+          </CalciteActionBar>
         </div>
         <div
           id="point-symbols"

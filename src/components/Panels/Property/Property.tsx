@@ -44,13 +44,13 @@ function Property(props: PropertyProps) {
       onCalcitePanelClose={panelDismissed}
     >
       <CalciteAction
-        id="tip"
+        id="propertyTip"
         icon="lightbulb"
         text="Tips"
         slot="header-actions-end"
         onClick={tipsClicked}
       ></CalciteAction>
-      <CalciteTooltip label="Show Tip" referenceElement="tip" closeOnClick>
+      <CalciteTooltip referenceElement="propertyTip" closeOnClick>
         Show Tip
       </CalciteTooltip>
       <div className="property">
@@ -75,7 +75,6 @@ function Property(props: PropertyProps) {
             ></CalciteButton>
             <CalciteTooltip
               referenceElement="clearSelection"
-              label="Clear Selection"
               closeOnClick
             >
               Clear Selection

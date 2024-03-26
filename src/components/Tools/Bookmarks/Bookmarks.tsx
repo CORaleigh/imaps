@@ -22,7 +22,7 @@ export const Bookmarks = (props: ToolProps) => {
       onCalcitePanelClose={toolDismissed}
     >
       <CalciteAction
-        id="tip"
+        id="bookmarkTip"
         icon="lightbulb"
         text="Tips"
         slot="header-actions-end"
@@ -35,11 +35,10 @@ export const Bookmarks = (props: ToolProps) => {
         slot="header-actions-end"
         onClick={collapsePanel}
       ></CalciteAction>
-      <CalciteTooltip label="Show Tip" referenceElement="tip" closeOnClick>
+      <CalciteTooltip referenceElement="bookmarkTip" closeOnClick>
         Show Tip
       </CalciteTooltip>
       <CalciteTooltip
-        label="Collapse"
         referenceElement="collapseTool"
         closeOnClick
       >

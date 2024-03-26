@@ -101,28 +101,13 @@ export const arcadeExpressionInfos = [
   {
     name: "general",
     title: "general",
-    expression: `"PIN"+
-        TextFormatting.NewLine+
-        $feature.PIN_NUM+" "+
-        $feature.PIN_EXT+
-        TextFormatting.NewLine+
-        "REID"+
-        TextFormatting.NewLine+
-        $feature.REID+
-        TextFormatting.NewLine+
-        "City"+
-        TextFormatting.NewLine+
-        Proper($feature.CITY_DECODE)+
-        TextFormatting.NewLine+
-        "Jurisdiction"+
-        TextFormatting.NewLine+' +
-        $feature.PLANNING_JURISDICTION+
-        TextFormatting.NewLine+"Township"+
-        TextFormatting.NewLine+Proper($feature.TOWNSHIP_DECODE)+
-        "Map Name"+TextFormatting.NewLine+
-        $feature.MAP_NAME+
-        TextFormatting.NewLine+
-        "Land Class"+TextFormatting.NewLine+
-        Proper($feature.LAND_CLASS_DECODE)`,
+    expression: `return Concatenate([
+      "PIN", Concatenate([$feature.PIN_NUM, $feature.PIN_EXT], " "),
+      "REID", $feature.REID, "City", Proper($feature.CITY_DECODE),
+      "Jurisdiction", $feature.PLANNING_JURISDICTION,
+      "Township", Proper($feature.TOWNSHIP_DECODE),
+      "Map Name", $feature.MAP_NAME,
+      "Land Class", Proper($feature.LAND_CLASS_DECODE)
+    ], TextFormatting.NewLine)`
   },
 ] as ExpressionInfo[];

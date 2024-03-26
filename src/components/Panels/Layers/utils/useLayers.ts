@@ -43,7 +43,7 @@ const useLayers = (props: PanelProps) => {
     isLoading,
     isActive,
     panelDismissed,
-    tipsClicked,
+    tipsClicked
   };
 };
 export default useLayers;

@@ -61,7 +61,7 @@ const Print = (props: PrintProps) => {
       onCalcitePanelClose={toolDismissed}
     >
       <CalciteAction
-        id="tip"
+        id="printTip"
         icon="lightbulb"
         text="Tips"
         slot="header-actions-end"
@@ -74,11 +74,10 @@ const Print = (props: PrintProps) => {
         slot="header-actions-end"
         onClick={collapsePanel}
       ></CalciteAction>
-      <CalciteTooltip label="Show Tip" referenceElement="tip" closeOnClick>
+      <CalciteTooltip referenceElement="printTip" closeOnClick>
         Show Tip
       </CalciteTooltip>
       <CalciteTooltip
-        label="Collapse"
         referenceElement="collapseTool"
         closeOnClick
       >

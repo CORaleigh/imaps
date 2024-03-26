@@ -30,6 +30,8 @@ const useShell = () => {
   const [selectedProperty, setSelectedProperty] = useState<__esri.Graphic>();
 
   const [tips, setTips] = useState<any>();
+  const [showDisclaimer, setShowDisclaimer] = useState<boolean>(false);
+
   useEffect(() => {
     if (properties) {
       setActivePanel("search");
@@ -159,7 +161,9 @@ const useShell = () => {
     alert,
     tipsCallback,
     tips,
-    getMapId
+    getMapId,
+    showDisclaimer, 
+    setShowDisclaimer    
   };
 };
 

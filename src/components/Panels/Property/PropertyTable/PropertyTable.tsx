@@ -23,10 +23,12 @@ function PropertyTable(props: PropertyTableProps) {
     };
   }, []);
   useEffect(() => {
+    console.log(featureTable);
+
     if (featureTable) {
       updateTable(props.condos, featureTable);
     }
-  }, [props.condos]);
+  }, [props.condos, featureTable]);
   return <div ref={ref}></div>;
 }
 

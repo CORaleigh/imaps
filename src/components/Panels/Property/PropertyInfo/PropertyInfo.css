@@ -13,3 +13,7 @@
   z-index: 1000;
   height: 50px;
 }
+
+.esri-feature calcite-button {
+  margin: 0 .5em;
+}

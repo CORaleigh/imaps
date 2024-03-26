@@ -30,7 +30,8 @@ function Basemaps(props: PanelProps) {
     blendActive,
     showBlend,
     selectedTab,
-    setSelectedTab
+    setSelectedTab,
+    opacity
   } = useBasemaps(props);
   return (
     <CalcitePanel
@@ -42,13 +43,13 @@ function Basemaps(props: PanelProps) {
       onCalcitePanelClose={panelDismissed}
     >
       <CalciteAction
-        id="tip"
+        id="basemapsTip"
         icon="lightbulb"
         text="Tips"
         slot="header-actions-end"
         onClick={tipsClicked}
       ></CalciteAction>
-      <CalciteTooltip label="Show Tip" referenceElement="tip" closeOnClick>
+      <CalciteTooltip referenceElement="basemapsTip" closeOnClick>
         Show Tip
       </CalciteTooltip>
       <div className="basemaps">
@@ -75,7 +76,7 @@ function Basemaps(props: PanelProps) {
               hidden={blendActive && showBlend ? undefined : true}
               max={100}
               min={0}
-              value={50}
+              value={100 - (opacity * 100)}
               onCalciteSliderInput={blendOpacityChanged}
             ></CalciteSlider>
             <div ref={imagesRef}></div>

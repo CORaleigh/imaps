@@ -40,7 +40,7 @@ export const Select = (props: SelectProps) => {
       onCalcitePanelClose={toolDismissed}
     >
       <CalciteAction
-        id="tip"
+        id="selectTip"
         icon="lightbulb"
         text="Tips"
         slot="header-actions-end"
@@ -53,12 +53,11 @@ export const Select = (props: SelectProps) => {
         slot="header-actions-end"
         onClick={collapsePanel}
       ></CalciteAction>
-      <CalciteTooltip closeOnClick label="Show Tip" referenceElement="tip">
+      <CalciteTooltip closeOnClick referenceElement="selectTip">
         Show Tip
       </CalciteTooltip>
       <CalciteTooltip
         closeOnClick
-        label="Collapse"
         referenceElement="collapseTool"
       >
         Collapse
@@ -80,7 +79,6 @@ export const Select = (props: SelectProps) => {
           ></CalciteAction>
           <CalciteTooltip
             closeOnClick
-            label="Select by Point"
             referenceElement="selectPoint"
           >
             Select by Point
@@ -100,7 +98,6 @@ export const Select = (props: SelectProps) => {
           ></CalciteAction>
           <CalciteTooltip
             closeOnClick
-            label="Select by Line"
             referenceElement="selectLine"
           >
             Select by Line
@@ -120,7 +117,6 @@ export const Select = (props: SelectProps) => {
           ></CalciteAction>
           <CalciteTooltip
             closeOnClick
-            label="Select by Rectangle"
             referenceElement="selectRectangle"
           >
             Select by Rectangle
@@ -140,7 +136,6 @@ export const Select = (props: SelectProps) => {
           ></CalciteAction>
           <CalciteTooltip
             closeOnClick
-            label="Select by Circle"
             referenceElement="selectCircle"
           >
             Select by Circle
@@ -160,7 +155,6 @@ export const Select = (props: SelectProps) => {
           ></CalciteAction>
           <CalciteTooltip
             closeOnClick
-            label="Select by Polygon"
             referenceElement="selectPolygon"
           >
             Select by Polygon
@@ -180,7 +174,6 @@ export const Select = (props: SelectProps) => {
           ></CalciteAction>
           <CalciteTooltip
             closeOnClick
-            label="Select by Multi-Point"
             referenceElement="selectMultipoint"
           >
             Select by Multi-point
@@ -201,7 +194,6 @@ export const Select = (props: SelectProps) => {
           ></CalciteAction>
           <CalciteTooltip
             closeOnClick
-            label="Clear Selection"
             referenceElement="clearSelection"
           >
             Clear selection

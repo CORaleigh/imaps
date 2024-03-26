@@ -5,3 +5,14 @@
 .basemaps {
   overflow: hidden;
 }
+
+.esri-basemap-gallery:focus-within {
+  outline: none;
+}
+
+
+@media only screen and (max-height: 400px) {
+  .basemaps calcite-tabs {
+    height: calc(var(--app-height) - 49px);
+  }
+}

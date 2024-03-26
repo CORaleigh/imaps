@@ -29,7 +29,7 @@ export const Measure = (props: ToolProps) => {
       onCalcitePanelClose={toolDismissed}
     >
       <CalciteAction
-        id="tip"
+        id="measureTip"
         icon="lightbulb"
         text="Tips"
         slot="header-actions-end"
@@ -42,11 +42,10 @@ export const Measure = (props: ToolProps) => {
         slot="header-actions-end"
         onClick={collapsePanel}
       ></CalciteAction>
-      <CalciteTooltip label="Show Tip" referenceElement="tip" closeOnClick>
+      <CalciteTooltip referenceElement="measureTip" closeOnClick>
         Show Tip
       </CalciteTooltip>
       <CalciteTooltip
-        label="Collapse"
         referenceElement="collapseTool"
         closeOnClick
       >
@@ -56,7 +55,6 @@ export const Measure = (props: ToolProps) => {
         <div className="measure-container">
           <CalciteTooltip
             closeOnClick
-            label="Distance"
             referenceElement="measureDistance"
           >
             Distance
@@ -75,7 +73,6 @@ export const Measure = (props: ToolProps) => {
           ></CalciteAction>
           <CalciteTooltip
             closeOnClick
-            label="Area"
             referenceElement="measureArea"
           >
             Area
@@ -94,7 +91,6 @@ export const Measure = (props: ToolProps) => {
           ></CalciteAction>
           <CalciteTooltip
             closeOnClick
-            label="Clear"
             referenceElement="clearMeasure"
           >
             Clear

@@ -23,12 +23,20 @@ export const initializeLayers = async (ref: HTMLDivElement, view: MapView): Prom
     view: view,
     container: ref,
     listItemCreatedFunction: layerListItemCreated,
+    visibleElements: {
+      filter: true,
+      statusIndicators: false
+    },
+    filterPlaceholder: 'Search layers',
+    visibilityAppearance: 'checkbox'
   });
   layers.on('trigger-action', (event: __esri.LayerListTriggerActionEvent) => {
     if (event.item.layer.title === 'Property') {
       togglePropertyLabels(event);
+      requestAnimationFrame(() => event.item.actionsOpen = true);
     }
   });
+
   return layers;
 };
 
@@ -160,6 +168,7 @@ const setPropertyColor = (layer: FeatureLayer, light: boolean) => {
 const togglePropertyColor = (layer: FeatureLayer, sections: any) => {
   if (sections.length > 1) {
     setPropertyColor(layer, !sections.getItemAt(1).getItemAt(0).value);
+    sections.getItemAt(1).getItemAt(0).icon = !sections.getItemAt(1).getItemAt(0).value ? 'toggle-off' : 'toggle-on';
   }
 };
 export const togglePropertyLabels = (event: __esri.LayerListTriggerActionEvent) => {
@@ -168,7 +177,10 @@ export const togglePropertyLabels = (event: __esri.LayerListTriggerActionEvent) 
     if (!(event.item.layer as __esri.FeatureLayer).labelsVisible) {
       (event.item.layer as __esri.FeatureLayer).labelsVisible = true;
     }
+    
     const selected = event.item.actionsSections.getItemAt(0).filter((section) => {
+      console.log(section.icon)
+      section.icon = (section as ActionToggle).value ? 'toggle-on' : 'toggle-off';
       return (section as ActionToggle).value;
     });
 
@@ -220,23 +232,23 @@ export const togglePropertyLabels = (event: __esri.LayerListTriggerActionEvent) 
 const propertyLabelExpressions: any[] = [
   {
     expression: `First(Split($feature['SITE_ADDRESS'], ' ')) + ' ' + $feature.STMISC`,
-    title: 'Address',
+    title: 'Address Labels',
   },
   {
     expression: `$feature['PIN_NUM']`,
-    title: 'PIN',
+    title: 'PIN Labels',
   },
   {
     expression: `$feature['REID']`,
-    title: 'REID',
+    title: 'REID Labels',
   },
   {
     expression: `When(IsEmpty($feature["SALE_DATE"]),null, Concatenate(Month($feature["SALE_DATE"])+1, '/',Day($feature["SALE_DATE"]), '/',Year($feature["SALE_DATE"])))`,
-    title: 'Sale Date',
+    title: 'Sale Date Labels',
   },
   {
     expression: `Text($feature.TOTSALPRICE,'$#,###')`,
-    title: 'Sale Price',
+    title: 'Sale Price Labels',
   },
 ];
 
@@ -251,6 +263,7 @@ const addPropertyLabelToggles = (item: any) => {
           }),
           title: expression.title,
           visible: true,
+          icon: 'toggle-off'
         });
       }),
     );
@@ -258,15 +271,18 @@ const addPropertyLabelToggles = (item: any) => {
 
     toggles = new Collection();
     toggles.add(
-      new ActionToggle({
+{
         value: item.layer.renderer?.symbol?.outline?.color?.isBright,
         title: 'Light Outline',
         visible: true,
-      }) as any,
+        type: 'toggle',
+        icon: 'toggle-off'
+      }as any,
     );
     (item as __esri.ListItem).actionsSections.push(toggles);
 
-    (item as __esri.ListItem).actionsOpen = true;
+    (item as __esri.ListItem).actionsOpen = false;
+    
     setTimeout(() => {
       const title = document.createElement('h4');
       title.id = 'labels-actions-title';
@@ -276,7 +292,8 @@ const addPropertyLabelToggles = (item: any) => {
       if (actions?.parentElement && !document.getElementById('labels-actions-title')) {
         actions.prepend(title);
       }
-    }, 500);
+      
+    }, 1000);
   }
 };
 
@@ -315,9 +332,12 @@ const createPanel = (item: __esri.ListItem) => {
   }
 };
 
-const layerListItemCreated = (event: any): void => {
-  const item = event.item;
+const layerListItemCreated = async (event: any) => {
+  const { item } = event;
+
+  await item.layer.when();  
   createPanel(item);
+
   item.open = item.layer.visible;
   item.layer.watch('visible', (visible: boolean) => {
     // if (item.panel) {
@@ -325,6 +345,7 @@ const layerListItemCreated = (event: any): void => {
     // }
     saveMap(layers.view as __esri.MapView);
     item.open = visible;
+
     createPanel(item);
 
     if (visible) {
