@@ -9,6 +9,7 @@
 
   .esri-layer-list__item {
     --calcite-list-item-spacing-indent: 2rem;
+    --calcite-list-item-icon-center: 8.5px;
   }
 
   .esri-layer-list__item-temporary-icon {
@@ -38,6 +39,7 @@
   .esri-layer-list__publishing {
     @include layerListPublishingIndicator();
 
+    transform-origin: var(--calcite-list-item-icon-center) var(--calcite-list-item-icon-center);
     animation: esri-layer-list__publishing-anim 2s normal infinite;
   }
 
