@@ -1,6 +1,8 @@
 import MapView from '@arcgis/core/views/MapView';
 import FeatureTable from '@arcgis/core/widgets/FeatureTable';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
+import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
+
 import FieldColumnTemplate from '@arcgis/core/widgets/FeatureTable/support/FieldColumnTemplate';
 import TableTemplate from '@arcgis/core/widgets/FeatureTable/support/TableTemplate';
 import FeatureSet from '@arcgis/core/rest/support/FeatureSet';
@@ -43,6 +45,11 @@ export const initializeFeatureTable = async (ref: HTMLDivElement, view: MapView)
   await featureTable?.when();
   featureTable.highlightIds.on('change',selectionChanged);
   initializeGrid(featureTable);
+  if (!view.map.findLayerById('address-graphics')) {
+    view.map.add(new GraphicsLayer({
+      id: 'address-graphics'
+    }))
+  }
   return featureTable;
 };
 
@@ -63,9 +70,10 @@ const selectionChanged = async (e: any) => {
             width: 24,
           });
           clearAddressPoints(featureTable.view as __esri.MapView); 
-
-          featureTable.view.graphics.add(feature);
-
+          if (featureTable.view.map.findLayerById('address-graphics')) {
+            const addressGraphics = featureTable.view.map.findLayerById('address-graphics') as __esri.GraphicsLayer;
+            addressGraphics.add(feature);
+          }
           featureTable.view.goTo({ target: feature, zoom: 18 }, { easing: 'ease-in-out' as any, duration: 1000 });
         }
 

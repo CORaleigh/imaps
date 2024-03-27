@@ -196,7 +196,7 @@ export const createLinkButtons = () => {
 
       const taxUrl = await executeArcade(
       `if ($feature.CITY_DECODE == "RALEIGH - DURHAM COUNTY") { 
-        return Concatenate("https://property.spatialest.com/nc/durham/#/property/",$feature.REID);
+        return Concatenate("https://taxcama.dconc.gov/camapwa/PropertySummary.aspx?REID=",$feature.REID);
       } else {
         return Concatenate("https://services.wake.gov/realestate/Account.asp?id=", $feature.REID);
       }`,

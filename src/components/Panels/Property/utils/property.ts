@@ -73,11 +73,10 @@ const getRelationshipId = (table: __esri.FeatureLayer, name: string) => {
 };
 
 export const clearAddressPoints = (view: MapView) => {
-  view.graphics.removeMany(
-    view.graphics.filter((graphic) => {
-      return graphic.getAttribute('type') === 'address';
-    }),
-  );
+  if (view.map.findLayerById('address-graphics')) {
+    const addressGraphics = view.map.findLayerById('address-graphics') as __esri.GraphicsLayer;
+    addressGraphics.removeAll();
+  }
 };
 
 export const clearSelectionGraphics = (view: MapView) => {

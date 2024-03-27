@@ -92,7 +92,7 @@ export const mapViewSet = (
         if (!vpn) {
           sendAlert("To view utility layers, you must be connected to the city network or connected through VPN. You will be redirected to the public iMAPS.","Not on City Network or VPN.",setAlert, setLoading);
           setTimeout(() => {
-            window.location.href = 'https://coraleigh.github.io/imaps';
+            window.location.href = 'https://maps.raleighnc.gov/imaps';
           }, 10000);
     
         }
