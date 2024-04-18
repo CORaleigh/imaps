@@ -26,7 +26,7 @@ export const initializeFeatureTable = async (ref: HTMLDivElement, view: MapView)
       menuItems: {
         refreshData: false,
         toggleColumns: false,
-      },
+      }
     },
     menuConfig: {
       items: [
@@ -147,8 +147,6 @@ const getTableTemplate = (): TableTemplate => {
         label: 'Type',
         fieldName: 'FEATURETYPE',
         editable: false,
-        initialSortPriority: 1,
-        direction: 'asc',
       }),
     ],
   });
