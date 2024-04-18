@@ -26,7 +26,7 @@ const useCoordinates = (props: CoordinateProps) => {
   const formats: CoordinateFormats[] = [
     { value: "dd", label: "Decimal Degrees", placeholder: '35.7582196 -78.8079653'},
     { value: "dms", label: "Degrees Minutes Seconds", placeholder: `35° 45' 29.7116777"N 78° 48' 31.524W`},
-    { value: "spft", label: "Stateplane Feet", placeholder: '731166.165 2056872.973' },
+    { value: "spft", label: "Stateplane Feet", placeholder: '2056872.973 731166.165' },
     { value: "usng", label: "US National Grid", placeholder: '17S PV 98178 59368'}
   ];
 
@@ -85,6 +85,7 @@ const useCoordinates = (props: CoordinateProps) => {
     []
   );
   const searchCoordinates = useCallback(async (e: any) => {
+    debugger
     if (coordInput.current?.value === '') {
       coordInput.current?.setAttribute('status', 'invalid');   
       return;   
@@ -127,6 +128,7 @@ const useCoordinates = (props: CoordinateProps) => {
       }
     }
     if (formatRef.current.value === "spft") {
+      debugger
       const value = coordInput.current?.value.replace(/\s\s+/g, ' ');
       let coords = value?.split(' ');
       if (coords?.length !== 2) {
@@ -136,8 +138,8 @@ const useCoordinates = (props: CoordinateProps) => {
           return;
         }
       }
-      const x = parseFloat(coords[1]);
-      const y = parseFloat(coords[2]);
+      const x = parseFloat(coords[0]);
+      const y = parseFloat(coords[1]);
       if (isNaN(x) || isNaN(y)) {
         coordInput.current?.setAttribute('status', 'invalid');
         return;
@@ -145,7 +147,7 @@ const useCoordinates = (props: CoordinateProps) => {
       point = new Point({
         x: x,
         y: y,
-        spatialReference: { wkid: 4326 },
+        spatialReference: { wkid: 2264 },
       });
       point = projection.project(point, props.view.spatialReference) as Point;
     }

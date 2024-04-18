@@ -47,7 +47,8 @@ export const initializeFeatureTable = async (ref: HTMLDivElement, view: MapView)
   initializeGrid(featureTable);
   if (!view.map.findLayerById('address-graphics')) {
     view.map.add(new GraphicsLayer({
-      id: 'address-graphics'
+      id: 'address-graphics',
+      listMode: 'hide'
     }))
   }
   return featureTable;
