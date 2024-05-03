@@ -45,7 +45,9 @@ const Print = (props: PrintProps) => {
     tipsClicked,
     showFrameChanged,
     frame,
-    scales
+    scales,
+    scaleTypeRef,
+    layoutRef
   } = usePrint(props);
   const toolDismissed = useCallback((e: any) => {
     props.toolDismissed();
@@ -92,17 +94,21 @@ const Print = (props: PrintProps) => {
           Page size
           <CalciteSelect
             label={""}
+            ref={layoutRef}
             onCalciteSelectChange={(e) => {
               setSelectedLayout(e.target.selectedOption.value);
-              if (frame.current) {
-                showFrame(
-                  frame.current.checked,
-                  props.view,
-                  selectedLayout,
-                  scaleType,
-                  customScaleSelect
-                );
-              }
+              setTimeout(() => {
+                if (frame.current) {
+                  showFrame(
+                    frame.current.checked,
+                    props.view,
+                    customScaleSelect,
+                    scaleTypeRef.current,
+                    layoutRef.current
+                  );
+                }
+              }, 250);
+
             }}
           >
             {layouts.map((layout, i) => {
@@ -135,22 +141,27 @@ const Print = (props: PrintProps) => {
             })}
           </CalciteSelect>
         </CalciteLabel>
-        <CalciteRadioButtonGroup name="scale-radio">
+        <CalciteRadioButtonGroup name="scale-radio" ref={scaleTypeRef}>
           <CalciteLabel layout="inline">
             <CalciteRadioButton
               checked={scaleType === "current" ? true : undefined}
               value="current"
               onCalciteRadioButtonChange={(e) => {
-                setScaleType(e.target.value);
-                if (frame.current) {
-                  showFrame(
-                    frame.current.checked,
-                    props.view,
-                    selectedLayout,
-                    scaleType,
-                    customScaleSelect
-                  );
+                if (e.target.checked) {
+                  setScaleType(e.target.value);
+                  setTimeout(() => {
+                    if (frame.current) {
+                      showFrame(
+                        frame.current.checked,
+                        props.view,
+                        customScaleSelect,
+                        scaleTypeRef.current,
+                        layoutRef.current
+                      );
+                    }
+                  },250)
                 }
+
               }}
             ></CalciteRadioButton>
             Current Scale
@@ -160,15 +171,21 @@ const Print = (props: PrintProps) => {
               checked={scaleType === "custom" ? true : undefined}
               value="custom"
               onCalciteRadioButtonChange={(e) => {
-                setScaleType(e.target.value);
-                if (frame.current) {
-                  showFrame(
-                    frame.current.checked,
-                    props.view,
-                    selectedLayout,
-                    scaleType,
-                    customScaleSelect
-                  );
+                if (e.target.checked) {
+                  setCustomScale(scales[0].scale)
+                  setScaleType(e.target.value);
+                  setTimeout(() => {
+                    if (frame.current) {
+                      showFrame(
+                        frame.current.checked,
+                        props.view,
+                        customScaleSelect,
+                        scaleTypeRef.current,
+                        layoutRef.current
+                      );
+                    }
+                  }, 250)
+              
                 }
               }}
             ></CalciteRadioButton>
@@ -188,9 +205,9 @@ const Print = (props: PrintProps) => {
                   showFrame(
                     frame.current.checked,
                     props.view,
-                    selectedLayout,
-                    scaleType,
-                    customScaleSelect
+                    customScaleSelect,
+                    scaleTypeRef.current,
+                    layoutRef.current
                   );
                 }
               }}

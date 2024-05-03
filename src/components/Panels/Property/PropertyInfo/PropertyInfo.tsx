@@ -50,7 +50,7 @@ function PropertyInfo(props: PropertyInfoProps) {
     if (window.history.state?.pins !== pin) {
       window.history.pushState({ pins: pin }, "", url);
     }
-  }, [props.feature, props.featureTable]);
+  }, [props.feature]);//20240503 - removed props.featureTable
   return <div ref={ref}></div>;
 }
 

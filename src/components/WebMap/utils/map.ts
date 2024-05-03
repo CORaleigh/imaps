@@ -14,12 +14,14 @@ import Color from '@arcgis/core/Color';
 import Collection from '@arcgis/core/core/Collection';
 import esriConfig from "@arcgis/core/config";
 import * as geometryEngine from '@arcgis/core/geometry/geometryEngine';
+import { Alert } from '../../Shell/utils/alert';
 
 export const initializeMap = async (
   ref: HTMLDivElement,
   mapId: string,
   geometrySet: Function,
   widgetActivated: Function,
+  alertSet?: Function | undefined
 ): Promise<MapView> => {
   const view = new MapView({
     container: ref,
@@ -30,7 +32,25 @@ export const initializeMap = async (
   const webmap: WebMap = await getWebMap(mapId);
   view.map = webmap;
   addWidgets(view, widgetActivated);
-  await view.when();
+  await view.when().catch(error => {
+   const alert: Alert = {
+      show: true,
+      autoClose: false,
+      duration: 'fast',
+      kind: 'danger',
+      title: 'WebGL 2 Required',
+      message: `Sorry, it appears that your graphics card doesn't support WebGL 2, which is required for this application. We recommend checking your browser settings or using a device with a more capable graphics card or updating your current hardware if possible. If you have any questions or need further assistance, please don't hesitate to contact us.  We have also made the previous version available, which does not have this requirement, however it will not receive any future updates.`,
+      link: {
+        text: "Previous Version",
+        url: "https://maps.raleighnc.gov/imaps-legacy",
+        show: true
+      }
+    };
+    if (alertSet) {
+      alertSet(alert);
+
+    }
+  });
   removeGraphicsLayers(view);
   view.map.add(selectionLayer);
   view.map.add(selectionCluster);

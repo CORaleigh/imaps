@@ -194,6 +194,7 @@ function Shell() {
         geometrySet={geometryCallback}
         properties={properties}
         widgetActivated={widgetCallback}
+        alertSet={alertSet}
       ></WebMap>
       <CalciteScrim loading hidden={!loading ? true : undefined}></CalciteScrim>
     </CalciteShell>

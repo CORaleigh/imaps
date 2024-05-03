@@ -17,8 +17,11 @@ const usePrint = (props: PrintProps) => {
   const jobRef = useRef<any[]>([]);
   const frame = useRef<HTMLCalciteCheckboxElement>(null);
   const scale = useRef<HTMLCalciteSelectElement>(null);
+  const scaleTypeRef = useRef<HTMLCalciteRadioButtonGroupElement>(null);
 
   const [layouts, setLayouts] = useState<any[]>([]);
+  const layoutRef = useRef<HTMLCalciteSelectElement>(null);
+
   const [formats, setFormats] = useState<string[]>([]);
   const [scales, setScales] = useState<any[]>([]);
 
@@ -58,9 +61,9 @@ const usePrint = (props: PrintProps) => {
       showFrame(
         e.target.checked,
         props.view,
-        selectedLayout,
-        scaleType,
-        customScaleSelect
+        customScaleSelect,
+        scaleTypeRef.current,
+        layoutRef.current
       );
     },
     [selectedLayout, scaleType, customScale]
@@ -90,7 +93,9 @@ const usePrint = (props: PrintProps) => {
     showFrameChanged,
     frame,
     scale,
-    scales
+    scales,
+    scaleTypeRef,
+    layoutRef
   };
 };
 

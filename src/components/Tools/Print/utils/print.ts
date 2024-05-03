@@ -363,9 +363,9 @@ let mapViewStationary: any = null;
 export const showFrame = (
   show: boolean,
   view: MapView,
-  selectedLayout: any,
-  scaleType: string,
   customScaleSelect: any,
+  scaleTypeRef: HTMLCalciteRadioButtonGroupElement | null,
+  layoutRef: HTMLCalciteSelectElement | null
 ) => {
   let graphics = view.map.findLayerById('print-graphic') as GraphicsLayer;
   if (!graphics) {
@@ -374,18 +374,27 @@ export const showFrame = (
   }
   graphics.removeAll();
   let customScale: any = null;
-  // if (customScaleSelect.current) {
-  //   customScale = customScaleSelect.current.value;
-  // }
+  if (scaleTypeRef?.selectedItem.value == "custom") {
+    if (customScaleSelect.current.value) {
+      customScale = parseInt(customScaleSelect.current.value);
+    } else {
+      customScale = getScales(view).at(0)?.scale
+    }
+  }
+
   if (show) {
-    addPrintGraphic(graphics, view, selectedLayout, scaleType, customScale);
+    addPrintGraphic(graphics, view, layoutRef?.selectedOption?.value, scaleTypeRef?.selectedItem?.value, customScale);
 
     mapViewStationary = view.watch('stationary', (stationary) => {
       graphics.removeAll();
-      // if (customScaleSelect.current) {
-      //   customScale = customScaleSelect.current.value;
-      // }
-      addPrintGraphic(graphics, view, selectedLayout, scaleType, customScale);
+      if (scaleTypeRef?.selectedItem.value == "custom") {
+        if (customScaleSelect.current.value) {
+          customScale = parseInt(customScaleSelect.current.value);
+        } else {
+          customScale = getScales(view).at(0)?.scale
+        }
+      }
+      addPrintGraphic(graphics, view, layoutRef?.selectedOption?.value, scaleTypeRef?.selectedItem?.value, customScale);
     });
   } else {
     if (mapViewStationary) {
@@ -406,7 +415,8 @@ const addPrintGraphic = (
     const center = projection.project(view.extent.center, {
       wkid: 2264,
     }) as __esri.Point;
-    const layout = selectedLayout.template ? selectedLayout : JSON.parse(selectedLayout);
+    
+    const layout = selectedLayout?.template ? selectedLayout : JSON.parse(selectedLayout);
     const selectedTemplate = layout.template.replace('.', '');
     const template = printTemplates.results[0].value.filter((value) => {
       return value.layoutTemplate === selectedTemplate;

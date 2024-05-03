@@ -40,6 +40,10 @@ calcite-loader {
   height: 100%;
 }
 
+.property {
+  overflow-x: hidden;
+}
+
 .tool-panel {
   position: absolute;
   max-width: 350px;
@@ -87,6 +91,7 @@ calcite-tip-manager {
     --calcite-shell-panel-max-width: 100vw;
 
   }
+  
 
   calcite-shell-panel > calcite-action-bar {
     right: 0;

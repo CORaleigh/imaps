@@ -85,7 +85,6 @@ const useCoordinates = (props: CoordinateProps) => {
     []
   );
   const searchCoordinates = useCallback(async (e: any) => {
-    debugger
     if (coordInput.current?.value === '') {
       coordInput.current?.setAttribute('status', 'invalid');   
       return;   
@@ -128,7 +127,6 @@ const useCoordinates = (props: CoordinateProps) => {
       }
     }
     if (formatRef.current.value === "spft") {
-      debugger
       const value = coordInput.current?.value.replace(/\s\s+/g, ' ');
       let coords = value?.split(' ');
       if (coords?.length !== 2) {

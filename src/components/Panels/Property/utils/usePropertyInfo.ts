@@ -39,7 +39,7 @@ const usePropertyInfo = (props: PropertyInfoProps) => {
       }
     }
     const url = new URL(window.location as any);
-    url.searchParams.delete("pin");
+    //url.searchParams.delete("pin");
 
     if (pin !== "") {
       url.searchParams.set("pin", pin);

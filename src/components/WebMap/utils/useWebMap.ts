@@ -17,7 +17,8 @@ const useWebMap = (props: WebMapProps) => {
         ref.current,
         props.mapId,
         props.geometrySet,
-        props.widgetActivated
+        props.widgetActivated,
+        props.alertSet
       ).then(mapView => {
         view.current = mapView;
         props.mapViewSet(view.current);

@@ -131,6 +131,7 @@ const useShell = () => {
 
   };
   const alertSet = (alert: Alert) => {    
+    setLoading(false);
     setAlert(alert);
   }
   const getMapId = () => {

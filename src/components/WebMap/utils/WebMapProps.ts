@@ -4,4 +4,5 @@ export interface WebMapProps {
   mapViewSet: Function;
   geometrySet: Function;
   widgetActivated: Function;
+  alertSet?: Function | undefined;
 }
