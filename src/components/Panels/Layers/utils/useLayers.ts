@@ -12,9 +12,9 @@ const useLayers = (props: PanelProps) => {
   const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
-    if (!loaded.current) {
+    if (!loaded.current && props.mapId) {
       loaded.current = true;
-      initializeLayers(ref.current, props.view).then(
+      initializeLayers(ref.current, props.view, props.mapId).then(
         (layerList: __esri.LayerList) => {
           setLayerList(layerList);
           layerList.when(() => {

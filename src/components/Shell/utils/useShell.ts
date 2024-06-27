@@ -10,6 +10,9 @@ import { Alert } from "./alert";
 import { addShortcuts } from "./shortcuts";
 
 const useShell = () => {
+  const [mapId, setMapId] = useState("95092428774c4b1fb6a3b6f5fed9fbc4")
+  const [logo, setLogo] = useState({dark: "logo_dark.svg", light: "logo.csv"})
+
   const [activePanel, setActivePanel] = useState("search");
   const [activeTool, setActiveTool] = useState("");
   const loaded = useRef(false);
@@ -57,12 +60,24 @@ const useShell = () => {
       }
       loaded.current = true;
       const loadConfig = async (file: string) => {
-        const response = await fetch(file);
-        const config = await response.json();
-        setAlert(config.alert);
+        try {
+          const response = await fetch(file);
+          const config = await response.json();
+          setAlert(config.alert);
+          setMapId(getMapId(config) as string);
+          setLogo({dark: config.logo.dark, light: config.logo.light});
+          document.title = config.title;
+        } catch {
+          loadConfig('./config.json');
+        }
+
       }
-      loadConfig('./config.json');
-      
+      const url = new URL(window.location.href);
+      if (url.searchParams.get('config')) {
+        loadConfig(`./${url.searchParams.get('config')}.json`)
+      } else {
+        loadConfig('./config.json');
+      }
     }
   }, []);
 
@@ -134,9 +149,9 @@ const useShell = () => {
     setLoading(false);
     setAlert(alert);
   }
-  const getMapId = () => {
+  const getMapId = (config: any) => {
     const url = new URL(window.location.href);
-    const mapId = url.searchParams.get('id') ? url.searchParams.get('id') : '95092428774c4b1fb6a3b6f5fed9fbc4';   
+    const mapId = url.searchParams.get('id') ? url.searchParams.get('id') : config.mapId ? config.mapId : '95092428774c4b1fb6a3b6f5fed9fbc4';   
     return mapId;    
   }
   return {
@@ -162,9 +177,10 @@ const useShell = () => {
     alert,
     tipsCallback,
     tips,
-    getMapId,
+    mapId,
     showDisclaimer, 
-    setShowDisclaimer    
+    setShowDisclaimer,
+    logo
   };
 };
 

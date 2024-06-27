@@ -1,10 +1,10 @@
 {
-    "title": "iMAPS",
+    "title": "PUMA",
     "logo": {
-      "light": "logo.svg",
-      "dark": "logo_dark.svg"
+      "light": "puma.svg",
+      "dark": "puma_dark.svg"
     },
-    "mapId": "95092428774c4b1fb6a3b6f5fed9fbc4",
+    "mapId": "1feff5b9d152475b828c8483b12a86bb",
     "alert": {
         "show": false,
         "autoClose": false,

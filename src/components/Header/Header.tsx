@@ -13,8 +13,7 @@ import {
 import React, { useEffect, useRef, useState } from 'react';
 import './Header.css';
 import { reopenDropdown, toggleTheme } from './utils/header';
-function Header(props: {disclaimerClicked: Function}) {
-  const logo = useRef<HTMLImageElement>(null);
+function Header(props: {disclaimerClicked: Function, logo: any}) {
   const ref = useRef<HTMLCalciteDropdownElement>();
 
   // const shortcuts = useRef<HTMLCalciteModalElement>();
@@ -39,7 +38,7 @@ function Header(props: {disclaimerClicked: Function}) {
   }, []);
   return (
     <CalciteNavigation slot="header" label='header'>
-      <CalciteNavigationLogo slot="logo" heading="" thumbnail={theme === 'dark' ? 'logo_dark.svg' : 'logo.svg'} target="_blank" href="https://www.wake.gov/departments-government/geographic-information-services-gis/maps-apps-data/imaps-information" ></CalciteNavigationLogo>
+      {props.logo && <CalciteNavigationLogo slot="logo" heading="" thumbnail={theme === 'dark' ? props.logo.dark :  props.logo.light} target="_blank" href="https://www.wake.gov/departments-government/geographic-information-services-gis/maps-apps-data/imaps-information" ></CalciteNavigationLogo>}
         <CalciteDropdown
         slot="content-end"
           ref={ref as any}
@@ -114,6 +113,8 @@ function Header(props: {disclaimerClicked: Function}) {
                 let id: string = '';
                 if (url.searchParams.get('id')) {
                   id += url.searchParams.get('id');
+                } else if (url.searchParams.get('config')) {
+                  id += url.searchParams.get('config');
                 }
                 window.localStorage.removeItem(`imaps_webmap_${id}`);
                 window.localStorage.removeItem('imaps_alert_read');

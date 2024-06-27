@@ -53,14 +53,15 @@ function Shell() {
     alert,
     tipsCallback,
     tips,
-    getMapId,
+    mapId,
     showDisclaimer, 
-    setShowDisclaimer
+    setShowDisclaimer,
+    logo
   } = useShell();
   return (
     <div>
     <CalciteShell contentBehind={contentBehind ? true : undefined}>
-      <Header disclaimerClicked={() => setShowDisclaimer(true)}></Header>
+      <Header disclaimerClicked={() => setShowDisclaimer(true)} logo={logo}></Header>
       <CalciteShellPanel slot="panel-start" position="start" hidden></CalciteShellPanel>
       <CalciteShellPanel
         className="custom-width"
@@ -107,6 +108,7 @@ function Shell() {
               panelDismissed={panelDismissed}
               isActive={activePanel === "layers"}
               showTips={tipsCallback}
+              mapId={mapId}
             ></Layers>
           </Suspense>
         )}
@@ -189,7 +191,7 @@ function Shell() {
         )}
       </div>
       <WebMap
-        mapId={getMapId() as string}
+        mapId={mapId}
         mapViewSet={mapCallback}
         geometrySet={geometryCallback}
         properties={properties}

@@ -4,4 +4,5 @@ export interface PanelProps {
     panelDismissed: Function;
     showTips: Function;
     alertSet?: Function | undefined;
+    mapId? : String;
 }
