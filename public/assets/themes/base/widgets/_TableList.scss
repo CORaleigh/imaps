@@ -11,6 +11,18 @@
     @include layerListStatusIndicator();
   }
 
+  .esri-table-list__item-action-image {
+    @include layerListActionImage();
+  }
+
+  .esri-table-list__action-menu .esri-table-list__action-group {
+    display: none;
+  }
+
+  .esri-table-list__action-menu[open] .esri-table-list__action-group {
+    display: flex;
+  }
+
   .esri-table-list__publishing {
     @include layerListPublishingIndicator();
 

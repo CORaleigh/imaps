@@ -2,6 +2,7 @@
   .esri-sketch-tooltip-controls {
     display: flex;
     flex-flow: column wrap;
+    min-width: 100%;
 
     &__block {
       margin: 0;

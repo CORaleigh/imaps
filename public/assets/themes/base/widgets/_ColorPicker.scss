@@ -49,24 +49,7 @@
     }
 
     &__popover {
-      @include defaultBoxShadow();
-
-      background: var(--calcite-color-foreground-1); //  match color picker background
-      width: 272px; // calcite-color-picker may not render immediately, so we make sure we have the right width right away.
-      max-height: 70vh;
-      overflow: hidden auto;
-    }
-
-    &__opacity-slider-container {
-      padding: $cap-spacing $side-spacing;
-    }
-
-    &__opacity-slider {
-      margin-inline: 8px; // Align slider handles
-    }
-
-    &__calcite-color-picker {
-      --calcite-color-border-1: transparent;
+      --calcite-color-border-1: none;
     }
   }
 }

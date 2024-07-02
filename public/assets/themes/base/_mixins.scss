@@ -511,8 +511,10 @@
 
     .esri-slider__tick-label {
       margin-top: $cap-spacing;
+      width: min-content; // Ensure the values like 12AM wrap.
       text-align: center;
-      line-height: normal;
+      line-height: 1.1em;
+      word-break: normal;
       font-size: $font-size--tiny-time-slider;
     }
 
@@ -549,6 +551,17 @@
 @mixin layerListStatusIndicator() {
   visibility: hidden;
   color: transparent;
+}
+
+@mixin layerListActionImage() {
+  flex: 0 0 16px;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 16px;
+  height: 16px;
+  text-align: center;
+  font-size: 14px;
 }
 
 @mixin layerListPublishingIndicator() {

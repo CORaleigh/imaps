@@ -30,13 +30,14 @@ export const initializeFeatureTable = async (ref: HTMLDivElement, view: MapView)
     },
     menuConfig: {
       items: [
-        new ButtonMenuItem({
+        {
           label: 'Export',
-          iconClass: 'esri-icon-download',
+          icon: 'export',
           clickFunction: () => {
             exportTable(featureTable);
           },
-        }),
+          hidden: () => false
+        },
       ],
     },
     tableTemplate: getTableTemplate(),
@@ -210,7 +211,8 @@ const exportTable = async (table: FeatureTable) => {
 
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   saveAs(blob, exportedFilename);
-  table.menu.open = false;
+  table.menuConfig.open = false;
+  //table.menu.open = false;
   // const link = document.createElement('a');
   // if (link.download !== undefined) {
   //   const url = URL.createObjectURL(blob);

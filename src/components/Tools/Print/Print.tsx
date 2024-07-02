@@ -1,59 +1,51 @@
-import {
-  CalciteButton,
-  CalciteCheckbox,
-  CalciteInput,
-  CalciteLabel,
-  CalciteLink,
-  CalciteLoader,
-  CalciteOption,
-  CalciteRadioButton,
-  CalciteRadioButtonGroup,
-  CalciteSelect,
-  CalcitePanel,
-  CalciteAction,
-  CalciteTooltip,
-} from "@esri/calcite-components-react";
-import React, { useCallback } from "react";
-import "./Print.css";
-import { getScales, exportClicked, showFrame } from "./utils/print";
-
-import { collapsePanel } from "../../Shell/utils/shell";
-import usePrint from "./utils/usePrint";
+import React from "react";
 import { PrintProps } from "./utils/PrintProps";
+import { CalcitePanel, CalciteAction, CalciteTooltip, CalciteTabs, CalciteTabTitle, CalciteTabNav, CalciteTab, CalciteLabel, CalciteInput, CalciteSelect, CalciteOption, CalciteRadioButtonGroup, CalciteRadioButton, CalciteSwitch, CalciteButton, CalciteList, CalciteListItem, CalciteLoader, CalciteIcon } from "@esri/calcite-components-react";
+import { collapsePanel } from "../../Shell/utils/shell";
+import usePrint from "./usePrint";
+import "./Print.css";
+import { roundScale } from "./utils/print";
+
 const Print = (props: PrintProps) => {
-  const {
-    isActive,
-    title,
-    setSelectedLayout,
-    layouts,
-    selectedFormat,
-    setSelectedFormat,
-    formats,
-    setScaleType,
-    scaleType,
-    customScaleSelect,
-    setCustomScale,
-    customScale,
-    userDefined,
-    selectedProperty,
-    selectedLayout,
-    attributes,
-    legend,
-    setJobs,
-    jobs,
-    jobRef,
-    tipsClicked,
-    showFrameChanged,
-    frame,
-    scales,
-    scaleTypeRef,
-    layoutRef
-  } = usePrint(props);
-  const toolDismissed = useCallback((e: any) => {
-    props.toolDismissed();
-  }, []);
-  return (
-    <CalcitePanel
+    const {        
+        isActive,
+        toolDismissed,
+        tipsClicked,
+        selectedTab,
+        tabChanged,
+        layouts,
+        layoutChanged,
+        selectedLayout,
+        formats,
+        formatChanged,
+        useCustomScale,
+        scales,
+        customScaleChanged,
+        showFrameChanged,
+        showLegendChanged,
+        showFrame,
+        showLegend,
+        titleChanged,
+        exports,
+        exportClicked,
+        selectedFormat,
+        customScale,
+        setExports,
+        showAttributes,
+        showAttributesChanged,
+        fileNameChanged,
+        selectedImageFormat,
+        imageFormatChanged,
+        imageHeight,
+        imageWidth,
+        imageHeightChanged,
+        imageWidthChanged,
+        scaleTypeChanged,
+        userDefinedScaleChanged,
+        swapWidthHeight
+    } = usePrint(props)
+    return (
+<CalcitePanel
       id="print-panel"
       heading="Print"
       data-panel="print"
@@ -85,246 +77,197 @@ const Print = (props: PrintProps) => {
       >
         Collapse
       </CalciteTooltip>
-      <div id="print-container">
-        <CalciteLabel>
-          Title
-          <CalciteInput ref={title} maxLength={50}></CalciteInput>
-        </CalciteLabel>
-        <CalciteLabel>
-          Page size
-          <CalciteSelect
-            label={""}
-            ref={layoutRef}
-            onCalciteSelectChange={(e) => {
-              setSelectedLayout(e.target.selectedOption.value);
-              setTimeout(() => {
-                if (frame.current) {
-                  showFrame(
-                    frame.current.checked,
-                    props.view,
-                    customScaleSelect,
-                    scaleTypeRef.current,
-                    layoutRef.current
-                  );
-                }
-              }, 250);
-
-            }}
-          >
-            {layouts.map((layout, i) => {
-              return (
-                <CalciteOption
-                  key={i}
-                  label={layout.label}
-                  value={JSON.stringify(layout)}
-                ></CalciteOption>
-              );
-            })}
-          </CalciteSelect>
-        </CalciteLabel>
-        <CalciteLabel>
-          File format
-          <CalciteSelect
-            label={""}
-            onCalciteSelectChange={(e) =>
-              setSelectedFormat(e.target.selectedOption.value)
-            }
-          >
-            {formats.map((format, i) => {
-              return (
-                <CalciteOption
-                  key={i}
-                  label={format}
-                  value={format}
-                ></CalciteOption>
-              );
-            })}
-          </CalciteSelect>
-        </CalciteLabel>
-        <CalciteRadioButtonGroup name="scale-radio" ref={scaleTypeRef}>
-          <CalciteLabel layout="inline">
-            <CalciteRadioButton
-              checked={scaleType === "current" ? true : undefined}
-              value="current"
-              onCalciteRadioButtonChange={(e) => {
-                if (e.target.checked) {
-                  setScaleType(e.target.value);
-                  setTimeout(() => {
-                    if (frame.current) {
-                      showFrame(
-                        frame.current.checked,
-                        props.view,
-                        customScaleSelect,
-                        scaleTypeRef.current,
-                        layoutRef.current
-                      );
-                    }
-                  },250)
-                }
-
-              }}
-            ></CalciteRadioButton>
-            Current Scale
-          </CalciteLabel>
-          <CalciteLabel layout="inline">
-            <CalciteRadioButton
-              checked={scaleType === "custom" ? true : undefined}
-              value="custom"
-              onCalciteRadioButtonChange={(e) => {
-                if (e.target.checked) {
-                  setCustomScale(scales[0].scale)
-                  setScaleType(e.target.value);
-                  setTimeout(() => {
-                    if (frame.current) {
-                      showFrame(
-                        frame.current.checked,
-                        props.view,
-                        customScaleSelect,
-                        scaleTypeRef.current,
-                        layoutRef.current
-                      );
-                    }
-                  }, 250)
-              
-                }
-              }}
-            ></CalciteRadioButton>
-            Custom Scale
-          </CalciteLabel>
-        </CalciteRadioButtonGroup>
-        {scaleType === "custom" && (
-          <CalciteLabel>
-            Scale
-            <CalciteSelect
-              ref={customScaleSelect}
-              label={""}
-              value={customScale}
-              onCalciteSelectChange={(e) => {
-                setCustomScale(e.target.selectedOption.value);
-                if (frame.current) {
-                  showFrame(
-                    frame.current.checked,
-                    props.view,
-                    customScaleSelect,
-                    scaleTypeRef.current,
-                    layoutRef.current
-                  );
-                }
-              }}
-            >
-              {props?.view &&
-                scales.map((scale, i) => {
-                  return (
-                    <CalciteOption
-                      key={i}
-                      label={scale.label}
-                      value={scale.scale}
-                      selected={scale.scale === customScale}
-                    ></CalciteOption>
-                  );
-                })}
-            </CalciteSelect>
-          </CalciteLabel>
-        )}
-        {scaleType === "custom" && customScale === "custom" && (
-          <CalciteInput
-            ref={userDefined}
-            type="number"
-            prefixText={`1" = `}
-            suffixText={`'`}
-            min={1}
-            max={50000}
-          ></CalciteInput>
-        )}
-        <br />
-        {selectedProperty && (
-          <CalciteLabel layout="inline">
-            <CalciteCheckbox
-              ref={attributes}
-              value="attributes"
-            ></CalciteCheckbox>
-            Include attributes?
-          </CalciteLabel>
-        )}
-        <CalciteLabel layout="inline">
-          <CalciteCheckbox ref={legend} value="legend"></CalciteCheckbox>Include
-          Legend?
-        </CalciteLabel>
-        <CalciteLabel layout="inline">
-          <CalciteCheckbox
-            ref={frame}
-            value="frameChecked"
-            onCalciteCheckboxChange={showFrameChanged}
-          ></CalciteCheckbox>
-          Show map frame?
-        </CalciteLabel>
-        <CalciteButton
-          width="full"
-          onClick={() => {
-            exportClicked(
-              props.view,
-              props.exportUrl,
-              scaleType,
-              customScale,
-              userDefined?.current?.value,
-              selectedLayout,
-              selectedFormat,
-              selectedProperty,
-              title.current?.value,
-              attributes.current?.checked,
-              legend.current?.checked,
-              jobRef,
-              jobs,
-              setJobs
-            );
-          }}
-        >
-          Export
-        </CalciteButton>
-        <hr></hr>
-        <h4>Exported files</h4>
-        {jobs.length <= 0 && <p>Your exported files will appear here</p>}
-        <div id="printJobs">
-          {jobs.map((job: any) => {
-            return (
-              <div key={`printjob_${job.submitted}`} className="print-job">
-                {job.loading && (
-                  <div>
-                    <CalciteLoader scale="s" inline label={""}></CalciteLoader>
-                    <span className="loader-text">{`${
-                      job.title !== "" ? job.title : "untitled"
-                    }`}</span>
-                  </div>
-                )}
-                {job.url && !job.loading && (
-                  <div>
-                    <CalciteLink
-                      target="_blank"
-                      icon-start="download"
-                      href={job.url}
-                    >{`${
-                      job.title !== "" ? job.title : "untitled"
-                    }`}</CalciteLink>
-                    <CalciteButton
-                      appearance="transparent"
-                      icon-start="x"
-                      scale="s"
-                      onClick={() => {
-                        jobRef.current = jobs.filter(
-                          (item) => item.title !== job.title
+        <CalciteTabs layout="inline" position="top">
+            <CalciteTabNav slot="title-group">
+                <CalciteTabTitle onCalciteTabsActivate={tabChanged} title="layout"  selected={selectedTab == "layout"}>Layout</CalciteTabTitle>
+                <CalciteTabTitle onCalciteTabsActivate={tabChanged} title="map"  selected={selectedTab == "map"}>Map Only</CalciteTabTitle>
+                <CalciteTabTitle onCalciteTabsActivate={tabChanged} title="exports" selected={selectedTab == "exports"}>Exports</CalciteTabTitle>
+            </CalciteTabNav>
+            <CalciteTab>
+                <div id="print-container">
+                <CalciteLabel>
+                    Title
+                    <CalciteInput  onCalciteInputInput={titleChanged}></CalciteInput>
+                </CalciteLabel>
+                <CalciteLabel>
+                    Page Size
+                    <CalciteSelect label={""} onCalciteSelectChange={layoutChanged}>
+                    {layouts.map((layout, i) => {
+                        return (
+                            <CalciteOption
+                            key={i}
+                            label={layout.label}
+                            value={layout}
+                            selected={layout.template === selectedLayout?.template}
+                            ></CalciteOption>
                         );
-                        setJobs(jobs.filter((item) => item !== job));
-                      }}
-                    ></CalciteButton>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </CalcitePanel>
-  );
-}
+                    })}
+                    </CalciteSelect>
+                </CalciteLabel>
+                <CalciteLabel>
+                    Format
+                    <CalciteSelect label={""} onCalciteSelectChange={formatChanged}>
+                    {formats.map((format, i) => {
+                        return (
+                            <CalciteOption
+                            key={i}
+                            label={format}
+                            value={format}
+                            selected={format === selectedFormat ? true : undefined}
+                            ></CalciteOption>
+                        );
+                    })}
+                    </CalciteSelect>
+                </CalciteLabel>      
+                <CalciteRadioButtonGroup name={""} layout="horizontal">
+                    <CalciteLabel layout="inline">
+                        <CalciteRadioButton 
+                        checked={useCustomScale ? undefined : true} 
+                        onCalciteRadioButtonChange={scaleTypeChanged} value="current"></CalciteRadioButton>
+                        Current Scale
+                    </CalciteLabel>
+                    <CalciteLabel  layout="inline">
+                    <CalciteRadioButton   checked={useCustomScale ? true : undefined} value="custom" 
+                        onCalciteRadioButtonChange={scaleTypeChanged} ></CalciteRadioButton>
+                        Custom Scale
+                    </CalciteLabel>                    
 
+                </CalciteRadioButtonGroup>  
+                {useCustomScale && <CalciteLabel>
+                    Scale
+                    <CalciteSelect label={""} 
+                        onCalciteSelectChange={customScaleChanged}>
+                    {scales.map((scale, i) => {
+                        return (
+                            <CalciteOption
+                            key={i}
+                            label={scale.label}
+                            value={scale}
+                            selected={scale.scale === customScale?.scale ? true : undefined}
+                            ></CalciteOption>
+                        );
+                    })}
+                    </CalciteSelect>
+                </CalciteLabel>     
+
+                }  
+           
+                {customScale?.scale === "custom" && 
+                     (
+                        <div>
+                    <CalciteInput 
+                    type="number"
+                    prefixText="1 in"
+                    suffixText="ft"
+                    onCalciteInputInput={userDefinedScaleChanged}
+                ></CalciteInput>
+                <br/>
+                </div>)
+                }
+                {props.selectedProperty && 
+                    <CalciteLabel  layout="inline">
+                        <CalciteSwitch  checked={showAttributes ? true : undefined} onCalciteSwitchChange={showAttributesChanged} ></CalciteSwitch>
+                        Show property attributes
+                    </CalciteLabel>
+                }                    
+                <CalciteLabel layout="inline">
+                    <CalciteSwitch checked={showLegend ? true : undefined} onCalciteSwitchChange={showLegendChanged}></CalciteSwitch>
+                    Show legend
+                </CalciteLabel>
+            
+                <CalciteLabel  layout="inline">
+                    <CalciteSwitch  checked={showFrame ? true : undefined} onCalciteSwitchChange={showFrameChanged}></CalciteSwitch>
+                    Show print area
+                </CalciteLabel>
+
+                <CalciteButton width="full" onClick={exportClicked}>Export</CalciteButton>
+                </div>
+            </CalciteTab>
+            <CalciteTab>
+                <div id="print-container">
+                    <CalciteLabel>
+                        File name
+                        <CalciteInput  onCalciteInputInput={fileNameChanged}></CalciteInput>
+                    </CalciteLabel>
+                    <CalciteLabel>
+                        Format
+                        <CalciteSelect label={""} onCalciteSelectChange={imageFormatChanged}>
+                        {formats.map((format, i) => {
+                            return (
+                                <CalciteOption
+                                key={i}
+                                label={format}
+                                value={format}
+                                selected={format === selectedImageFormat ? true : undefined}
+                                ></CalciteOption>
+                            );
+                        })}
+                        </CalciteSelect>
+                    </CalciteLabel>     
+                    <div className="map-only-size">
+                        <CalciteLabel>
+                            Width
+                            <CalciteInput onCalciteInputChange={imageWidthChanged} type="number" value={imageWidth.toString()}></CalciteInput>
+                        </CalciteLabel>
+                        <CalciteLabel>
+                            Height
+                            <CalciteInput onCalciteInputChange={imageHeightChanged} type="number" value={imageHeight.toString()}></CalciteInput>
+                        </CalciteLabel>   
+                        <CalciteButton 
+                            onClick={swapWidthHeight}
+                            iconStart="arrow-right-left" label="swap width/height" appearance="transparent" kind="neutral">
+                        </CalciteButton>
+                    </div>              
+                    <CalciteButton width="full" onClick={exportClicked}>Export</CalciteButton>
+ 
+                </div>
+            </CalciteTab>
+            <CalciteTab>
+                {exports.length > 0 && <CalciteList>
+                    {exports.map((item, i) => {
+                        return (
+                            <CalciteListItem closable 
+                            label={item.title} 
+                            description={item.loading ? 'Generating export' : item.url ? 'Open in new window' : item.error}
+                            key={item.id}
+                            onCalciteListItemClose={(e) => {
+                                setExports(exports.filter((exportItem) => exportItem.id !== item.id));
+                            }}
+                            disabled={item.loading && item.url == '' ? true : undefined}
+                            onCalciteListItemSelect={_ => {
+                                    if (item.url !== undefined) {
+                                        window.open(item.url, '_blank')
+
+                                    }
+                                }
+                            }
+                            >
+                                <div slot="content-start">
+                                    {item.loading && <CalciteLoader class="export-loader" inline  label=""></CalciteLoader>}
+                                    {!item.loading && item.format === "PDF" && <CalciteIcon class="export-loader" scale="s" icon={item.url !== undefined ? "file-pdf"  : "exclamation-mark-circle"}
+                                        className={`${item.error !== undefined ? 'print-error' : ''}`}
+                                    ></CalciteIcon>}
+                                    {!item.loading && item.format !== "PDF" && <CalciteIcon class="export-loader" scale="s" icon={item.url !== undefined  ? "file"  : "exclamation-mark-circle-"}></CalciteIcon>}
+
+                                </div>
+                                <div slot="content-end">
+                                    {!item.loading && item.url && <CalciteIcon class="export-loader" scale="s" icon="launch"></CalciteIcon>}
+
+                                </div>
+                            </CalciteListItem>
+                        );
+                    })}
+                </CalciteList>}
+                {exports.length == 0 && 
+                        <div className="no-exports">
+                        <CalciteIcon scale="l" icon="file"></CalciteIcon>
+                        <h3>No exported files</h3>
+                        <div>When you export a file, it will be shown here. Exports are only stored for a short period of time. Download your export to ensure continued access.</div>
+                        </div>
+                }
+            </CalciteTab>
+        </CalciteTabs>
+    </CalcitePanel>
+    )
+}
 export default React.memo(Print);

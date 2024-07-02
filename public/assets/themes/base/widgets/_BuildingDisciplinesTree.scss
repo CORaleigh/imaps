@@ -41,6 +41,12 @@
     padding-bottom: $side-spacing--quarter;
     font-size: $font-size;
     font-weight: $font-weight--light;
+
+    span {
+      min-width: 0;
+      word-break: break-word;
+      text-wrap: pretty;
+    }
   }
 
   .#{$collapse-toggle} {

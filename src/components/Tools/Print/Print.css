@@ -18,3 +18,24 @@
 .print-job calcite-loader {
   display: flex;
 }
+
+
+.export-loader {
+  position: relative;
+  margin: 0.5em;
+}
+
+.no-exports {
+  text-align: center;
+  margin: 1em;
+}
+
+.map-only-size {
+  flex-direction: row;
+  display: flex;
+  gap: 1em;
+}
+
+.print-error {
+  color: var(--calcite-color-status-danger);
+}

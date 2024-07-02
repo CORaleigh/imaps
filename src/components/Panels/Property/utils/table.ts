@@ -5,7 +5,6 @@ import FieldColumnTemplate from '@arcgis/core/widgets/FeatureTable/support/Field
 import TableTemplate from '@arcgis/core/widgets/FeatureTable/support/TableTemplate';
 import FeatureSet from '@arcgis/core/rest/support/FeatureSet';
 import Graphic from '@arcgis/core/Graphic';
-import ButtonMenuItem from '@arcgis/core/widgets/FeatureTable/Grid/support/ButtonMenuItem';
 import {saveAs} from 'file-saver';
 
 import '../PropertyTable/PropertyTable.css';
@@ -27,18 +26,23 @@ export const initializeFeatureTable = async (
       selectionColumn: false,
       menuItems: {
         refreshData: false,
-        toggleColumns: true
+        toggleColumns: true,
+        clearSelection: false,
+        deleteSelection: false,
+        selectedRecordsShowAllToggle: false,
+        selectedRecordsShowSelectedToggle: false,
+        zoomToSelection: false
       },
     },
     menuConfig: {
-      items: [
-        new ButtonMenuItem({
+      items: [{
           label: 'Export',
-          iconClass: 'esri-icon-download',
+          icon: 'export',
           clickFunction: () => {
             exportTable(featureTable);
           },
-        }),
+          hidden: () => { return false}
+        },
       ],
     },
     tableTemplate: getTableTemplate(table),
@@ -61,7 +65,7 @@ export const initializeFeatureTable = async (
     {passive: true}
   );
   await featureTable?.when();
-  featureTable.menu.items = featureTable.menu.items.reverse();
+  //featureTable.menu.items = featureTable.menu.items.reverse();
 
   featureTable.highlightIds.on('change', async (e) => {
     if (e.added.length) {
@@ -240,7 +244,7 @@ export const updateTable = async (features: Graphic[], featureTable: FeatureTabl
 const updateTableTitle = (featureTable: __esri.FeatureTable, featureCount: number) => {
   
   setTimeout(() => {
-    const title = (featureTable.container as HTMLElement).querySelector('.esri-feature-table__title');
+    const title = (featureTable.container as HTMLElement).querySelector('.esri-feature-table__content')?.shadowRoot?.querySelector('.heading');
     if (title) {
       
       title.textContent = 'Selected Properties: ' + featureCount;
@@ -282,7 +286,8 @@ const exportTable = async (table: FeatureTable) => {
 
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   saveAs(blob, exportedFilename);
-  table.menu.open = false;
+  table.menuConfig.open = false;
+  //table.menu.open = false;
   // const link = document.createElement('a');
   // if (link.download !== undefined) {
   //   const url = URL.createObjectURL(blob);

@@ -47,7 +47,9 @@
   }
 
   .esri-item-list__list-item-icon {
+    place-content: center;
     margin-inline: 0.75rem; // Matches default spacing used by Calcite
+    height: $list-item-height;
   }
 
   .esri-item-list__no-matches-message {

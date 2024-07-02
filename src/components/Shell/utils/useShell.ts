@@ -11,7 +11,7 @@ import { addShortcuts } from "./shortcuts";
 
 const useShell = () => {
   const [mapId, setMapId] = useState("95092428774c4b1fb6a3b6f5fed9fbc4")
-  const [logo, setLogo] = useState({dark: "logo_dark.svg", light: "logo.csv"})
+  const [logo, setLogo] = useState({dark: "logo_dark.svg", light: "logo.svg"})
 
   const [activePanel, setActivePanel] = useState("search");
   const [activeTool, setActiveTool] = useState("");

@@ -49,6 +49,10 @@
         margin: 0;
       }
     }
+
+    .esri-popup--hidden {
+      display: none;
+    }
   }
 
   .esri-popup--shadow {

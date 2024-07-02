@@ -156,6 +156,7 @@
       flex-direction: row;
       border-bottom: var(--divider-border);
       background-color: var(--calcite-color-foreground-1);
+      overflow-wrap: anywhere;
     }
 
     &__settings {
@@ -171,6 +172,10 @@
 
     &__notice {
       margin-bottom: $cap-spacing;
+    }
+
+    .esri-snapping-controls__layer-list {
+      max-height: 220px;
     }
 
     // ---------------------------------------------------------------------------------------------
