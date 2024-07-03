@@ -80,11 +80,11 @@ calcite-tip-manager {
   .esri-expand {
     display: none;
   }
-  .custom-width calcite-panel {
+  /* .custom-width calcite-panel {
     max-width: calc(100vw - 50px);
     position: absolute;
     right: 50px;
-  }
+  } */
 
   .custom-width  {
     --calcite-shell-panel-width: 100vw;
