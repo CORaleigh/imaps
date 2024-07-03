@@ -53,8 +53,8 @@ const addOverview = async (view: __esri.MapView) => {
 
   const overviewExpand = new Expand({
     content: container,
-    expandIconClass: 'esri-icon-overview-arrow-top-left',
-    collapseIconClass: 'esri-icon-overview-arrow-bottom-right',
+    expandIcon: 'esri-icon-overview-arrow-top-left',
+    collapseIcon: 'esri-icon-overview-arrow-bottom-right',
     mode: 'floating',
     label: 'Overview Map',
     collapseTooltip: 'Overview Map',
@@ -78,8 +78,8 @@ const addCoordinates = async (view: __esri.MapView, widgetActivated: Function) =
 
   const coordinateExpand = new Expand({
     content: container,
-    expandIconClass: 'esri-icon-pan',
-    collapseIconClass: 'esri-icon-pan',
+    expandIcon: 'esri-icon-pan',
+    collapseIcon: 'esri-icon-pan',
     mode: 'floating',
     label: 'Coordinates',
     collapseTooltip: 'Coordinates',
