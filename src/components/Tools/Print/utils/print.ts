@@ -172,7 +172,6 @@ export const getLayouts = async (): Promise<Layout[]> => {
       const customElements: any[] = getCustomElements(selectedLayout.size, printScale, showAttributes, selectedProperty);
 
       const printTemplate = getPrintTemplate(view, printScale, selectedFormat, title, template, customElements, selectedTab, imageWidth, imageHeight);
-      
       const graphicsLayer: __esri.GraphicsLayer = view?.map.findLayerById('print-graphic') as __esri.GraphicsLayer;
       if (graphicsLayer) {
         graphicsLayer.visible = false;
@@ -186,7 +185,6 @@ export const getLayouts = async (): Promise<Layout[]> => {
         try {
           const result = await exportMap(view, exportUrl, printTemplate, selectedFormat);
           setTimeout(() => {
-            //graphics.visible = true;
             if (graphicsLayer) {
               graphicsLayer.visible = true;
             }
@@ -368,6 +366,7 @@ export const getLayouts = async (): Promise<Layout[]> => {
       graphics = new GraphicsLayer({ id: 'print-graphic', listMode: 'hide' });
       view.map.add(graphics);
     }
+    graphics.visible = true;
     graphics.removeAll();
     const templateName = getTemplateName(selectedLayout, showAttributes, showLegend)
     
@@ -426,6 +425,7 @@ export const getLayouts = async (): Promise<Layout[]> => {
   export const hidePrintFrame =  (view: MapView) => {
     let graphics = view.map.findLayerById('print-graphic') as GraphicsLayer;
     if (graphics) {
+      graphics.visible = false;
       graphics.removeAll();
     }
     if (mapViewStationary){
