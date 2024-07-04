@@ -380,15 +380,17 @@ export const getLayouts = async (): Promise<Layout[]> => {
       mapViewStationary = view.watch('stationary', (stationary) => {
         if (!stationary) {
           graphics.removeAll();
+        } else {
+          addPrintGraphic(view, graphics, printTemplate, useCustomScale ? printScale : roundScale(view.scale));
+
         }
-        addPrintGraphic(view, graphics, printTemplate, useCustomScale ? printScale : roundScale(view.scale));
       });      
     }
   }
 
   const addPrintGraphic = async (view: MapView, graphics: GraphicsLayer, printTemplate: any, printScale: number) => {
     await projection.load();
-    const extent = projection.project(view.extent.expand(3), {
+    const extent = projection.project(view.extent, {
       wkid: 2264,
     }) as Extent;      
     const center = extent.center;
