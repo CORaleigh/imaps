@@ -122,7 +122,7 @@ const usePrint = (props: PrintProps) => {
         props.view,
         useCustomScale ? printScale : roundScale(props.view.scale),
         selectedLayout,
-        selectedFormat,
+        selectedTab === "layout" ? selectedFormat : selectedImageFormat,
         selectedTab === "layout" ? title : fileName,
         showLegend,
         showAttributes,
@@ -150,7 +150,8 @@ const usePrint = (props: PrintProps) => {
       selectedTab,
       imageHeight,
       imageWidth,
-      fileName
+      fileName,
+      selectedImageFormat
     ]
   );
 

@@ -65,6 +65,7 @@ export const getLayouts = async (): Promise<Layout[]> => {
   export const getFormats = async (url: string): Promise<string[]> => {
     try {
       const result = await request(url, { query: { f: 'json' } });
+      console.log(result)
       const parameter = result.data.parameters.find((parameter: any) => parameter.name === 'Format');
       return parameter?.choiceList;
     } catch (error) {
@@ -157,6 +158,7 @@ export const getLayouts = async (): Promise<Layout[]> => {
     imageHeight: number | undefined
 
   ) => {
+    console.log(selectedFormat)
     const exportId = exports.length === 0 ? 1 : exports[exports.length - 1].id + 1;
     const exportJob: Exports = { loading: true, url: undefined, title: `${title}.${selectedFormat?.toLowerCase()}`, format: selectedFormat ? selectedFormat : '', id: exportId, error: undefined }
     setExports((prevExports: Exports[]) => [
