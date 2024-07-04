@@ -141,6 +141,23 @@ export const getLayouts = async (): Promise<Layout[]> => {
     return 0;
   };
 
+  const getFileExtension = (format: string) => {
+    let extension = format;
+    switch(extension) {
+      case "PNG32":
+        extension = "png";
+        break;
+      case "PNG8":
+        extension = "png";
+      case "TIFF":
+        extension = "tiff";
+    }
+
+    extension = extension.toLowerCase();
+    return extension;
+
+  }
+
   export const prepareExport = (
     view: MapView,
     printScale: number, 
@@ -160,7 +177,7 @@ export const getLayouts = async (): Promise<Layout[]> => {
   ) => {
     console.log(selectedFormat)
     const exportId = exports.length === 0 ? 1 : exports[exports.length - 1].id + 1;
-    const exportJob: Exports = { loading: true, url: undefined, title: `${title}.${selectedFormat?.toLowerCase()}`, format: selectedFormat ? selectedFormat : '', id: exportId, error: undefined }
+    const exportJob: Exports = { loading: true, url: undefined, title: `${title}.${getFileExtension(selectedFormat ? selectedFormat : '')}`, format: selectedFormat ? selectedFormat : '', id: exportId, error: undefined }
     setExports((prevExports: Exports[]) => [
       ...prevExports,
       exportJob
