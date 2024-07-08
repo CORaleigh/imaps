@@ -111,7 +111,7 @@ const initializeGrid = (featureTable: FeatureTable) => {
 
   requestAnimationFrame(() => {
     const grid = (featureTable.container as HTMLElement).querySelector('vaadin-grid') as any;
-    updateTableTitle(featureTable, 0);
+    featureTable.title = "0 properties selected";
     //set tabpanel to 100% in shadowRoot
     (featureTable.container as HTMLElement).parentElement?.shadowRoot
       ?.querySelector('[role="tabpanel"]')
@@ -234,23 +234,14 @@ export const updateTable = async (features: Graphic[], featureTable: FeatureTabl
       requestAnimationFrame(() => {
         featureTable.refresh();
       });
-      updateTableTitle(featureTable, features.length);
+      featureTable.title = `${features.length} ${features.length === 1 ? 'property' : 'properties'} selected`;
     } catch (error) {
       console.log(error);
     }
   }
 };
 
-const updateTableTitle = (featureTable: __esri.FeatureTable, featureCount: number) => {
-  
-  setTimeout(() => {
-    const title = (featureTable.container as HTMLElement).querySelector('.esri-feature-table__content')?.shadowRoot?.querySelector('.heading');
-    if (title) {
-      
-      title.textContent = 'Selected Properties: ' + featureCount;
-    }
-  }, 100);
-};
+
 const exportTable = async (table: FeatureTable) => {
   const result = await (table.layer as FeatureLayer).queryFeatures({ where: '1=1', outFields: ['*'] });
 

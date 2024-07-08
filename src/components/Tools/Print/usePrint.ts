@@ -57,64 +57,67 @@ const usePrint = (props: PrintProps) => {
   }, []);
   const titleChanged = useCallback((e: any) => {
     setTitle(e.target.value);
-  }, []);  
+  }, []);
   const layoutChanged = useCallback((e: any) => {
     setSelectedLayout(e.target.selectedOption.value);
-  }, []);    
+  }, []);
   const formatChanged = useCallback((e: any) => {
     setSelectedFormat(e.target.selectedOption.value);
-  }, []);    
+  }, []);
   const showAttributesChanged = useCallback((e: any) => {
     setShowAttributes(e.target.checked);
-  }, []);      
+  }, []);
   const showLegendChanged = useCallback((e: any) => {
     setShowLegend(e.target.checked);
-  }, []);     
+  }, []);
   const showFrameChanged = useCallback((e: any) => {
     setShowFrame(e.target.checked);
-  }, []);      
+  }, []);
 
   const userDefinedScaleChanged = useCallback((e: any) => {
     setPrintScale(parseInt(e.target.value) * 12);
-  }, []);  
+  }, []);
   const fileNameChanged = useCallback((e: any) => {
     setFileName(e.target.value);
-  }, []);    
+  }, []);
   const imageFormatChanged = useCallback((e: any) => {
     setSelectedImageFormat(e.target.selectedOption.value);
-  }, []); 
+  }, []);
   const imageHeightChanged = useCallback((e: any) => {
     setImageHeight(parseInt(e.target.value));
-  }, []);    
+  }, []);
   const imageWidthChanged = useCallback((e: any) => {
     setImageWidth(parseInt(e.target.value));
-  }, []);   
+  }, []);
 
   const customScaleChanged = useCallback((e: any) => {
     setCustomScale(e.target.selectedOption.value);
     if (!userDefined) {
-        setPrintScale(parseInt(e.target.selectedOption.value.scale));
+      setPrintScale(parseInt(e.target.selectedOption.value.scale));
     }
-  }, []);    
+  }, []);
 
   const swapWidthHeight = useCallback(() => {
     setImageWidth(imageHeight);
     setImageHeight(imageWidth);
-  }, [imageWidth, imageHeight])
+  }, [imageWidth, imageHeight]);
 
-  const scaleTypeChanged = useCallback((e: any) => {
-    setUseCustomScale(e.target.value === "custom");
-    
-    if (e.target.value === "custom" && customScale) {
-      setPrintScale(parseInt(customScale.scale));
-    } else {
-      setPrintScale(roundScale(props.view.scale));
-    }
-  }, [props.view, customScale]);    
+  const scaleTypeChanged = useCallback(
+    (e: any) => {
+      setUseCustomScale(e.target.value === "custom");
+
+      if (e.target.value === "custom" && customScale) {
+        setPrintScale(parseInt(customScale.scale));
+      } else {
+        setPrintScale(roundScale(props.view.scale));
+      }
+    },
+    [props.view, customScale]
+  );
 
   const tabChanged = useCallback((e: any) => {
     setSelectedTab(e.target.title);
-  }, []);      
+  }, []);
 
   const exportClicked = useCallback(
     (e: any) => {
@@ -133,9 +136,8 @@ const usePrint = (props: PrintProps) => {
         selectedTab,
         imageWidth,
         imageHeight
-      );      
+      );
       setSelectedTab("exports");
-
     },
     [
       title,
@@ -151,7 +153,7 @@ const usePrint = (props: PrintProps) => {
       imageHeight,
       imageWidth,
       fileName,
-      selectedImageFormat
+      selectedImageFormat,
     ]
   );
 
@@ -163,12 +165,34 @@ const usePrint = (props: PrintProps) => {
   }, [customScale]);
 
   useEffect(() => {
+    debugger
     if (showFrame && selectedLayout) {
-      showPrintFrame(props.view, selectedLayout, useCustomScale,  useCustomScale ? printScale : roundScale(props.view.scale), showAttributes && props.selectedProperty != undefined, showLegend)
+      showPrintFrame(
+        props.view,
+        selectedLayout,
+        useCustomScale,
+        useCustomScale ? printScale : roundScale(props.view.scale),
+        showAttributes && props.selectedProperty != undefined,
+        showLegend,
+        imageHeight, 
+        imageWidth, 
+        selectedTab        
+      );
     } else {
       hidePrintFrame(props.view);
     }
-  }, [showFrame, selectedLayout, useCustomScale, printScale, showLegend, showAttributes, props.selectedProperty]);
+  }, [
+    showFrame,
+    selectedLayout,
+    useCustomScale,
+    printScale,
+    showLegend,
+    showAttributes,
+    props.selectedProperty,
+    imageHeight, 
+    imageWidth, 
+    selectedTab
+  ]);
 
   useEffect(() => {
     if (!loaded.current) {
@@ -222,7 +246,7 @@ const usePrint = (props: PrintProps) => {
     imageWidthChanged,
     scaleTypeChanged,
     userDefinedScaleChanged,
-    swapWidthHeight
+    swapWidthHeight,
   };
 };
 

@@ -21,6 +21,7 @@ export const initializeFeatureTable = async (ref: HTMLDivElement, view: MapView)
     view: view,
     editingEnabled: false,
     multiSortEnabled: false,
+    title: '0 addresses on property',
     visibleElements: {
       selectionColumn: false,
       menuItems: {
@@ -172,7 +173,7 @@ export const updateTable = async (property: Graphic, featureTable: FeatureTable)
 
       await (featureTable.layer as __esri.FeatureLayer).applyEdits({ deleteFeatures: result.features });
       await (featureTable.layer as __esri.FeatureLayer).applyEdits({ addFeatures: featureSet.features });
-
+      featureTable.title = `${featureSet.features.length} ${featureSet.features.length === 1 ? 'address' : 'addresses'}  on property`
       featureTable.refresh();
     } catch (error) {
       console.log(error);
