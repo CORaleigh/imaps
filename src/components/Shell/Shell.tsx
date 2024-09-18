@@ -210,7 +210,7 @@ function Shell() {
 
     <CalciteDialog open={showDisclaimer}  width-scale="s" onCalciteDialogClose={() => setShowDisclaimer(false)} heading="Disclaimer" id="disclaimer-dialog" placement="center">
         <p>iMAPS makes every effort to produce and publish the most current and accurate information possible. However,
-          the maps are productions for information purposed, and are NOT surveys. No warranties, expressed or implied,
+          the maps are productions for information purposes, and are NOT surveys. No warranties, expressed or implied,
           are provided for the data therein, its use, or its interpretation. Register of Deeds documents accessed
           through this site are unofficial. The official records are maintained at the Wake County Register of Deeds
           office. The Wake County Register of Deeds assumes no responsibility or liability associated with the use or
@@ -247,7 +247,7 @@ function Shell() {
         </div>
         <div slot="content">
           iMAPS makes every effort to produce and publish the most current and accurate information possible. However,
-          the maps are productions for information purposed, and are NOT surveys. No warranties, expressed or implied,
+          the maps are productions for information purposes, and are NOT surveys. No warranties, expressed or implied,
           are provided for the data therein, its use, or its interpretation. Register of Deeds documents accessed
           through this site are unofficial. The official records are maintained at the Wake County Register of Deeds
           office. The Wake County Register of Deeds assumes no responsibility or liability associated with the use or
