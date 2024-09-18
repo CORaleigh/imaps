@@ -94,7 +94,7 @@ const Print = (props: PrintProps) => {
       <CalciteTooltip referenceElement="collapseTool" closeOnClick>
         Collapse
       </CalciteTooltip>
-      <CalciteTabs layout="inline" position="top">
+      <CalciteTabs layout="center" position="top" >
         <CalciteTabNav slot="title-group">
           <CalciteTabTitle
             onCalciteTabsActivate={tabChanged}
@@ -108,7 +108,7 @@ const Print = (props: PrintProps) => {
             title="map"
             selected={selectedTab == "map"}
           >
-            Map Only
+            Map only
           </CalciteTabTitle>
           <CalciteTabTitle
             onCalciteTabsActivate={tabChanged}
@@ -122,7 +122,7 @@ const Print = (props: PrintProps) => {
           <div id="print-container">
             <CalciteLabel>
               Title
-              <CalciteInput onCalciteInputInput={titleChanged}></CalciteInput>
+              <CalciteInput onCalciteInputInput={titleChanged} placeholder="Title of file"></CalciteInput>
             </CalciteLabel>
             <CalciteLabel>
               Page Size
@@ -242,6 +242,7 @@ const Print = (props: PrintProps) => {
               File name
               <CalciteInput
                 onCalciteInputInput={fileNameChanged}
+                placeholder="File name"
               ></CalciteInput>
             </CalciteLabel>
             <CalciteLabel>
@@ -361,7 +362,7 @@ const Print = (props: PrintProps) => {
                           icon={
                             item.url !== undefined
                               ? "file"
-                              : "exclamation-mark-circle-"
+                              : "exclamation-mark-circle"
                           }
                         ></CalciteIcon>
                       )}
