@@ -7,6 +7,7 @@ import {
   CalciteScrim,
   CalciteShell,
   CalciteShellPanel,
+  CalciteDialog
 } from "@esri/calcite-components-react";
 // import WebMap from "../WebMap/WebMap";
 import Header from "../Header/Header";
@@ -206,7 +207,41 @@ function Shell() {
     </CalciteShell>
     <AppTips tips={tips}></AppTips>
     <AppAlert alert={alert} ></AppAlert>
-    <CalciteModal open={showDisclaimer} onCalciteModalClose={() => setShowDisclaimer(false)} aria-labelledby="disclaimer-title">
+
+    <CalciteDialog open={showDisclaimer}  width-scale="s" onCalciteDialogClose={() => setShowDisclaimer(false)} heading="Disclaimer" id="disclaimer-dialog" placement="center">
+        <p>iMAPS makes every effort to produce and publish the most current and accurate information possible. However,
+          the maps are productions for information purposed, and are NOT surveys. No warranties, expressed or implied,
+          are provided for the data therein, its use, or its interpretation. Register of Deeds documents accessed
+          through this site are unofficial. The official records are maintained at the Wake County Register of Deeds
+          office. The Wake County Register of Deeds assumes no responsibility or liability associated with the use or
+          misused of this data.</p>
+   
+        <CalciteLabel slot="footer-start" layout="inline-space-between">
+          <CalciteCheckbox checked={disclaimerOptedOut ? true : undefined} onCalciteCheckboxChange={(e) => {
+            if (e.target.checked) {
+              localStorage.setItem('imaps_disclaimer_opted_out', '');
+              setDisclaimerOptedOut(true);
+            } else {
+              localStorage.removeItem('imaps_disclaimer_opted_out');
+              setDisclaimerOptedOut(false);
+            }
+          }}></CalciteCheckbox>Don't show again
+        </CalciteLabel>        
+        <CalciteButton
+          slot="footer-end"
+          kind="brand"
+          onClick={() => {
+            setShowDisclaimer(false)
+          }}
+        >
+          Close
+        </CalciteButton>
+    </CalciteDialog>
+
+
+
+
+    {/* <CalciteModal open={showDisclaimer} onCalciteModalClose={() => setShowDisclaimer(false)} aria-labelledby="disclaimer-title">
         <div slot="header" id="disclaimer-title">
           Disclaimer
         </div>
@@ -238,7 +273,7 @@ function Shell() {
         >
           Close
         </CalciteButton>
-      </CalciteModal>    
+      </CalciteModal>     */}
     </div>
   );
 }

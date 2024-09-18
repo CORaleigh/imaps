@@ -10,11 +10,9 @@ const useWebMap = (props: WebMapProps) => {
 
   useEffect(() => {
     window.onerror = function (e) {
-      debugger
       console.log(e);
     }  
     console.error = function(...args) {
-      debugger
     }
     if (!loaded.current && props.mapId) {
 

@@ -3,6 +3,10 @@
   --calcite-app-z-index-dropdown: 1000;
 }
 
+calcite-scrim {
+  position: absolute;
+}
+
 .tools {
   overflow-y: hidden;
   width: 336px;

@@ -56,6 +56,7 @@ import "@esri/calcite-components/dist/components/calcite-list";
 import "@esri/calcite-components/dist/components/calcite-list-item";
 import "@esri/calcite-components/dist/components/calcite-navigation";
 import "@esri/calcite-components/dist/components/calcite-navigation-logo";
+import "@esri/calcite-components/dist/components/calcite-dialog";
 
 
 

@@ -99,21 +99,21 @@ const Print = (props: PrintProps) => {
           <CalciteTabTitle
             onCalciteTabsActivate={tabChanged}
             title="layout"
-            selected={selectedTab == "layout"}
+            selected={selectedTab === "layout" ? true : undefined}
           >
             Layout
           </CalciteTabTitle>
           <CalciteTabTitle
             onCalciteTabsActivate={tabChanged}
             title="map"
-            selected={selectedTab == "map"}
+            selected={selectedTab === "map" ? true : undefined}
           >
             Map only
           </CalciteTabTitle>
           <CalciteTabTitle
             onCalciteTabsActivate={tabChanged}
             title="exports"
-            selected={selectedTab == "exports"}
+            selected={selectedTab === "exports" ? true : undefined}
           >
             Exports
           </CalciteTabTitle>
@@ -242,7 +242,7 @@ const Print = (props: PrintProps) => {
               File name
               <CalciteInput
                 onCalciteInputInput={fileNameChanged}
-                placeholder="File name"
+                placeholder="File"
               ></CalciteInput>
             </CalciteLabel>
             <CalciteLabel>

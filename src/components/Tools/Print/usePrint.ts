@@ -11,8 +11,7 @@ import {
   hidePrintFrame,
   prepareExport,
   roundScale,
-  showPrintFrame,
-  updatePrintFrame
+  showPrintFrame
 } from "./utils/print";
 
 const usePrint = (props: PrintProps) => {
@@ -205,6 +204,7 @@ const usePrint = (props: PrintProps) => {
       getFormats(props.exportUrl).then((formats) => {
         setFormats(formats);
         setSelectedFormat(formats[0]);
+        setSelectedImageFormat(formats[0]);
       });
       const scales = getScales(props.view);
       setScales(scales);
