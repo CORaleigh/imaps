@@ -1,6 +1,8 @@
 import React, { lazy, Suspense } from "react";
 import {
   CalciteButton,
+  CalciteCheckbox,
+  CalciteLabel,
   CalciteModal,
   CalciteScrim,
   CalciteShell,
@@ -56,7 +58,9 @@ function Shell() {
     mapId,
     showDisclaimer, 
     setShowDisclaimer,
-    logo
+    logo,
+    disclaimerOptedOut,
+    setDisclaimerOptedOut
   } = useShell();
   return (
     <div>
@@ -214,6 +218,17 @@ function Shell() {
           office. The Wake County Register of Deeds assumes no responsibility or liability associated with the use or
           misused of this data.
         </div>
+        <CalciteLabel slot="back" layout="inline-space-between">
+          <CalciteCheckbox checked={disclaimerOptedOut ? true : undefined} onCalciteCheckboxChange={(e) => {
+            if (e.target.checked) {
+              localStorage.setItem('imaps_disclaimer_opted_out', '');
+              setDisclaimerOptedOut(true);
+            } else {
+              localStorage.removeItem('imaps_disclaimer_opted_out');
+              setDisclaimerOptedOut(false);
+            }
+          }}></CalciteCheckbox>Don't show again
+        </CalciteLabel>
         <CalciteButton
           slot="primary"
           width="full"

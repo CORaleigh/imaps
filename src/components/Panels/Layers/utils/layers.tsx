@@ -14,8 +14,8 @@ export const initializeLayers = async (ref: HTMLDivElement, view: MapView, mapId
 
   await addLayersFromWebmap(view, mapId);
   const url = new URL(window.location as any);
-  if (url.searchParams.get('config')) {
-    if (url.searchParams.get('config') === 'puma') {
+  if (url.searchParams.get('app')) {
+    if (url.searchParams.get('app') === 'puma') {
       //await addUtilitiesLayers(view, 'a07528d1d37542b79fade50370f2305f');
     }
   }

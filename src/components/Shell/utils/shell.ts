@@ -85,8 +85,8 @@ export const mapViewSet = (
 
     checkForPropertyService(view, setLoading, start, setAlert);
     const url = new URL(window.location as any);
-    if (url.searchParams.get('config')) {
-      const config = url.searchParams.get('config');
+    if (url.searchParams.get('app')) {
+      const config = url.searchParams.get('app');
       if (config === 'puma') {
         const vpn: boolean = await checkVpn();
         if (!vpn) {

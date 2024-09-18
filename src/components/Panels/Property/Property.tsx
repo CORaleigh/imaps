@@ -72,6 +72,8 @@ function Property(props: PropertyProps) {
               onClick={() => {
                 clearSearch(props.view);
               }}
+              label="clear selection"
+              aria-label="clear selection"
             ></CalciteButton>
             <CalciteTooltip
               referenceElement="clearSelection"

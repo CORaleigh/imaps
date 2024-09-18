@@ -141,8 +141,8 @@ const getConfig = () => {
   let config: string = '';
   if (url.searchParams.get('id')) {
     config += url.searchParams.get('id');
-  } else if (url.searchParams.get('config')) {
-    config += url.searchParams.get('config');
+  } else if (url.searchParams.get('app')) {
+    config += url.searchParams.get('app');
   }
   return config;
 };

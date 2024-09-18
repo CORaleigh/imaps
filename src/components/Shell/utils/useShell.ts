@@ -33,7 +33,8 @@ const useShell = () => {
   const [selectedProperty, setSelectedProperty] = useState<__esri.Graphic>();
 
   const [tips, setTips] = useState<any>();
-  const [showDisclaimer, setShowDisclaimer] = useState<boolean>(false);
+  const [showDisclaimer, setShowDisclaimer] = useState<boolean>(checkDisclaimerOptOut());
+  const [disclaimerOptedOut, setDisclaimerOptedOut] = useState<boolean>(!checkDisclaimerOptOut());
 
   useEffect(() => {
     if (properties) {
@@ -73,8 +74,8 @@ const useShell = () => {
 
       }
       const url = new URL(window.location.href);
-      if (url.searchParams.get('config')) {
-        loadConfig(`./${url.searchParams.get('config')}.json`)
+      if (url.searchParams.get('app')) {
+        loadConfig(`./${url.searchParams.get('app')}.json`)
       } else {
         loadConfig('./config.json');
       }
@@ -180,8 +181,14 @@ const useShell = () => {
     mapId,
     showDisclaimer, 
     setShowDisclaimer,
-    logo
+    logo,
+    disclaimerOptedOut,
+    setDisclaimerOptedOut
   };
 };
+
+const checkDisclaimerOptOut = () => {
+  return window.localStorage.getItem('imaps_disclaimer_opted_out') === null
+}
 
 export default useShell;

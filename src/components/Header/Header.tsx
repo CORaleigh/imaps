@@ -49,7 +49,7 @@ function Header(props: {disclaimerClicked: Function, logo: any}) {
             e.target.shadowRoot?.querySelector('.calcite-dropdown-content')?.setAttribute('style', `min-height: ${isMobile ? '590' : '590'}px`);
           }}
         >
-          <CalciteButton id="menuButton" appearance="solid" scale="m" slot="trigger" name="Menu" role="button" aria-label="Menu">
+          <CalciteButton id="menuButton" appearance="solid" scale="m" slot="trigger" name="Menu" role="button" aria-label="Menu" label="Menu">
             <CalciteIcon icon="hamburger" scale="m"></CalciteIcon>
           </CalciteButton>
           <CalciteTooltip label="Menu" referenceElement="menuButton" closeOnClick>
@@ -113,8 +113,8 @@ function Header(props: {disclaimerClicked: Function, logo: any}) {
                 let id: string = '';
                 if (url.searchParams.get('id')) {
                   id += url.searchParams.get('id');
-                } else if (url.searchParams.get('config')) {
-                  id += url.searchParams.get('config');
+                } else if (url.searchParams.get('app')) {
+                  id += url.searchParams.get('app');
                 }
                 window.localStorage.removeItem(`imaps_webmap_${id}`);
                 window.localStorage.removeItem('imaps_alert_read');

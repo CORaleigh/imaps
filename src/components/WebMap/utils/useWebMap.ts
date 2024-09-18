@@ -9,7 +9,13 @@ const useWebMap = (props: WebMapProps) => {
   const view = useRef<MapView | null>(null);
 
   useEffect(() => {
-    
+    window.onerror = function (e) {
+      debugger
+      console.log(e);
+    }  
+    console.error = function(...args) {
+      debugger
+    }
     if (!loaded.current && props.mapId) {
 
       loaded.current = true;

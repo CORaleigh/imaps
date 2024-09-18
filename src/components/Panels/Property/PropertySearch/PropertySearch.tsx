@@ -27,7 +27,9 @@ function PropertySearch(props: PropertySearchProps) {
         id="searchHistory"
         iconEnd="clock"
         appearance="transparent"
-        kind="neutral"        
+        kind="neutral"
+        aria-label="search history"
+        label="search history"    
         >
       </CalciteButton>
     </div>;

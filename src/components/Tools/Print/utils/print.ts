@@ -11,7 +11,6 @@ import SpatialReference from "@arcgis/core/geometry/SpatialReference";
 import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer";
 import * as projection from "@arcgis/core/geometry/projection";
 import Extent from "@arcgis/core/geometry/Extent";
-import * as geometryEngine from "@arcgis/core/geometry/geometryEngine";
 
 export type MapScale = {
   scale: string;
@@ -313,7 +312,7 @@ const getPrintTemplate = (
     format: selectedFormat,
     scalePreserved: true,
     exportOptions: {
-      dpi: selectedTab === "layout" ? 200 : 96,
+      dpi: 200,//selectedTab === "layout" ? 200 : 96,
       height: selectedTab === "map" ? imageHeight : undefined,
       width: selectedTab === "map" ? imageWidth : undefined,
     },
@@ -468,6 +467,111 @@ export const showPrintFrame = (
   }
 };
 
+
+export function updatePrintFrame(view: MapView, width: number, height: number, dpi: number, mapOnly: boolean,  scale: number) {
+  const adjustmentFactor = mapOnly ? 1.19 : 1.23; // Factor to adjust for scaling
+
+  // Convert print dimensions (pixels) to inches
+  const printWidthInches = mapOnly ? width / dpi  : width;
+  const printHeightInches = mapOnly ? height / dpi: height;
+
+  // Convert scale to map units per inch
+  const mapUnitsPerInch = scale / 39.3701; // 1 meter ≈ 39.37 inches
+
+  // Calculate width and height in map units
+  const widthMapUnits = printWidthInches * mapUnitsPerInch * adjustmentFactor;
+  const heightMapUnits = printHeightInches * mapUnitsPerInch * adjustmentFactor;
+
+  // Calculate the frame size in pixels based on the view's resolution
+  const resolution = view.resolution; // Map units per pixel
+  const frameWidthPixels = widthMapUnits / resolution;
+  const frameHeightPixels = heightMapUnits / resolution;
+
+  // Calculate the center of the map view in pixels
+  const centerX = view.width / 2;
+  const centerY = view.height / 2;
+
+  // Calculate the left, right, top, and bottom positions of the rectangle
+  const left = centerX - frameWidthPixels / 2;
+  const top = centerY - frameHeightPixels / 2;
+  const right = centerX + frameWidthPixels / 2;
+  const bottom = centerY + frameHeightPixels / 2;
+
+  // Create or update the SVG element
+  let svg = document.getElementById("printFrameSvg") as SVGElement | null;
+  if (!svg) {
+    svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.id = "printFrameSvg";
+    svg.style.position = "absolute";
+    svg.style.left = "0";
+    svg.style.top = "0";
+    svg.style.width = "100%";
+    svg.style.height = "100%";
+    view.container.querySelector('.esri-overlay-surface')?.appendChild(svg);
+  }
+
+  // Clear previous children
+  while (svg.firstChild) {
+    svg.removeChild(svg.firstChild);
+  }
+
+  // Create the mask for the hollow effect
+  let defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+
+  const mask = document.createElementNS("http://www.w3.org/2000/svg", "mask");
+  mask.id = "printMask";
+
+  // Outer rectangle (entire map area) filled with white (visible area)
+  const outerRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+  outerRect.setAttribute("x", "0");
+  outerRect.setAttribute("y", "0");
+  outerRect.setAttribute("width", "100%");
+  outerRect.setAttribute("height", "100%");
+  outerRect.setAttribute("fill", "white"); // The outer area remains visible
+
+  // Inner rectangle (print frame area) filled with black (cut-out area)
+  const innerRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+  innerRect.setAttribute("x", left.toString());
+  innerRect.setAttribute("y", top.toString());
+  innerRect.setAttribute("width", (frameWidthPixels).toString());
+  innerRect.setAttribute("height", (frameHeightPixels).toString());
+  innerRect.setAttribute("fill", "black"); // The inner area will be cut out
+
+  // Append rectangles to the mask
+  mask.appendChild(outerRect);
+  mask.appendChild(innerRect);
+
+  // Append mask to defs
+  defs.appendChild(mask);
+  svg.appendChild(defs);
+
+  // Create the gray background, using the mask to hollow out the print area
+  const grayRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+  grayRect.setAttribute("x", "0");
+  grayRect.setAttribute("y", "0");
+  grayRect.setAttribute("width", "100%");
+  grayRect.setAttribute("height", "100%");
+  grayRect.setAttribute("fill", "rgba(0,0,0,0.5)"); // Gray background
+  grayRect.setAttribute("mask", "url(#printMask)"); // Apply the mask to cut out the hollow area
+  svg.appendChild(grayRect);
+
+  // Add dashed blue border for the frame
+  const borderRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+  borderRect.setAttribute("x", (left).toString());
+  borderRect.setAttribute("y", (top).toString());
+  borderRect.setAttribute("width", (frameWidthPixels).toString());
+  borderRect.setAttribute("height", (frameHeightPixels).toString());
+  borderRect.setAttribute("fill", "none");
+  borderRect.setAttribute("stroke", "rgb(30,144,255)");
+  borderRect.setAttribute("stroke-width", "2");
+  borderRect.setAttribute("stroke-dasharray", "5");
+
+  // Append the border rect
+  svg.appendChild(borderRect);
+}
+
+
+
 const addPrintGraphic = async (
   view: MapView,
   graphics: GraphicsLayer,
@@ -484,71 +588,20 @@ const addPrintGraphic = async (
   const center = extent.center;
   let xmax, ymax, xmin, ymin, printFrame, geometry;
   if (selectedTab === "layout") {
-    const width = (printTemplate?.webMapFrameSize[0] * printScale) / 12;
-    const height = (printTemplate?.webMapFrameSize[1] * printScale) / 12;
-    xmax = center.x + width / 2;
-    ymax = center.y + height / 2;
-    xmin = center.x - width / 2;
-    ymin = center.y - height / 2;
-    printFrame = new Extent({
-      xmax: xmax,
-      xmin: xmin,
-      ymax: ymax,
-      ymin: ymin,
-      spatialReference: { wkid: 2264 },
-    });
-    geometry = geometryEngine.difference(extent, printFrame);
-
+    const width = (printTemplate?.webMapFrameSize[0]);
+    const height = (printTemplate?.webMapFrameSize[1]);
+    updatePrintFrame(view, width, height, 200, false, printScale);
   } else if (selectedTab === "map") {
-
-
-    // Calculate the map coordinates of the rectangle corners
-    var min = view.toMap({
-        x: view.toScreen(center).x - (96*imageWidth / 2),
-        y: view.toScreen(center).y + (96*imageHeight / 2)
-    });
-    var max = view.toMap({
-        x: view.toScreen(center).x + (96*imageWidth / 2),
-        y: view.toScreen(center).y - (96*imageHeight / 2)
-    });
-
-    printFrame = new Extent({
-      xmax: max.x,
-      xmin: min.x,
-      ymax: max.y,
-      ymin: min.y,
-      spatialReference: view.spatialReference,
-    });
-    geometry = printFrame//geometryEngine.difference(view.extent, printFrame);
+    updatePrintFrame(view, imageWidth, imageHeight, 200, true, printScale);
   }
-
-  if (geometry) {
-
-    graphics.removeAll();
-    graphics.add(
-      new Graphic({
-        symbol: {
-          type: "simple-fill",
-          style: "solid",
-          color: [0, 0, 0, 0.25],
-          outline: { width: 3, color: [0, 122, 194, 1], style: "short-dash" },
-        } as any,
-        geometry: geometry as __esri.Geometry,
-      })
-    );
-  }
-
 };
 
 export const hidePrintFrame = (view: MapView) => {
-  let graphics = view.map.findLayerById("print-graphic") as GraphicsLayer;
-  if (graphics) {
-    graphics.visible = false;
-    graphics.removeAll();
+  const svg = document.getElementById("printFrameSvg");
+  if (svg) {
+    svg.remove();
   }
-  if (mapViewStationary) {
-    mapViewStationary.remove();
-  }
+
 };
 
 function isPrintResponse(value: any): value is __esri.PrintResponse {

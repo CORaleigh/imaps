@@ -12,6 +12,7 @@ import {
   prepareExport,
   roundScale,
   showPrintFrame,
+  updatePrintFrame
 } from "./utils/print";
 
 const usePrint = (props: PrintProps) => {
@@ -165,8 +166,8 @@ const usePrint = (props: PrintProps) => {
   }, [customScale]);
 
   useEffect(() => {
-    debugger
     if (showFrame && selectedLayout) {
+      //updatePrintFrame(props.view, imageWidth, imageHeight, 200);
       showPrintFrame(
         props.view,
         selectedLayout,
