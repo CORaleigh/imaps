@@ -5,7 +5,6 @@ import {
   CalciteTooltip,
 } from "@esri/calcite-components-react";
 import "./Bookmarks.css";
-import { collapsePanel } from "../../Shell/utils/shell";
 import useBookmarks from "./utils/useBooksmarks";
 import { ToolProps } from "../utils/ToolProps";
 export const Bookmarks = (props: ToolProps) => {
@@ -19,6 +18,7 @@ export const Bookmarks = (props: ToolProps) => {
       hidden={!isActive}
       closed={!isActive ? true : undefined}
       closable
+      collapsible
       onCalcitePanelClose={toolDismissed}
     >
       <CalciteAction
@@ -28,21 +28,8 @@ export const Bookmarks = (props: ToolProps) => {
         slot="header-actions-end"
         onClick={tipsClicked}
       ></CalciteAction>
-      <CalciteAction
-        id="collapseTool"
-        icon="chevron-up"
-        text=""
-        slot="header-actions-end"
-        onClick={collapsePanel}
-      ></CalciteAction>
       <CalciteTooltip referenceElement="bookmarkTip" closeOnClick>
         Show Tip
-      </CalciteTooltip>
-      <CalciteTooltip
-        referenceElement="collapseTool"
-        closeOnClick
-      >
-        Collapse
       </CalciteTooltip>
       <div ref={bookmarkRef}></div>
     </CalcitePanel>

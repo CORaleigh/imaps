@@ -21,7 +21,6 @@ import {
   CalciteLoader,
   CalciteIcon,
 } from "@esri/calcite-components-react";
-import { collapsePanel } from "../../Shell/utils/shell";
 import usePrint from "./usePrint";
 import "./Print.css";
 import { roundScale } from "./utils/print";
@@ -73,6 +72,7 @@ const Print = (props: PrintProps) => {
       closed={!isActive ? true : undefined}
       closable
       onCalcitePanelClose={toolDismissed}
+      collapsible
     >
       <CalciteAction
         id="printTip"
@@ -81,18 +81,8 @@ const Print = (props: PrintProps) => {
         slot="header-actions-end"
         onClick={tipsClicked}
       ></CalciteAction>
-      <CalciteAction
-        id="collapseTool"
-        icon="chevron-up"
-        text=""
-        slot="header-actions-end"
-        onClick={collapsePanel}
-      ></CalciteAction>
       <CalciteTooltip referenceElement="printTip" closeOnClick>
         Show Tip
-      </CalciteTooltip>
-      <CalciteTooltip referenceElement="collapseTool" closeOnClick>
-        Collapse
       </CalciteTooltip>
       <CalciteTabs layout="center" position="top" >
         <CalciteTabNav slot="title-group">

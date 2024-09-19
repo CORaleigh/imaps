@@ -51,6 +51,7 @@ const usePrint = (props: PrintProps) => {
   const toolDismissed = useCallback((e: any) => {
     props.toolDismissed();
     setShowFrame(false);
+    hidePrintFrame(props.view);
   }, []);
   const tipsClicked = useCallback((e: any) => {
     props.showTips(tips);

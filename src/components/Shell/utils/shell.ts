@@ -48,26 +48,6 @@ export const panelSelected = (
   }
 }
 
-const collapse = (
-  panel: HTMLCalcitePanelElement,
-  action: HTMLCalciteActionElement
-) => {
-  if (action.icon === "chevron-up") {
-    panel?.shadowRoot
-      ?.querySelector(".content-wrapper")
-      ?.setAttribute("style", "display:none");
-    action.icon = "chevron-down";
-  } else if (action.icon === "chevron-down") {
-    panel?.shadowRoot
-      ?.querySelector(".content-wrapper")
-      ?.setAttribute("style", "display:flex");
-    action.icon = "chevron-up";
-  }
-}
-export const  collapsePanel = (e: any) => {
-  collapse(e.target.parentElement, e.target);
-}
-
 export const mapViewSet = (
   view: MapView,
   setView: Function,

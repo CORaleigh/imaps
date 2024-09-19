@@ -5,7 +5,6 @@ import {
 } from "@esri/calcite-components-react";
 import React from "react";
 import "./Measure.css";
-import { collapsePanel } from "../../Shell/utils/shell";
 import useMeasure from "./utils/useMeasure";
 import { ToolProps } from "../utils/ToolProps";
 export const Measure = (props: ToolProps) => {
@@ -26,6 +25,7 @@ export const Measure = (props: ToolProps) => {
       hidden={!isActive}
       closed={!isActive ? true : undefined}
       closable
+      collapsible
       onCalcitePanelClose={toolDismissed}
     >
       <CalciteAction
@@ -35,21 +35,8 @@ export const Measure = (props: ToolProps) => {
         slot="header-actions-end"
         onClick={tipsClicked}
       ></CalciteAction>
-      <CalciteAction
-        id="collapseTool"
-        icon="chevron-up"
-        text=""
-        slot="header-actions-end"
-        onClick={collapsePanel}
-      ></CalciteAction>
       <CalciteTooltip referenceElement="measureTip" closeOnClick>
         Show Tip
-      </CalciteTooltip>
-      <CalciteTooltip
-        referenceElement="collapseTool"
-        closeOnClick
-      >
-        Collapse
       </CalciteTooltip>
       <div id="measure-tools">
         <div className="measure-container">

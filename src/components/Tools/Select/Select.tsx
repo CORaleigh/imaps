@@ -8,7 +8,6 @@ import {
 } from "@esri/calcite-components-react";
 import React from "react";
 import "./Select.css";
-import { collapsePanel } from "../../Shell/utils/shell";
 
 import {
   bufferDistanceChanged,
@@ -37,6 +36,7 @@ export const Select = (props: SelectProps) => {
       hidden={!isActive}
       closed={!isActive ? true : undefined}
       closable
+      collapsible
       onCalcitePanelClose={toolDismissed}
     >
       <CalciteAction
@@ -46,21 +46,8 @@ export const Select = (props: SelectProps) => {
         slot="header-actions-end"
         onClick={tipsClicked}
       ></CalciteAction>
-      <CalciteAction
-        id="collapseTool"
-        icon="chevron-up"
-        text=""
-        slot="header-actions-end"
-        onClick={collapsePanel}
-      ></CalciteAction>
       <CalciteTooltip closeOnClick referenceElement="selectTip">
         Show Tip
-      </CalciteTooltip>
-      <CalciteTooltip
-        closeOnClick
-        referenceElement="collapseTool"
-      >
-        Collapse
       </CalciteTooltip>
       <div id="select-tools">
         <div className="select-container">

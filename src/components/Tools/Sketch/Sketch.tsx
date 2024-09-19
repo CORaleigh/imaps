@@ -23,7 +23,6 @@ import LineSymbols from "./LineSymbols";
 import PolygonSymbols from "./PolygonSymbols";
 import TextSymbols from "./TextSymbols";
 import PointSymbols from "./PointSymbols";
-import { collapsePanel } from "../../Shell/utils/shell";
 import useSketch from "./utils/useSketch";
 import { ToolProps } from "../utils/ToolProps";
 function Sketch(props: ToolProps) {
@@ -54,21 +53,8 @@ function Sketch(props: ToolProps) {
         slot="header-actions-end"
         onClick={tipsClicked}
       ></CalciteAction>
-      <CalciteAction
-        id="collapseTool"
-        icon="chevron-up"
-        text=""
-        slot="header-actions-end"
-        onClick={collapsePanel}
-      ></CalciteAction>
       <CalciteTooltip closeOnClick label="Show Tip" referenceElement="sketchTip">
         Show Tip
-      </CalciteTooltip>
-      <CalciteTooltip
-        closeOnClick
-        referenceElement="collapseTool"
-      >
-        Collapse
       </CalciteTooltip>
       <div id="sketch-tools">
         <div className="sticky" >
