@@ -3,6 +3,7 @@ import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 import SketchViewModel from '@arcgis/core/widgets/Sketch/SketchViewModel';
 import Graphic from '@arcgis/core/Graphic';
 import * as geometryEngine from '@arcgis/core/geometry/geometryEngine';
+import Geometry from '@arcgis/core/geometry/Geometry';
 let distance = 0;
 let propertyLayerView: __esri.FeatureLayerView;
 let sketchVm: SketchViewModel;
@@ -16,7 +17,7 @@ export const cancelSelect = () => {
   }
   layer.removeAll();
 };
-export const initializeSelect = async (view: MapView, geometrySet: Function, setSelectedTool: Function) => {
+export const initializeSelect = async (view: MapView, geometrySet: (geometry: Geometry) => void, setSelectedTool: (selectedTool: string) => void) => {
   layer = new GraphicsLayer({
     listMode: 'hide',
     id: 'select-graphics'
@@ -114,7 +115,7 @@ const highlightProperties = async (view: MapView, geometry: __esri.Geometry): Pr
   return propertyLayerView.highlight(result.features);
 };
 
-export const bufferDistanceChanged = (event: any, setDistance: Function) => {
+export const bufferDistanceChanged = (event: any, setDistance: (distance: number) => void) => {
   if (event.target.value === '') {
     distance = 0;
   } else {
@@ -133,7 +134,7 @@ export const createSketch = (
   sketchVm.create(tool);
 };
 
-export const bufferProperty = (property: Graphic, distance: number, geometrySet: Function, view: MapView) => {
+export const bufferProperty = (property: Graphic, distance: number, geometrySet: (geometry: Geometry) => void, view: MapView) => {
   const geom = buffer(distance, property) as __esri.Geometry;
   geometrySet(geom);
   addBufferGraphic(geom);  

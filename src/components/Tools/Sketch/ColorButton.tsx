@@ -17,7 +17,7 @@ interface Props {
   id: string;
   label: string;
   color: number[];
-  colorSet: Function;
+  colorSet: (c: any) => void;
   hideTransparency?: boolean;
 }
 function ColorButton(props: Props) {

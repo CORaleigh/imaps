@@ -1,10 +1,13 @@
+import { Alert } from "../../../Shell/utils/alert";
+import { Tips } from "../../../Tools/Print/utils/tips";
+
 export interface PropertyProps {
   view: __esri.MapView;
   geometry: __esri.Geometry | undefined;
-  selected: Function;
-  showTips: Function;
-  panelDismissed: Function;
+  selected: (feature?: __esri.Graphic, condos?: __esri.Graphic[]) => void ;
+  showTips: (newTips: Tips) => void;
+  panelDismissed: () => void;
   isActive: boolean;
-  alertSet?: Function;
+  alertSet?: (alert: Alert) => void;
 
 }

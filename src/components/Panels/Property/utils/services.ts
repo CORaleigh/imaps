@@ -20,8 +20,8 @@ const loadWebmap = async (serviceLayers: any[]): Promise<__esri.Layer[]> => {
 const getServiceData = (
   layers: any[],
   graphic: Graphic,
-  setFeatures: Function,
-  setSearching: Function,
+  setFeatures: (features: Graphic[]) => void,
+  setSearching: (searching: boolean) => void,
   promises: Promise<__esri.FeatureSet>[]
 ) => {
   layers?.forEach((layer) => {
@@ -59,8 +59,8 @@ export const getServices = (
   services: any[],
   view: MapView,
   graphic: Graphic,
-  setFeatures: Function,
-  setSearching: Function
+  setFeatures: (features: Graphic[]) => void,
+  setSearching: (searching: boolean) => void
 ) => {
   requestAnimationFrame(async () => {
     if (

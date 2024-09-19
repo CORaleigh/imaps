@@ -44,9 +44,9 @@ export const initializeImageMaps = async (
   view: MapView,
   ref: HTMLDivElement,
   id: string,
-  alertSet: (alert: Alert) => void,
   setShowBlend: (showBlend: boolean) => void, 
-  setSelectedTab: (selectedTab: string) => void
+  setSelectedTab: (selectedTab: string) => void,
+  alertSet?: (alert: Alert) => void
 ) => {
   images = new BasemapGallery({
     container: ref,
@@ -144,7 +144,7 @@ const getBoundary = async (view: __esri.MapView): Promise<Polygon> => {
       return Polygon.fromJSON(response.data.shape);
 };
 
-const viewExtentChanged = (extent: __esri.Extent, view: MapView, alertSet: (alert: Alert) => void) => {
+const viewExtentChanged = (extent: __esri.Extent, view: MapView, alertSet?: (alert: Alert) => void) => {
 
   if (imageryBoundary) {// && images.source.basemaps.find((basemap) => images.activeBasemap.title === basemap.title)) {
     wasRaleigh = inRaleigh;
@@ -164,6 +164,7 @@ const viewExtentChanged = (extent: __esri.Extent, view: MapView, alertSet: (aler
                 autoClose: true,
                 duration: 'medium',
                 kind: 'warning',
+                icon: 'warning',
                 title: 'Imagery Year Changed',
                 message: `Imagery for ${from} only available inside Raleigh, base map has changed to ${to}`,
               };

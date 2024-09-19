@@ -26,7 +26,7 @@ const useShell = () => {
 
   const viewRef = useRef<__esri.MapView>();
 
-  const [properties, setProperties] = useState<__esri.Graphic[]>([]);
+  const [properties, setProperties] = useState<__esri.Graphic[] | undefined>([]);
   const [geometry, setGeometry] = useState<__esri.Geometry | undefined>(
     undefined
   );
@@ -98,8 +98,8 @@ const useShell = () => {
         activeTool,
         setActiveTool,
         setActivePanel,
-        activePanelChanged as any,
-        activeToolChanged as any
+        activePanelChanged,
+        activeToolChanged
       );
     }
   }, []);
@@ -130,7 +130,7 @@ const useShell = () => {
     setActiveTool("");
   }, []);
   const propertySelected = useCallback(
-    (feature: __esri.Graphic, condos: __esri.Graphic[]) => {
+    (feature?: __esri.Graphic, condos?: __esri.Graphic[]) => {
       setSelectedProperty(feature);
       setProperties(getDistinctProperties(feature, condos));
     },

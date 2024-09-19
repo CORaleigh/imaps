@@ -3,7 +3,7 @@ import React from "react";
 import "./Sketch.css";
 interface Props {
   symbol: any;
-  pickerClicked: Function;
+  pickerClicked: () => void;
 }
 function IconPicker(props: Props) {
   return (

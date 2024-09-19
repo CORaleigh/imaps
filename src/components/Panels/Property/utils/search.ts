@@ -10,7 +10,7 @@ let condos: FeatureLayer;
 let addresses: FeatureLayer;
 let search: Search;
 let properties: FeatureLayer;
-const getQueryParams = async (condosSelected: Function) => {
+const getQueryParams = async (condosSelected: (selectedCondos: Graphic[]) => void) => {
   const url = new URL(window.location as any);
   const pins = url.searchParams.get('pin');
   if (pins !== '' && pins !== null) {
@@ -18,7 +18,7 @@ const getQueryParams = async (condosSelected: Function) => {
     condosSelected(result);
   }
 };
-export const initializeSearch = (ref: HTMLDivElement, view: MapView, setCondos: Function) => {
+export const initializeSearch = (ref: HTMLDivElement, view: MapView, setCondos: (condos: Graphic[]) => void) => {
   getTables(view);
   search = new Search({
     view: view,

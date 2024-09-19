@@ -55,9 +55,9 @@ let sketchLayerView: __esri.GraphicsLayerView;
 
 export const initializeSketchViewModel = async (
   view: MapView,
-  setActiveSketchTool: Function,
+  setActiveSketchTool: (activeSketchTool: string) => void,
   selectedGraphics: Graphic[],
-  setSelectedGraphics: Function,
+  setSelectedGraphics: (selectedGraphics: Graphic[]) => void,
 ) => {
   sketchLayer = new MapNotesLayer({
     listMode: 'hide',
@@ -143,7 +143,7 @@ export const sketchActivated = () => {
 
 };
 
-export const toolSelected = (tool: string, activeSketchTool: string, setActiveSketchTool: Function) => {
+export const toolSelected = (tool: string, activeSketchTool: string, setActiveSketchTool: (activeSketchTool: string) => void) => {
   sketchActivated();
   selectedTool = tool;
   tool === activeSketchTool ? setActiveSketchTool('') : setActiveSketchTool(tool);
@@ -277,7 +277,7 @@ export const cancelSketch = () => {
   cancelAllViewModels();
 };
 
-export const clearSketch = (setActiveSketchTool: Function, setSelectedGraphics: Function) => {
+export const clearSketch = (setActiveSketchTool: (activeSketchTool: string) => void, setSelectedGraphics: (selectedGraphics: Graphic[]) => void) => {
   setActiveSketchTool('');
   setSelectedGraphics([...[], ...[]]);
   cancelAllViewModels();
@@ -339,7 +339,7 @@ export const stopSketching = () => {
   cancelAllViewModels();
 };
 
-export const deleteSelectedGraphics = (selectedGraphics: Graphic[], setSelectedGraphics: Function) => {
+export const deleteSelectedGraphics = (selectedGraphics: Graphic[], setSelectedGraphics: (updater: (current: Graphic[]) => Graphic[]) => void) => {
   removeGraphics(selectedGraphics);
   requestAnimationFrame(() => {
     setSelectedGraphics((current: Graphic[]) => {

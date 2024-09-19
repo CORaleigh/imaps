@@ -15,13 +15,14 @@ import Collection from '@arcgis/core/core/Collection';
 import esriConfig from "@arcgis/core/config";
 import * as geometryEngine from '@arcgis/core/geometry/geometryEngine';
 import { Alert } from '../../Shell/utils/alert';
+import Geometry from '@arcgis/core/geometry/Geometry';
 
 export const initializeMap = async (
   ref: HTMLDivElement,
   mapId: string,
-  geometrySet: Function,
-  widgetActivated: Function,
-  alertSet?: Function | undefined
+  geometrySet: (geometry: Geometry) => void,
+  widgetActivated:  (view: MapView, setActiveTool?: (activeTool: string) => void) => void,
+  alertSet?: (alert: Alert) => void
 ): Promise<MapView> => {
   const view = new MapView({
     container: ref,
@@ -38,6 +39,7 @@ export const initializeMap = async (
       autoClose: false,
       duration: 'fast',
       kind: 'danger',
+      icon: 'error',
       title: 'WebGL 2 Required',
       message: `Sorry, it appears that your graphics card doesn't support WebGL 2, which is required for this application. We recommend checking your browser settings or using a device with a more capable graphics card or updating your current hardware if possible. If you have any questions or need further assistance, please don't hesitate to contact us.  We have also made the previous version available, which does not have this requirement, however it will not receive any future updates.`,
       link: {
@@ -61,7 +63,7 @@ export const initializeMap = async (
 
     view.popup.on('trigger-action', (event) => {
       if (event.action.title === 'Select') {
-        geometrySet(geometryEngine.geodesicBuffer(view.popup.selectedFeature.geometry, -2, 'feet'));
+        geometrySet(geometryEngine.geodesicBuffer(view.popup.selectedFeature.geometry, -2, 'feet') as Geometry);
       }
     });
   })

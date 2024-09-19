@@ -12,6 +12,13 @@ import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer";
 import * as projection from "@arcgis/core/geometry/projection";
 import Extent from "@arcgis/core/geometry/Extent";
 
+export interface Job {
+  title?: string;        // Title is a string
+  loading: boolean;     // Loading is a boolean
+  submitted: string;    // Submitted is a string (timestamp in this case)
+  href: string | null;  // href can be a string or null
+}
+
 export type MapScale = {
   scale: string;
   label: string;
@@ -168,7 +175,7 @@ export const prepareExport = (
   selectedProperty: Graphic | undefined,
   exportUrl: string,
   exports: Exports[],
-  setExports: Function,
+  setExports: (updater: (prevExports: Exports[]) => Exports[]) => void,
   selectedTab: string,
   imageWidth: number | undefined,
   imageHeight: number | undefined

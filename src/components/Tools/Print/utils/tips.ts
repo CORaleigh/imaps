@@ -1,4 +1,12 @@
-export const tips = { title: "Print Tips", 
+export interface Tip {
+  title: string;
+  text: string;
+}
+export interface Tips {
+  title: string;
+  tips: Tip[]
+}
+export const tips: Tips = { title: "Print Tips", 
     tips: [
         {
             title: "Exports Tab",

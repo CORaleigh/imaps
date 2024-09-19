@@ -1,5 +1,5 @@
 export interface PropertySearchProps {
   view: __esri.MapView;
-  searchingChanged: Function;
-  condosSelected: Function;
+  searchingChanged: (isSearching: boolean) => void;
+  condosSelected: (selectedCondos: __esri.Graphic[]) => void;
 }

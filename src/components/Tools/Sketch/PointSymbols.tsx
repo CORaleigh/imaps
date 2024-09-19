@@ -14,7 +14,7 @@ import IconSelectionPanel from "./IconSelectionPanel";
 import ColorButton from "./ColorButton";
 import Color from "@arcgis/core/Color";
 interface Props {
-  pointSymbolUpdated: Function;
+  pointSymbolUpdated: (symbol: any, c: any, pointSize: number) => void;
 }
 function PointSymbols(props: Props) {
   const [symbols, setSymbols] = useState<any[]>([]);

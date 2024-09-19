@@ -14,7 +14,7 @@ let featureTable: FeatureTable;
 export const initializeFeatureTable = async (
   ref: HTMLDivElement,
   view: MapView,
-  featureSelected: Function,
+  featureSelected: (selectedFeature: Graphic) => void,
 ): Promise<FeatureTable> => {
   const table: __esri.FeatureLayer = (await getTableLayer(view)) as __esri.FeatureLayer;
   featureTable = new FeatureTable({

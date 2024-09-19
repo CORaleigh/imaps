@@ -1,10 +1,10 @@
-import { AlertDuration } from "@esri/calcite-components/dist/types/components/alert/interfaces";
 
 export interface Alert {
     show: boolean;
     kind: "brand" | "danger" | "info" | "success" | "warning" | undefined;
+    icon: string;
     autoClose: boolean | undefined;
-    duration: AlertDuration | undefined;
+    duration: "fast" | "medium" | "slow" | undefined;
     title: string;
     message: string;
     link?: link;

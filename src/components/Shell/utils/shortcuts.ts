@@ -1,7 +1,8 @@
+import Geometry from "@arcgis/core/geometry/Geometry";
 import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer";
 import SketchViewModel from "@arcgis/core/widgets/Sketch/SketchViewModel";
 
-export const addShortcuts = (mapView: __esri.MapView, setGeometry: Function) => {
+export const addShortcuts = (mapView: __esri.MapView, setGeometry: (geometry: Geometry) => void) => {
     if (!window.matchMedia("(pointer:coarse)").matches) {
         let keys: string[] = [];
         let active: boolean = false;

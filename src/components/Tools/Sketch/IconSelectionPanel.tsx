@@ -7,8 +7,8 @@ import React, { useEffect, useState } from "react";
 import "./Sketch.css";
 interface Props {
   symbols: any[];
-  backClicked: Function;
-  iconSelected: Function;
+  backClicked: () => void;
+  iconSelected: (icon: any) => void;
 }
 function IconSelectionPanel(props: Props) {
   const [symbols, setSymbols] = useState<any[]>([]);

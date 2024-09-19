@@ -5,7 +5,7 @@ import ColorButton from "./ColorButton";
 import SizeSlider from "./SizeSlider";
 import Color from "@arcgis/core/Color";
 interface Props {
-  polylineSymbolUpdated: Function;
+  polylineSymbolUpdated: (lineColor: Color, width: any) => void;
 }
 function LineSymbols(props: Props) {
   const [lineColor, setLineColor] = useState<Color>(new Color([255, 0, 0, 1]));
@@ -33,7 +33,7 @@ function LineSymbols(props: Props) {
         min={0.1}
         max={18}
         label="Width"
-        sizeSet={(size: number) => {
+        sizeSet={(size: any) => {
           setWidth(size);
           props.polylineSymbolUpdated(lineColor, width);
         }}

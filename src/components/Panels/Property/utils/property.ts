@@ -86,13 +86,14 @@ export const clearSelectionGraphics = (view: MapView) => {
   }
 }
 
-export const checkMaximumRecordCount = (features: Graphic[], alertSet: Function) => {
+export const checkMaximumRecordCount = (features: Graphic[], alertSet: (alert: Alert) => void) => {
   if (features.length >= 2000) {
     const alert: Alert = {
       show: true,
       autoClose: true,
       duration: 'fast',
       kind: 'warning',
+      icon: 'warning',
       title: 'Maximum Records Returned',
       message: `The maximum number of records have been returned.  Not all records may be returned, please limit your search.`,
     };

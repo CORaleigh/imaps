@@ -1,13 +1,14 @@
 import MapView from "@arcgis/core/views/MapView";
 import * as reactiveUtils from "@arcgis/core/core/reactiveUtils";
+import { Alert } from "./alert";
 
 export const toolSelected = (
   tool: string,
   activeTool: string,
-  setActiveTool: Function,
-  setActivePanel: Function,
-  activePanelChanged: Function,
-  activeToolChanged: Function
+  setActiveTool: (activeTool: string) => void,
+  setActivePanel: (activePanel: string) => void,
+  activePanelChanged: (panel: string) => void,
+  activeToolChanged: (tool: string) => void
 ) => {
   const panel = document.getElementById(
     `${tool}-panel`
@@ -33,10 +34,10 @@ export const toolSelected = (
 export const panelSelected = (
   panel: string,
   activePanel: string,
-  setActiveTool: Function,
-  setActivePanel: Function,
-  activePanelChanged: Function,
-  activeToolChanged: Function
+  setActiveTool: (activeTool: string) => void,
+  setActivePanel: (activePanel: string) => void,
+  activePanelChanged: (panel: string) => void,
+  activeToolChanged: (tool: string) => void,
 ) => {
   activePanel === panel ? setActivePanel("") : setActivePanel(panel);
 
@@ -50,9 +51,9 @@ export const panelSelected = (
 
 export const mapViewSet = (
   view: MapView,
-  setView: Function,
-  setLoading: Function,
-  setAlert: Function
+  setView: (view: MapView) => void,
+  setLoading: (loading: boolean) => void,
+  setAlert: (alert: Alert) => void
 ) => {
   const start = Date.now();
 
@@ -86,9 +87,9 @@ export const mapViewSet = (
 
 const checkForPropertyService = async (
   view: MapView,
-  setLoading: Function,
+  setLoading: (loading: boolean) => void,
   start: number,
-  setAlert: Function
+  setAlert: (alert: Alert) => void
 ) => {
 
   const propertyLayer = view.map.allLayers.find((layer) => {
@@ -138,13 +139,13 @@ const checkVpn = async () => {
 const sendAlert = (
   message: string,
   title: string,
-  setAlert: Function,
-  setLoading: Function
+  setAlert: (alert: Alert) => void,
+  setLoading: (loading: boolean) => void
 ) => {
-  const alert = {
+  const alert: Alert = {
     show: true,
     autoClose: false,
-    duration: "long",
+    duration: "slow",
     kind: "danger",
     icon: "error",
     title: title,
@@ -160,17 +161,19 @@ const sendAlert = (
   setLoading(false);
 }
 
-export const widgetActivated = (view: MapView, setActiveTool: Function) => {
+export const widgetActivated = (view: MapView, setActiveTool?: (activeTool: string) => void) => {
   (view as any).activeTool = null;
-  setActiveTool("");
+  if (setActiveTool) {
+    setActiveTool("");
+  }
 }
 
 export const getDistinctProperties = (
-  feature: __esri.Graphic,
-  condos: __esri.Graphic[]
+  feature?: __esri.Graphic,
+  condos?: __esri.Graphic[]
 ) => {
   const pins: string[] = [];
-  const properties = condos.filter((condo) => {
+  const properties = condos?.filter((condo) => {
     if (pins.includes(condo.getAttribute("PIN_NUM"))) return false;
     if (feature) {
       if (condo.getAttribute("PIN_NUM") === feature.getAttribute("PIN_NUM")) {

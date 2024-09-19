@@ -101,7 +101,7 @@ const useProperty = (props: PropertyProps) => {
     setCondos([]);
     setActiveTab("list");
     setInfoDisabled(true);
-    props.selected(null, []);
+    props.selected(undefined, []);
     clearAddressPoints(view);
     clearSelectionGraphics(view);
   }, []);

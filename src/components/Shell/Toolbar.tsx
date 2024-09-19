@@ -11,8 +11,8 @@ interface Props {
   expandable: boolean | undefined;
   activePanel: string;
   activeTool: string;
-  activePanelChanged: Function;
-  activeToolChanged: Function;
+  activePanelChanged: (panel: string) => void;
+  activeToolChanged: (tool: string) => void;
 }
 function Toolbar(props: Props) {
   const [activePanel, setActivePanel] = useState("search");

@@ -7,7 +7,13 @@ import {
 import React, { useState } from "react";
 import ColorButton from "./ColorButton";
 interface Props {
-  textSymbolUpdated: Function;
+  textSymbolUpdated: (
+    fontSize: number,
+    fontColor: Color,
+    haloSize: number,
+    haloColor: Color,
+    showHalo: boolean,
+    text: string) => void;
 }
 function TextSymbols(props: Props) {
   const [fontColor, setFontColor] = useState<Color>(new Color([255, 0, 0, 1]));

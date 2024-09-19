@@ -239,7 +239,7 @@ const useCoordinates = (props: CoordinateProps) => {
       coordinateRef.current.innerHTML = `${spft.y.toFixed(3)}N ${spft.x.toFixed(3)}E`;
     }
   };
-  const addClickHandler = (view: __esri.MapView, clickActivated: Function) => {
+  const addClickHandler = (view: __esri.MapView, clickActivated: (view: __esri.MapView) => void) => {
     clickActivated(view);
     props.view.popupEnabled = false;
     document.querySelector(".identify-widget")?.classList.remove("active");

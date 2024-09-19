@@ -14,7 +14,7 @@ const Overview = lazy(() => import('../Overview/Overview'));
 const Coordinates = lazy(() => import('../Coordinates/Coodinates'));
 let streetviewClick: IHandle | null = null;
 
-export const addWidgets = (view: MapView, widgetActivated: Function) => {
+export const addWidgets = (view: MapView, widgetActivated: (view: __esri.MapView, setActiveTool?: (activeTool: string) => void) => void) => {
   view.ui.add(
     new Home({
       view: view,
@@ -73,7 +73,7 @@ const addOverview = async (view: __esri.MapView) => {
   }
 };
 
-const addCoordinates = async (view: __esri.MapView, widgetActivated: Function) => {
+const addCoordinates = async (view: __esri.MapView, widgetActivated: (view: __esri.MapView, setActiveTool?: (activeTool: string) => void) => void) => {
   const container = document.createElement('div');
 
   const coordinateExpand = new Expand({
@@ -106,7 +106,7 @@ const addCoordinates = async (view: __esri.MapView, widgetActivated: Function) =
   }
 };
 
-const createStreetviewButton = (view: MapView, widgetActivated: Function): any => {
+const createStreetviewButton = (view: MapView, widgetActivated: (view: __esri.MapView, setActiveTool?: (activeTool: string) => void) => void): any => {
   const button = document.createElement('div');
   button.classList.add('streetview-widget');
   button.classList.add('esri-component');
@@ -149,7 +149,7 @@ const createStreetviewButton = (view: MapView, widgetActivated: Function): any =
   return button;
 };
 
-export const createIdentifyButton = (view: MapView, widgetActivated: Function): any => {
+export const createIdentifyButton = (view: MapView, widgetActivated: (view: __esri.MapView, setActiveTool?: (activeTool: string) => void) => void): any => {
   const infoButton = document.createElement('div');
   infoButton.classList.add('identify-widget');
   infoButton.classList.add('esri-component');

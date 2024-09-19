@@ -37,9 +37,9 @@ const useBasemaps = (props: PanelProps) => {
         props.view,
         imagesRef.current as any,
         imageGroup,
-        props.alertSet,
         setShowBlend,
-        setSelectedTab
+        setSelectedTab,
+        props.alertSet        
       );
       initializeEsriMaps(props.view, esriRef.current as any, setSelectedTab, setBlendActive);
       setTimeout(() => {
@@ -56,10 +56,10 @@ const useBasemaps = (props: PanelProps) => {
   useEffect(() => {
     tabChanged(selectedTab);
   }, [selectedTab]);
-  const panelDismissed = useCallback((e: any) => {
+  const panelDismissed = useCallback(() => {
     props.panelDismissed();
   }, []);
-  const tipsClicked = useCallback((e: any) => {
+  const tipsClicked = useCallback(() => {
     props.showTips(tips);
   }, []);
   const blendUpdated = useCallback((e: any) => {

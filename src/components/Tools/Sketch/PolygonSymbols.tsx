@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import ColorButton from "./ColorButton";
 import SizeSlider from "./SizeSlider";
 interface Props {
-  polygonSymbolUpdated: Function;
+  polygonSymbolUpdated: (fillColor: Color, outlineColor: Color, width: any) => void;
 }
 function PolygonSymbols(props: Props) {
   const [fillColor, setFillColor] = useState<Color>(
