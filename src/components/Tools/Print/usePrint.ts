@@ -160,6 +160,10 @@ const usePrint = (props: PrintProps) => {
 
   useEffect(() => {
     setIsActive(props.isActive);
+    if (!props.isActive) {
+      hidePrintFrame(props.view);
+      setShowFrame(false);
+    }
   }, [props.isActive]);
   useEffect(() => {
     setUserDefined(customScale?.scale == 'custom');
