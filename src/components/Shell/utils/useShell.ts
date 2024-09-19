@@ -123,10 +123,10 @@ const useShell = () => {
     },
     [loadedTools]
   );
-  const panelDismissed = useCallback((e: any) => {
+  const panelDismissed = useCallback(() => {
     setActivePanel("");
   }, []);
-  const toolDismissed = useCallback((e: any) => {
+  const toolDismissed = useCallback(() => {
     setActiveTool("");
   }, []);
   const propertySelected = useCallback(

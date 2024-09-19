@@ -6,6 +6,7 @@ import {
 } from "./location";
 import { PanelProps } from "../../utils/PanelProps";
 import { tips } from "./tips";
+import Graphic from "@arcgis/core/Graphic";
 
 const useLocation = (props: PanelProps) => {
   const searchDiv = useRef(null);
@@ -16,7 +17,7 @@ const useLocation = (props: PanelProps) => {
   const feature = useRef<__esri.Feature>();
 
   const [isIntersection, setIsIntersection] = useState(false);
-  const [intersections, setIntersections] = useState([]);
+  const [intersections, setIntersections] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isActive, setIsActive] = useState(false);
 

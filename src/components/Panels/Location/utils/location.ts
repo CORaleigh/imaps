@@ -17,7 +17,7 @@ const marker: PictureMarkerSymbol = new PictureMarkerSymbol({
   width: 36,
 });
 
-export const intializeLocationSearch = async (view: MapView, container: HTMLDivElement, setIsIntersection: Function): Promise<widgetSearch> => {
+export const intializeLocationSearch = async (view: MapView, container: HTMLDivElement, setIsIntersection: (isIntersection: boolean) => void): Promise<widgetSearch> => {
   const sources: any[] = [];
   const source = await addLocationSearch();
   sources.push(source);
@@ -85,9 +85,9 @@ const addLocationSearch = (): LocatorSearchSource => {
 export const addSearchEvents = (
   search: widgetSearch,
   view: MapView,
-  setIsIntersection: Function,
-  setIntersections: Function,
-  setSearchTerm: Function,
+  setIsIntersection: (isIntersection: boolean) => void,
+  setIntersections: (intersections: string[]) => void,
+  setSearchTerm: (searchTerm: string) => void,
   feature: Feature,
 ) => {
   search.on('search-complete', async (result) => {

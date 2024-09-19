@@ -11,7 +11,7 @@ import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
 import { Alert } from '../../../Shell/utils/alert';
 
-export const initializeBasemaps = async (view: MapView, ref: HTMLDivElement, id: string, setSelectedTab: Function, setBlendActive: Function) => {
+export const initializeBasemaps = async (view: MapView, ref: HTMLDivElement, id: string, setSelectedTab: (selectedTab: string) => void, setBlendActive: (blendActive: boolean) => void) => {
   const gallery = new BasemapGallery({
     container: ref,
     view: view,
@@ -44,9 +44,9 @@ export const initializeImageMaps = async (
   view: MapView,
   ref: HTMLDivElement,
   id: string,
-  alertSet: Function | undefined,
-  setShowBlend: Function, 
-  setSelectedTab: Function
+  alertSet: (alert: Alert) => void,
+  setShowBlend: (showBlend: boolean) => void, 
+  setSelectedTab: (selectedTab: string) => void
 ) => {
   images = new BasemapGallery({
     container: ref,
@@ -98,7 +98,7 @@ export const initializeImageMaps = async (
   });
 };
 
-export const initializeEsriMaps = async (view: MapView, ref: HTMLDivElement, setSelectedTab: Function, setBlendActive: Function) => {
+export const initializeEsriMaps = async (view: MapView, ref: HTMLDivElement, setSelectedTab: (selectedTab: string) => void, setBlendActive: (blendActive: boolean) => void) => {
   const esri = new BasemapGallery({
     container: ref,
     view: view,
@@ -144,7 +144,7 @@ const getBoundary = async (view: __esri.MapView): Promise<Polygon> => {
       return Polygon.fromJSON(response.data.shape);
 };
 
-const viewExtentChanged = (extent: __esri.Extent, view: MapView, alertSet: Function | undefined) => {
+const viewExtentChanged = (extent: __esri.Extent, view: MapView, alertSet: (alert: Alert) => void) => {
 
   if (imageryBoundary) {// && images.source.basemaps.find((basemap) => images.activeBasemap.title === basemap.title)) {
     wasRaleigh = inRaleigh;

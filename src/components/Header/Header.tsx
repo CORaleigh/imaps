@@ -13,7 +13,15 @@ import {
 import React, { useEffect, useRef, useState } from 'react';
 import './Header.css';
 import { reopenDropdown, toggleTheme } from './utils/header';
-function Header(props: {disclaimerClicked: Function, logo: any}) {
+
+interface HeaderProps {
+  disclaimerClicked: () => void;
+  logo: {
+    dark: string,
+    light: string
+  }
+}
+function Header({disclaimerClicked, logo}: HeaderProps) {
   const ref = useRef<HTMLCalciteDropdownElement>();
 
   // const shortcuts = useRef<HTMLCalciteModalElement>();
@@ -38,7 +46,7 @@ function Header(props: {disclaimerClicked: Function, logo: any}) {
   }, []);
   return (
     <CalciteNavigation slot="header" label='header'>
-      {props.logo && <CalciteNavigationLogo slot="logo" heading="" thumbnail={theme === 'dark' ? props.logo.dark :  props.logo.light} target="_blank" href="https://www.wake.gov/departments-government/geographic-information-services-gis/maps-apps-data/imaps-information" ></CalciteNavigationLogo>}
+      {logo && <CalciteNavigationLogo slot="logo" heading="" thumbnail={theme === 'dark' ? logo.dark :  logo.light} target="_blank" href="https://www.wake.gov/departments-government/geographic-information-services-gis/maps-apps-data/imaps-information" ></CalciteNavigationLogo>}
         <CalciteDropdown
         slot="content-end"
           ref={ref as any}
@@ -58,7 +66,7 @@ function Header(props: {disclaimerClicked: Function, logo: any}) {
           <CalciteDropdownGroup selection-mode="none" group-title="About" key="disclaimer">
             <CalciteDropdownItem
               onClick={(e: any) => {
-                props.disclaimerClicked();               
+                disclaimerClicked();               
               }}
             >
               Disclaimer
