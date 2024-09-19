@@ -341,6 +341,12 @@ export const createFeatureTitle = (
               </Suspense>
             </div>,
           );
+        } else {
+          root.render(
+            <div className="feature-title">
+              <h2>{title}</h2>
+            </div>,
+          );          
         }
       }
 
