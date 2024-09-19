@@ -1,7 +1,7 @@
-import MapView from "@arcgis/core/views/MapView";
-import { useEffect, useRef } from "react";
-import { displayProperties, initializeMap } from "../utils/map";
-import { WebMapProps } from "./WebMapProps";
+import MapView from '@arcgis/core/views/MapView';
+import { useEffect, useRef } from 'react';
+import { displayProperties, initializeMap } from '../utils/map';
+import { WebMapProps } from './WebMapProps';
 
 const useWebMap = (props: WebMapProps) => {
   const ref = useRef() as any;
@@ -11,19 +11,17 @@ const useWebMap = (props: WebMapProps) => {
   useEffect(() => {
     window.onerror = function (e) {
       console.log(e);
-    }  
-    console.error = function(...args) {
-    }
+    };
+    console.error = function (...args) {};
     if (!loaded.current && props.mapId) {
-
       loaded.current = true;
       initializeMap(
         ref.current,
         props.mapId,
         props.geometrySet,
         props.widgetActivated,
-        props.alertSet
-      ).then(mapView => {
+        props.alertSet,
+      ).then((mapView) => {
         view.current = mapView;
         props.mapViewSet(view.current);
       });

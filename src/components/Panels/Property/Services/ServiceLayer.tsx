@@ -1,6 +1,6 @@
-import Feature from "@arcgis/core/widgets/Feature";
-import React from "react";
-import { useEffect, useRef } from "react";
+import Feature from '@arcgis/core/widgets/Feature';
+import React from 'react';
+import { useEffect, useRef } from 'react';
 interface Props {
   key: number;
   feature: __esri.Graphic;

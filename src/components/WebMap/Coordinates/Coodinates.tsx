@@ -8,11 +8,11 @@ import {
   CalciteNotice,
   CalciteOption,
   CalciteSelect,
-} from "@esri/calcite-components-react";
-import React from "react";
-import "./Coordinates.css";
-import { CoordinateProps } from "./utils/CoordinateProps";
-import useCoordinates from "./utils/useCoordinates";
+} from '@esri/calcite-components-react';
+import React from 'react';
+import './Coordinates.css';
+import { CoordinateProps } from './utils/CoordinateProps';
+import useCoordinates from './utils/useCoordinates';
 
 function Coordinates(props: CoordinateProps) {
   const {
@@ -30,7 +30,7 @@ function Coordinates(props: CoordinateProps) {
     coordinateRef,
     modeActionRef,
     noticeRef,
-    coordinateInputChanged
+    coordinateInputChanged,
   } = useCoordinates(props);
   return (
     <div id="coordinatesWidget">
@@ -123,30 +123,36 @@ function Coordinates(props: CoordinateProps) {
           </CalciteInputMessage>
         </CalciteLabel> */}
         <CalciteLabel>
-        <div className="coordinate-input">
-        <CalciteInput
-          scale="m"
-          ref={coordInput}
-          id="coordInput"
-          placeholder={selectedFormat.placeholder}
-          clearable
-          onCalciteInputChange={coordinateInputChanged}
-        ></CalciteInput>
-        <CalciteButton onClick={searchCoordinates} appearance="transparent" kind="neutral" width="full" scale="m" iconEnd="search">
-          
-        </CalciteButton>   
-        </div>
-     
+          <div className="coordinate-input">
+            <CalciteInput
+              scale="m"
+              ref={coordInput}
+              id="coordInput"
+              placeholder={selectedFormat.placeholder}
+              clearable
+              onCalciteInputChange={coordinateInputChanged}
+            ></CalciteInput>
+            <CalciteButton
+              onClick={searchCoordinates}
+              appearance="transparent"
+              kind="neutral"
+              width="full"
+              scale="m"
+              iconEnd="search"
+            ></CalciteButton>
+          </div>
+
           <CalciteInputMessage
             hidden={
-              coordInput.current?.getAttribute("status") === "invalid" ? undefined : true
+              coordInput.current?.getAttribute('status') === 'invalid'
+                ? undefined
+                : true
             }
             status="invalid"
           >
             Value is not valid
-          </CalciteInputMessage>        
+          </CalciteInputMessage>
         </CalciteLabel>
-
       </div>
       <div className="coordinates-row">
         <div ref={coordinateRef} className="coordinates-text"></div>
@@ -157,10 +163,7 @@ function Coordinates(props: CoordinateProps) {
           active={showSearch ? true : undefined}
           onClick={searchClicked}
         ></CalciteAction>
-        <CalciteTooltip
-          closeOnClick
-          referenceElement="coordinateSearch"
-        >
+        <CalciteTooltip closeOnClick referenceElement="coordinateSearch">
           Search Coordinates
         </CalciteTooltip>
         <CalciteAction
@@ -170,10 +173,7 @@ function Coordinates(props: CoordinateProps) {
           onClick={settingsClicked}
           active={showSettings ? true : undefined}
         ></CalciteAction>
-        <CalciteTooltip
-          closeOnClick
-          referenceElement="coordinateUnits"
-        >
+        <CalciteTooltip closeOnClick referenceElement="coordinateUnits">
           Set Units
         </CalciteTooltip>
         <CalciteAction
@@ -183,10 +183,7 @@ function Coordinates(props: CoordinateProps) {
           icon="pin"
           onClick={modeClicked}
         ></CalciteAction>
-        <CalciteTooltip
-          closeOnClick
-          referenceElement="coordinateMode"
-        >
+        <CalciteTooltip closeOnClick referenceElement="coordinateMode">
           Set Mode
         </CalciteTooltip>
       </div>

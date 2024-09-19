@@ -1,5 +1,5 @@
-import { CalciteSlider } from "@esri/calcite-components-react";
-import React, { useEffect, useState } from "react";
+import { CalciteSlider } from '@esri/calcite-components-react';
+import React, { useEffect, useState } from 'react';
 interface Props {
   layer: __esri.Layer;
   value: number;

@@ -1,6 +1,5 @@
 #overview-map {
-    width: 250px;
-    height: 250px;
-    background-color: var(--calcite-ui-foreground-1) !important;
-  }
-  
+  width: 250px;
+  height: 250px;
+  background-color: var(--calcite-ui-foreground-1) !important;
+}

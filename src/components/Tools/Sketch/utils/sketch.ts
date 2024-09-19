@@ -40,7 +40,12 @@ let textSymbol = new TextSymbol({
   text: '',
   xoffset: 3,
   yoffset: 3,
-  font: { size: 10, family: 'Avenir Next LT Pro', style: 'normal', weight: 'bold' }  
+  font: {
+    size: 10,
+    family: 'Avenir Next LT Pro',
+    style: 'normal',
+    weight: 'bold',
+  },
 });
 let pointSymbol: CIMSymbol;
 let pointSketchViewModel: SketchViewModel;
@@ -81,7 +86,12 @@ export const initializeSketchViewModel = async (
 
   textSketchViewModel = createSketchViewModels(textLayer, view, true);
 
-  const viewModels = [pointSketchViewModel, polylineSketchViewModel, polygonSketchViewModel, textSketchViewModel];
+  const viewModels = [
+    pointSketchViewModel,
+    polylineSketchViewModel,
+    polygonSketchViewModel,
+    textSketchViewModel,
+  ];
   viewModels.forEach((viewModel) => {
     viewModel?.on('create', (e) => {
       if (e.state === 'cancel' && viewModel.activeTool !== null) {
@@ -99,7 +109,11 @@ export const initializeSketchViewModel = async (
   });
 };
 
-const createSketchViewModels = (layer: GraphicsLayer, view: MapView, isText: boolean) => {
+const createSketchViewModels = (
+  layer: GraphicsLayer,
+  view: MapView,
+  isText: boolean,
+) => {
   const sketchVM = new SketchViewModel({
     view,
     layer,
@@ -137,16 +151,19 @@ const addGraphic = (e: any) => {
 export const sketchActivated = () => {
   try {
     setUpdateOnGraphicClick(true);
-  } catch (error) {
-
-  }
-
+  } catch (error) {}
 };
 
-export const toolSelected = (tool: string, activeSketchTool: string, setActiveSketchTool: (activeSketchTool: string) => void) => {
+export const toolSelected = (
+  tool: string,
+  activeSketchTool: string,
+  setActiveSketchTool: (activeSketchTool: string) => void,
+) => {
   sketchActivated();
   selectedTool = tool;
-  tool === activeSketchTool ? setActiveSketchTool('') : setActiveSketchTool(tool);
+  tool === activeSketchTool
+    ? setActiveSketchTool('')
+    : setActiveSketchTool(tool);
   if (activeSketchTool === '') {
     cancelSketch();
   }
@@ -164,7 +181,11 @@ export const toolSelected = (tool: string, activeSketchTool: string, setActiveSk
   }
 };
 let updatingPolygonSymbol = false;
-export const polygonSymbolUpdated = async (fillColor: Color, outlineColor: Color, width: number) => {
+export const polygonSymbolUpdated = async (
+  fillColor: Color,
+  outlineColor: Color,
+  width: number,
+) => {
   const preview = document.getElementById('polygon-preview');
   if (preview && !updatingPolygonSymbol) {
     fillSymbol = fillSymbol.clone();
@@ -174,7 +195,11 @@ export const polygonSymbolUpdated = async (fillColor: Color, outlineColor: Color
     if (polygonSketchViewModel) {
       polygonSketchViewModel.activeFillSymbol = fillSymbol;
       if (sketchLayer.polygonLayer) {
-        updateHighlightedGraphicSymbol(sketchLayer.polygonLayer, fillSymbol, polygonSketchViewModel);
+        updateHighlightedGraphicSymbol(
+          sketchLayer.polygonLayer,
+          fillSymbol,
+          polygonSketchViewModel,
+        );
       }
     }
     updatingPolygonSymbol = true;
@@ -187,7 +212,11 @@ export const polygonSymbolUpdated = async (fillColor: Color, outlineColor: Color
   }
 };
 
-const updateHighlightedGraphicSymbol = (layer: GraphicsLayer, symbol: __esri.Symbol, vm: __esri.SketchViewModel) => {
+const updateHighlightedGraphicSymbol = (
+  layer: GraphicsLayer,
+  symbol: __esri.Symbol,
+  vm: __esri.SketchViewModel,
+) => {
   if (vm.updateGraphics.length) {
     const graphic = vm.updateGraphics.getItemAt(0);
     layer.remove(graphic);
@@ -202,7 +231,11 @@ const updateHighlightedGraphicSymbol = (layer: GraphicsLayer, symbol: __esri.Sym
   }
 };
 
-export const pointSymbolUpdated = async (symbol: any, color: Color, size: number) => {
+export const pointSymbolUpdated = async (
+  symbol: any,
+  color: Color,
+  size: number,
+) => {
   const ref = await request(`${symbol.url}${symbol.cimRef.replace('.', '')}`);
   pointSymbol = new CIMSymbol({
     data: {
@@ -213,7 +246,11 @@ export const pointSymbolUpdated = async (symbol: any, color: Color, size: number
   cimSymbolUtils.applyCIMSymbolColor(pointSymbol, color);
   cimSymbolUtils.scaleCIMSymbolTo(pointSymbol, size);
   if (sketchLayer.pointLayer) {
-    updateHighlightedGraphicSymbol(sketchLayer.pointLayer, pointSymbol, pointSketchViewModel);
+    updateHighlightedGraphicSymbol(
+      sketchLayer.pointLayer,
+      pointSymbol,
+      pointSketchViewModel,
+    );
   }
   pointSketchViewModel.pointSymbol = pointSymbol;
   const preview = document.getElementById('icon-preview');
@@ -237,7 +274,11 @@ export const polylineSymbolUpdated = (lineColor: Color, width: number) => {
       graphic.symbol = lineSymbol;
     });
     if (sketchLayer.polylineLayer) {
-      updateHighlightedGraphicSymbol(sketchLayer.polylineLayer, lineSymbol, polylineSketchViewModel);
+      updateHighlightedGraphicSymbol(
+        sketchLayer.polylineLayer,
+        lineSymbol,
+        polylineSketchViewModel,
+      );
     }
   }
 
@@ -267,17 +308,23 @@ export const textSymbolUpdated = (
   textSymbol.text = textContent;
   textSketchViewModel.pointSymbol = textSymbol as any;
   if (sketchLayer.textLayer) {
-    updateHighlightedGraphicSymbol(sketchLayer.textLayer, textSymbol, textSketchViewModel);
+    updateHighlightedGraphicSymbol(
+      sketchLayer.textLayer,
+      textSymbol,
+      textSketchViewModel,
+    );
   }
 };
 
 export const cancelSketch = () => {
-
   setUpdateOnGraphicClick(false);
   cancelAllViewModels();
 };
 
-export const clearSketch = (setActiveSketchTool: (activeSketchTool: string) => void, setSelectedGraphics: (selectedGraphics: Graphic[]) => void) => {
+export const clearSketch = (
+  setActiveSketchTool: (activeSketchTool: string) => void,
+  setSelectedGraphics: (selectedGraphics: Graphic[]) => void,
+) => {
   setActiveSketchTool('');
   setSelectedGraphics([...[], ...[]]);
   cancelAllViewModels();
@@ -312,34 +359,57 @@ export const getSymbols = (ids: string[], url: string) => {
 };
 
 const cancelAllViewModels = () => {
-  [pointSketchViewModel,polylineSketchViewModel,polygonSketchViewModel,textSketchViewModel].forEach(vm => {
+  [
+    pointSketchViewModel,
+    polylineSketchViewModel,
+    polygonSketchViewModel,
+    textSketchViewModel,
+  ].forEach((vm) => {
     vm.cancel();
-  });  
-}
+  });
+};
 
 const removeAllGraphics = () => {
-  [sketchLayer.polygonLayer,sketchLayer.pointLayer,sketchLayer.polylineLayer,sketchLayer.textLayer].forEach(layer => {
+  [
+    sketchLayer.polygonLayer,
+    sketchLayer.pointLayer,
+    sketchLayer.polylineLayer,
+    sketchLayer.textLayer,
+  ].forEach((layer) => {
     layer.graphics.removeAll();
   });
-}
+};
 
 const removeGraphics = (selectedGraphics: Graphic[]) => {
-  [sketchLayer.polygonLayer,sketchLayer.pointLayer,sketchLayer.polylineLayer,sketchLayer.textLayer].forEach(layer => {
+  [
+    sketchLayer.polygonLayer,
+    sketchLayer.pointLayer,
+    sketchLayer.polylineLayer,
+    sketchLayer.textLayer,
+  ].forEach((layer) => {
     layer.graphics.removeAll();
   });
-}
+};
 
 const setUpdateOnGraphicClick = (update: boolean) => {
-  [pointSketchViewModel, polylineSketchViewModel, polygonSketchViewModel,textSketchViewModel].forEach(vm => {
+  [
+    pointSketchViewModel,
+    polylineSketchViewModel,
+    polygonSketchViewModel,
+    textSketchViewModel,
+  ].forEach((vm) => {
     vm.updateOnGraphicClick = update;
   });
-}
+};
 
 export const stopSketching = () => {
   cancelAllViewModels();
 };
 
-export const deleteSelectedGraphics = (selectedGraphics: Graphic[], setSelectedGraphics: (updater: (current: Graphic[]) => Graphic[]) => void) => {
+export const deleteSelectedGraphics = (
+  selectedGraphics: Graphic[],
+  setSelectedGraphics: (updater: (current: Graphic[]) => Graphic[]) => void,
+) => {
   removeGraphics(selectedGraphics);
   requestAnimationFrame(() => {
     setSelectedGraphics((current: Graphic[]) => {

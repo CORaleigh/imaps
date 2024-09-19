@@ -2,9 +2,9 @@ import {
   CalciteBlock,
   CalciteFlow,
   CalciteFlowItem,
-} from "@esri/calcite-components-react";
-import React, { useEffect, useState } from "react";
-import "./Sketch.css";
+} from '@esri/calcite-components-react';
+import React, { useEffect, useState } from 'react';
+import './Sketch.css';
 interface Props {
   symbols: any[];
   backClicked: () => void;
@@ -28,7 +28,7 @@ function IconSelectionPanel(props: Props) {
             props.backClicked();
           }}
         >
-          <CalciteBlock heading={""}>
+          <CalciteBlock heading={''}>
             <div className="palette">
               {symbols &&
                 symbols.map((symbol: any, i: number) => {
@@ -42,8 +42,8 @@ function IconSelectionPanel(props: Props) {
                       key={`icon-${i}`}
                       alt={symbol.title}
                       src={`${symbol.url}${symbol.thumbnail.href.replace(
-                        ".",
-                        ""
+                        '.',
+                        '',
                       )}`}
                     ></img>
                   );

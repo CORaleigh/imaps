@@ -1,6 +1,6 @@
-import React, { lazy } from "react";
-import "./App.css";
-const Shell = lazy(() => import("./components/Shell/Shell"));
+import React, { lazy } from 'react';
+import './App.css';
+const Shell = lazy(() => import('./components/Shell/Shell'));
 
 function App() {
   return (

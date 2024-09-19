@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   addSearchEvents,
   intializeLocationFeature,
   intializeLocationSearch,
-} from "./location";
-import { PanelProps } from "../../utils/PanelProps";
-import { tips } from "./tips";
-import Graphic from "@arcgis/core/Graphic";
+} from './location';
+import { PanelProps } from '../../utils/PanelProps';
+import { tips } from './tips';
+import Graphic from '@arcgis/core/Graphic';
 
 const useLocation = (props: PanelProps) => {
   const searchDiv = useRef(null);
@@ -18,28 +18,30 @@ const useLocation = (props: PanelProps) => {
 
   const [isIntersection, setIsIntersection] = useState(false);
   const [intersections, setIntersections] = useState<string[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
     if (!loaded.current && searchDiv.current) {
       loaded.current = true;
-      intializeLocationSearch(props.view, searchDiv.current, setIsIntersection).then(
-        (searchWidget: __esri.widgetsSearch) => {
-          search.current = searchWidget;
-          addSearchEvents(
-            searchWidget,
-            props.view,
-            setIsIntersection,
-            setIntersections,
-            setSearchTerm,
-            feature.current as __esri.Feature
-          );
-        }
-      );
+      intializeLocationSearch(
+        props.view,
+        searchDiv.current,
+        setIsIntersection,
+      ).then((searchWidget: __esri.widgetsSearch) => {
+        search.current = searchWidget;
+        addSearchEvents(
+          searchWidget,
+          props.view,
+          setIsIntersection,
+          setIntersections,
+          setSearchTerm,
+          feature.current as __esri.Feature,
+        );
+      });
       feature.current = intializeLocationFeature(
         props.view,
-        featureDiv.current as HTMLDivElement
+        featureDiv.current as HTMLDivElement,
       );
     }
   });

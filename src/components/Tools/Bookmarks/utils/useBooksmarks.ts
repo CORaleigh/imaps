@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { tips } from "./tips";
-import { initializeBookmarks } from "./bookmarks";
-import { ToolProps } from "../../utils/ToolProps";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { tips } from './tips';
+import { initializeBookmarks } from './bookmarks';
+import { ToolProps } from '../../utils/ToolProps';
 
 const useBookmarks = (props: ToolProps) => {
   const bookmarkRef = useRef() as any;

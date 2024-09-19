@@ -41,10 +41,9 @@ calcite-tab {
   display: flex;
   flex-direction: row;
   width: 100%;
-  text-align: center;  
+  text-align: center;
 }
 
 .feature-title h2 {
   width: 100%;
 }
-

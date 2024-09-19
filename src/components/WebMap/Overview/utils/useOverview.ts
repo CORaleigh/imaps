@@ -1,7 +1,7 @@
-import { useEffect, useRef } from "react";
-import MapView from "@arcgis/core/views/MapView";
+import { useEffect, useRef } from 'react';
+import MapView from '@arcgis/core/views/MapView';
 
-import { initializeOverview } from "./overview";
+import { initializeOverview } from './overview';
 interface Props {
   id: string;
   view: __esri.MapView;

@@ -9,15 +9,19 @@ import Graphic from '@arcgis/core/Graphic';
 import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 import Color from '@arcgis/core/Color';
 import Feature from '@arcgis/core/widgets/Feature';
-import * as reactiveUtils from "@arcgis/core/core/reactiveUtils.js";
+import * as reactiveUtils from '@arcgis/core/core/reactiveUtils.js';
 
 const marker: PictureMarkerSymbol = new PictureMarkerSymbol({
-  url: "assets/pin.svg",
+  url: 'assets/pin.svg',
   height: 36,
   width: 36,
 });
 
-export const intializeLocationSearch = async (view: MapView, container: HTMLDivElement, setIsIntersection: (isIntersection: boolean) => void): Promise<widgetSearch> => {
+export const intializeLocationSearch = async (
+  view: MapView,
+  container: HTMLDivElement,
+  setIsIntersection: (isIntersection: boolean) => void,
+): Promise<widgetSearch> => {
   const sources: any[] = [];
   const source = await addLocationSearch();
   sources.push(source);
@@ -30,7 +34,10 @@ export const intializeLocationSearch = async (view: MapView, container: HTMLDivE
     popupEnabled: false,
     container: container,
     goToOverride: (view, params) => {
-      view.goTo({ target: params.target.target, zoom: 17 }, { duration: 1000, easing: 'ease' as any });
+      view.goTo(
+        { target: params.target.target, zoom: 17 },
+        { duration: 1000, easing: 'ease' as any },
+      );
     },
   });
   search.on('search-clear', () => {
@@ -38,10 +45,11 @@ export const intializeLocationSearch = async (view: MapView, container: HTMLDivE
     setIsIntersection(false);
   });
   search.sources.addMany(sources);
-  
+
   search.allSources.on('after-add', (event: any) => {
     if ((event.item as any).layer) {
-      const item: __esri.LayerSearchSource = event.item as __esri.LayerSearchSource;
+      const item: __esri.LayerSearchSource =
+        event.item as __esri.LayerSearchSource;
       item.name = (event.item as any).layer.title;
       item.placeholder = (event.item as any).layer.title;
     }
@@ -92,17 +100,20 @@ export const addSearchEvents = (
 ) => {
   search.on('search-complete', async (result) => {
     search.blur();
-    reactiveUtils.whenOnce(() => search?.view?.popup.visible).then(() => search?.view?.popup.close());
+    reactiveUtils
+      .whenOnce(() => search?.view?.popup.visible)
+      .then(() => search?.view?.popup.close());
     (feature as any).graphic = null;
     setSearchTerm(result.searchTerm);
     setIsIntersection(result.results[0].source.name === 'Intersection');
     if (result.results[0].source.name === 'Intersection') {
-      const featureSet: __esri.FeatureSet = await result.results[0].source.layer.queryFeatures({
-        geometry: result.results[0].results[0].feature.geometry,
-        returnGeometry: false,
-        outFields: ['CARTONAME'],
-        orderByFields: ['CARTONAME'],
-      });
+      const featureSet: __esri.FeatureSet =
+        await result.results[0].source.layer.queryFeatures({
+          geometry: result.results[0].results[0].feature.geometry,
+          returnGeometry: false,
+          outFields: ['CARTONAME'],
+          orderByFields: ['CARTONAME'],
+        });
       setIntersections(
         featureSet.features.map((feature) => {
           return feature.getAttribute('CARTONAME');
@@ -119,9 +130,13 @@ export const addSearchEvents = (
       });
     }
   });
-}
+};
 
-export const intersectingStreetSelected = async (intersection: string, searchTerm: string, view: MapView) => {
+export const intersectingStreetSelected = async (
+  intersection: string,
+  searchTerm: string,
+  view: MapView,
+) => {
   const value = `${intersection} & ${searchTerm}`;
   const candidates = await addressToLocations(
     'https://maps.raleighnc.gov/arcgis/rest/services/Locators/Locator/GeocodeServer',
@@ -135,7 +150,10 @@ export const intersectingStreetSelected = async (intersection: string, searchTer
   if (candidates.length) {
     removeGraphics(view);
     addGraphics(view, candidates[0].location);
-    view.goTo({ target: candidates[0].location, zoom: 17 }, { duration: 1000, easing: 'ease' as any });
+    view.goTo(
+      { target: candidates[0].location, zoom: 17 },
+      { duration: 1000, easing: 'ease' as any },
+    );
   }
 };
 
@@ -145,7 +163,7 @@ const addGraphics = (view: __esri.MapView, geometry: __esri.Geometry): void => {
       new Graphic({
         geometry: geometry,
         attributes: { type: 'location' },
-        symbol: marker
+        symbol: marker,
       }),
     );
   } else {
@@ -172,6 +190,9 @@ const removeGraphics = (view: __esri.MapView): void => {
   );
 };
 
-export const intializeLocationFeature = (view: MapView, container: HTMLDivElement) => {
+export const intializeLocationFeature = (
+  view: MapView,
+  container: HTMLDivElement,
+) => {
   return new Feature({ view: view, container: container });
-}
+};

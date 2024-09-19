@@ -19,7 +19,6 @@ d #coordinatesWidget:before {
   opacity: 0.8;
 }
 
-
 #coordinatesWidget calcite-select {
   margin-bottom: 0.5em;
 }
@@ -37,6 +36,6 @@ d #coordinatesWidget:before {
   width: 100%;
 }
 .coordinate-input calcite-button {
-  width:  50px;
+  width: 50px;
   margin: 0;
 }

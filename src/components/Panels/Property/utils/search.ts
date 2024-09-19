@@ -4,21 +4,30 @@ import LayerSearchSource from '@arcgis/core/widgets/Search/LayerSearchSource';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import Collection from '@arcgis/core/core/Collection';
 import Graphic from '@arcgis/core/Graphic';
-import * as reactiveUtils from "@arcgis/core/core/reactiveUtils.js";
+import * as reactiveUtils from '@arcgis/core/core/reactiveUtils.js';
 
 let condos: FeatureLayer;
 let addresses: FeatureLayer;
 let search: Search;
 let properties: FeatureLayer;
-const getQueryParams = async (condosSelected: (selectedCondos: Graphic[]) => void) => {
+const getQueryParams = async (
+  condosSelected: (selectedCondos: Graphic[]) => void,
+) => {
   const url = new URL(window.location as any);
   const pins = url.searchParams.get('pin');
   if (pins !== '' && pins !== null) {
-    const result = await searchCondos(`PIN_NUM in ('${pins?.replaceAll(',', "','")}')`, []);
+    const result = await searchCondos(
+      `PIN_NUM in ('${pins?.replaceAll(',', "','")}')`,
+      [],
+    );
     condosSelected(result);
   }
 };
-export const initializeSearch = (ref: HTMLDivElement, view: MapView, setCondos: (condos: Graphic[]) => void) => {
+export const initializeSearch = (
+  ref: HTMLDivElement,
+  view: MapView,
+  setCondos: (condos: Graphic[]) => void,
+) => {
   getTables(view);
   search = new Search({
     view: view,
@@ -44,9 +53,13 @@ export const initializeSearch = (ref: HTMLDivElement, view: MapView, setCondos: 
   });
 
   getQueryParams(setCondos);
-  window.addEventListener('popstate', (event) => {
-    getQueryParams(setCondos);
-  }, {passive: true});
+  window.addEventListener(
+    'popstate',
+    (event) => {
+      getQueryParams(setCondos);
+    },
+    { passive: true },
+  );
 
   return search;
 };
@@ -62,7 +75,11 @@ const getTables = (view: MapView) => {
     return layer.title.includes('Property') && layer.type === 'feature';
   }) as __esri.FeatureLayer;
 };
-const sortSuggestions = (input: string, field: string, data: __esri.Graphic[]): __esri.Graphic[] => {
+const sortSuggestions = (
+  input: string,
+  field: string,
+  data: __esri.Graphic[],
+): __esri.Graphic[] => {
   const first = [];
   const others = [];
   for (let i = 0; i < data.length; i++) {
@@ -107,7 +124,11 @@ const getSuggestions = async (
     where: whereArray.join(' OR '),
   });
 
-  const features = sortSuggestions(params.suggestTerm.toUpperCase(), searchFields[0], results.features);
+  const features = sortSuggestions(
+    params.suggestTerm.toUpperCase(),
+    searchFields[0],
+    results.features,
+  );
   return features.map((feature: Graphic) => {
     return {
       key: name,
@@ -149,7 +170,16 @@ const getLayerSource = (
     name: name,
     maxSuggestions: 6,
     getSuggestions: (params: any) => {
-      return getSuggestions(params, name, table, outFields, orderByFields, searchFields, startsWith, searchWidget);
+      return getSuggestions(
+        params,
+        name,
+        table,
+        outFields,
+        orderByFields,
+        searchFields,
+        startsWith,
+        searchWidget,
+      );
     },
     getResults: getResults,
   });
@@ -199,7 +229,17 @@ const setSearchSources = (
       ['PIN_NUM', 'OBJECTID'],
       searchWidget,
     ),
-    getLayerSource('REID', 'REID', condoTable, ['REID'], ['REID'], ['REID'], true, ['REID', 'OBJECTID'], searchWidget),
+    getLayerSource(
+      'REID',
+      'REID',
+      condoTable,
+      ['REID'],
+      ['REID'],
+      ['REID'],
+      true,
+      ['REID', 'OBJECTID'],
+      searchWidget,
+    ),
     getLayerSource(
       'example: W HARGETT ST',
       'Street Name',
@@ -220,17 +260,30 @@ const checkPin = (searchTerm: string): string => {
     searchTerm[4] === '.' &&
     [searchTerm[7], searchTerm[10], searchTerm[15]].every((p) => p === ' ');
   if (matches) {
-    searchTerm = searchTerm.substring(0, 4) + searchTerm.substring(8, 10) + searchTerm.substring(11, 15);
+    searchTerm =
+      searchTerm.substring(0, 4) +
+      searchTerm.substring(8, 10) +
+      searchTerm.substring(11, 15);
   }
   return searchTerm;
 };
 
-const searchComplete = async (event: __esri.SearchSearchCompleteEvent): Promise<any> => {
+const searchComplete = async (
+  event: __esri.SearchSearchCompleteEvent,
+): Promise<any> => {
   search.blur();
-  reactiveUtils.whenOnce(() => search?.view?.popup.visible).then(() => search?.view?.popup.close());
+  reactiveUtils
+    .whenOnce(() => search?.view?.popup.visible)
+    .then(() => search?.view?.popup.close());
   requestAnimationFrame(() => search?.view?.popup.close());
   if (!search.viewModel.selectedSuggestion) {
-    let searchFields: string[] = ['SITE_ADDRESS','OWNER','FULL_STREET_NAME','PIN_NUM', 'REID'];
+    let searchFields: string[] = [
+      'SITE_ADDRESS',
+      'OWNER',
+      'FULL_STREET_NAME',
+      'PIN_NUM',
+      'REID',
+    ];
     // if ((search.activeSource as LayerSearchSource)?.searchFields) {
     //   searchFields = (search.activeSource as LayerSearchSource)?.searchFields;
     // } else {
@@ -242,7 +295,7 @@ const searchComplete = async (event: __esri.SearchSearchCompleteEvent): Promise<
       .toUpperCase()
       .replace(/'/g, "''")
       .replace(/[\u2018\u2019]/g, "''");
-      setSearchHistory(term);
+    setSearchHistory(term);
     if (term.length > 2) {
       const where = getWildcardSearchWhere(searchFields, term);
       return wildcardSearch(searchFields, condos, term);
@@ -257,13 +310,16 @@ const searchComplete = async (event: __esri.SearchSearchCompleteEvent): Promise<
       event.results[0].results,
       event.searchTerm,
     );
-    
+
     setSearchHistory(event.searchTerm);
     return result;
   }
 };
 
-const getWildcardSearchWhere = (searchFields: string[], term: string): string => {
+const getWildcardSearchWhere = (
+  searchFields: string[],
+  term: string,
+): string => {
   let where = '';
   if (!searchFields?.length) {
     where = `SITE_ADDRESS like '${term}%' OR FULL_STREET_NAME like '${term}%' OR OWNER like '${term}%' OR REID like '${term}%' OR PIN_NUM like '${term}%'`;
@@ -281,10 +337,17 @@ const getWildcardSearchWhere = (searchFields: string[], term: string): string =>
   return where;
 };
 
-const searchByField = async (field: string, condoTable: FeatureLayer, term: string): Promise<Graphic[]> => {
+const searchByField = async (
+  field: string,
+  condoTable: FeatureLayer,
+  term: string,
+): Promise<Graphic[]> => {
   const oids: number[] = [];
   const where = `${field} like '${field == 'OWNER' ? '%' : ''}${term}%'`;
-  const result = await condoTable.queryFeatures({ where: where, outFields: ['*'] });
+  const result = await condoTable.queryFeatures({
+    where: where,
+    outFields: ['*'],
+  });
   result.features.forEach((f) => {
     oids.push(f.getAttribute('OBJECTID'));
   });
@@ -293,7 +356,9 @@ const searchByField = async (field: string, condoTable: FeatureLayer, term: stri
     //resolve({ features: result.features, properties: properties });
     result.features.forEach((feature) => {
       const geometry = properties.find((property) => {
-        return property.getAttribute('PIN_NUM') === feature.getAttribute('PIN_NUM');
+        return (
+          property.getAttribute('PIN_NUM') === feature.getAttribute('PIN_NUM')
+        );
       })?.geometry;
       if (geometry) {
         feature.geometry = geometry;
@@ -301,21 +366,31 @@ const searchByField = async (field: string, condoTable: FeatureLayer, term: stri
     });
     return result.features;
   } else {
-    return []
+    return [];
   }
-}
+};
 
-const wildcardSearch = async (searchFields: string[], condoTable: FeatureLayer, term: string): Promise<any> => {
-  document.querySelector('.esri-search__warning-menu')?.setAttribute('style', 'visibility: hidden');
-  const promises = searchFields.map(async field => {
+const wildcardSearch = async (
+  searchFields: string[],
+  condoTable: FeatureLayer,
+  term: string,
+): Promise<any> => {
+  document
+    .querySelector('.esri-search__warning-menu')
+    ?.setAttribute('style', 'visibility: hidden');
+  const promises = searchFields.map(async (field) => {
     return await searchByField(field, condoTable, term);
   });
   const results = await Promise.all(promises);
   return results.flat(1);
-
 };
 
-const searchResultSelected = async (layer: FeatureLayer, source: string, results: any, term: string) => {
+const searchResultSelected = async (
+  layer: FeatureLayer,
+  source: string,
+  results: any,
+  term: string,
+) => {
   if (!layer && source === 'Owner') {
     layer = condos;
   }
@@ -359,7 +434,9 @@ const searchCondos = async (where: string, oids: number[]): Promise<any> => {
   const properties: Graphic[] = await getProperty(oids);
   result.features.forEach((feature) => {
     const geometry = properties.find((property) => {
-      return property.getAttribute('PIN_NUM') === feature.getAttribute('PIN_NUM');
+      return (
+        property.getAttribute('PIN_NUM') === feature.getAttribute('PIN_NUM')
+      );
     })?.geometry;
     if (geometry) {
       feature.geometry = geometry;
@@ -368,7 +445,10 @@ const searchCondos = async (where: string, oids: number[]): Promise<any> => {
   return result.features;
 };
 
-const searchRelatedCondos = async (oids: number[], layer: __esri.FeatureLayer) => {
+const searchRelatedCondos = async (
+  oids: number[],
+  layer: __esri.FeatureLayer,
+) => {
   const relationship = layer.relationships.find((r) => {
     return r.name === 'ADDRESSES_CONDO';
   });
@@ -394,7 +474,9 @@ const searchRelatedCondos = async (oids: number[], layer: __esri.FeatureLayer) =
   const properties: Graphic[] = await getProperty(oids);
   features.forEach((feature: Graphic) => {
     const geometry = properties.find((property) => {
-      return property.getAttribute('PIN_NUM') === feature.getAttribute('PIN_NUM');
+      return (
+        property.getAttribute('PIN_NUM') === feature.getAttribute('PIN_NUM')
+      );
     })?.geometry;
     if (geometry) {
       feature.geometry = geometry;
@@ -402,7 +484,9 @@ const searchRelatedCondos = async (oids: number[], layer: __esri.FeatureLayer) =
   });
   return features;
 };
-export const getProperty = async (oids: number[]): Promise<__esri.Graphic[]> => {
+export const getProperty = async (
+  oids: number[],
+): Promise<__esri.Graphic[]> => {
   const relationship = condos.relationships.find((r) => {
     return r.name === 'CONDO_PROPERTY';
   });
@@ -435,26 +519,26 @@ export const getSearchHistory = (): Array<string> => {
     historyItems = JSON.parse(history) as Array<string>;
   }
   return historyItems;
-}
+};
 
 export const setSearchHistory = (term: string, field?: string) => {
   const history = localStorage.getItem('imaps_history');
   let historyItems: Array<string> = [];
   if (history) {
-    historyItems = JSON.parse(history) as Array<string>
+    historyItems = JSON.parse(history) as Array<string>;
   }
-  historyItems = historyItems.filter(item => {
+  historyItems = historyItems.filter((item) => {
     return item !== term;
-  })
-  if (term.length >=3) {
+  });
+  if (term.length >= 3) {
     historyItems.unshift(term);
   }
   if (historyItems.length > 10) {
     historyItems.pop();
   }
   localStorage.setItem('imaps_history', JSON.stringify(historyItems));
-}
+};
 
 export const searchHistory = (term: string, field?: string) => {
   search.search(term);
-}
+};

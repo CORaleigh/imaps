@@ -1,5 +1,9 @@
 import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
-import { CalciteTip, CalciteTipGroup, CalciteTipManager } from '@esri/calcite-components-react';
+import {
+  CalciteTip,
+  CalciteTipGroup,
+  CalciteTipManager,
+} from '@esri/calcite-components-react';
 interface AppTip {
   title: string;
   text: string;
@@ -29,7 +33,11 @@ function AppTips(props: Props) {
     }, 100);
   }, [props.tips]);
   return (
-    <CalciteTipManager ref={manager} closed={tips === undefined ? true : undefined} onCalciteTipManagerClose={() => setTips(undefined)}>
+    <CalciteTipManager
+      ref={manager}
+      closed={tips === undefined ? true : undefined}
+      onCalciteTipManagerClose={() => setTips(undefined)}
+    >
       <CalciteTipGroup>
         {props.tips?.tips.map((tip: any) => {
           return (

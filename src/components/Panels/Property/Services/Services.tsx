@@ -2,13 +2,13 @@ import {
   CalciteAccordion,
   CalciteAccordionItem,
   CalciteScrim,
-} from "@esri/calcite-components-react";
-import React from "react";
-import { useEffect, useState } from "react";
-import { services } from "../../../../config/config";
+} from '@esri/calcite-components-react';
+import React from 'react';
+import { useEffect, useState } from 'react';
+import { services } from '../../../../config/config';
 
-import ServiceLayer from "./ServiceLayer";
-import { getServices } from "../utils/services";
+import ServiceLayer from './ServiceLayer';
+import { getServices } from '../utils/services';
 
 interface Props {
   view: __esri.MapView;
@@ -45,7 +45,7 @@ export const Services = (props: Props) => {
                   view,
                   graphic,
                   setFeatures,
-                  setSearching
+                  setSearching,
                 );
               }
             }}

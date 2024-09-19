@@ -8,14 +8,14 @@ import {
   CalciteButton,
   CalciteAction,
   CalciteTooltip,
-} from "@esri/calcite-components-react";
-import React from "react";
-import "./Property.css";
-import PropertySearch from "./PropertySearch/PropertySearch";
-import PropertyTable from "./PropertyTable/PropertyTable";
-import PropertyInfo from "./PropertyInfo/PropertyInfo";
-import useProperty from "./utils/useProperty";
-import { PropertyProps } from "./utils/PropertyProps";
+} from '@esri/calcite-components-react';
+import React from 'react';
+import './Property.css';
+import PropertySearch from './PropertySearch/PropertySearch';
+import PropertyTable from './PropertyTable/PropertyTable';
+import PropertyInfo from './PropertyInfo/PropertyInfo';
+import useProperty from './utils/useProperty';
+import { PropertyProps } from './utils/PropertyProps';
 function Property(props: PropertyProps) {
   const {
     condos,
@@ -75,22 +75,19 @@ function Property(props: PropertyProps) {
               label="clear selection"
               aria-label="clear selection"
             ></CalciteButton>
-            <CalciteTooltip
-              referenceElement="clearSelection"
-              closeOnClick
-            >
+            <CalciteTooltip referenceElement="clearSelection" closeOnClick>
               Clear Selection
             </CalciteTooltip>
           </div>
         )}
         <CalciteTabs position="bottom" layout="center" scale="l">
           <CalciteTabNav slot="title-group">
-            <CalciteTabTitle selected={activeTab === "list" ? true : undefined}>
+            <CalciteTabTitle selected={activeTab === 'list' ? true : undefined}>
               List
             </CalciteTabTitle>
             <CalciteTabTitle
               disabled={infoDisabled === true ? true : undefined}
-              selected={activeTab === "info" ? true : undefined}
+              selected={activeTab === 'info' ? true : undefined}
             >
               Info
             </CalciteTabTitle>

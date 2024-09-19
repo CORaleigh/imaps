@@ -9,7 +9,11 @@ function AppAlert(props: Props) {
   const [alert, setAlert] = useState<Alert>();
   useEffect(() => {
     if (localStorage.getItem('imaps_alert_read')) {
-      if (props.alert?.optOut && JSON.parse(localStorage.getItem('imaps_alert_read') as string).title === props?.alert?.title) {
+      if (
+        props.alert?.optOut &&
+        JSON.parse(localStorage.getItem('imaps_alert_read') as string).title ===
+          props?.alert?.title
+      ) {
         props.alert.show = false;
       }
     }

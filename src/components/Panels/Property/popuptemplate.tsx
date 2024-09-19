@@ -28,7 +28,13 @@ export const createTemplate = (
       return {
         fieldName: field.fieldName,
         label: field.label,
-        visible: ['SITE_ADDRESS', 'OWNER', 'PIN_NUM', 'PIN_EXT', 'REID'].includes(field.fieldName),
+        visible: [
+          'SITE_ADDRESS',
+          'OWNER',
+          'PIN_NUM',
+          'PIN_EXT',
+          'REID',
+        ].includes(field.fieldName),
       };
     }),
     content: [
@@ -233,7 +239,13 @@ const getFieldInfos = (condoTable: FeatureLayer): FieldInfo[] => {
       new FieldInfo({
         fieldName: field.name,
         label: field.alias,
-        visible: ['SITE_ADDRESS', 'OWNER', 'PIN_NUM', 'PIN_EXT', 'REID'].includes(field.name),
+        visible: [
+          'SITE_ADDRESS',
+          'OWNER',
+          'PIN_NUM',
+          'PIN_EXT',
+          'REID',
+        ].includes(field.name),
       }),
     );
   });
@@ -253,7 +265,9 @@ const getFieldInfos = (condoTable: FeatureLayer): FieldInfo[] => {
     return fc.fieldName === 'SITE_ADDRESS';
   }) as FieldInfo;
   fieldConfigs = fieldConfigs.filter((fc) => {
-    return !['SITE_ADDRESS', 'OWNER', 'PIN_NUM', 'PIN_EXT', 'REID'].includes(fc.fieldName);
+    return !['SITE_ADDRESS', 'OWNER', 'PIN_NUM', 'PIN_EXT', 'REID'].includes(
+      fc.fieldName,
+    );
   });
   fieldConfigs.unshift(ext);
   fieldConfigs.unshift(pin);
@@ -263,10 +277,14 @@ const getFieldInfos = (condoTable: FeatureLayer): FieldInfo[] => {
   return fieldConfigs;
 };
 
-export const getPhotos = async (feature: __esri.Graphic): Promise<__esri.MediaInfo[]> => {
-  const relationship = (feature.layer as FeatureLayer)?.relationships.find((r) => {
-    return r.name === 'CONDO_PHOTOS';
-  });
+export const getPhotos = async (
+  feature: __esri.Graphic,
+): Promise<__esri.MediaInfo[]> => {
+  const relationship = (feature.layer as FeatureLayer)?.relationships.find(
+    (r) => {
+      return r.name === 'CONDO_PHOTOS';
+    },
+  );
   const mediaInfos: any[] = [];
   const layer: FeatureLayer = feature.layer as FeatureLayer;
   const result = await layer?.queryRelatedFeatures({

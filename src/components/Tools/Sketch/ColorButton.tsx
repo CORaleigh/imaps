@@ -1,5 +1,5 @@
-import "./Sketch.css";
-import Color from "@arcgis/core/Color";
+import './Sketch.css';
+import Color from '@arcgis/core/Color';
 import {
   CalciteAction,
   CalciteButton,
@@ -10,8 +10,8 @@ import {
   CalcitePanel,
   CalcitePopover,
   CalciteSlider,
-} from "@esri/calcite-components-react";
-import React, { useEffect, useRef, useState } from "react";
+} from '@esri/calcite-components-react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface Props {
   id: string;
@@ -52,7 +52,7 @@ function ColorButton(props: Props) {
         ref={popover}
         overlayPositioning="fixed"
         placement="top-start"
-        label={""}
+        label={''}
         referenceElement={`${props.id}-popover-button`}
       >
         <CalcitePanel heading="Color">
@@ -74,7 +74,7 @@ function ColorButton(props: Props) {
             hideSaved
             hideHex
             hideChannels
-            value={color ? color.toHex() : "#FF0000"}
+            value={color ? color.toHex() : '#FF0000'}
             onCalciteColorPickerInput={(e) =>
               setColor(new Color(e.target.value))
             }

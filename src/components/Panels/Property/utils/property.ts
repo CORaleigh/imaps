@@ -5,7 +5,10 @@ import MapView from '@arcgis/core/views/MapView';
 import { Alert } from '../../../Shell/utils/alert';
 import Graphic from '@arcgis/core/Graphic';
 
-export const getPropertyByGeometry = async (geometry: Geometry, view: MapView) => {
+export const getPropertyByGeometry = async (
+  geometry: Geometry,
+  view: MapView,
+) => {
   const layer = view.map.allLayers.find((layer: __esri.Layer) => {
     return layer.title.includes('Property') && layer.type === 'feature';
   }) as __esri.FeatureLayer;
@@ -20,7 +23,12 @@ export const getPropertyByGeometry = async (geometry: Geometry, view: MapView) =
   });
 
   if (result.features.length) {
-    const relatedCondos = await getRelatedCondos(view, result, layer, condoTable);
+    const relatedCondos = await getRelatedCondos(
+      view,
+      result,
+      layer,
+      condoTable,
+    );
     return relatedCondos;
   }
 };
@@ -74,7 +82,9 @@ const getRelationshipId = (table: __esri.FeatureLayer, name: string) => {
 
 export const clearAddressPoints = (view: MapView) => {
   if (view.map.findLayerById('address-graphics')) {
-    const addressGraphics = view.map.findLayerById('address-graphics') as __esri.GraphicsLayer;
+    const addressGraphics = view.map.findLayerById(
+      'address-graphics',
+    ) as __esri.GraphicsLayer;
     addressGraphics.removeAll();
   }
 };
@@ -84,9 +94,12 @@ export const clearSelectionGraphics = (view: MapView) => {
   if (layer) {
     (layer as __esri.GraphicsLayer).removeAll();
   }
-}
+};
 
-export const checkMaximumRecordCount = (features: Graphic[], alertSet: (alert: Alert) => void) => {
+export const checkMaximumRecordCount = (
+  features: Graphic[],
+  alertSet: (alert: Alert) => void,
+) => {
   if (features.length >= 2000) {
     const alert: Alert = {
       show: true,
@@ -98,5 +111,5 @@ export const checkMaximumRecordCount = (features: Graphic[], alertSet: (alert: A
       message: `The maximum number of records have been returned.  Not all records may be returned, please limit your search.`,
     };
     alertSet(alert);
-  }    
-}
+  }
+};

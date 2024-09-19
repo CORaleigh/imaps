@@ -2,11 +2,11 @@ import {
   CalciteAction,
   CalcitePanel,
   CalciteTooltip,
-} from "@esri/calcite-components-react";
-import React from "react";
-import "./Measure.css";
-import useMeasure from "./utils/useMeasure";
-import { ToolProps } from "../utils/ToolProps";
+} from '@esri/calcite-components-react';
+import React from 'react';
+import './Measure.css';
+import useMeasure from './utils/useMeasure';
+import { ToolProps } from '../utils/ToolProps';
 export const Measure = (props: ToolProps) => {
   const {
     measureRef,
@@ -40,46 +40,37 @@ export const Measure = (props: ToolProps) => {
       </CalciteTooltip>
       <div id="measure-tools">
         <div className="measure-container">
-          <CalciteTooltip
-            closeOnClick
-            referenceElement="measureDistance"
-          >
+          <CalciteTooltip closeOnClick referenceElement="measureDistance">
             Distance
           </CalciteTooltip>
           <CalciteAction
             id="measureDistance"
             icon="measure-line"
             text="Distance"
-            active={selectedTool === "distance" ? true : undefined}
+            active={selectedTool === 'distance' ? true : undefined}
             onClick={() => {
-              setSelectedTool("distance");
+              setSelectedTool('distance');
               if (measurement.current) {
-                measurement.current.activeTool = "distance";
+                measurement.current.activeTool = 'distance';
               }
             }}
           ></CalciteAction>
-          <CalciteTooltip
-            closeOnClick
-            referenceElement="measureArea"
-          >
+          <CalciteTooltip closeOnClick referenceElement="measureArea">
             Area
           </CalciteTooltip>
           <CalciteAction
             id="measureArea"
             icon="measure-area"
             text="Area"
-            active={selectedTool === "area" ? true : undefined}
+            active={selectedTool === 'area' ? true : undefined}
             onClick={() => {
-              setSelectedTool("area");
+              setSelectedTool('area');
               if (measurement.current) {
-                measurement.current.activeTool = "area";
+                measurement.current.activeTool = 'area';
               }
             }}
           ></CalciteAction>
-          <CalciteTooltip
-            closeOnClick
-            referenceElement="clearMeasure"
-          >
+          <CalciteTooltip closeOnClick referenceElement="clearMeasure">
             Clear
           </CalciteTooltip>
           <CalciteAction
@@ -89,14 +80,14 @@ export const Measure = (props: ToolProps) => {
             onClick={() => {
               if (measurement.current) {
                 measurement.current?.clear();
-                setSelectedTool("");
+                setSelectedTool('');
               }
             }}
           ></CalciteAction>
         </div>
         <div ref={measureRef}></div>
         <section
-          hidden={selectedTool !== "" ? true : undefined}
+          hidden={selectedTool !== '' ? true : undefined}
           className="measurement-hint"
         >
           <p>Select line or distance measurement tool</p>

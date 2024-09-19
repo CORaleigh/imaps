@@ -1,9 +1,9 @@
-import TileInfo from "@arcgis/core/layers/support/TileInfo";
+import TileInfo from '@arcgis/core/layers/support/TileInfo';
 export const constraints = {
   minZoom: 9,
   lods: TileInfo.create().lods,
   geometry: {
-    type: "polygon",
+    type: 'polygon',
     rings: [
       [
         [-78.757458636999957, 36.070027180000068],

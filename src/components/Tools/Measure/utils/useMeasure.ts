@@ -1,13 +1,13 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { tips } from "./tips";
-import Measurement from "@arcgis/core/widgets/Measurement";
-import { initializeMeasure } from "./measure";
-import { ToolProps } from "../../utils/ToolProps";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { tips } from './tips';
+import Measurement from '@arcgis/core/widgets/Measurement';
+import { initializeMeasure } from './measure';
+import { ToolProps } from '../../utils/ToolProps';
 
 const useMeasure = (props: ToolProps) => {
   const measureRef = useRef() as any;
   const loaded = useRef(false);
-  const [selectedTool, setSelectedTool] = useState("");
+  const [selectedTool, setSelectedTool] = useState('');
   const [isActive, setIsActive] = useState(false);
   const measurement = useRef<Measurement>();
   useEffect(() => {
@@ -15,9 +15,9 @@ const useMeasure = (props: ToolProps) => {
       loaded.current = true;
       const widget = initializeMeasure(measureRef.current, props.view);
       measurement.current = widget;
-      widget.watch("activeTool", (activeTool) => {
+      widget.watch('activeTool', (activeTool) => {
         if (activeTool) {
-          setSelectedTool(activeTool ? activeTool : "");
+          setSelectedTool(activeTool ? activeTool : '');
           //measurement.current?.clear();
         }
       });

@@ -9,9 +9,12 @@ import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import DevPlanFilter from '../DevPlanFilter';
 import { saveMap } from '../../../WebMap/utils/map';
 const OpacitySlider = lazy(() => import('../OpacitySlider'));
-let layers: LayerList
-export const initializeLayers = async (ref: HTMLDivElement, view: MapView, mapId?: String): Promise<LayerList> => {
-
+let layers: LayerList;
+export const initializeLayers = async (
+  ref: HTMLDivElement,
+  view: MapView,
+  mapId?: String,
+): Promise<LayerList> => {
   await addLayersFromWebmap(view, mapId);
   const url = new URL(window.location as any);
   if (url.searchParams.get('app')) {
@@ -25,15 +28,15 @@ export const initializeLayers = async (ref: HTMLDivElement, view: MapView, mapId
     listItemCreatedFunction: layerListItemCreated,
     visibleElements: {
       filter: true,
-      statusIndicators: false
+      statusIndicators: false,
     },
     filterPlaceholder: 'Search layers',
-    visibilityAppearance: 'checkbox'
+    visibilityAppearance: 'checkbox',
   });
   layers.on('trigger-action', (event: __esri.LayerListTriggerActionEvent) => {
     if (event.item.layer.title === 'Property') {
       togglePropertyLabels(event);
-      requestAnimationFrame(() => event.item.actionsOpen = true);
+      requestAnimationFrame(() => (event.item.actionsOpen = true));
     }
   });
 
@@ -45,60 +48,72 @@ const addLayersFromWebmap = async (view: MapView, mapId?: String) => {
   //const mapId = url.searchParams.get('id') ? url.searchParams.get('id') : '95092428774c4b1fb6a3b6f5fed9fbc4';
   const map = new WebMap({
     portalItem: {
-      id: mapId ? mapId as string : '95092428774c4b1fb6a3b6f5fed9fbc4',
+      id: mapId ? (mapId as string) : '95092428774c4b1fb6a3b6f5fed9fbc4',
     },
   });
 
-  await map.load().catch(error => {
-    console.log(error);
-  }).then(() => {
-    const groups = view.map.allLayers
-    .filter((layer) => {
-      return layer.type === 'group';
+  await map
+    .load()
+    .catch((error) => {
+      console.log(error);
     })
-    .toArray();
+    .then(() => {
+      const groups = view.map.allLayers
+        .filter((layer) => {
+          return layer.type === 'group';
+        })
+        .toArray();
 
-  groups.forEach((group) => {
-    const match = map.allLayers.find((layer) => {
-      return layer.type === 'group' && layer.title === group.title;
-    }) as __esri.GroupLayer;
-    if (match) {
-      const matchlayers = match.layers.slice();
-      const layers = match.layers.filter((layer) => {
-        const found = (group as __esri.GroupLayer).findLayerById(layer.id);
-        //attempting to update stored layer if updated in webmap (popup and renderer)
-        if (found !== undefined) {
-          if (found.type === 'feature') {
-            if ((layer as __esri.FeatureLayer).popupTemplate) {
-              (found as __esri.FeatureLayer).popupTemplate = (layer as __esri.FeatureLayer).popupTemplate;
+      groups.forEach((group) => {
+        const match = map.allLayers.find((layer) => {
+          return layer.type === 'group' && layer.title === group.title;
+        }) as __esri.GroupLayer;
+        if (match) {
+          const matchlayers = match.layers.slice();
+          const layers = match.layers.filter((layer) => {
+            const found = (group as __esri.GroupLayer).findLayerById(layer.id);
+            //attempting to update stored layer if updated in webmap (popup and renderer)
+            if (found !== undefined) {
+              if (found.type === 'feature') {
+                if ((layer as __esri.FeatureLayer).popupTemplate) {
+                  (found as __esri.FeatureLayer).popupTemplate = (
+                    layer as __esri.FeatureLayer
+                  ).popupTemplate;
+                }
+                if ((layer as __esri.FeatureLayer).renderer) {
+                  (found as __esri.FeatureLayer).renderer = (
+                    layer as __esri.FeatureLayer
+                  ).renderer;
+                }
+              }
             }
-            if ((layer as __esri.FeatureLayer).renderer) {
-              (found as __esri.FeatureLayer).renderer = (layer as __esri.FeatureLayer).renderer;
-            }
-          }
+
+            return (
+              (group as __esri.GroupLayer).findLayerById(layer.id) === undefined
+            );
+          });
+          (group as __esri.GroupLayer).addMany(layers.toArray());
+
+          (group as __esri.GroupLayer).layers.forEach((layer1) => {
+            let index = matchlayers.findIndex((layer2) => {
+              return layer1.id === layer2.id;
+            });
+            (group as __esri.GroupLayer).reorder(layer1, index);
+          });
+          matchlayers.destroy();
         }
-  
-        return (group as __esri.GroupLayer).findLayerById(layer.id) === undefined;
       });
-      (group as __esri.GroupLayer).addMany(layers.toArray());
-  
-      (group as __esri.GroupLayer).layers.forEach((layer1) => {
-        let index = matchlayers.findIndex((layer2) => {
-          return layer1.id === layer2.id;
-        });
-        (group as __esri.GroupLayer).reorder(layer1, index);
-      });
-      matchlayers.destroy();
-    }
-
-  });
-  const nongroup = map.layers.filter(layer => layer.type !== 'group' && !layer.visible && !view.map.findLayerById(layer.id));
-  view.map.addMany(nongroup.toArray());
-   //console.log(nongroup.toArray().length)
-  // nongroup.forEach(layer => console.log(layer.title));
-  return true;
-  });
-  
+      const nongroup = map.layers.filter(
+        (layer) =>
+          layer.type !== 'group' &&
+          !layer.visible &&
+          !view.map.findLayerById(layer.id),
+      );
+      view.map.addMany(nongroup.toArray());
+      //console.log(nongroup.toArray().length)
+      // nongroup.forEach(layer => console.log(layer.title));
+      return true;
+    });
 };
 const setPropertyColor = (layer: FeatureLayer, light: boolean) => {
   const renderer = (layer.renderer as __esri.SimpleRenderer).clone();
@@ -116,29 +131,44 @@ const setPropertyColor = (layer: FeatureLayer, light: boolean) => {
 const togglePropertyColor = (layer: FeatureLayer, sections: any) => {
   if (sections.length > 1) {
     setPropertyColor(layer, !sections.getItemAt(1).getItemAt(0).value);
-    sections.getItemAt(1).getItemAt(0).icon = !sections.getItemAt(1).getItemAt(0).value ? 'toggle-off' : 'toggle-on';
+    sections.getItemAt(1).getItemAt(0).icon = !sections
+      .getItemAt(1)
+      .getItemAt(0).value
+      ? 'toggle-off'
+      : 'toggle-on';
   }
 };
-export const togglePropertyLabels = (event: __esri.LayerListTriggerActionEvent) => {
+export const togglePropertyLabels = (
+  event: __esri.LayerListTriggerActionEvent,
+) => {
   if (event.item.layer.title === 'Property') {
-    togglePropertyColor(event.item.layer as FeatureLayer, event.item.actionsSections);
+    togglePropertyColor(
+      event.item.layer as FeatureLayer,
+      event.item.actionsSections,
+    );
     if (!(event.item.layer as __esri.FeatureLayer).labelsVisible) {
       (event.item.layer as __esri.FeatureLayer).labelsVisible = true;
     }
-    
-    const selected = event.item.actionsSections.getItemAt(0).filter((section) => {
-      console.log(section.icon)
-      section.icon = (section as ActionToggle).value ? 'toggle-on' : 'toggle-off';
-      return (section as ActionToggle).value;
-    });
+
+    const selected = event.item.actionsSections
+      .getItemAt(0)
+      .filter((section) => {
+        console.log(section.icon);
+        section.icon = (section as ActionToggle).value
+          ? 'toggle-on'
+          : 'toggle-off';
+        return (section as ActionToggle).value;
+      });
 
     const selectedTitles = selected.map((section) => {
       return (section as ActionToggle).title;
     });
 
-    const selectedExpressions = propertyLabelExpressions.filter((expression) => {
-      return selectedTitles.includes(expression.title);
-    });
+    const selectedExpressions = propertyLabelExpressions.filter(
+      (expression) => {
+        return selectedTitles.includes(expression.title);
+      },
+    );
     const expressions = selectedExpressions.map((expression) => {
       return expression.expression;
     });
@@ -201,46 +231,54 @@ const propertyLabelExpressions: any[] = [
 ];
 
 const addPropertyLabelToggles = (item: any) => {
-  if (item.layer.title === 'Property' && item.layer.type !== 'group' && item.actionsSections.length === 0) {
+  if (
+    item.layer.title === 'Property' &&
+    item.layer.type !== 'group' &&
+    item.actionsSections.length === 0
+  ) {
     let toggles: Collection = new Collection();
     toggles.addMany(
       propertyLabelExpressions.map((expression) => {
         return new ActionToggle({
           value: item.layer.labelingInfo?.find((info: any) => {
-            return info.labelExpressionInfo?.expression.includes(expression.expression) && item.layer.labelsVisible;
+            return (
+              info.labelExpressionInfo?.expression.includes(
+                expression.expression,
+              ) && item.layer.labelsVisible
+            );
           }),
           title: expression.title,
           visible: true,
-          icon: 'toggle-off'
+          icon: 'toggle-off',
         });
       }),
     );
     (item as __esri.ListItem).actionsSections.push(toggles);
 
     toggles = new Collection();
-    toggles.add(
-{
-        value: item.layer.renderer?.symbol?.outline?.color?.isBright,
-        title: 'Light Outline',
-        visible: true,
-        type: 'toggle',
-        icon: 'toggle-off'
-      }as any,
-    );
+    toggles.add({
+      value: item.layer.renderer?.symbol?.outline?.color?.isBright,
+      title: 'Light Outline',
+      visible: true,
+      type: 'toggle',
+      icon: 'toggle-off',
+    } as any);
     (item as __esri.ListItem).actionsSections.push(toggles);
 
     (item as __esri.ListItem).actionsOpen = false;
-    
+
     setTimeout(() => {
       const title = document.createElement('h4');
       title.id = 'labels-actions-title';
       title.textContent = 'Labels';
       title.setAttribute('style', 'padding: 0.5em;margin: 0;');
       const actions = document.querySelector('.esri-layer-list__item-actions');
-      if (actions?.parentElement && !document.getElementById('labels-actions-title')) {
+      if (
+        actions?.parentElement &&
+        !document.getElementById('labels-actions-title')
+      ) {
         actions.prepend(title);
       }
-      
     }, 1000);
   }
 };
@@ -263,7 +301,12 @@ const addDevPlanFilters = (item: any) => {
 };
 
 const createPanel = (item: __esri.ListItem) => {
-  if (item.visible && !item.panel && item.layer.type !== 'group' && item.layer.type !== undefined) {
+  if (
+    item.visible &&
+    !item.panel &&
+    item.layer.type !== 'group' &&
+    item.layer.type !== undefined
+  ) {
     const slider = document.createElement('slider-container');
     const root = createRoot(slider as HTMLDivElement);
     root.render(
@@ -283,7 +326,7 @@ const createPanel = (item: __esri.ListItem) => {
 const layerListItemCreated = async (event: any) => {
   const { item } = event;
 
-  await item.layer.when();  
+  await item.layer.when();
   createPanel(item);
 
   item.open = item.layer.visible;
@@ -312,7 +355,10 @@ const layerListItemCreated = async (event: any) => {
   addPropertyLabelToggles(item);
 };
 
-export const filterLayers = (value: string, layerList: __esri.LayerList): void => {
+export const filterLayers = (
+  value: string,
+  layerList: __esri.LayerList,
+): void => {
   if (!value) {
     value = '';
   }
@@ -342,22 +388,33 @@ export const filterLayers = (value: string, layerList: __esri.LayerList): void =
       item.open = value.length > 0 && open;
       if (!value.length || open) {
         document
-          .getElementById(`${(layerList as any).id}_${(item as any).uid}__title`)
-          ?.parentElement?.parentElement?.parentElement?.removeAttribute('hidden');
+          .getElementById(
+            `${(layerList as any).id}_${(item as any).uid}__title`,
+          )
+          ?.parentElement?.parentElement?.parentElement?.removeAttribute(
+            'hidden',
+          );
       }
       if (!open) {
         document
-          .getElementById(`${(layerList as any).id}_${(item as any).uid}__title`)
-          ?.parentElement?.parentElement?.parentElement?.setAttribute('hidden', '');
+          .getElementById(
+            `${(layerList as any).id}_${(item as any).uid}__title`,
+          )
+          ?.parentElement?.parentElement?.parentElement?.setAttribute(
+            'hidden',
+            '',
+          );
       }
     }
   });
 };
 
 export const resetLayers = (list: __esri.LayerList) => {
-  const groups: Collection<__esri.GroupLayer> = list?.view.map.allLayers.filter((layer) => {
-    return layer.type === 'group';
-  }) as Collection<__esri.GroupLayer>;
+  const groups: Collection<__esri.GroupLayer> = list?.view.map.allLayers.filter(
+    (layer) => {
+      return layer.type === 'group';
+    },
+  ) as Collection<__esri.GroupLayer>;
   groups.forEach((group) => {
     group.visible = group.title === 'Property';
     group.layers.forEach((layer) => {

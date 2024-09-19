@@ -1,4 +1,4 @@
-import { Tips } from "../Print/utils/tips";
+import { Tips } from '../Print/utils/tips';
 
 export interface ToolProps {
   view: __esri.MapView;

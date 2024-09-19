@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
-import { createTemplate } from "../popuptemplate";
-import { PropertyInfoProps } from "../PropertyInfo/PropertyInfoProps";
-import { initializeFeature, updateFeature } from "../utils/info";
+import { useEffect, useRef, useState } from 'react';
+import { createTemplate } from '../popuptemplate';
+import { PropertyInfoProps } from '../PropertyInfo/PropertyInfoProps';
+import { initializeFeature, updateFeature } from '../utils/info';
 const usePropertyInfo = (props: PropertyInfoProps) => {
   const loaded = useRef(false);
   const ref = useRef<any>(null);
@@ -17,20 +17,20 @@ const usePropertyInfo = (props: PropertyInfoProps) => {
   }, []);
 
   useEffect(() => {
-    let pin = "";
+    let pin = '';
     if (feature && props.feature) {
-      pin = props.feature.getAttribute("PIN_NUM");
+      pin = props.feature.getAttribute('PIN_NUM');
       const table = feature?.view.map.allTables.find((table: __esri.Layer) => {
-        return table.title.includes("Condo");
+        return table.title.includes('Condo');
       }) as __esri.FeatureLayer;
-     // props.feature.view = feature.view;
+      // props.feature.view = feature.view;
       props.feature.layer = table;
       props.feature.popupTemplate = createTemplate(
         feature?.view as __esri.MapView,
         table,
         props.feature,
         props.condos,
-        props.featureTable
+        props.featureTable,
       );
       updateFeature(feature, props.feature, props.condos, props.featureTable);
     } else {
@@ -41,13 +41,13 @@ const usePropertyInfo = (props: PropertyInfoProps) => {
     const url = new URL(window.location as any);
     //url.searchParams.delete("pin");
 
-    if (pin !== "") {
-      url.searchParams.set("pin", pin);
+    if (pin !== '') {
+      url.searchParams.set('pin', pin);
     }
 
     //only pushState when history state is different than parameters
     if (window.history.state?.pins !== pin) {
-      window.history.pushState({ pins: pin }, "", url);
+      window.history.pushState({ pins: pin }, '', url);
     }
   }, [props.feature, props.featureTable]);
 

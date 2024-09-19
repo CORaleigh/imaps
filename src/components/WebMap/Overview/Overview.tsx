@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
-import "./Overview.css";
-import useOverview from "./utils/useOverview";
+import './Overview.css';
+import useOverview from './utils/useOverview';
 interface Props {
   id: string;
   view: __esri.MapView;

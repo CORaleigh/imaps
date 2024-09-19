@@ -1,5 +1,5 @@
-import React from "react";
-import { PrintProps } from "./utils/PrintProps";
+import React from 'react';
+import { PrintProps } from './utils/PrintProps';
 import {
   CalcitePanel,
   CalciteAction,
@@ -20,10 +20,10 @@ import {
   CalciteListItem,
   CalciteLoader,
   CalciteIcon,
-} from "@esri/calcite-components-react";
-import usePrint from "./usePrint";
-import "./Print.css";
-import { roundScale } from "./utils/print";
+} from '@esri/calcite-components-react';
+import usePrint from './usePrint';
+import './Print.css';
+import { roundScale } from './utils/print';
 
 const Print = (props: PrintProps) => {
   const {
@@ -84,26 +84,26 @@ const Print = (props: PrintProps) => {
       <CalciteTooltip referenceElement="printTip" closeOnClick>
         Show Tip
       </CalciteTooltip>
-      <CalciteTabs layout="center" position="top" >
+      <CalciteTabs layout="center" position="top">
         <CalciteTabNav slot="title-group">
           <CalciteTabTitle
             onCalciteTabsActivate={tabChanged}
             title="layout"
-            selected={selectedTab === "layout" ? true : undefined}
+            selected={selectedTab === 'layout' ? true : undefined}
           >
             Layout
           </CalciteTabTitle>
           <CalciteTabTitle
             onCalciteTabsActivate={tabChanged}
             title="map"
-            selected={selectedTab === "map" ? true : undefined}
+            selected={selectedTab === 'map' ? true : undefined}
           >
             Map only
           </CalciteTabTitle>
           <CalciteTabTitle
             onCalciteTabsActivate={tabChanged}
             title="exports"
-            selected={selectedTab === "exports" ? true : undefined}
+            selected={selectedTab === 'exports' ? true : undefined}
           >
             Exports
           </CalciteTabTitle>
@@ -112,11 +112,14 @@ const Print = (props: PrintProps) => {
           <div id="print-container">
             <CalciteLabel>
               Title
-              <CalciteInput onCalciteInputInput={titleChanged} placeholder="Title of file"></CalciteInput>
+              <CalciteInput
+                onCalciteInputInput={titleChanged}
+                placeholder="Title of file"
+              ></CalciteInput>
             </CalciteLabel>
             <CalciteLabel>
               Page Size
-              <CalciteSelect label={""} onCalciteSelectChange={layoutChanged}>
+              <CalciteSelect label={''} onCalciteSelectChange={layoutChanged}>
                 {layouts.map((layout, i) => {
                   return (
                     <CalciteOption
@@ -131,7 +134,7 @@ const Print = (props: PrintProps) => {
             </CalciteLabel>
             <CalciteLabel>
               Format
-              <CalciteSelect label={""} onCalciteSelectChange={formatChanged}>
+              <CalciteSelect label={''} onCalciteSelectChange={formatChanged}>
                 {formats.map((format, i) => {
                   return (
                     <CalciteOption
@@ -144,7 +147,7 @@ const Print = (props: PrintProps) => {
                 })}
               </CalciteSelect>
             </CalciteLabel>
-            <CalciteRadioButtonGroup name={""} layout="horizontal">
+            <CalciteRadioButtonGroup name={''} layout="horizontal">
               <CalciteLabel layout="inline">
                 <CalciteRadioButton
                   checked={useCustomScale ? undefined : true}
@@ -166,7 +169,7 @@ const Print = (props: PrintProps) => {
               <CalciteLabel>
                 Scale
                 <CalciteSelect
-                  label={""}
+                  label={''}
                   onCalciteSelectChange={customScaleChanged}
                 >
                   {scales.map((scale, i) => {
@@ -185,7 +188,7 @@ const Print = (props: PrintProps) => {
               </CalciteLabel>
             )}
 
-            {customScale?.scale === "custom" && (
+            {customScale?.scale === 'custom' && (
               <div>
                 <CalciteInput
                   type="number"
@@ -238,7 +241,7 @@ const Print = (props: PrintProps) => {
             <CalciteLabel>
               Format
               <CalciteSelect
-                label={""}
+                label={''}
                 onCalciteSelectChange={imageFormatChanged}
               >
                 {formats.map((format, i) => {
@@ -272,7 +275,7 @@ const Print = (props: PrintProps) => {
                   value={imageHeight.toString()}
                 ></CalciteInput>
               </CalciteLabel>
-              
+
               <CalciteButton
                 onClick={swapWidthHeight}
                 iconStart="arrow-right-left"
@@ -303,23 +306,23 @@ const Print = (props: PrintProps) => {
                     label={item.title}
                     description={
                       item.loading
-                        ? "Generating export"
+                        ? 'Generating export'
                         : item.url
-                        ? "Open in new window"
-                        : item.error
+                          ? 'Open in new window'
+                          : item.error
                     }
                     key={item.id}
                     onCalciteListItemClose={(e) => {
                       setExports(
                         exports.filter(
-                          (exportItem) => exportItem.id !== item.id
-                        )
+                          (exportItem) => exportItem.id !== item.id,
+                        ),
                       );
                     }}
-                    disabled={item.loading && item.url == "" ? true : undefined}
+                    disabled={item.loading && item.url == '' ? true : undefined}
                     onCalciteListItemSelect={(_) => {
                       if (item.url !== undefined) {
-                        window.open(item.url, "_blank");
+                        window.open(item.url, '_blank');
                       }
                     }}
                   >
@@ -331,28 +334,28 @@ const Print = (props: PrintProps) => {
                           label=""
                         ></CalciteLoader>
                       )}
-                      {!item.loading && item.format === "PDF" && (
+                      {!item.loading && item.format === 'PDF' && (
                         <CalciteIcon
                           class="export-loader"
                           scale="s"
                           icon={
                             item.url !== undefined
-                              ? "file-pdf"
-                              : "exclamation-mark-circle"
+                              ? 'file-pdf'
+                              : 'exclamation-mark-circle'
                           }
                           className={`${
-                            item.error !== undefined ? "print-error" : ""
+                            item.error !== undefined ? 'print-error' : ''
                           }`}
                         ></CalciteIcon>
                       )}
-                      {!item.loading && item.format !== "PDF" && (
+                      {!item.loading && item.format !== 'PDF' && (
                         <CalciteIcon
                           class="export-loader"
                           scale="s"
                           icon={
                             item.url !== undefined
-                              ? "file"
-                              : "exclamation-mark-circle"
+                              ? 'file'
+                              : 'exclamation-mark-circle'
                           }
                         ></CalciteIcon>
                       )}

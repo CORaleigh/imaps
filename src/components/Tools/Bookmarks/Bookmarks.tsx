@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
 import {
   CalcitePanel,
   CalciteAction,
   CalciteTooltip,
-} from "@esri/calcite-components-react";
-import "./Bookmarks.css";
-import useBookmarks from "./utils/useBooksmarks";
-import { ToolProps } from "../utils/ToolProps";
+} from '@esri/calcite-components-react';
+import './Bookmarks.css';
+import useBookmarks from './utils/useBooksmarks';
+import { ToolProps } from '../utils/ToolProps';
 export const Bookmarks = (props: ToolProps) => {
   const { bookmarkRef, isActive, toolDismissed, tipsClicked } =
     useBookmarks(props);

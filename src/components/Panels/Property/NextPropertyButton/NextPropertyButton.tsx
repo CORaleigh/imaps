@@ -17,10 +17,15 @@ function NextPropertyButton(props: Props) {
       onClick={async () => {
         const ids = (props.featureTable as __esri.FeatureTable).highlightIds;
         if (ids.length) {
-          const orderByFields = (props.featureTable as __esri.FeatureTable).activeSortOrders.map((order) => {
+          const orderByFields = (
+            props.featureTable as __esri.FeatureTable
+          ).activeSortOrders.map((order) => {
             return order.fieldName + ' ' + order.direction;
           });
-          const fs = await ((props.featureTable as __esri.FeatureTable).layer as __esri.FeatureLayer).queryFeatures({
+          const fs = await (
+            (props.featureTable as __esri.FeatureTable)
+              .layer as __esri.FeatureLayer
+          ).queryFeatures({
             where: '1=1',
             orderByFields: orderByFields,
             outFields: ['OBJECTID'],
@@ -47,7 +52,9 @@ function NextPropertyButton(props: Props) {
           }
 
           (props.featureTable as __esri.FeatureTable).highlightIds.removeAll();
-          (props.featureTable as __esri.FeatureTable).highlightIds.add(oids[index]);
+          (props.featureTable as __esri.FeatureTable).highlightIds.add(
+            oids[index],
+          );
         }
       }}
     ></CalciteButton>

@@ -1,61 +1,74 @@
-import { Tip } from "@esri/calcite-components/dist/types/components/tip/tip";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { Tip } from '@esri/calcite-components/dist/types/components/tip/tip';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import {
   getDistinctProperties,
   mapViewSet,
   toolSelected,
   widgetActivated,
-} from "../utils/shell";
-import { Alert } from "./alert";
-import { addShortcuts } from "./shortcuts";
+} from '../utils/shell';
+import { Alert } from './alert';
+import { addShortcuts } from './shortcuts';
 
 const useShell = () => {
-  const [mapId, setMapId] = useState("95092428774c4b1fb6a3b6f5fed9fbc4")
-  const [logo, setLogo] = useState({dark: "logo_dark.svg", light: "logo.svg"})
+  const [mapId, setMapId] = useState('95092428774c4b1fb6a3b6f5fed9fbc4');
+  const [logo, setLogo] = useState({
+    dark: 'logo_dark.svg',
+    light: 'logo.svg',
+  });
 
-  const [activePanel, setActivePanel] = useState("search");
-  const [activeTool, setActiveTool] = useState("");
+  const [activePanel, setActivePanel] = useState('search');
+  const [activeTool, setActiveTool] = useState('');
   const loaded = useRef(false);
   const [loading, setLoading] = useState(true);
   const [alert, setAlert] = useState<Alert>();
   const [contentBehind, setContentBehind] = useState(false);
-  const [loadedPanels, setLoadedPanels] = useState<string[]>(() => ["search"]);
+  const [loadedPanels, setLoadedPanels] = useState<string[]>(() => ['search']);
   const [loadedTools, setLoadedTools] = useState<string[]>(() => []);
 
   const [view, setView] = useState<__esri.MapView>();
 
   const viewRef = useRef<__esri.MapView>();
 
-  const [properties, setProperties] = useState<__esri.Graphic[] | undefined>([]);
+  const [properties, setProperties] = useState<__esri.Graphic[] | undefined>(
+    [],
+  );
   const [geometry, setGeometry] = useState<__esri.Geometry | undefined>(
-    undefined
+    undefined,
   );
   const [selectedProperty, setSelectedProperty] = useState<__esri.Graphic>();
 
   const [tips, setTips] = useState<any>();
-  const [showDisclaimer, setShowDisclaimer] = useState<boolean>(checkDisclaimerOptOut());
-  const [disclaimerOptedOut, setDisclaimerOptedOut] = useState<boolean>(!checkDisclaimerOptOut());
+  const [showDisclaimer, setShowDisclaimer] = useState<boolean>(
+    checkDisclaimerOptOut(),
+  );
+  const [disclaimerOptedOut, setDisclaimerOptedOut] = useState<boolean>(
+    !checkDisclaimerOptOut(),
+  );
 
   useEffect(() => {
     if (properties) {
-      setActivePanel("search");
-      setLoadedPanels((loadedPanels) => [...loadedPanels, "search"]);
+      setActivePanel('search');
+      setLoadedPanels((loadedPanels) => [...loadedPanels, 'search']);
     }
   }, [properties]);
   useEffect(() => {
-    if (!loaded.current) {   
-      window.addEventListener("resize", () => {
-        if (window.innerWidth < 700) {
-          //setActivePanel("");
-          setActiveTool("");
-          setContentBehind(true);
-        } else {
-          setContentBehind(false);
-        }
-      }, {passive: true});
+    if (!loaded.current) {
+      window.addEventListener(
+        'resize',
+        () => {
+          if (window.innerWidth < 700) {
+            //setActivePanel("");
+            setActiveTool('');
+            setContentBehind(true);
+          } else {
+            setContentBehind(false);
+          }
+        },
+        { passive: true },
+      );
       if (window.innerWidth < 700) {
-       // setActivePanel("");
-       setActiveTool("");
+        // setActivePanel("");
+        setActiveTool('');
 
         setContentBehind(true);
       }
@@ -66,16 +79,15 @@ const useShell = () => {
           const config = await response.json();
           setAlert(config.alert);
           setMapId(getMapId(config) as string);
-          setLogo({dark: config.logo.dark, light: config.logo.light});
+          setLogo({ dark: config.logo.dark, light: config.logo.light });
           document.title = config.title;
         } catch {
           loadConfig('./config.json');
         }
-
-      }
+      };
       const url = new URL(window.location.href);
       if (url.searchParams.get('app')) {
-        loadConfig(`./${url.searchParams.get('app')}.json`)
+        loadConfig(`./${url.searchParams.get('app')}.json`);
       } else {
         loadConfig('./config.json');
       }
@@ -84,7 +96,7 @@ const useShell = () => {
 
   const mapCallback = useCallback((mapView: __esri.MapView) => {
     viewRef.current = mapView;
-   // addShortcuts(mapView, setGeometry);
+    // addShortcuts(mapView, setGeometry);
     mapViewSet(mapView, setView, setLoading, setAlert);
   }, []);
   const geometryCallback = useCallback((geometry: __esri.Geometry) => {
@@ -94,12 +106,12 @@ const useShell = () => {
     if (mapView) {
       widgetActivated(mapView, setActiveTool);
       toolSelected(
-        "",
+        '',
         activeTool,
         setActiveTool,
         setActivePanel,
         activePanelChanged,
-        activeToolChanged
+        activeToolChanged,
       );
     }
   }, []);
@@ -111,7 +123,7 @@ const useShell = () => {
         setLoadedPanels([...loadedPanels, panel]);
       }
     },
-    [loadedPanels]
+    [loadedPanels],
   );
   const activeToolChanged = useCallback(
     (tool: string) => {
@@ -121,40 +133,42 @@ const useShell = () => {
         setLoadedTools([...loadedTools, tool]);
       }
     },
-    [loadedTools]
+    [loadedTools],
   );
   const panelDismissed = useCallback(() => {
-    setActivePanel("");
+    setActivePanel('');
   }, []);
   const toolDismissed = useCallback(() => {
-    setActiveTool("");
+    setActiveTool('');
   }, []);
   const propertySelected = useCallback(
     (feature?: __esri.Graphic, condos?: __esri.Graphic[]) => {
       setSelectedProperty(feature);
       setProperties(getDistinctProperties(feature, condos));
     },
-    []
+    [],
   );
   const tipsCallback = (newTips: any) => {
-
     setTips((oldTips: any) => {
       if (oldTips?.title === newTips?.title) {
         return undefined;
       }
-      return {...tips, ...{title: newTips.title, tips: newTips.tips}}
+      return { ...tips, ...{ title: newTips.title, tips: newTips.tips } };
     });
-
   };
-  const alertSet = (alert: Alert) => {    
+  const alertSet = (alert: Alert) => {
     setLoading(false);
     setAlert(alert);
-  }
+  };
   const getMapId = (config: any) => {
     const url = new URL(window.location.href);
-    const mapId = url.searchParams.get('id') ? url.searchParams.get('id') : config.mapId ? config.mapId : '95092428774c4b1fb6a3b6f5fed9fbc4';   
-    return mapId;    
-  }
+    const mapId = url.searchParams.get('id')
+      ? url.searchParams.get('id')
+      : config.mapId
+        ? config.mapId
+        : '95092428774c4b1fb6a3b6f5fed9fbc4';
+    return mapId;
+  };
   return {
     activePanel,
     activeTool,
@@ -179,16 +193,16 @@ const useShell = () => {
     tipsCallback,
     tips,
     mapId,
-    showDisclaimer, 
+    showDisclaimer,
     setShowDisclaimer,
     logo,
     disclaimerOptedOut,
-    setDisclaimerOptedOut
+    setDisclaimerOptedOut,
   };
 };
 
 const checkDisclaimerOptOut = () => {
-  return window.localStorage.getItem('imaps_disclaimer_opted_out') === null
-}
+  return window.localStorage.getItem('imaps_disclaimer_opted_out') === null;
+};
 
 export default useShell;

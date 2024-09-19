@@ -1,6 +1,6 @@
-import { CalciteIcon, CalciteLabel } from "@esri/calcite-components-react";
-import React from "react";
-import "./Sketch.css";
+import { CalciteIcon, CalciteLabel } from '@esri/calcite-components-react';
+import React from 'react';
+import './Sketch.css';
 interface Props {
   symbol: any;
   pickerClicked: () => void;
@@ -23,7 +23,7 @@ function IconPicker(props: Props) {
                 <img
                   src={`${
                     props.symbol.url
-                  }${props.symbol.thumbnail.href.replace(".", "")}`}
+                  }${props.symbol.thumbnail.href.replace('.', '')}`}
                   alt={props.symbol.title}
                   width={50}
                   height={50}

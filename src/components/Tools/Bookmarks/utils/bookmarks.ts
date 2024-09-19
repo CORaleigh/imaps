@@ -1,6 +1,6 @@
-import MapView from "@arcgis/core/views/MapView";
-import Bookmarks from "@arcgis/core/widgets/Bookmarks";
-import { saveMap } from "../../../WebMap/utils/map";
+import MapView from '@arcgis/core/views/MapView';
+import Bookmarks from '@arcgis/core/widgets/Bookmarks';
+import { saveMap } from '../../../WebMap/utils/map';
 export const initializeBookmarks = (ref: HTMLDivElement, view: MapView) => {
   const bookmarks = new Bookmarks({
     view: view,
@@ -12,4 +12,4 @@ export const initializeBookmarks = (ref: HTMLDivElement, view: MapView) => {
   bookmarks.bookmarks.on('after-remove', () => saveMap(view));
 
   return bookmarks;
-}
+};

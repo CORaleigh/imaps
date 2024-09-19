@@ -3,9 +3,9 @@ import {
   CalciteActionBar,
   CalciteActionGroup,
   CalciteTooltip,
-} from "@esri/calcite-components-react";
-import React, { useEffect, useState } from "react";
-import { panelSelected, toolSelected } from "./utils/shell";
+} from '@esri/calcite-components-react';
+import React, { useEffect, useState } from 'react';
+import { panelSelected, toolSelected } from './utils/shell';
 interface Props {
   view: __esri.MapView;
   expandable: boolean | undefined;
@@ -15,8 +15,8 @@ interface Props {
   activeToolChanged: (tool: string) => void;
 }
 function Toolbar(props: Props) {
-  const [activePanel, setActivePanel] = useState("search");
-  const [activeTool, setActiveTool] = useState("");
+  const [activePanel, setActivePanel] = useState('search');
+  const [activeTool, setActiveTool] = useState('');
 
   useEffect(() => {
     setActivePanel(props.activePanel);
@@ -25,91 +25,78 @@ function Toolbar(props: Props) {
     setActiveTool(props.activeTool);
   }, [props.activeTool]);
   return (
-    <CalciteActionBar
-      slot="action-bar"
-      position="end"
-     
-    >
+    <CalciteActionBar slot="action-bar" position="end">
       <CalciteActionGroup>
         <CalciteAction
           id="propertySearch"
           icon="search"
           text="Property Search"
-          active={activePanel === "search" ? true : undefined}
+          active={activePanel === 'search' ? true : undefined}
           onClick={() =>
             panelSelected(
-              "search",
+              'search',
               activePanel,
               setActiveTool,
               setActivePanel,
               props.activePanelChanged,
-              props.activeToolChanged
+              props.activeToolChanged,
             )
           }
         ></CalciteAction>
-        <CalciteTooltip
-          closeOnClick
-          referenceElement="propertySearch"
-        >
+        <CalciteTooltip closeOnClick referenceElement="propertySearch">
           Property Search
         </CalciteTooltip>
         <CalciteAction
           id="locationSearch"
           icon="pin"
           text="Location Search"
-          active={activePanel === "location" ? true : undefined}
+          active={activePanel === 'location' ? true : undefined}
           onClick={() => {
             panelSelected(
-              "location",
+              'location',
               activePanel,
               setActiveTool,
               setActivePanel,
               props.activePanelChanged,
-              props.activeToolChanged
+              props.activeToolChanged,
             );
           }}
         ></CalciteAction>
-        <CalciteTooltip
-          closeOnClick
-          referenceElement="locationSearch"
-        >
+        <CalciteTooltip closeOnClick referenceElement="locationSearch">
           Location Search
         </CalciteTooltip>
         <CalciteAction
           id="layerList"
           icon="layers"
           text="Layers"
-          active={activePanel === "layers" ? true : undefined}
+          active={activePanel === 'layers' ? true : undefined}
           onClick={() => {
             panelSelected(
-              "layers",
+              'layers',
               activePanel,
               setActiveTool,
               setActivePanel,
               props.activePanelChanged,
-              props.activeToolChanged
+              props.activeToolChanged,
             );
           }}
         ></CalciteAction>
-        <CalciteTooltip
-          closeOnClick
-          referenceElement="layerList"
-        >
+        <CalciteTooltip closeOnClick referenceElement="layerList">
           Layers
         </CalciteTooltip>
         <CalciteAction
           id="legend"
           icon="legend"
           text="Legend"
-          active={activePanel === "legend" ? true : undefined}
+          active={activePanel === 'legend' ? true : undefined}
           onClick={() => {
             panelSelected(
-              "legend",
+              'legend',
               activePanel,
               setActiveTool,
               setActivePanel,
               props.activePanelChanged,
-              props.activeToolChanged
+              props.activeToolChanged,
             );
           }}
         ></CalciteAction>
@@ -120,22 +107,19 @@ function Toolbar(props: Props) {
           id="basemaps"
           icon="basemap"
           text="Basemaps"
-          active={activePanel === "basemaps" ? true : undefined}
+          active={activePanel === 'basemaps' ? true : undefined}
           onClick={() => {
             panelSelected(
-              "basemaps",
+              'basemaps',
               activePanel,
               setActiveTool,
               setActivePanel,
               props.activePanelChanged,
-              props.activeToolChanged
+              props.activeToolChanged,
             );
           }}
         ></CalciteAction>
-        <CalciteTooltip
-          closeOnClick
-          referenceElement="basemaps"
-        >
+        <CalciteTooltip closeOnClick referenceElement="basemaps">
           Basemaps
         </CalciteTooltip>
       </CalciteActionGroup>
@@ -144,37 +128,34 @@ function Toolbar(props: Props) {
           id="propertySelect"
           icon="select"
           text="Property Select"
-          active={activeTool === "select" ? true : undefined}
+          active={activeTool === 'select' ? true : undefined}
           onClick={() =>
             toolSelected(
-              "select",
+              'select',
               activeTool,
               setActiveTool,
               setActivePanel,
               props.activePanelChanged,
-              props.activeToolChanged
+              props.activeToolChanged,
             )
           }
         ></CalciteAction>
-        <CalciteTooltip
-          closeOnClick
-          referenceElement="propertySelect"
-        >
+        <CalciteTooltip closeOnClick referenceElement="propertySelect">
           Property Select
         </CalciteTooltip>
         <CalciteAction
           id="measure"
           icon="measure"
           text="Measure"
-          active={activeTool === "measure" ? true : undefined}
+          active={activeTool === 'measure' ? true : undefined}
           onClick={() => {
             toolSelected(
-              "measure",
+              'measure',
               activeTool,
               setActiveTool,
               setActivePanel,
               props.activePanelChanged,
-              props.activeToolChanged
+              props.activeToolChanged,
             );
           }}
         ></CalciteAction>
@@ -185,15 +166,15 @@ function Toolbar(props: Props) {
           id="sketch"
           icon="pencil"
           text="Sketch"
-          active={activeTool === "sketch" ? true : undefined}
+          active={activeTool === 'sketch' ? true : undefined}
           onClick={() => {
             toolSelected(
-              "sketch",
+              'sketch',
               activeTool,
               setActiveTool,
               setActivePanel,
               props.activePanelChanged,
-              props.activeToolChanged
+              props.activeToolChanged,
             );
           }}
         ></CalciteAction>
@@ -204,37 +185,34 @@ function Toolbar(props: Props) {
           id="bookmarks"
           icon="bookmark"
           text="Bookmarks"
-          active={activeTool === "bookmarks" ? true : undefined}
+          active={activeTool === 'bookmarks' ? true : undefined}
           onClick={() => {
             toolSelected(
-              "bookmarks",
+              'bookmarks',
               activeTool,
               setActiveTool,
               setActivePanel,
               props.activePanelChanged,
-              props.activeToolChanged
+              props.activeToolChanged,
             );
           }}
         ></CalciteAction>
-        <CalciteTooltip
-          closeOnClick
-          referenceElement="bookmarks"
-        >
+        <CalciteTooltip closeOnClick referenceElement="bookmarks">
           Bookmarks
         </CalciteTooltip>
         <CalciteAction
           id="print"
           icon="print"
           text="Print"
-          active={activeTool === "print" ? true : undefined}
+          active={activeTool === 'print' ? true : undefined}
           onClick={() =>
             toolSelected(
-              "print",
+              'print',
               activeTool,
               setActiveTool,
               setActivePanel,
               props.activePanelChanged,
-              props.activeToolChanged
+              props.activeToolChanged,
             )
           }
         ></CalciteAction>

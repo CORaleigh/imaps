@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { PanelProps } from "../../utils/PanelProps";
-import { initializeLegend } from "./legend";
-import { tips } from "./tips";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { PanelProps } from '../../utils/PanelProps';
+import { initializeLegend } from './legend';
+import { tips } from './tips';
 
 const useLegend = (props: PanelProps) => {
   const ref = useRef() as any;

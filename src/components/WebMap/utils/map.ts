@@ -12,7 +12,7 @@ import * as reactiveUtils from '@arcgis/core/core/reactiveUtils';
 import Basemap from '@arcgis/core/Basemap';
 import Color from '@arcgis/core/Color';
 import Collection from '@arcgis/core/core/Collection';
-import esriConfig from "@arcgis/core/config";
+import esriConfig from '@arcgis/core/config';
 import * as geometryEngine from '@arcgis/core/geometry/geometryEngine';
 import { Alert } from '../../Shell/utils/alert';
 import Geometry from '@arcgis/core/geometry/Geometry';
@@ -21,20 +21,23 @@ export const initializeMap = async (
   ref: HTMLDivElement,
   mapId: string,
   geometrySet: (geometry: Geometry) => void,
-  widgetActivated:  (view: MapView, setActiveTool?: (activeTool: string) => void) => void,
-  alertSet?: (alert: Alert) => void
+  widgetActivated: (
+    view: MapView,
+    setActiveTool?: (activeTool: string) => void,
+  ) => void,
+  alertSet?: (alert: Alert) => void,
 ): Promise<MapView> => {
   const view = new MapView({
     container: ref,
     constraints: constraints as any,
   });
   esriConfig.request.useIdentity = false;
-  
+
   const webmap: WebMap = await getWebMap(mapId);
   view.map = webmap;
   addWidgets(view, widgetActivated);
-  await view.when().catch(error => {
-   const alert: Alert = {
+  await view.when().catch((error) => {
+    const alert: Alert = {
       show: true,
       autoClose: false,
       duration: 'fast',
@@ -43,14 +46,13 @@ export const initializeMap = async (
       title: 'WebGL 2 Required',
       message: `Sorry, it appears that your graphics card doesn't support WebGL 2, which is required for this application. We recommend checking your browser settings or using a device with a more capable graphics card or updating your current hardware if possible. If you have any questions or need further assistance, please don't hesitate to contact us.  We have also made the previous version available, which does not have this requirement, however it will not receive any future updates.`,
       link: {
-        text: "Previous Version",
-        url: "https://maps.raleighnc.gov/imaps-legacy",
-        show: true
-      }
+        text: 'Previous Version',
+        url: 'https://maps.raleighnc.gov/imaps-legacy',
+        show: true,
+      },
     };
     if (alertSet) {
       alertSet(alert);
-
     }
   });
   removeGraphicsLayers(view);
@@ -58,15 +60,23 @@ export const initializeMap = async (
   view.map.add(selectionCluster);
   customizePopup(view);
   //in preparation for lazying loading of popups at 4.27
-  reactiveUtils.whenOnce(() => view.popup.actions != null).then(() => {
-    view.popup.dockOptions.position = 'top-left';
+  reactiveUtils
+    .whenOnce(() => view.popup.actions != null)
+    .then(() => {
+      view.popup.dockOptions.position = 'top-left';
 
-    view.popup.on('trigger-action', (event) => {
-      if (event.action.title === 'Select') {
-        geometrySet(geometryEngine.geodesicBuffer(view.popup.selectedFeature.geometry, -2, 'feet') as Geometry);
-      }
+      view.popup.on('trigger-action', (event) => {
+        if (event.action.title === 'Select') {
+          geometrySet(
+            geometryEngine.geodesicBuffer(
+              view.popup.selectedFeature.geometry,
+              -2,
+              'feet',
+            ) as Geometry,
+          );
+        }
+      });
     });
-  })
 
   await reactiveUtils.whenOnce(() => view.map.basemap.loaded);
   const color = await getBackgroundColor(view.map.basemap);
@@ -85,7 +95,9 @@ export const initializeMap = async (
     const config = getConfig();
     const data = window.localStorage.getItem(`imaps_webmap_${config}`);
     if (data) {
-      const json = JSON.parse(window?.localStorage?.getItem(`imaps_webmap_${config}`) as string);
+      const json = JSON.parse(
+        window?.localStorage?.getItem(`imaps_webmap_${config}`) as string,
+      );
       if (view.extent) {
         json.initialState = {
           viewpoint: {
@@ -93,22 +105,28 @@ export const initializeMap = async (
           },
         };
       } else {
-        json.initialState = {
-
-        };
+        json.initialState = {};
       }
 
-      window.localStorage.setItem(`imaps_webmap_${config}`, JSON.stringify(json));
+      window.localStorage.setItem(
+        `imaps_webmap_${config}`,
+        JSON.stringify(json),
+      );
     }
   });
   view.map.watch('basemap', () => {
     const config = getConfig();
     const data = window.localStorage.getItem(`imaps_webmap_${config}`);
     if (data) {
-      const json = JSON.parse(window?.localStorage?.getItem(`imaps_webmap_${config}`) as string);
+      const json = JSON.parse(
+        window?.localStorage?.getItem(`imaps_webmap_${config}`) as string,
+      );
 
       json.baseMap = view.map.basemap;
-      window.localStorage.setItem(`imaps_webmap_${config}`, JSON.stringify(json));
+      window.localStorage.setItem(
+        `imaps_webmap_${config}`,
+        JSON.stringify(json),
+      );
     }
   });
 
@@ -127,14 +145,20 @@ const addUnloadListeners = (view: __esri.MapView) => {
       saveMap(view);
     }
   };
-  window.addEventListener('beforeunload', handleBeforeUnload, {passive: true});
-  window.addEventListener('unload', handleUnload, {passive: true});
-  document.addEventListener('visibilitychange', handleVisibilityChange, {passive: true});
+  window.addEventListener('beforeunload', handleBeforeUnload, {
+    passive: true,
+  });
+  window.addEventListener('unload', handleUnload, { passive: true });
+  document.addEventListener('visibilitychange', handleVisibilityChange, {
+    passive: true,
+  });
 };
 const isSearchable = (layer: __esri.Layer, webmap: any) => {
-  const found = webmap.applicationProperties.viewing.search.layers.find((searchLayer: __esri.SearchLayer) => {
-    return searchLayer.id === layer.id;
-  });
+  const found = webmap.applicationProperties.viewing.search.layers.find(
+    (searchLayer: __esri.SearchLayer) => {
+      return searchLayer.id === layer.id;
+    },
+  );
   return found;
 };
 
@@ -152,9 +176,16 @@ const getConfig = () => {
 const getWebMap = async (mapId: string): Promise<WebMap> => {
   let webmap: any;
   const config = getConfig();
-  if (window.localStorage.getItem(`imaps_webmap_${config}`) && window.localStorage.getItem('imaps_reset') !== 'true') {
+  if (
+    window.localStorage.getItem(`imaps_webmap_${config}`) &&
+    window.localStorage.getItem('imaps_reset') !== 'true'
+  ) {
     try {
-      webmap = WebMap.fromJSON(JSON.parse(window?.localStorage?.getItem(`imaps_webmap_${config}`) as string));
+      webmap = WebMap.fromJSON(
+        JSON.parse(
+          window?.localStorage?.getItem(`imaps_webmap_${config}`) as string,
+        ),
+      );
       await webmap.load();
       if (!webmap.basemap) {
         return loadWebMapFromPortal(mapId);
@@ -194,8 +225,6 @@ const getWebMap = async (mapId: string): Promise<WebMap> => {
       }
     }
     return webmap;
-
-
   } else {
     return loadWebMapFromPortal(mapId);
   }
@@ -218,18 +247,27 @@ const loadWebMapFromPortal = async (mapId: string) => {
     (group as __esri.GroupLayer).removeMany(
       (group as __esri.GroupLayer).allLayers
         .filter((layer) => {
-          return !layer.visible && !layer.title.includes('Property') && !isSearchable(layer, webmap);
+          return (
+            !layer.visible &&
+            !layer.title.includes('Property') &&
+            !isSearchable(layer, webmap)
+          );
         })
         .toArray(),
     );
   });
-  webmap.layers.removeMany(webmap.layers.filter((layer: __esri.Layer) => {
-    return layer.type !== 'group' && !layer.visible;
-  }));  
+  webmap.layers.removeMany(
+    webmap.layers.filter((layer: __esri.Layer) => {
+      return layer.type !== 'group' && !layer.visible;
+    }),
+  );
   return webmap;
-}
+};
 const removeGraphicsLayers = (view: MapView) => {
-  view.map.removeMany([view.map.findLayerById('selection-layer'), view.map.findLayerById('feature-table')]);
+  view.map.removeMany([
+    view.map.findLayerById('selection-layer'),
+    view.map.findLayerById('feature-table'),
+  ]);
   view.map.removeMany(
     view.map.allLayers
       .filter((layer: any) => {
@@ -241,7 +279,9 @@ const removeGraphicsLayers = (view: MapView) => {
 
 const getAllGroups = (layers: any) => {
   return layers.reduce((acc: any, emp: any) => {
-    return acc.concat(emp.layerType === 'GroupLayer' ? [emp, ...getAllGroups(emp.layers)] : []);
+    return acc.concat(
+      emp.layerType === 'GroupLayer' ? [emp, ...getAllGroups(emp.layers)] : [],
+    );
   }, []);
 };
 export const saveMap = async (view: MapView) => {
@@ -253,7 +293,10 @@ export const saveMap = async (view: MapView) => {
       if (group.layerType !== 'ArcGISMapServiceLayer') {
         group.layers = group.layers.filter(function (layer: any) {
           return (
-            layer.visibility || layer.title.includes('Property') || isSearchable(layer, map) || layer.type === 'group'
+            layer.visibility ||
+            layer.title.includes('Property') ||
+            isSearchable(layer, map) ||
+            layer.type === 'group'
           );
         });
       }
@@ -265,11 +308,8 @@ export const saveMap = async (view: MapView) => {
         },
       };
     } else {
-      map.initialState = {
-
-      };
+      map.initialState = {};
     }
-
 
     const config = getConfig();
 
@@ -386,7 +426,7 @@ const selectionLayer: FeatureLayer = new FeatureLayer({
         },
       } as any,
     ],
-  } as UniqueValueRenderer
+  } as UniqueValueRenderer,
 });
 
 const selectionCluster: FeatureLayer = new FeatureLayer({
@@ -420,7 +460,10 @@ const selectionCluster: FeatureLayer = new FeatureLayer({
   } as any,
   maxScale: 20000,
 });
-export const displayProperties = async (properties: Graphic[], view: MapView) => {
+export const displayProperties = async (
+  properties: Graphic[],
+  view: MapView,
+) => {
   const featureSet: FeatureSet = await selectionLayer?.queryFeatures({
     where: '1=1',
     returnGeometry: false,
@@ -469,7 +512,9 @@ const getBackgroundColor = async (basemap: Basemap): Promise<Color | null> => {
   }
 
   await reactiveUtils.whenOnce(() => baseLayer?.loaded);
-  const background = (baseLayer as __esri.VectorTileLayer).getStyleLayer('background');
+  const background = (baseLayer as __esri.VectorTileLayer).getStyleLayer(
+    'background',
+  );
   if (background) {
     const color: Color = new Color(background.paint['background-color']);
     return color;
@@ -502,12 +547,13 @@ const addStreets = (view: MapView) => {
     if (!streets) {
       streets = new FeatureLayer({
         portalItem: {
-          id: '0dd28958f9a344dba14d1c4500b4842d'
-        }, id: 'streets-popup-layer',
+          id: '0dd28958f9a344dba14d1c4500b4842d',
+        },
+        id: 'streets-popup-layer',
         opacity: 0,
         visible: true,
         listMode: 'hide',
-        legendEnabled: false
+        legendEnabled: false,
       });
       view.map.add(streets);
     } else {
@@ -516,5 +562,4 @@ const addStreets = (view: MapView) => {
   } catch {
     console.log('cannot add streets layer');
   }
-
-}
+};

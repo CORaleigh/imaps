@@ -2,9 +2,9 @@ import {
   CalciteInput,
   CalciteLabel,
   CalciteSlider,
-} from "@esri/calcite-components-react";
-import { useEffect, useState } from "react";
-import React from "react";
+} from '@esri/calcite-components-react';
+import { useEffect, useState } from 'react';
+import React from 'react';
 interface Props {
   label: string;
   min: number;

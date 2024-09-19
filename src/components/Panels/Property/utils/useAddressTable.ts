@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from "react";
-import { initializeFeatureTable, updateTable } from "../utils/addresses";
+import React, { useEffect, useRef } from 'react';
+import { initializeFeatureTable, updateTable } from '../utils/addresses';
 interface Props {
   view: __esri.MapView;
   property: __esri.Graphic;
@@ -15,7 +15,7 @@ const useAddressTable = (props: Props) => {
       initializeFeatureTable(ref.current, props.view).then(
         (table: __esri.FeatureTable) => {
           updateTable(props.property, table);
-        }
+        },
       );
     }
     return () => {

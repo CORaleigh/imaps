@@ -1,11 +1,11 @@
-import Color from "@arcgis/core/Color";
+import Color from '@arcgis/core/Color';
 import {
   CalciteInput,
   CalciteLabel,
   CalciteSwitch,
-} from "@esri/calcite-components-react";
-import React, { useState } from "react";
-import ColorButton from "./ColorButton";
+} from '@esri/calcite-components-react';
+import React, { useState } from 'react';
+import ColorButton from './ColorButton';
 interface Props {
   textSymbolUpdated: (
     fontSize: number,
@@ -13,7 +13,8 @@ interface Props {
     haloSize: number,
     haloColor: Color,
     showHalo: boolean,
-    text: string) => void;
+    text: string,
+  ) => void;
 }
 function TextSymbols(props: Props) {
   const [fontColor, setFontColor] = useState<Color>(new Color([255, 0, 0, 1]));
@@ -21,9 +22,9 @@ function TextSymbols(props: Props) {
   const [showHalo, setShowHalo] = useState(false);
   const [haloSize, setHaloSize] = useState(1);
   const [haloColor, setHaloColor] = useState<Color>(
-    new Color([255, 255, 255, 1])
+    new Color([255, 255, 255, 1]),
   );
-  const [textContent, setTextContent] = useState("");
+  const [textContent, setTextContent] = useState('');
 
   return (
     <div id="text-symbols">
@@ -42,7 +43,7 @@ function TextSymbols(props: Props) {
                 haloSize,
                 haloColor,
                 showHalo,
-                e.target.value
+                e.target.value,
               );
             });
           }}
@@ -62,7 +63,7 @@ function TextSymbols(props: Props) {
             haloSize,
             haloColor,
             showHalo,
-            textContent
+            textContent,
           );
         }}
       ></ColorButton>
@@ -81,7 +82,7 @@ function TextSymbols(props: Props) {
               haloSize,
               haloColor,
               showHalo,
-              textContent
+              textContent,
             );
           }}
         ></CalciteInput>
@@ -98,7 +99,7 @@ function TextSymbols(props: Props) {
               haloSize,
               haloColor,
               showHalo,
-              textContent
+              textContent,
             );
           }}
         ></CalciteSwitch>
@@ -117,7 +118,7 @@ function TextSymbols(props: Props) {
               haloSize,
               c,
               showHalo,
-              textContent
+              textContent,
             );
           }}
         ></ColorButton>
@@ -136,7 +137,7 @@ function TextSymbols(props: Props) {
                 haloSize,
                 haloColor,
                 showHalo,
-                textContent
+                textContent,
               );
             }}
           ></CalciteInput>

@@ -1,7 +1,7 @@
-import React from "react";
-import "./WebMap.css";
-import useWebMap from "./utils/useWebMap";
-import { WebMapProps } from "./utils/WebMapProps";
+import React from 'react';
+import './WebMap.css';
+import useWebMap from './utils/useWebMap';
+import { WebMapProps } from './utils/WebMapProps';
 
 function WebMap(props: WebMapProps) {
   const { ref } = useWebMap(props);

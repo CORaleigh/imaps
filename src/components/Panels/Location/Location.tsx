@@ -5,17 +5,14 @@ import {
   CalciteLabel,
   CalcitePanel,
   CalciteTooltip,
-} from "@esri/calcite-components-react";
-import React, {  } from "react";
-import {
-  intersectingStreetSelected,
-} from "./utils/location";
-import "./Location.css";
-import useLocation from "./utils/useLocation";
-import { PanelProps } from "../utils/PanelProps";
+} from '@esri/calcite-components-react';
+import React from 'react';
+import { intersectingStreetSelected } from './utils/location';
+import './Location.css';
+import useLocation from './utils/useLocation';
+import { PanelProps } from '../utils/PanelProps';
 const Location = (props: PanelProps) => {
-   
-  const { 
+  const {
     searchDiv,
     featureDiv,
     search,
@@ -24,7 +21,7 @@ const Location = (props: PanelProps) => {
     searchTerm,
     isActive,
     panelDismissed,
-    tipsClicked    
+    tipsClicked,
   } = useLocation(props);
 
   return (
@@ -36,15 +33,23 @@ const Location = (props: PanelProps) => {
       closable
       onCalcitePanelClose={panelDismissed}
     >
-      <CalciteAction id="locationTip" icon="lightbulb"  text="Tips" slot="header-actions-end" onClick={tipsClicked}></CalciteAction>
-      <CalciteTooltip referenceElement="locationTip" closeOnClick>Show Tip</CalciteTooltip>
+      <CalciteAction
+        id="locationTip"
+        icon="lightbulb"
+        text="Tips"
+        slot="header-actions-end"
+        onClick={tipsClicked}
+      ></CalciteAction>
+      <CalciteTooltip referenceElement="locationTip" closeOnClick>
+        Show Tip
+      </CalciteTooltip>
       <div id="location-search">
         <div ref={searchDiv}></div>
         {isIntersection && (
           <div id="intersection-search">
             <CalciteLabel>
               Intersections
-              <CalciteCombobox label={""} selectionMode="single" scale="l">
+              <CalciteCombobox label={''} selectionMode="single" scale="l">
                 {intersections.map((intersection, i) => {
                   return (
                     <CalciteComboboxItem
@@ -56,7 +61,7 @@ const Location = (props: PanelProps) => {
                           intersectingStreetSelected(
                             intersection,
                             searchTerm,
-                            search?.current?.view as __esri.MapView
+                            search?.current?.view as __esri.MapView,
                           );
                         }
                       }}
@@ -71,6 +76,6 @@ const Location = (props: PanelProps) => {
       </div>
     </CalcitePanel>
   );
-}
+};
 
 export default React.memo(Location);

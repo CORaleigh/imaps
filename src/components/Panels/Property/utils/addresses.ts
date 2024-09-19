@@ -10,11 +10,14 @@ import Graphic from '@arcgis/core/Graphic';
 import ButtonMenuItem from '@arcgis/core/widgets/FeatureTable/Grid/support/ButtonMenuItem';
 
 import PictureMarkerSymbol from '@arcgis/core/symbols/PictureMarkerSymbol';
-import {saveAs} from 'file-saver'
+import { saveAs } from 'file-saver';
 import { clearAddressPoints } from './property';
 let featureTable: FeatureTable;
 let selectedProperty: Graphic;
-export const initializeFeatureTable = async (ref: HTMLDivElement, view: MapView): Promise<FeatureTable> => {
+export const initializeFeatureTable = async (
+  ref: HTMLDivElement,
+  view: MapView,
+): Promise<FeatureTable> => {
   const table: any = await getTableLayer(view);
   featureTable = new FeatureTable({
     container: ref,
@@ -27,7 +30,7 @@ export const initializeFeatureTable = async (ref: HTMLDivElement, view: MapView)
       menuItems: {
         refreshData: false,
         toggleColumns: false,
-      }
+      },
     },
     menuConfig: {
       items: [
@@ -37,7 +40,7 @@ export const initializeFeatureTable = async (ref: HTMLDivElement, view: MapView)
           clickFunction: () => {
             exportTable(featureTable);
           },
-          hidden: () => false
+          hidden: () => false,
         },
       ],
     },
@@ -45,96 +48,108 @@ export const initializeFeatureTable = async (ref: HTMLDivElement, view: MapView)
     layer: table,
   });
   await featureTable?.when();
-  featureTable.highlightIds.on('change',selectionChanged);
+  featureTable.highlightIds.on('change', selectionChanged);
   initializeGrid(featureTable);
   if (!view.map.findLayerById('address-graphics')) {
-    view.map.add(new GraphicsLayer({
-      id: 'address-graphics',
-      listMode: 'hide'
-    }))
+    view.map.add(
+      new GraphicsLayer({
+        id: 'address-graphics',
+        listMode: 'hide',
+      }),
+    );
   }
   return featureTable;
 };
 
 const selectionChanged = async (e: any) => {
   if (e.added.length) {
-    const featureSet: FeatureSet = await (featureTable.layer as __esri.FeatureLayer)
-      .queryFeatures({
-        objectIds: [e.added[0]],
-        returnGeometry: true,
+    const featureSet: FeatureSet = await (
+      featureTable.layer as __esri.FeatureLayer
+    ).queryFeatures({
+      objectIds: [e.added[0]],
+      returnGeometry: true,
+    });
+
+    if (featureSet.features.length) {
+      const feature = featureSet.features[0];
+      feature.setAttribute('type', 'address');
+      feature.symbol = new PictureMarkerSymbol({
+        url: 'assets/pin.svg',
+        height: 24,
+        width: 24,
       });
-
-        if (featureSet.features.length) {
-          const feature = featureSet.features[0];
-          feature.setAttribute('type', 'address');
-          feature.symbol = new PictureMarkerSymbol({
-            url: 'assets/pin.svg',
-            height: 24,
-            width: 24,
-          });
-          clearAddressPoints(featureTable.view as __esri.MapView); 
-          if (featureTable.view.map.findLayerById('address-graphics')) {
-            const addressGraphics = featureTable.view.map.findLayerById('address-graphics') as __esri.GraphicsLayer;
-            addressGraphics.add(feature);
-          }
-          featureTable.view.goTo({ target: feature, zoom: 18 }, { easing: 'ease-in-out' as any, duration: 1000 });
-        }
-
+      clearAddressPoints(featureTable.view as __esri.MapView);
+      if (featureTable.view.map.findLayerById('address-graphics')) {
+        const addressGraphics = featureTable.view.map.findLayerById(
+          'address-graphics',
+        ) as __esri.GraphicsLayer;
+        addressGraphics.add(feature);
+      }
+      featureTable.view.goTo(
+        { target: feature, zoom: 18 },
+        { easing: 'ease-in-out' as any, duration: 1000 },
+      );
+    }
   }
-}
+};
 const initializeGrid = (featureTable: FeatureTable) => {
   (featureTable.findColumn('ADDRESS') as any).width = 150;
   (featureTable.findColumn('FEATURETYPE') as any).width = 150;
 
   setTimeout(() => {
-    const grid = (featureTable.container as HTMLElement).querySelector('vaadin-grid') as any;
-    grid?.addEventListener('click', (e: any) => {
-      if ((e.target as HTMLElement).nodeName === 'VAADIN-GRID-CELL-CONTENT') {
-        featureTable.highlightIds.removeAll();
-        const item = (grid.getEventContext(e) as any)?.item;
-        const feature = item.feature;
-        //            featureTable.view.goTo(feature);
-        featureTable.highlightIds.add(feature.getAttribute('OBJECTID'));
-      }
-    }, {passive: true});
+    const grid = (featureTable.container as HTMLElement).querySelector(
+      'vaadin-grid',
+    ) as any;
+    grid?.addEventListener(
+      'click',
+      (e: any) => {
+        if ((e.target as HTMLElement).nodeName === 'VAADIN-GRID-CELL-CONTENT') {
+          featureTable.highlightIds.removeAll();
+          const item = (grid.getEventContext(e) as any)?.item;
+          const feature = item.feature;
+          //            featureTable.view.goTo(feature);
+          featureTable.highlightIds.add(feature.getAttribute('OBJECTID'));
+        }
+      },
+      { passive: true },
+    );
   }, 2000);
-}
+};
 let addressLayer: FeatureLayer;
 
 const getTableLayer = async (view: MapView) => {
-
-    const layer = new FeatureLayer({
-      portalItem: {
-        id: '4d7f78186b0649d081ac56058b041fb7',
-      },
-      layerId: 0,
-    });
-    addressLayer = layer;
-    const table = await layer.load();
-      const copyTable = new FeatureLayer({
-        source: [],
-        fields: table.fields,
-        geometryType: 'point',
-        spatialReference: view.spatialReference,
-        popupTemplate: table.popupTemplate,
-        objectIdField: table.objectIdField,
-        displayField: table.displayField,
-        id: 'feature-table',
-      });
-      copyTable.fields.forEach((field) => {
-        field.nullable = true;
-        if (field.name === 'DEED_DATE') {
-          field.type = 'string';
-        }
-      });
-      view.map.allTables.add(copyTable);
-      try {
-        await copyTable.load();
-        return copyTable;
-      } catch (error) {
-        console.log(error);
-      }
-}
+  const layer = new FeatureLayer({
+    portalItem: {
+      id: '4d7f78186b0649d081ac56058b041fb7',
+    },
+    layerId: 0,
+  });
+  addressLayer = layer;
+  const table = await layer.load();
+  const copyTable = new FeatureLayer({
+    source: [],
+    fields: table.fields,
+    geometryType: 'point',
+    spatialReference: view.spatialReference,
+    popupTemplate: table.popupTemplate,
+    objectIdField: table.objectIdField,
+    displayField: table.displayField,
+    id: 'feature-table',
+  });
+  copyTable.fields.forEach((field) => {
+    field.nullable = true;
+    if (field.name === 'DEED_DATE') {
+      field.type = 'string';
+    }
+  });
+  view.map.allTables.add(copyTable);
+  try {
+    await copyTable.load();
+    return copyTable;
+  } catch (error) {
+    console.log(error);
+  }
+};
 const getTableTemplate = (): TableTemplate => {
   const tableTemplate: TableTemplate = new TableTemplate({
     columnTemplates: [
@@ -153,9 +168,12 @@ const getTableTemplate = (): TableTemplate => {
     ],
   });
   return tableTemplate;
-}
+};
 
-export const updateTable = async (property: Graphic, featureTable: FeatureTable) => {
+export const updateTable = async (
+  property: Graphic,
+  featureTable: FeatureTable,
+) => {
   if (featureTable) {
     try {
       selectedProperty = property;
@@ -166,14 +184,20 @@ export const updateTable = async (property: Graphic, featureTable: FeatureTable)
         returnGeometry: true,
         where: '1=1',
       });
-      const result: FeatureSet = await (featureTable.layer as __esri.FeatureLayer).queryFeatures({
+      const result: FeatureSet = await (
+        featureTable.layer as __esri.FeatureLayer
+      ).queryFeatures({
         where: '1=1',
         returnGeometry: true,
       });
 
-      await (featureTable.layer as __esri.FeatureLayer).applyEdits({ deleteFeatures: result.features });
-      await (featureTable.layer as __esri.FeatureLayer).applyEdits({ addFeatures: featureSet.features });
-      featureTable.title = `${featureSet.features.length} ${featureSet.features.length === 1 ? 'address' : 'addresses'}  on property`
+      await (featureTable.layer as __esri.FeatureLayer).applyEdits({
+        deleteFeatures: result.features,
+      });
+      await (featureTable.layer as __esri.FeatureLayer).applyEdits({
+        addFeatures: featureSet.features,
+      });
+      featureTable.title = `${featureSet.features.length} ${featureSet.features.length === 1 ? 'address' : 'addresses'}  on property`;
       featureTable.refresh();
     } catch (error) {
       console.log(error);
@@ -189,21 +213,23 @@ const exportTable = async (table: FeatureTable) => {
   });
 
   let csv = '';
-  (table.tableTemplate.columnTemplates as __esri.FieldColumnTemplate[]).forEach((field: __esri.FieldColumnTemplate) => {
-    csv += `${field.label},`;
-  });
-  csv += `PIN_NUM, REID,`
+  (table.tableTemplate.columnTemplates as __esri.FieldColumnTemplate[]).forEach(
+    (field: __esri.FieldColumnTemplate) => {
+      csv += `${field.label},`;
+    },
+  );
+  csv += `PIN_NUM, REID,`;
   csv += '\r\n';
   result.features.forEach((feature) => {
-    (table.tableTemplate.columnTemplates as __esri.FieldColumnTemplate[]).forEach(
-      (field: __esri.FieldColumnTemplate) => {
-        if (feature.attributes[field.fieldName]) {
-          csv += `"${feature.attributes[field.fieldName]}",`;
-        } else {
-          csv += `"",`;
-        }
-      },
-    );
+    (
+      table.tableTemplate.columnTemplates as __esri.FieldColumnTemplate[]
+    ).forEach((field: __esri.FieldColumnTemplate) => {
+      if (feature.attributes[field.fieldName]) {
+        csv += `"${feature.attributes[field.fieldName]}",`;
+      } else {
+        csv += `"",`;
+      }
+    });
     csv += `="${selectedProperty.getAttribute('PIN_NUM')}",="${selectedProperty.getAttribute('REID')}",\r\n`;
   });
   let datestr = new Date().toISOString().split('.')[0];

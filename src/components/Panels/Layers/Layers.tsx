@@ -4,12 +4,12 @@ import {
   CalciteScrim,
   CalcitePanel,
   CalciteTooltip,
-} from "@esri/calcite-components-react";
-import React from "react";
-import { filterLayers, resetLayers } from "./utils/layers";
-import "./Layers.css";
-import useLayers from "./utils/useLayers";
-import { PanelProps } from "../utils/PanelProps";
+} from '@esri/calcite-components-react';
+import React from 'react';
+import { filterLayers, resetLayers } from './utils/layers';
+import './Layers.css';
+import useLayers from './utils/useLayers';
+import { PanelProps } from '../utils/PanelProps';
 export const Layers = (props: PanelProps) => {
   const { ref, layerList, isLoading, isActive, panelDismissed, tipsClicked } =
     useLayers(props);
@@ -20,23 +20,24 @@ export const Layers = (props: PanelProps) => {
       heading="Layers"
       hidden={!isActive}
       closed={!isActive ? true : undefined}
-      closable 
+      closable
       onCalcitePanelClose={panelDismissed}
     >
-      {layerList && 
-      (<><CalciteAction
-        id="layerReset"
-        text="Reset Layers"
-        icon="reset"
-        scale="s"
-        slot="header-actions-end"
-        onClick={() => resetLayers(layerList)}
-      ></CalciteAction>
-        <CalciteTooltip referenceElement="layerReset" closeOnClick>
-          Reset Layers
-        </CalciteTooltip></>   
-      )
-      }
+      {layerList && (
+        <>
+          <CalciteAction
+            id="layerReset"
+            text="Reset Layers"
+            icon="reset"
+            scale="s"
+            slot="header-actions-end"
+            onClick={() => resetLayers(layerList)}
+          ></CalciteAction>
+          <CalciteTooltip referenceElement="layerReset" closeOnClick>
+            Reset Layers
+          </CalciteTooltip>
+        </>
+      )}
       <CalciteAction
         id="layerTip"
         icon="lightbulb"

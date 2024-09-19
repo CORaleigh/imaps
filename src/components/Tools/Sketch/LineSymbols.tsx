@@ -1,9 +1,9 @@
-import "./Sketch.css";
+import './Sketch.css';
 
-import React, { useEffect, useState } from "react";
-import ColorButton from "./ColorButton";
-import SizeSlider from "./SizeSlider";
-import Color from "@arcgis/core/Color";
+import React, { useEffect, useState } from 'react';
+import ColorButton from './ColorButton';
+import SizeSlider from './SizeSlider';
+import Color from '@arcgis/core/Color';
 interface Props {
   polylineSymbolUpdated: (lineColor: Color, width: any) => void;
 }

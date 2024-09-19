@@ -5,17 +5,17 @@ import {
   CalciteInput,
   CalciteLabel,
   CalciteTooltip,
-} from "@esri/calcite-components-react";
-import React from "react";
-import "./Select.css";
+} from '@esri/calcite-components-react';
+import React from 'react';
+import './Select.css';
 
 import {
   bufferDistanceChanged,
   bufferProperty,
   createSketch,
-} from "./utils/select";
-import useSelect from "./utils/useSelect";
-import { SelectProps } from "./utils/SelectProps";
+} from './utils/select';
+import useSelect from './utils/useSelect';
+import { SelectProps } from './utils/SelectProps';
 export const Select = (props: SelectProps) => {
   const {
     isActive,
@@ -56,18 +56,15 @@ export const Select = (props: SelectProps) => {
             scale="m"
             icon="pin"
             text="Point"
-            active={selectedTool === "point" ? true : undefined}
+            active={selectedTool === 'point' ? true : undefined}
             onClick={() => {
-              setSelectedTool("point");
+              setSelectedTool('point');
               if (sketchVm) {
-                createSketch(sketchVm, "point");
+                createSketch(sketchVm, 'point');
               }
             }}
           ></CalciteAction>
-          <CalciteTooltip
-            closeOnClick
-            referenceElement="selectPoint"
-          >
+          <CalciteTooltip closeOnClick referenceElement="selectPoint">
             Select by Point
           </CalciteTooltip>
           <CalciteAction
@@ -75,18 +72,15 @@ export const Select = (props: SelectProps) => {
             scale="m"
             icon="line"
             text="Line"
-            active={selectedTool === "line" ? true : undefined}
+            active={selectedTool === 'line' ? true : undefined}
             onClick={() => {
-              setSelectedTool("line");
+              setSelectedTool('line');
               if (sketchVm) {
-                createSketch(sketchVm, "polyline");
+                createSketch(sketchVm, 'polyline');
               }
             }}
           ></CalciteAction>
-          <CalciteTooltip
-            closeOnClick
-            referenceElement="selectLine"
-          >
+          <CalciteTooltip closeOnClick referenceElement="selectLine">
             Select by Line
           </CalciteTooltip>
           <CalciteAction
@@ -94,18 +88,15 @@ export const Select = (props: SelectProps) => {
             scale="m"
             icon="polygon"
             text="Polygon"
-            active={selectedTool === "polygon" ? true : undefined}
+            active={selectedTool === 'polygon' ? true : undefined}
             onClick={() => {
-              setSelectedTool("polygon");
+              setSelectedTool('polygon');
               if (sketchVm) {
-                createSketch(sketchVm, "polygon");
+                createSketch(sketchVm, 'polygon');
               }
             }}
           ></CalciteAction>
-          <CalciteTooltip
-            closeOnClick
-            referenceElement="selectRectangle"
-          >
+          <CalciteTooltip closeOnClick referenceElement="selectRectangle">
             Select by Rectangle
           </CalciteTooltip>
           <CalciteAction
@@ -113,18 +104,15 @@ export const Select = (props: SelectProps) => {
             scale="m"
             icon="rectangle"
             text="Rectangle"
-            active={selectedTool === "rectangle" ? true : undefined}
+            active={selectedTool === 'rectangle' ? true : undefined}
             onClick={() => {
-              setSelectedTool("rectangle");
+              setSelectedTool('rectangle');
               if (sketchVm) {
-                createSketch(sketchVm, "rectangle");
+                createSketch(sketchVm, 'rectangle');
               }
             }}
           ></CalciteAction>
-          <CalciteTooltip
-            closeOnClick
-            referenceElement="selectCircle"
-          >
+          <CalciteTooltip closeOnClick referenceElement="selectCircle">
             Select by Circle
           </CalciteTooltip>
           <CalciteAction
@@ -132,18 +120,15 @@ export const Select = (props: SelectProps) => {
             scale="m"
             icon="circle"
             text="Circle"
-            active={selectedTool === "circle" ? true : undefined}
+            active={selectedTool === 'circle' ? true : undefined}
             onClick={() => {
-              setSelectedTool("circle");
+              setSelectedTool('circle');
               if (sketchVm) {
-                createSketch(sketchVm, "circle");
+                createSketch(sketchVm, 'circle');
               }
             }}
           ></CalciteAction>
-          <CalciteTooltip
-            closeOnClick
-            referenceElement="selectPolygon"
-          >
+          <CalciteTooltip closeOnClick referenceElement="selectPolygon">
             Select by Polygon
           </CalciteTooltip>
           <CalciteAction
@@ -151,18 +136,15 @@ export const Select = (props: SelectProps) => {
             scale="m"
             icon="pins"
             text="Multi-Point"
-            active={selectedTool === "multipoint" ? true : undefined}
+            active={selectedTool === 'multipoint' ? true : undefined}
             onClick={() => {
-              setSelectedTool("multipoint");
+              setSelectedTool('multipoint');
               if (sketchVm) {
-                createSketch(sketchVm, "multipoint");
+                createSketch(sketchVm, 'multipoint');
               }
             }}
           ></CalciteAction>
-          <CalciteTooltip
-            closeOnClick
-            referenceElement="selectMultipoint"
-          >
+          <CalciteTooltip closeOnClick referenceElement="selectMultipoint">
             Select by Multi-point
           </CalciteTooltip>
           <CalciteAction
@@ -176,13 +158,9 @@ export const Select = (props: SelectProps) => {
               if (layer) {
                 (layer as __esri.GraphicsLayer).removeAll();
               }
-
             }}
           ></CalciteAction>
-          <CalciteTooltip
-            closeOnClick
-            referenceElement="clearSelection"
-          >
+          <CalciteTooltip closeOnClick referenceElement="clearSelection">
             Clear selection
           </CalciteTooltip>
         </div>
@@ -207,7 +185,12 @@ export const Select = (props: SelectProps) => {
             hidden={distance <= 0}
             width="full"
             onClick={() =>
-              bufferProperty(selectedProperty, distance, props.geometrySet, props.view)
+              bufferProperty(
+                selectedProperty,
+                distance,
+                props.geometrySet,
+                props.view,
+              )
             }
           >
             Buffer Property

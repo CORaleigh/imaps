@@ -18,7 +18,9 @@ const useSelect = (props: SelectProps) => {
   useEffect(() => {
     if (!loaded.current) {
       loaded.current = true;
-      initializeSelect(props.view, props.geometrySet, setSelectedTool).then((sketchVm) => setSketchVm(sketchVm));
+      initializeSelect(props.view, props.geometrySet, setSelectedTool).then(
+        (sketchVm) => setSketchVm(sketchVm),
+      );
     }
     return () => {
       sketchVm && sketchVm.destroy();

@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { PrintProps } from "./utils/PrintProps";
-import { tips } from "./utils/tips";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { PrintProps } from './utils/PrintProps';
+import { tips } from './utils/tips';
 import {
   Exports,
   Layout,
@@ -11,19 +11,19 @@ import {
   hidePrintFrame,
   prepareExport,
   roundScale,
-  showPrintFrame
-} from "./utils/print";
+  showPrintFrame,
+} from './utils/print';
 
 const usePrint = (props: PrintProps) => {
   const loaded = useRef(false);
 
   const [isActive, setIsActive] = useState(false);
-  const [selectedTab, setSelectedTab] = useState("layout");
+  const [selectedTab, setSelectedTab] = useState('layout');
   const [layouts, setLayouts] = useState<Layout[]>([]);
   const [formats, setFormats] = useState<string[]>([]);
 
-  const [title, setTitle] = useState<string>("");
-  const [fileName, setFileName] = useState<string>("");
+  const [title, setTitle] = useState<string>('');
+  const [fileName, setFileName] = useState<string>('');
 
   const [selectedLayout, setSelectedLayout] = useState<Layout>();
   const [selectedFormat, setSelectedFormat] = useState<string>();
@@ -35,7 +35,7 @@ const usePrint = (props: PrintProps) => {
   const [customScale, setCustomScale] = useState<MapScale>();
 
   const [printScale, setPrintScale] = useState<number>(
-    roundScale(props.view.scale)
+    roundScale(props.view.scale),
   );
 
   const [userDefined, setUserDefined] = useState<boolean>(false);
@@ -105,15 +105,15 @@ const usePrint = (props: PrintProps) => {
 
   const scaleTypeChanged = useCallback(
     (e: any) => {
-      setUseCustomScale(e.target.value === "custom");
+      setUseCustomScale(e.target.value === 'custom');
 
-      if (e.target.value === "custom" && customScale) {
+      if (e.target.value === 'custom' && customScale) {
         setPrintScale(parseInt(customScale.scale));
       } else {
         setPrintScale(roundScale(props.view.scale));
       }
     },
-    [props.view, customScale]
+    [props.view, customScale],
   );
 
   const tabChanged = useCallback((e: any) => {
@@ -126,8 +126,8 @@ const usePrint = (props: PrintProps) => {
         props.view,
         useCustomScale ? printScale : roundScale(props.view.scale),
         selectedLayout,
-        selectedTab === "layout" ? selectedFormat : selectedImageFormat,
-        selectedTab === "layout" ? title : fileName,
+        selectedTab === 'layout' ? selectedFormat : selectedImageFormat,
+        selectedTab === 'layout' ? title : fileName,
         showLegend,
         showAttributes,
         props.selectedProperty,
@@ -136,9 +136,9 @@ const usePrint = (props: PrintProps) => {
         setExports,
         selectedTab,
         imageWidth,
-        imageHeight
+        imageHeight,
       );
-      setSelectedTab("exports");
+      setSelectedTab('exports');
     },
     [
       title,
@@ -155,14 +155,14 @@ const usePrint = (props: PrintProps) => {
       imageWidth,
       fileName,
       selectedImageFormat,
-    ]
+    ],
   );
 
   useEffect(() => {
     setIsActive(props.isActive);
   }, [props.isActive]);
   useEffect(() => {
-    setUserDefined(customScale?.scale == "custom");
+    setUserDefined(customScale?.scale == 'custom');
   }, [customScale]);
 
   useEffect(() => {
@@ -175,9 +175,9 @@ const usePrint = (props: PrintProps) => {
         useCustomScale ? printScale : roundScale(props.view.scale),
         showAttributes && props.selectedProperty != undefined,
         showLegend,
-        imageHeight, 
-        imageWidth, 
-        selectedTab        
+        imageHeight,
+        imageWidth,
+        selectedTab,
       );
     } else {
       hidePrintFrame(props.view);
@@ -190,9 +190,9 @@ const usePrint = (props: PrintProps) => {
     showLegend,
     showAttributes,
     props.selectedProperty,
-    imageHeight, 
-    imageWidth, 
-    selectedTab
+    imageHeight,
+    imageWidth,
+    selectedTab,
   ]);
 
   useEffect(() => {

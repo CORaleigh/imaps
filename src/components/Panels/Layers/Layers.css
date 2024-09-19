@@ -14,10 +14,10 @@
 }
 
 .esri-icon-non-visible::before {
-  content: "\e610" !important;
+  content: '\e610' !important;
 }
 .esri-icon-visible::before {
-  content: "\e611" !important;
+  content: '\e611' !important;
 }
 
 .layers {

@@ -5,7 +5,7 @@ import FieldColumnTemplate from '@arcgis/core/widgets/FeatureTable/support/Field
 import TableTemplate from '@arcgis/core/widgets/FeatureTable/support/TableTemplate';
 import FeatureSet from '@arcgis/core/rest/support/FeatureSet';
 import Graphic from '@arcgis/core/Graphic';
-import {saveAs} from 'file-saver';
+import { saveAs } from 'file-saver';
 
 import '../PropertyTable/PropertyTable.css';
 import { getProperty } from './search';
@@ -16,7 +16,9 @@ export const initializeFeatureTable = async (
   view: MapView,
   featureSelected: (selectedFeature: Graphic) => void,
 ): Promise<FeatureTable> => {
-  const table: __esri.FeatureLayer = (await getTableLayer(view)) as __esri.FeatureLayer;
+  const table: __esri.FeatureLayer = (await getTableLayer(
+    view,
+  )) as __esri.FeatureLayer;
   featureTable = new FeatureTable({
     container: ref,
     view: view,
@@ -31,17 +33,20 @@ export const initializeFeatureTable = async (
         deleteSelection: false,
         selectedRecordsShowAllToggle: false,
         selectedRecordsShowSelectedToggle: false,
-        zoomToSelection: false
+        zoomToSelection: false,
       },
     },
     menuConfig: {
-      items: [{
+      items: [
+        {
           label: 'Export',
           icon: 'export',
           clickFunction: () => {
             exportTable(featureTable);
           },
-          hidden: () => { return false}
+          hidden: () => {
+            return false;
+          },
         },
       ],
     },
@@ -59,17 +64,22 @@ export const initializeFeatureTable = async (
           .map((column: any) => {
             return column.field.name;
           });
-        window.localStorage.setItem('imaps_table_template', JSON.stringify(visibleFields));
+        window.localStorage.setItem(
+          'imaps_table_template',
+          JSON.stringify(visibleFields),
+        );
       }
     },
-    {passive: true}
+    { passive: true },
   );
   await featureTable?.when();
   //featureTable.menu.items = featureTable.menu.items.reverse();
 
   featureTable.highlightIds.on('change', async (e) => {
     if (e.added.length) {
-      const fs: FeatureSet = await (featureTable.layer as __esri.FeatureLayer).queryFeatures({
+      const fs: FeatureSet = await (
+        featureTable.layer as __esri.FeatureLayer
+      ).queryFeatures({
         where: `OBJECTID = ${e.added[0]}`,
         outFields: ['REID'],
         returnGeometry: false,
@@ -110,21 +120,27 @@ const initializeGrid = (featureTable: FeatureTable) => {
   featureTable.refresh();
 
   requestAnimationFrame(() => {
-    const grid = (featureTable.container as HTMLElement).querySelector('vaadin-grid') as any;
-    featureTable.title = "0 properties selected";
+    const grid = (featureTable.container as HTMLElement).querySelector(
+      'vaadin-grid',
+    ) as any;
+    featureTable.title = '0 properties selected';
     //set tabpanel to 100% in shadowRoot
     (featureTable.container as HTMLElement).parentElement?.shadowRoot
       ?.querySelector('[role="tabpanel"]')
       ?.setAttribute('style', 'height: 100%');
-    grid?.addEventListener('cell-activate', (e: any) => {
-      featureTable.highlightIds.removeAll();
-      const feature = e.detail.model.item.feature;
+    grid?.addEventListener(
+      'cell-activate',
+      (e: any) => {
+        featureTable.highlightIds.removeAll();
+        const feature = e.detail.model.item.feature;
 
-      featureTable.highlightIds.add(e.detail.model.item.objectId);
-      //featureTable.highlightIds.add(e.detail.model.index);
-    }, {passive: true});
+        featureTable.highlightIds.add(e.detail.model.item.objectId);
+        //featureTable.highlightIds.add(e.detail.model.index);
+      },
+      { passive: true },
+    );
   });
-}
+};
 
 const getTableLayer = async (view: MapView) => {
   const table = view.map.allTables.find((table: __esri.Layer) => {
@@ -168,12 +184,14 @@ const setSortPriority = (fieldName: string): number | null => {
   } else {
     return -1;
   }
-}
-const  getTableTemplate = (layer: __esri.FeatureLayer): TableTemplate => {
+};
+const getTableTemplate = (layer: __esri.FeatureLayer): TableTemplate => {
   const tableTemplate: TableTemplate = new TableTemplate({
     columnTemplates: [],
   });
-  const storedFields = JSON.parse(window.localStorage.getItem('imaps_table_template') as string);
+  const storedFields = JSON.parse(
+    window.localStorage.getItem('imaps_table_template') as string,
+  );
   const ignoreFields = ['OBJECTID', 'PARCELPK', 'GlobalID'];
   const showColumns = ['SITE_ADDRESS', 'OWNER', 'REID', 'PIN_NUM', 'PIN_EXT'];
   //const showColumns: string[] = storedFields ? storedFields : ["SITE_ADDRESS", "OWNER", "REID", "PIN_NUM", "PIN_EXT"];
@@ -187,7 +205,9 @@ const  getTableTemplate = (layer: __esri.FeatureLayer): TableTemplate => {
     const columnTemplate = new FieldColumnTemplate({
       label: field.label,
       fieldName: field.fieldName,
-      visible: storedFields ? storedFields.includes(field.fieldName) : showColumns.includes(field.fieldName),
+      visible: storedFields
+        ? storedFields.includes(field.fieldName)
+        : showColumns.includes(field.fieldName),
       editable: false,
       initialSortPriority: setSortPriority(field.fieldName),
       direction: 'asc',
@@ -195,30 +215,40 @@ const  getTableTemplate = (layer: __esri.FeatureLayer): TableTemplate => {
     tableTemplate.columnTemplates.push(columnTemplate);
   });
   layer.popupTemplate.fieldInfos.forEach((field) => {
-    if (!ignoreFields.includes(field.fieldName) && !showColumns.includes(field.fieldName)) {
+    if (
+      !ignoreFields.includes(field.fieldName) &&
+      !showColumns.includes(field.fieldName)
+    ) {
       tableTemplate.columnTemplates.push(
         new FieldColumnTemplate({
           label: field.label,
           fieldName: field.fieldName,
-          visible: storedFields ? storedFields.includes(field.fieldName) : showColumns.includes(field.fieldName),
+          visible: storedFields
+            ? storedFields.includes(field.fieldName)
+            : showColumns.includes(field.fieldName),
           editable: false,
         } as any),
       );
     }
   });
   return tableTemplate;
-}
+};
 
-export const updateTable = async (features: Graphic[], featureTable: FeatureTable) => {
-  console.log(featureTable)
+export const updateTable = async (
+  features: Graphic[],
+  featureTable: FeatureTable,
+) => {
+  console.log(featureTable);
 
   if (featureTable) {
     try {
-      const result: FeatureSet = await (featureTable.layer as __esri.FeatureLayer).queryFeatures({
+      const result: FeatureSet = await (
+        featureTable.layer as __esri.FeatureLayer
+      ).queryFeatures({
         where: '1=1',
         returnGeometry: true,
       });
-      features.forEach(feature => {
+      features.forEach((feature) => {
         let address = feature.getAttribute('SITE_ADDRESS');
         if (feature.getAttribute('STMISC') === '1/2') {
           address = address.replace(' ', ` 1/2 `);
@@ -226,10 +256,13 @@ export const updateTable = async (features: Graphic[], featureTable: FeatureTabl
           address = `${address} ${feature.getAttribute('STMISC')}`;
         }
         feature.setAttribute('SITE_ADDRESS', address);
-
-      })
-      await (featureTable.layer as __esri.FeatureLayer).applyEdits({ deleteFeatures: result.features });
-      await (featureTable.layer as __esri.FeatureLayer).applyEdits({ addFeatures: features });
+      });
+      await (featureTable.layer as __esri.FeatureLayer).applyEdits({
+        deleteFeatures: result.features,
+      });
+      await (featureTable.layer as __esri.FeatureLayer).applyEdits({
+        addFeatures: features,
+      });
 
       requestAnimationFrame(() => {
         featureTable.refresh();
@@ -241,34 +274,39 @@ export const updateTable = async (features: Graphic[], featureTable: FeatureTabl
   }
 };
 
-
 const exportTable = async (table: FeatureTable) => {
-  const result = await (table.layer as FeatureLayer).queryFeatures({ where: '1=1', outFields: ['*'] });
+  const result = await (table.layer as FeatureLayer).queryFeatures({
+    where: '1=1',
+    outFields: ['*'],
+  });
 
   let csv = '';
-  (table.tableTemplate.columnTemplates as __esri.FieldColumnTemplate[]).forEach((field: __esri.FieldColumnTemplate) => {
-    csv += `${field.label},`;
-  });
+  (table.tableTemplate.columnTemplates as __esri.FieldColumnTemplate[]).forEach(
+    (field: __esri.FieldColumnTemplate) => {
+      csv += `${field.label},`;
+    },
+  );
   csv += '\r\n';
   result.features.forEach((feature) => {
-    (table.tableTemplate.columnTemplates as __esri.FieldColumnTemplate[]).forEach(
-      (field: __esri.FieldColumnTemplate) => {
-        if (feature.attributes[field.fieldName]) {
-          if (field.fieldName.toLowerCase().includes('date')) {
-            csv += `"${new Intl.DateTimeFormat("en-US", { year: "numeric",
-              month: "2-digit",
-              day: "2-digit"
-            }).format(new Date(feature.attributes[field.fieldName]))}",`;            
-          } else if (field.fieldName.toLowerCase().includes('acres')) {
-            csv += `"${parseFloat(feature.attributes[field.fieldName]).toFixed(2)}",`;
-          } else {
-            csv += `"${feature.attributes[field.fieldName]}",`;
-          }
+    (
+      table.tableTemplate.columnTemplates as __esri.FieldColumnTemplate[]
+    ).forEach((field: __esri.FieldColumnTemplate) => {
+      if (feature.attributes[field.fieldName]) {
+        if (field.fieldName.toLowerCase().includes('date')) {
+          csv += `"${new Intl.DateTimeFormat('en-US', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+          }).format(new Date(feature.attributes[field.fieldName]))}",`;
+        } else if (field.fieldName.toLowerCase().includes('acres')) {
+          csv += `"${parseFloat(feature.attributes[field.fieldName]).toFixed(2)}",`;
         } else {
-          csv += `"",`;
+          csv += `"${feature.attributes[field.fieldName]}",`;
         }
-      },
-    );
+      } else {
+        csv += `"",`;
+      }
+    });
     csv += '\r\n';
   });
   let datestr = new Date().toISOString().split('.')[0];

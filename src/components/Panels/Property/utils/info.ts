@@ -27,14 +27,18 @@ export const updateFeature = async (
     featureTable,
   );
 
-  const media = (graphic.popupTemplate.content as __esri.Content[]).find((content: __esri.Content) => {
-    return content?.type === 'media';
-  }) as __esri.MediaContent;
+  const media = (graphic.popupTemplate.content as __esri.Content[]).find(
+    (content: __esri.Content) => {
+      return content?.type === 'media';
+    },
+  ) as __esri.MediaContent;
   media.mediaInfos = mediaInfos;
   if (feature) {
     feature.graphic = graphic;
   }
   requestAnimationFrame(() => {
-    document.querySelector('.esri-feature')?.parentElement?.scrollTo({ top: 0, behavior: 'smooth' });
+    document
+      .querySelector('.esri-feature')
+      ?.parentElement?.scrollTo({ top: 0, behavior: 'smooth' });
   });
 };

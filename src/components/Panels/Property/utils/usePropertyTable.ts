@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
-import { PropertyTableProps } from "../PropertyTable/PropertyProps";
-import { initializeFeatureTable, updateTable } from "../utils/table";
+import { useEffect, useRef, useState } from 'react';
+import { PropertyTableProps } from '../PropertyTable/PropertyProps';
+import { initializeFeatureTable, updateTable } from '../utils/table';
 
 const usePropertyTable = (props: PropertyTableProps) => {
   const ref = useRef() as any;
@@ -14,7 +14,7 @@ const usePropertyTable = (props: PropertyTableProps) => {
       initializeFeatureTable(
         ref.current,
         props.view,
-        props.featureSelected
+        props.featureSelected,
       ).then((table: __esri.FeatureTable) => {
         setFeatureTable(table);
         props.featureTableSet(table);

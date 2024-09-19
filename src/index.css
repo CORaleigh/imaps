@@ -1,4 +1,4 @@
-@import "@esri/calcite-components/dist/calcite/calcite.css";
+@import '@esri/calcite-components/dist/calcite/calcite.css';
 :root {
   --app-height: 100%;
 }
@@ -36,4 +36,3 @@ calcite-shell[content-behind] .esri-view {
 .select-container {
   background-color: var(--calcite-ui-foreground-1);
 }
-

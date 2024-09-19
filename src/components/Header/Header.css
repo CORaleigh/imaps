@@ -3,7 +3,6 @@
   padding: 0 1rem;
   background-color: var(--calcite-ui-foreground-1);
   width: 100%;
-
 }
 #header-controls {
   display: flex;
@@ -52,9 +51,9 @@ calcite-dropdown {
   background-color: var(--calcite-ui-foreground-2);
 }
 
-.shortcuts-content table td, .shortcuts-content table th {
+.shortcuts-content table td,
+.shortcuts-content table th {
   border: 1px solid #eaeaea;
   border-radius: 3px;
   padding: 0.5rem 0.75rem 0.5rem 0.75rem;
 }
-

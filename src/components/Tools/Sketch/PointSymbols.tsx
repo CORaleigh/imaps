@@ -1,18 +1,18 @@
-import "@esri/calcite-components/dist/components/calcite-input";
-import "@esri/calcite-components/dist/components/calcite-label";
-import "@esri/calcite-components/dist/components/calcite-panel";
+import '@esri/calcite-components/dist/components/calcite-input';
+import '@esri/calcite-components/dist/components/calcite-label';
+import '@esri/calcite-components/dist/components/calcite-panel';
 
 import {
   CalciteInput,
   CalciteLabel,
   CalcitePanel,
-} from "@esri/calcite-components-react";
-import React, { useEffect, useState } from "react";
-import { getSymbols } from "./utils/sketch";
-import IconPicker from "./IconPicker";
-import IconSelectionPanel from "./IconSelectionPanel";
-import ColorButton from "./ColorButton";
-import Color from "@arcgis/core/Color";
+} from '@esri/calcite-components-react';
+import React, { useEffect, useState } from 'react';
+import { getSymbols } from './utils/sketch';
+import IconPicker from './IconPicker';
+import IconSelectionPanel from './IconSelectionPanel';
+import ColorButton from './ColorButton';
+import Color from '@arcgis/core/Color';
 interface Props {
   pointSymbolUpdated: (symbol: any, c: any, pointSize: number) => void;
 }
@@ -21,15 +21,15 @@ function PointSymbols(props: Props) {
   const [symbol, setSymbol] = useState<any>();
   const [pointSize, setPointSize] = useState(16);
 
-  const url = "https://www.arcgis.com/sharing/rest/content/items/";
+  const url = 'https://www.arcgis.com/sharing/rest/content/items/';
   const ids = [
-    "a63b3a4631ae41d4a1bc3ba6d9c85bfe",
-    "70ccf6bcbd304773a164be896e76edd3",
+    'a63b3a4631ae41d4a1bc3ba6d9c85bfe',
+    '70ccf6bcbd304773a164be896e76edd3',
   ];
 
-  const [activeFlow, setActiveFlow] = useState("main");
+  const [activeFlow, setActiveFlow] = useState('main');
   const [pointColor, setPointColor] = useState<Color>(
-    new Color([255, 0, 0, 1])
+    new Color([255, 0, 0, 1]),
   );
 
   useEffect(() => {
@@ -45,10 +45,10 @@ function PointSymbols(props: Props) {
     <div id="point-symbols">
       {symbols.length && (
         <div>
-          {activeFlow === "main" && (
+          {activeFlow === 'main' && (
             <CalcitePanel>
               <IconPicker
-                pickerClicked={() => setActiveFlow("icon")}
+                pickerClicked={() => setActiveFlow('icon')}
                 symbol={symbol}
               ></IconPicker>
               <ColorButton
@@ -72,20 +72,20 @@ function PointSymbols(props: Props) {
                     props.pointSymbolUpdated(
                       symbol,
                       pointColor,
-                      parseFloat(e.target.value)
+                      parseFloat(e.target.value),
                     );
                   }}
                 ></CalciteInput>
               </CalciteLabel>
             </CalcitePanel>
           )}
-          {activeFlow === "icon" && (
+          {activeFlow === 'icon' && (
             <IconSelectionPanel
               iconSelected={(icon: any) => {
                 setSymbol(icon);
                 props.pointSymbolUpdated(icon, pointColor, pointSize);
               }}
-              backClicked={() => setActiveFlow("main")}
+              backClicked={() => setActiveFlow('main')}
               symbols={symbols}
             ></IconSelectionPanel>
           )}

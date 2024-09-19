@@ -10,7 +10,9 @@ import { arcadeExpressionInfos } from './utils/arcadeExpressions';
 
 const Services = lazy(() => import('./Services/Services'));
 const AddressTable = lazy(() => import('./AddressTable/AddressTable'));
-const NextPropertyButton = lazy(() => import('./NextPropertyButton/NextPropertyButton'));
+const NextPropertyButton = lazy(
+  () => import('./NextPropertyButton/NextPropertyButton'),
+);
 
 export const executeArcade = async (expression: string, feature: Graphic) => {
   const executor = await arcade.createArcadeExecutor(expression, {
@@ -38,7 +40,10 @@ export const createDurhamButton = () => {
     outFields: ['*'],
     creator: async (e: any) => {
       const div = document.createElement('div');
-      div.setAttribute('style', 'display: flex;flex-direction: row;justify-content: space-around;');
+      div.setAttribute(
+        'style',
+        'display: flex;flex-direction: row;justify-content: space-around;',
+      );
 
       const durham = await executeArcade(
         `if (Find("DURHAM COUNTY",$feature.CITY_DECODE) > -1) { 
@@ -67,38 +72,59 @@ export const createDeedButtons = () => {
 };
 const deedCreator = async (e: any) => {
   const div = document.createElement('div');
-  div.setAttribute('style', 'display: flex;flex-direction: row;justify-content: space-around;');
+  div.setAttribute(
+    'style',
+    'display: flex;flex-direction: row;justify-content: space-around;',
+  );
   let deed: string | null = null;
   let bom: string | null = null;
 
   if (!e.graphic.getAttribute('CITY_DECODE')?.includes('DURHAM COUNTY')) {
-    const objectids = await (e.graphic.layer as FeatureLayer).queryObjectIds({where: `REID = '${e.graphic.getAttribute('REID')}'`});
+    const objectids = await (e.graphic.layer as FeatureLayer).queryObjectIds({
+      where: `REID = '${e.graphic.getAttribute('REID')}'`,
+    });
     if (objectids.length) {
-      const result = await (e.graphic.layer as FeatureLayer).queryRelatedFeatures({
-        relationshipId: (e.graphic.layer as FeatureLayer).relationships.find((r) => {
-          return r.name === 'CONDO_BOOKS';
-        })?.id,
+      const result = await (
+        e.graphic.layer as FeatureLayer
+      ).queryRelatedFeatures({
+        relationshipId: (e.graphic.layer as FeatureLayer).relationships.find(
+          (r) => {
+            return r.name === 'CONDO_BOOKS';
+          },
+        )?.id,
         objectIds: [objectids[0]],
         outFields: ['BOM_DOC_NUM', 'DEED_DOC_NUM'],
       });
-  
+
       deed = result[objectids[0]].features[0].getAttribute('DEED_DOC_NUM');
       bom = result[objectids[0]].features[0].getAttribute('BOM_DOC_NUM');
     }
 
-
-    if (!e.graphic.getAttribute('CITY_DECODE')?.includes('DURHAM COUNTY') || !e.graphic.getAttribute('CITY_DECODE')) {
+    if (
+      !e.graphic.getAttribute('CITY_DECODE')?.includes('DURHAM COUNTY') ||
+      !e.graphic.getAttribute('CITY_DECODE')
+    ) {
       if (deed) {
         const deedBtn = createButton('file-text', 'Deeds');
         deedBtn.onclick = () => {
-          window.open('https://rodcrpi.wakegov.com/booksweb/pdfview.aspx?docid=' + deed + '&RecordDate=', 'deedwindow');
+          window.open(
+            'https://rodcrpi.wakegov.com/booksweb/pdfview.aspx?docid=' +
+              deed +
+              '&RecordDate=',
+            'deedwindow',
+          );
         };
         div.append(deedBtn);
       }
       if (bom) {
         const bombtn = createButton('map', 'Book of Maps');
         bombtn.onclick = () => {
-          window.open('https://rodcrpi.wakegov.com/booksweb/pdfview.aspx?docid=' + bom + '&RecordDate=', 'bomwindow');
+          window.open(
+            'https://rodcrpi.wakegov.com/booksweb/pdfview.aspx?docid=' +
+              bom +
+              '&RecordDate=',
+            'bomwindow',
+          );
         };
         div.append(bombtn);
       }
@@ -138,18 +164,26 @@ const wellCreator = async (e: any, view: __esri.MapView) => {
       },
     });
   }
-  let featureSet: __esri.FeatureSet = await (layer as FeatureLayer).queryFeatures({
+  let featureSet: __esri.FeatureSet = await (
+    layer as FeatureLayer
+  ).queryFeatures({
     where: `PIN_NUM = '${e.graphic.attributes['PIN_NUM']}'`,
     returnGeometry: false,
   });
   const div = document.createElement('div');
-  div.setAttribute('style', 'display: flex;flex-direction: row;justify-content: space-around;');
+  div.setAttribute(
+    'style',
+    'display: flex;flex-direction: row;justify-content: space-around;',
+  );
 
   if (featureSet.features.length) {
     const pin = featureSet.features[0].getAttribute('PIN_NUM');
     const btn = createButton('link', 'Wells');
     btn.onclick = () => {
-      window.open('https://maps.wakegov.com/water-analysis/index.html#/?pin=' + pin, 'wells');
+      window.open(
+        'https://maps.wakegov.com/water-analysis/index.html#/?pin=' + pin,
+        'wells',
+      );
     };
     div.append(btn);
   }
@@ -168,7 +202,10 @@ const wellCreator = async (e: any, view: __esri.MapView) => {
     const pin = featureSet.features[0].getAttribute('PIN_NUM');
     const btn = createButton('link', 'Septic');
     btn.onclick = () => {
-      window.open('https://maps.wakegov.com/septic/index.html#/?pin=' + pin, 'septic');
+      window.open(
+        'https://maps.wakegov.com/septic/index.html#/?pin=' + pin,
+        'septic',
+      );
     };
     div.append(btn);
   }
@@ -181,11 +218,18 @@ export const createLinkButtons = () => {
     outFields: ['*'],
     creator: async (e: any) => {
       const div = document.createElement('div');
-      div.setAttribute('style', 'display: flex;flex-direction: row;justify-content: space-around;');
+      div.setAttribute(
+        'style',
+        'display: flex;flex-direction: row;justify-content: space-around;',
+      );
       const btn = createButton('link', 'Google Maps');
       btn.onclick = () => {
-        const latitude = ((e.graphic as __esri.Graphic).geometry as __esri.Polygon).centroid.latitude;
-        const longitude = ((e.graphic as __esri.Graphic).geometry as __esri.Polygon).centroid.longitude;
+        const latitude = (
+          (e.graphic as __esri.Graphic).geometry as __esri.Polygon
+        ).centroid.latitude;
+        const longitude = (
+          (e.graphic as __esri.Graphic).geometry as __esri.Polygon
+        ).centroid.longitude;
         const url = `https://www.google.com/maps/@${latitude - 0.0006721930485},${
           longitude - 0.0000196467158
         },68a,35y,49.52t/data=!3m1!1e3`;
@@ -195,7 +239,7 @@ export const createLinkButtons = () => {
       const tax = createButton('home', 'Tax Page');
 
       const taxUrl = await executeArcade(
-      `if ($feature.CITY_DECODE == "RALEIGH - DURHAM COUNTY") { 
+        `if ($feature.CITY_DECODE == "RALEIGH - DURHAM COUNTY") { 
         return Concatenate("https://taxcama.dconc.gov/camapwa/PropertySummary.aspx?REID=",$feature.REID);
       } else {
         return Concatenate("https://services.wake.gov/realestate/Account.asp?id=", $feature.REID);
@@ -276,13 +320,23 @@ export const createFeatureTitle = (
             <div className="feature-title">
               {condos.length > 1 && (
                 <Suspense fallback={''}>
-                  <NextPropertyButton view={view} icon="caret-left" text="Previous" featureTable={featureTable} />
+                  <NextPropertyButton
+                    view={view}
+                    icon="caret-left"
+                    text="Previous"
+                    featureTable={featureTable}
+                  />
                 </Suspense>
               )}
               <h2>{title}</h2>
               <Suspense fallback={''}>
                 {condos.length > 1 && (
-                  <NextPropertyButton view={view} icon="caret-right" text="Next" featureTable={featureTable} />
+                  <NextPropertyButton
+                    view={view}
+                    icon="caret-right"
+                    text="Next"
+                    featureTable={featureTable}
+                  />
                 )}
               </Suspense>
             </div>,

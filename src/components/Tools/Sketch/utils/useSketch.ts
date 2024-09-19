@@ -1,18 +1,18 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { ToolProps } from "../../utils/ToolProps";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { ToolProps } from '../../utils/ToolProps';
 import {
   cancelSketch,
   initializeSketchViewModel,
   sketchActivated,
-} from "./sketch";
-import { tips } from "./tips";
+} from './sketch';
+import { tips } from './tips';
 
 const useSketch = (props: ToolProps) => {
   const loaded = useRef(false);
-  const [activeSketchTool, setActiveSketchTool] = useState("");
+  const [activeSketchTool, setActiveSketchTool] = useState('');
   const [isActive, setIsActive] = useState(false);
   const [selectedGraphics, setSelectedGraphics] = useState<__esri.Graphic[]>(
-    []
+    [],
   );
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const useSketch = (props: ToolProps) => {
         props.view,
         setActiveSketchTool,
         selectedGraphics,
-        setSelectedGraphics
+        setSelectedGraphics,
       );
     }
   }, []);
@@ -30,17 +30,16 @@ const useSketch = (props: ToolProps) => {
     if (!props.isActive) {
       props.toolDismissed();
       cancelSketch();
-      setActiveSketchTool("");
+      setActiveSketchTool('');
       setSelectedGraphics([...[], ...[]]);
     } else {
       props.view.popupEnabled = false;
-
     }
   }, [props.isActive]);
   const toolDismissed = useCallback(() => {
     props.toolDismissed();
     cancelSketch();
-    setActiveSketchTool("");
+    setActiveSketchTool('');
     setSelectedGraphics([...[], ...[]]);
   }, []);
   const tipsClicked = useCallback((e: any) => {
@@ -48,12 +47,12 @@ const useSketch = (props: ToolProps) => {
   }, []);
   const checkGeometryType = (
     selectedGraphics: __esri.Graphic[],
-    geometryType: string
+    geometryType: string,
   ) => {
     const geometryTypes = selectedGraphics.map((graphic) => {
       let type: string = graphic.geometry.type;
-      if (graphic.symbol.type === "text") {
-        type = "text";
+      if (graphic.symbol.type === 'text') {
+        type = 'text';
       }
       return type;
     });

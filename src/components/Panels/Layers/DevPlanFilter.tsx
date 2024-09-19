@@ -32,8 +32,12 @@ export const DevPlanFilter = (props: Props) => {
     });
 
     if (stats?.features.length) {
-      const max = new Date(stats.features[0].getAttribute('MAX_DATE')).getFullYear();
-      const min = new Date(stats.features[0].getAttribute('MIN_DATE')).getFullYear();
+      const max = new Date(
+        stats.features[0].getAttribute('MAX_DATE'),
+      ).getFullYear();
+      const min = new Date(
+        stats.features[0].getAttribute('MIN_DATE'),
+      ).getFullYear();
       layer.definitionExpression = `EXTRACT(YEAR FROM ${props.datefield}) >= ${min}
             AND EXTRACT(YEAR FROM ${props.datefield}) <= ${max}
             `;

@@ -22,7 +22,6 @@
   top: 40px;
 }
 
-
 @media only screen and (max-width: 500px) {
   .esri-expand {
     display: none;

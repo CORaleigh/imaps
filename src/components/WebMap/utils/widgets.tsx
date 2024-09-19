@@ -14,7 +14,13 @@ const Overview = lazy(() => import('../Overview/Overview'));
 const Coordinates = lazy(() => import('../Coordinates/Coodinates'));
 let streetviewClick: IHandle | null = null;
 
-export const addWidgets = (view: MapView, widgetActivated: (view: __esri.MapView, setActiveTool?: (activeTool: string) => void) => void) => {
+export const addWidgets = (
+  view: MapView,
+  widgetActivated: (
+    view: __esri.MapView,
+    setActiveTool?: (activeTool: string) => void,
+  ) => void,
+) => {
   view.ui.add(
     new Home({
       view: view,
@@ -73,7 +79,13 @@ const addOverview = async (view: __esri.MapView) => {
   }
 };
 
-const addCoordinates = async (view: __esri.MapView, widgetActivated: (view: __esri.MapView, setActiveTool?: (activeTool: string) => void) => void) => {
+const addCoordinates = async (
+  view: __esri.MapView,
+  widgetActivated: (
+    view: __esri.MapView,
+    setActiveTool?: (activeTool: string) => void,
+  ) => void,
+) => {
   const container = document.createElement('div');
 
   const coordinateExpand = new Expand({
@@ -106,7 +118,13 @@ const addCoordinates = async (view: __esri.MapView, widgetActivated: (view: __es
   }
 };
 
-const createStreetviewButton = (view: MapView, widgetActivated: (view: __esri.MapView, setActiveTool?: (activeTool: string) => void) => void): any => {
+const createStreetviewButton = (
+  view: MapView,
+  widgetActivated: (
+    view: __esri.MapView,
+    setActiveTool?: (activeTool: string) => void,
+  ) => void,
+): any => {
   const button = document.createElement('div');
   button.classList.add('streetview-widget');
   button.classList.add('esri-component');
@@ -127,29 +145,50 @@ const createStreetviewButton = (view: MapView, widgetActivated: (view: __esri.Ma
   text.textContent = 'Open streetview';
   button.appendChild(icon);
   button.appendChild(text);
-  button.addEventListener('click', () => {
-    widgetActivated(view);
+  button.addEventListener(
+    'click',
+    () => {
+      widgetActivated(view);
 
-    view.popupEnabled = false;
-    if (document.querySelector('.streetview-widget')?.classList.contains('active')) {
-      document.querySelector('.streetview-widget')?.classList.remove('active');
-      streetviewClick?.remove();
-    } else {
-      document.querySelector('.map-tool.active')?.classList.remove('active');
-      document.querySelector('.streetview-widget')?.classList.add('active');
-      streetviewClick?.remove();
-      streetviewClick = view.on('click', (e) => {
+      view.popupEnabled = false;
+      if (
+        document
+          .querySelector('.streetview-widget')
+          ?.classList.contains('active')
+      ) {
+        document
+          .querySelector('.streetview-widget')
+          ?.classList.remove('active');
+        streetviewClick?.remove();
+      } else {
         document.querySelector('.map-tool.active')?.classList.remove('active');
         document.querySelector('.streetview-widget')?.classList.add('active');
-        const cbll = e.mapPoint.latitude + ',' + e.mapPoint.longitude;
-        window.open('https://maps.google.com?layer=c&cbll=' + cbll + '&cbp=0,0,0,0,0', 'streetview');
-      });
-    }
-  }, {passive: true});
+        streetviewClick?.remove();
+        streetviewClick = view.on('click', (e) => {
+          document
+            .querySelector('.map-tool.active')
+            ?.classList.remove('active');
+          document.querySelector('.streetview-widget')?.classList.add('active');
+          const cbll = e.mapPoint.latitude + ',' + e.mapPoint.longitude;
+          window.open(
+            'https://maps.google.com?layer=c&cbll=' + cbll + '&cbp=0,0,0,0,0',
+            'streetview',
+          );
+        });
+      }
+    },
+    { passive: true },
+  );
   return button;
 };
 
-export const createIdentifyButton = (view: MapView, widgetActivated: (view: __esri.MapView, setActiveTool?: (activeTool: string) => void) => void): any => {
+export const createIdentifyButton = (
+  view: MapView,
+  widgetActivated: (
+    view: __esri.MapView,
+    setActiveTool?: (activeTool: string) => void,
+  ) => void,
+): any => {
   const infoButton = document.createElement('div');
   infoButton.classList.add('identify-widget');
   infoButton.classList.add('esri-component');
@@ -172,13 +211,17 @@ export const createIdentifyButton = (view: MapView, widgetActivated: (view: __es
   infoButton.appendChild(icon);
   infoButton.appendChild(text);
   view.popupEnabled = true;
-  infoButton.addEventListener('click', () => {
-    view.popupEnabled = true;
-    streetviewClick?.remove();
-    document.querySelector('.identify-widget')?.classList.add('active');
-    document.querySelector('.streetview-widget')?.classList.remove('active');
+  infoButton.addEventListener(
+    'click',
+    () => {
+      view.popupEnabled = true;
+      streetviewClick?.remove();
+      document.querySelector('.identify-widget')?.classList.add('active');
+      document.querySelector('.streetview-widget')?.classList.remove('active');
 
-    widgetActivated(view);
-  }, {passive: true});
+      widgetActivated(view);
+    },
+    { passive: true },
+  );
   return infoButton;
 };

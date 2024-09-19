@@ -8,7 +8,7 @@ import {
   CalciteSwitch,
   CalciteTooltip,
   CalciteNavigation,
-  CalciteNavigationLogo
+  CalciteNavigationLogo,
 } from '@esri/calcite-components-react';
 import React, { useEffect, useRef, useState } from 'react';
 import './Header.css';
@@ -17,11 +17,11 @@ import { reopenDropdown, toggleTheme } from './utils/header';
 interface HeaderProps {
   disclaimerClicked: () => void;
   logo: {
-    dark: string,
-    light: string
-  }
+    dark: string;
+    light: string;
+  };
 }
-function Header({disclaimerClicked, logo}: HeaderProps) {
+function Header({ disclaimerClicked, logo }: HeaderProps) {
   const ref = useRef<HTMLCalciteDropdownElement>();
 
   // const shortcuts = useRef<HTMLCalciteModalElement>();
@@ -29,7 +29,7 @@ function Header({disclaimerClicked, logo}: HeaderProps) {
   const [links, setLinks] = useState<any[]>();
   const [theme, setTheme] = useState('light');
   //const altOptKey: string = navigator.userAgent.toUpperCase().includes('MAC') ? 'Option' : 'Alt';
-  const isMobile: boolean =  window.matchMedia("(pointer:coarse)").matches;
+  const isMobile: boolean = window.matchMedia('(pointer:coarse)').matches;
   useEffect(() => {
     fetch('./config.json').then((response) => {
       response.json().then((config) => {
@@ -45,66 +45,104 @@ function Header({disclaimerClicked, logo}: HeaderProps) {
     }
   }, []);
   return (
-    <CalciteNavigation slot="header" label='header'>
-      {logo && <CalciteNavigationLogo slot="logo" heading="" thumbnail={theme === 'dark' ? logo.dark :  logo.light} target="_blank" href="https://www.wake.gov/departments-government/geographic-information-services-gis/maps-apps-data/imaps-information" ></CalciteNavigationLogo>}
-        <CalciteDropdown
+    <CalciteNavigation slot="header" label="header">
+      {logo && (
+        <CalciteNavigationLogo
+          slot="logo"
+          heading=""
+          thumbnail={theme === 'dark' ? logo.dark : logo.light}
+          target="_blank"
+          href="https://www.wake.gov/departments-government/geographic-information-services-gis/maps-apps-data/imaps-information"
+        ></CalciteNavigationLogo>
+      )}
+      <CalciteDropdown
         slot="content-end"
-          ref={ref as any}
-          placement="bottom-end"
+        ref={ref as any}
+        placement="bottom-end"
+        scale="m"
+        type="click"
+        onCalciteDropdownOpen={(e: any) => {
+          e.target.shadowRoot
+            ?.querySelector('.calcite-dropdown-content')
+            ?.setAttribute(
+              'style',
+              `min-height: ${isMobile ? '590' : '590'}px`,
+            );
+        }}
+      >
+        <CalciteButton
+          id="menuButton"
+          appearance="solid"
           scale="m"
-          type="click"
-          onCalciteDropdownOpen={(e: any) => {
-            e.target.shadowRoot?.querySelector('.calcite-dropdown-content')?.setAttribute('style', `min-height: ${isMobile ? '590' : '590'}px`);
-          }}
+          slot="trigger"
+          name="Menu"
+          role="button"
+          aria-label="Menu"
+          label="Menu"
         >
-          <CalciteButton id="menuButton" appearance="solid" scale="m" slot="trigger" name="Menu" role="button" aria-label="Menu" label="Menu">
-            <CalciteIcon icon="hamburger" scale="m"></CalciteIcon>
-          </CalciteButton>
-          <CalciteTooltip label="Menu" referenceElement="menuButton" closeOnClick>
-            Menu
-          </CalciteTooltip>
-          <CalciteDropdownGroup selection-mode="none" group-title="About" key="disclaimer">
-            <CalciteDropdownItem
-              onClick={(e: any) => {
-                disclaimerClicked();               
-              }}
-            >
-              Disclaimer
-            </CalciteDropdownItem>
-          </CalciteDropdownGroup>
-          {links &&
-            links.map((group: any) => {
-              return (
-                <CalciteDropdownGroup selection-mode="none" group-title={group.title} key={group.title}>
-                  {group.links.map((link: any) => {
-                    return (
-                      <CalciteDropdownItem rel="noreferrer" href={link.href} target="_blank" key={link.title}
-                      onClick={reopenDropdown}>
-                        {link.title}
-                      </CalciteDropdownItem>
-                    );
-                  })}
-                </CalciteDropdownGroup>
-              );
-            })}
-          <CalciteDropdownGroup selectionMode="none" group-title="Settings">
-            <CalciteDropdownItem onClick={reopenDropdown}>
-              <CalciteLabel layout="inline" className="label-wrapper">
-                Light
-                <CalciteIcon icon="brightness" scale="s"></CalciteIcon>
-                <CalciteSwitch
-                  checked={theme === 'dark' ? true : undefined}
-                  onCalciteSwitchChange={(e: any) => {
-                    const isDark = toggleTheme(e.currentTarget.checked);
-                    setTheme(isDark ? 'dark' : 'light');
-                    window.localStorage.setItem('calcite-imaps-theme', isDark ? 'dark' : 'light');
-                  }}
-                ></CalciteSwitch>
-                <CalciteIcon icon="moon" scale="s"></CalciteIcon>
-                Dark
-              </CalciteLabel>
-            </CalciteDropdownItem>
-            {/* {!isMobile && <CalciteDropdownItem
+          <CalciteIcon icon="hamburger" scale="m"></CalciteIcon>
+        </CalciteButton>
+        <CalciteTooltip label="Menu" referenceElement="menuButton" closeOnClick>
+          Menu
+        </CalciteTooltip>
+        <CalciteDropdownGroup
+          selection-mode="none"
+          group-title="About"
+          key="disclaimer"
+        >
+          <CalciteDropdownItem
+            onClick={(e: any) => {
+              disclaimerClicked();
+            }}
+          >
+            Disclaimer
+          </CalciteDropdownItem>
+        </CalciteDropdownGroup>
+        {links &&
+          links.map((group: any) => {
+            return (
+              <CalciteDropdownGroup
+                selection-mode="none"
+                group-title={group.title}
+                key={group.title}
+              >
+                {group.links.map((link: any) => {
+                  return (
+                    <CalciteDropdownItem
+                      rel="noreferrer"
+                      href={link.href}
+                      target="_blank"
+                      key={link.title}
+                      onClick={reopenDropdown}
+                    >
+                      {link.title}
+                    </CalciteDropdownItem>
+                  );
+                })}
+              </CalciteDropdownGroup>
+            );
+          })}
+        <CalciteDropdownGroup selectionMode="none" group-title="Settings">
+          <CalciteDropdownItem onClick={reopenDropdown}>
+            <CalciteLabel layout="inline" className="label-wrapper">
+              Light
+              <CalciteIcon icon="brightness" scale="s"></CalciteIcon>
+              <CalciteSwitch
+                checked={theme === 'dark' ? true : undefined}
+                onCalciteSwitchChange={(e: any) => {
+                  const isDark = toggleTheme(e.currentTarget.checked);
+                  setTheme(isDark ? 'dark' : 'light');
+                  window.localStorage.setItem(
+                    'calcite-imaps-theme',
+                    isDark ? 'dark' : 'light',
+                  );
+                }}
+              ></CalciteSwitch>
+              <CalciteIcon icon="moon" scale="s"></CalciteIcon>
+              Dark
+            </CalciteLabel>
+          </CalciteDropdownItem>
+          {/* {!isMobile && <CalciteDropdownItem
               onClick={() => {
                 if (shortcuts.current) {
                   shortcuts.current.open = !shortcuts.current.open;
@@ -113,28 +151,28 @@ function Header({disclaimerClicked, logo}: HeaderProps) {
             >
               Keyboard Shortcuts
             </CalciteDropdownItem>} */}
-            <CalciteDropdownItem
-              iconStart="reset"
-              onClick={() => {
-                window.localStorage.setItem('imaps_reset', 'true');
-                const url = new URL(window.location as any);
-                let id: string = '';
-                if (url.searchParams.get('id')) {
-                  id += url.searchParams.get('id');
-                } else if (url.searchParams.get('app')) {
-                  id += url.searchParams.get('app');
-                }
-                window.localStorage.removeItem(`imaps_webmap_${id}`);
-                window.localStorage.removeItem('imaps_alert_read');
-                window.localStorage.removeItem('imaps_history');
-                window.localStorage.removeItem('imaps_table_template');
-                window.location.reload();
-              }}
-            >
-              Reset To Default
-            </CalciteDropdownItem>
-          </CalciteDropdownGroup>
-        </CalciteDropdown>
+          <CalciteDropdownItem
+            iconStart="reset"
+            onClick={() => {
+              window.localStorage.setItem('imaps_reset', 'true');
+              const url = new URL(window.location as any);
+              let id: string = '';
+              if (url.searchParams.get('id')) {
+                id += url.searchParams.get('id');
+              } else if (url.searchParams.get('app')) {
+                id += url.searchParams.get('app');
+              }
+              window.localStorage.removeItem(`imaps_webmap_${id}`);
+              window.localStorage.removeItem('imaps_alert_read');
+              window.localStorage.removeItem('imaps_history');
+              window.localStorage.removeItem('imaps_table_template');
+              window.location.reload();
+            }}
+          >
+            Reset To Default
+          </CalciteDropdownItem>
+        </CalciteDropdownGroup>
+      </CalciteDropdown>
       {/* {!isMobile && <CalciteModal ref={shortcuts as any} aria-labelledby="shortcuts-title">
         <div slot="header" id="shortcuts-title">
           Keyboard Shortcuts

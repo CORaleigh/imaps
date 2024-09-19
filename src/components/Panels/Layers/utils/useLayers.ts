@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { PanelProps } from "../../utils/PanelProps";
-import { initializeLayers } from "./layers";
-import { tips } from "./tips";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { PanelProps } from '../../utils/PanelProps';
+import { initializeLayers } from './layers';
+import { tips } from './tips';
 
 const useLayers = (props: PanelProps) => {
   const ref = useRef() as any;
@@ -20,7 +20,7 @@ const useLayers = (props: PanelProps) => {
           layerList.when(() => {
             setIsLoading(false);
           });
-        }
+        },
       );
     }
     return () => {
@@ -43,7 +43,7 @@ const useLayers = (props: PanelProps) => {
     isLoading,
     isActive,
     panelDismissed,
-    tipsClicked
+    tipsClicked,
   };
 };
 export default useLayers;

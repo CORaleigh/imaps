@@ -1,8 +1,8 @@
-import ExpressionInfo from "@arcgis/core/popup/ExpressionInfo";
+import ExpressionInfo from '@arcgis/core/popup/ExpressionInfo';
 export const arcadeExpressionInfos = [
   {
-    name: "mailing-address",
-    title: "mailing-address",
+    name: 'mailing-address',
+    title: 'mailing-address',
     expression: `return When(
             IsEmpty($feature.ADDR3),$feature.ADDR1 + 
             TextFormatting.NewLine + 
@@ -13,8 +13,8 @@ export const arcadeExpressionInfos = [
             $feature.ADDR3)`,
   },
   {
-    name: "site-address",
-    title: "site-address",
+    name: 'site-address',
+    title: 'site-address',
     expression: `return When(
             $feature.STMISC == '1/2', 
             replace(replace($feature.SITE_ADDRESS, ' ', ' 1/2 ', false), ' 1/2 1/2 ', ' 1/2 '), 
@@ -24,8 +24,8 @@ export const arcadeExpressionInfos = [
         )`,
   },
   {
-    name: "property-values",
-    title: "property-values",
+    name: 'property-values',
+    title: 'property-values',
     expression: `"Building Value"+TextFormatting.NewLine+
         "$"+$feature.BLDG_VAL+TextFormatting.NewLine+
         "Land Value"+TextFormatting.NewLine+
@@ -35,49 +35,49 @@ export const arcadeExpressionInfos = [
   },
 
   {
-    name: "pin",
-    title: "PIN",
+    name: 'pin',
+    title: 'PIN',
     expression: `var num = $feature.PIN_NUM;
         var ext = $feature.PIN_EXT;
         return When(ext == '000',num,num+' '+ext);`,
   },
   {
-    name: "build_val",
-    title: "Building Value",
+    name: 'build_val',
+    title: 'Building Value',
     expression: `var value = $feature.BLDG_VAL;
         When(IsEmpty(value),'--', '$'+Text(value, '#,###'));`,
   },
   {
-    name: "land_val",
-    title: "Land Value",
+    name: 'land_val',
+    title: 'Land Value',
     expression: `var value = $feature.LAND_VAL;
         When(IsEmpty(value),'--', '$'+Text(value, '#,###'));`,
   },
   {
-    name: "total_val",
-    title: "Total Value",
+    name: 'total_val',
+    title: 'Total Value',
     expression: `var value = $feature.TOTAL_VALUE_ASSD;
         When(IsEmpty(value),'--', '$'+Text(value, '#,###'));`,
   },
   {
-    name: "sale_price",
-    title: "Sale Price",
+    name: 'sale_price',
+    title: 'Sale Price',
     expression: `var value = $feature.TOTSALPRICE;When(IsEmpty(value),'--', '$'+Text(value, '#,###'));`,
   },
   {
-    name: "city",
-    title: "City",
+    name: 'city',
+    title: 'City',
     expression: `var city = $feature.CITY_DECODE;When(IsEmpty(city),'', Proper(city));`,
   },
   {
-    name: "township",
-    title: "Township",
+    name: 'township',
+    title: 'Township',
     expression: `var ts = $feature.TOWNSHIP_DECODE;When(IsEmpty(ts),'', Proper(ts));`,
   },
   {
-    name: "jurisdiction",
-    title: "Jurisdiction",
-   // expression: `$feature.PLANNING_JURISDICTION`,
+    name: 'jurisdiction',
+    title: 'Jurisdiction',
+    // expression: `$feature.PLANNING_JURISDICTION`,
 
     expression: `var juris = $feature.PLANNING_JURISDICTION;When(
         juris == 'RA', 'Raleigh',
@@ -99,8 +99,8 @@ export const arcadeExpressionInfos = [
         '');`,
   },
   {
-    name: "general",
-    title: "general",
+    name: 'general',
+    title: 'general',
     expression: `return Concatenate([
       "PIN", Concatenate([$feature.PIN_NUM, $feature.PIN_EXT], " "),
       "REID", $feature.REID, "City", Proper($feature.CITY_DECODE),
@@ -108,6 +108,6 @@ export const arcadeExpressionInfos = [
       "Township", Proper($feature.TOWNSHIP_DECODE),
       "Map Name", $feature.MAP_NAME,
       "Land Class", Proper($feature.LAND_CLASS_DECODE)
-    ], TextFormatting.NewLine)`
+    ], TextFormatting.NewLine)`,
   },
 ] as ExpressionInfo[];
