@@ -104,7 +104,7 @@ const updateLabels = (labels: GraphicsLayer, view: __esri.MapView) => {
                   .labelExpressionInfo;
                 arcade
                   .createArcadeExecutor(info.expression, profile as any)
-                  .then((executor: any) => {
+                  .then((executor: __esri.ArcadeExecutor) => {
                     if (executor) {
                       symbol.text = executor.execute({ $feature: feature });
                     }

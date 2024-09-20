@@ -124,7 +124,7 @@ const createStreetviewButton = (
     view: __esri.MapView,
     setActiveTool?: (activeTool: string) => void,
   ) => void,
-): any => {
+): HTMLDivElement => {
   const button = document.createElement('div');
   button.classList.add('streetview-widget');
   button.classList.add('esri-component');
@@ -188,7 +188,7 @@ export const createIdentifyButton = (
     view: __esri.MapView,
     setActiveTool?: (activeTool: string) => void,
   ) => void,
-): any => {
+): HTMLDivElement => {
   const infoButton = document.createElement('div');
   infoButton.classList.add('identify-widget');
   infoButton.classList.add('esri-component');

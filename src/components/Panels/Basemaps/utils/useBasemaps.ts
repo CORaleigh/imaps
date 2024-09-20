@@ -11,6 +11,7 @@ import {
   updateBlendOpacity,
 } from './basemaps';
 import { tips } from './tips';
+import { CalciteSliderCustomEvent, CalciteSwitchCustomEvent } from '@esri/calcite-components';
 
 const useBasemaps = (props: PanelProps) => {
   const [view, setView] = useState<MapView>();
@@ -73,18 +74,22 @@ const useBasemaps = (props: PanelProps) => {
   const tipsClicked = useCallback(() => {
     props.showTips(tips);
   }, []);
-  const blendUpdated = useCallback((e: any) => {
-    setBlendActive(e.currentTarget.checked);
-    blendBasemap(e.currentTarget.checked, props.view, streetMapId, opacity);
+  const blendUpdated = useCallback((e: CalciteSwitchCustomEvent<void>) => {
+    setBlendActive(e.target.checked);
+    blendBasemap(e.target.checked, props.view, streetMapId, opacity);
   }, []);
-  const blendOpacityChanged = useCallback((e: any) => {
-    setOpacity(1 - e.target.value / 100);
-    updateBlendOpacity(
-      e.target.value / 100,
-      props.view,
-      streetMapId,
-      1 - e.target.value / 100,
-    );
+  const blendOpacityChanged = useCallback((e: CalciteSliderCustomEvent<void>) => {
+    const value: number = e.target.value as number;
+    if (value) {
+      setOpacity(1 - value / 100);
+      updateBlendOpacity(
+        value / 100,
+        props.view,
+        streetMapId,
+        1 - value / 100,
+      );
+    }
+
   }, []);
   return {
     basemapRef,

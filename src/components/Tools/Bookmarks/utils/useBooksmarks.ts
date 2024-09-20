@@ -22,10 +22,10 @@ const useBookmarks = (props: ToolProps) => {
   useEffect(() => {
     setIsActive(props.isActive);
   }, [props.isActive]);
-  const toolDismissed = useCallback((e: any) => {
+  const toolDismissed = useCallback(() => {
     props.toolDismissed();
   }, []);
-  const tipsClicked = useCallback((e: any) => {
+  const tipsClicked = useCallback(() => {
     props.showTips(tips);
   }, []);
   return { bookmarkRef, isActive, toolDismissed, tipsClicked };

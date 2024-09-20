@@ -9,6 +9,7 @@ import { services } from '../../../../config/config';
 
 import ServiceLayer from './ServiceLayer';
 import { getServices } from '../utils/services';
+import { CalciteAccordionItemCustomEvent } from '@esri/calcite-components';
 
 interface Props {
   view: __esri.MapView;
@@ -37,10 +38,10 @@ export const Services = (props: Props) => {
             key={service.group.title}
             item-title={service.group.title}
             heading={service.group.title}
-            onClick={(e) => {
+            onClick={(e: React.MouseEvent<HTMLCalciteAccordionItemElement>) => {
               if (view && graphic) {
                 getServices(
-                  e,
+                  e.currentTarget,
                   services,
                   view,
                   graphic,

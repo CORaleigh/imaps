@@ -35,22 +35,24 @@ const useProperty = (props: PropertyProps) => {
   useEffect(() => {
     if (props.geometry && props.view) {
       getPropertyByGeometry(props.geometry, props.view as MapView).then(
-        (result: any) => {
-          setCondos(result.features);
-          condoRef.current = result.features;
-          if (result.features.length === 1) {
-            setInfoDisabled(false);
-            setActiveTab('info');
-            setFeature(result.features[0]);
-            props.selected(result.features[0], result.features);
-          } else {
-            setInfoDisabled(true);
-            setActiveTab('list');
-            setFeature(undefined);
-            props.selected(undefined, result.features);
-          }
-          if (props.alertSet) {
-            checkMaximumRecordCount(result.features, props.alertSet);
+        (result: __esri.FeatureSet | undefined) => {
+          if (result) {
+            setCondos(result.features);
+            condoRef.current = result.features;
+            if (result.features.length === 1) {
+              setInfoDisabled(false);
+              setActiveTab('info');
+              setFeature(result.features[0]);
+              props.selected(result.features[0], result.features);
+            } else {
+              setInfoDisabled(true);
+              setActiveTab('list');
+              setFeature(undefined);
+              props.selected(undefined, result.features);
+            }
+            if (props.alertSet) {
+              checkMaximumRecordCount(result.features, props.alertSet);
+            }
           }
         },
       );
@@ -114,10 +116,10 @@ const useProperty = (props: PropertyProps) => {
   useEffect(() => {
     setIsActive(props.isActive);
   }, [props.isActive]);
-  const panelDismissed = useCallback((e: any) => {
+  const panelDismissed = useCallback(() => {
     props.panelDismissed();
   }, []);
-  const tipsClicked = useCallback((e: any) => {
+  const tipsClicked = useCallback(() => {
     props.showTips(tips);
   }, []);
 

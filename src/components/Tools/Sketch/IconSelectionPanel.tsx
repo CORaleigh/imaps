@@ -5,10 +5,11 @@ import {
 } from '@esri/calcite-components-react';
 import React, { useEffect, useState } from 'react';
 import './Sketch.css';
+import { SymbolItem } from './PointSymbols';
 interface Props {
-  symbols: any[];
+  symbols: SymbolItem[];
   backClicked: () => void;
-  iconSelected: (icon: any) => void;
+  iconSelected: (icon: SymbolItem) => void;
 }
 function IconSelectionPanel(props: Props) {
   const [symbols, setSymbols] = useState<any[]>([]);
@@ -31,7 +32,7 @@ function IconSelectionPanel(props: Props) {
           <CalciteBlock heading={''}>
             <div className="palette">
               {symbols &&
-                symbols.map((symbol: any, i: number) => {
+                symbols.map((symbol: SymbolItem, i: number) => {
                   return (
                     <img
                       onClick={() => {

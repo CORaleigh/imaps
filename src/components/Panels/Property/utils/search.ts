@@ -93,8 +93,26 @@ const sortSuggestions = (
   others.sort();
   return first.concat(others);
 };
+
+type SuggestParams = {
+  exactMatch: boolean;
+  maxSuggestions: number;
+  sourceIndex: number;
+  spatialReference: __esri.SpatialReference;
+  suggestTerm: string;
+  view: MapView;
+}
+type SuggestResults = {
+  exactMatch: boolean;
+  maxSuggestions: number;
+  location: __esri.Geometry;
+  sourceIndex: number;
+  spatialReference: __esri.SpatialReference;
+  suggestResult: { key: string, sourceIndex: number, text: string};
+  view: MapView;
+}
 const getSuggestions = async (
-  params: any,
+  params: SuggestParams,
   name: string,
   layer: FeatureLayer,
   outFields: string[],
@@ -148,7 +166,8 @@ const getLayerSource = (
   resultFields: string[],
   searchWidget: Search,
 ) => {
-  const getResults = async (params: any): Promise<__esri.SearchResult[]> => {
+  const getResults = async (params: SuggestResults): Promise<__esri.SearchResult[]> => {
+
     const term: string = params.suggestResult.text
       .toUpperCase()
       .replace(/'/g, "''")
@@ -169,7 +188,7 @@ const getLayerSource = (
     placeholder: placeholder,
     name: name,
     maxSuggestions: 6,
-    getSuggestions: (params: any) => {
+    getSuggestions: (params: SuggestParams) => {
       return getSuggestions(
         params,
         name,
@@ -388,7 +407,7 @@ const wildcardSearch = async (
 const searchResultSelected = async (
   layer: FeatureLayer,
   source: string,
-  results: any,
+  results: __esri.SearchResult[],
   term: string,
 ) => {
   if (!layer && source === 'Owner') {
@@ -397,7 +416,7 @@ const searchResultSelected = async (
   if (!layer && ['Site Address', 'Street Name'].includes(source)) {
     layer = addresses;
   }
-  const oids: number[] = results.map((r: any) => {
+  const oids: number[] = results.map((r: __esri.SearchResult) => {
     return r.feature.getAttribute('OBJECTID');
   });
 
@@ -420,7 +439,7 @@ const searchResultSelected = async (
 };
 
 const searchCondos = async (where: string, oids: number[]): Promise<any> => {
-  const params: any = { outFields: ['*'], returnDistinctValues: true };
+  const params: { outFields: string[], returnDistinctValues: boolean, where?: string, objectIds?: number[] } = { outFields: ['*'], returnDistinctValues: true };
   if (where !== '') {
     params.where = where;
   } else {
@@ -452,37 +471,42 @@ const searchRelatedCondos = async (
   const relationship = layer.relationships.find((r) => {
     return r.name === 'ADDRESSES_CONDO';
   });
-  const params: any = {
-    outFields: ['*'],
-    objectIds: oids,
-    relationshipId: relationship?.id,
-  };
-
-  const result = await layer.queryRelatedFeatures(params);
-  oids = [];
-  const features: __esri.Graphic[] = [];
-  const reids: string[] = [];
-  for (const key in result) {
-    result[key].features.forEach((feature: Graphic) => {
-      if (!reids.includes(feature.getAttribute('REID'))) {
-        oids.push(feature.getAttribute('OBJECTID'));
-        reids.push(feature.getAttribute('REID'));
-        features.push(feature);
+  if (relationship) {
+    const params: { outFields: string[], objectIds: number[], relationshipId: number} = {
+      outFields: ['*'],
+      objectIds: oids,
+      relationshipId: relationship?.id,
+    };
+  
+    const result = await layer.queryRelatedFeatures(params);
+    oids = [];
+    const features: __esri.Graphic[] = [];
+    const reids: string[] = [];
+    for (const key in result) {
+      result[key].features.forEach((feature: Graphic) => {
+        if (!reids.includes(feature.getAttribute('REID'))) {
+          oids.push(feature.getAttribute('OBJECTID'));
+          reids.push(feature.getAttribute('REID'));
+          features.push(feature);
+        }
+      });
+    }
+    const properties: Graphic[] = await getProperty(oids);
+    features.forEach((feature: Graphic) => {
+      const geometry = properties.find((property) => {
+        return (
+          property.getAttribute('PIN_NUM') === feature.getAttribute('PIN_NUM')
+        );
+      })?.geometry;
+      if (geometry) {
+        feature.geometry = geometry;
       }
     });
+    return features;
+  } else {
+    return [];
   }
-  const properties: Graphic[] = await getProperty(oids);
-  features.forEach((feature: Graphic) => {
-    const geometry = properties.find((property) => {
-      return (
-        property.getAttribute('PIN_NUM') === feature.getAttribute('PIN_NUM')
-      );
-    })?.geometry;
-    if (geometry) {
-      feature.geometry = geometry;
-    }
-  });
-  return features;
+
 };
 export const getProperty = async (
   oids: number[],

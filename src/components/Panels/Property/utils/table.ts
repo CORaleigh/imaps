@@ -11,6 +11,16 @@ import '../PropertyTable/PropertyTable.css';
 import { getProperty } from './search';
 let featureTable: FeatureTable;
 
+type CellActivateEvent = CustomEvent<{
+  model: {
+    item: {
+      feature: Graphic; // Replace with the actual type of feature
+      objectId: string | number; // Adjust based on your use case
+      // Add any other properties you need here
+    };
+  };
+}>;
+
 export const initializeFeatureTable = async (
   ref: HTMLDivElement,
   view: MapView,
@@ -55,13 +65,13 @@ export const initializeFeatureTable = async (
   });
   document.addEventListener(
     'visibilitychange',
-    (e) => {
+    () => {
       if (document.hidden) {
-        const visibleFields = featureTable.columns
-          .filter((column: any) => {
-            return !column.hidden;
+        const visibleFields = (featureTable.columns as __esri.Collection<__esri.FieldColumn>)
+          .filter((column: __esri.FieldColumn) => {
+            return !(column as any).hidden;
           })
-          .map((column: any) => {
+          .map((column: __esri.FieldColumn) => {
             return column.field.name;
           });
         window.localStorage.setItem(
@@ -130,7 +140,7 @@ const initializeGrid = (featureTable: FeatureTable) => {
       ?.setAttribute('style', 'height: 100%');
     grid?.addEventListener(
       'cell-activate',
-      (e: any) => {
+      (e: CellActivateEvent) => {
         featureTable.highlightIds.removeAll();
         const feature = e.detail.model.item.feature;
 

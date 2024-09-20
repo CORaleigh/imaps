@@ -36,13 +36,13 @@ const useMeasure = (props: ToolProps) => {
       measurement.current.activeTool = selectedTool as any;
     }
   }, [props.isActive]);
-  const toolDismissed = useCallback((e: any) => {
+  const toolDismissed = useCallback(() => {
     props.toolDismissed();
 
     (measurement.current as any).activeTool = null;
     //measurement.current?.clear();
   }, []);
-  const tipsClicked = useCallback((e: any) => {
+  const tipsClicked = useCallback(() => {
     props.showTips(tips);
   }, []);
   return {

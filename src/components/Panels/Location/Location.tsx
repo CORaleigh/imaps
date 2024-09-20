@@ -11,6 +11,7 @@ import { intersectingStreetSelected } from './utils/location';
 import './Location.css';
 import useLocation from './utils/useLocation';
 import { PanelProps } from '../utils/PanelProps';
+import { CalciteComboboxItemCustomEvent } from '@esri/calcite-components';
 const Location = (props: PanelProps) => {
   const {
     searchDiv,
@@ -56,7 +57,7 @@ const Location = (props: PanelProps) => {
                       key={i}
                       textLabel={intersection}
                       value={intersection}
-                      onCalciteComboboxItemChange={(e: any) => {
+                      onCalciteComboboxItemChange={(e: CalciteComboboxItemCustomEvent<void>) => {
                         if (e.target.selected) {
                           intersectingStreetSelected(
                             intersection,

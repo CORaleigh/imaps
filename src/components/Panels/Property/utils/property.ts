@@ -61,10 +61,13 @@ const queryRelatedCondos = async (
       features: [],
     });
     for (let [key] of Object.entries(result)) {
-      result[key].features.forEach((feature: any) => {
-        feature.geometry = properties.features.find((property) => {
+      result[key].features.forEach((feature: Graphic) => {
+        const geometry = properties.features.find((property) => {
           return property.getObjectId().toString() === key;
         })?.geometry;
+        if (geometry) {
+          feature.geometry = geometry;
+        }
         feature.layer = condoTable;
         featureSet.features.push(feature);
       });

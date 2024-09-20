@@ -1,8 +1,9 @@
 import { CalciteIcon, CalciteLabel } from '@esri/calcite-components-react';
 import React from 'react';
 import './Sketch.css';
+import { SymbolItem } from './PointSymbols';
 interface Props {
-  symbol: any;
+  symbol: SymbolItem | undefined;
   pickerClicked: () => void;
 }
 function IconPicker(props: Props) {
@@ -31,7 +32,7 @@ function IconPicker(props: Props) {
               </div>
             )}
 
-            <div className="icon-label">{props.symbol.title}</div>
+            <div className="icon-label">{props.symbol?.title}</div>
             <CalciteIcon icon="chevron-right"></CalciteIcon>
           </div>
         </button>

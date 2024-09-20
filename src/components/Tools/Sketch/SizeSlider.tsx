@@ -10,7 +10,7 @@ interface Props {
   min: number;
   max: number;
   value: number;
-  sizeSet: (value: any) => void;
+  sizeSet: (value: number) => void;
 }
 function SizeSlider(props: Props) {
   const [value, setValue] = useState<any>();
@@ -28,7 +28,7 @@ function SizeSlider(props: Props) {
           onCalciteSliderInput={(e) => {
             if (e.target.value) {
               setValue(e.target.value);
-              props.sizeSet(e.target.value);
+              props.sizeSet(e.target.value as number);
             }
           }}
         ></CalciteSlider>

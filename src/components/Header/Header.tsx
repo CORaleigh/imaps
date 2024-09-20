@@ -12,7 +12,9 @@ import {
 } from '@esri/calcite-components-react';
 import React, { useEffect, useRef, useState } from 'react';
 import './Header.css';
-import { reopenDropdown, toggleTheme } from './utils/header';
+import { itemSelected, toggleTheme } from './utils/header';
+import { CalciteDropdownCustomEvent, CalciteDropdownItemCustomEvent, CalciteSwitchCustomEvent } from '@esri/calcite-components';
+import { Link } from '../../config/config';
 
 interface HeaderProps {
   disclaimerClicked: () => void;
@@ -26,7 +28,7 @@ function Header({ disclaimerClicked, logo }: HeaderProps) {
 
   // const shortcuts = useRef<HTMLCalciteModalElement>();
 
-  const [links, setLinks] = useState<any[]>();
+  const [links, setLinks] = useState<Link[]>();
   const [theme, setTheme] = useState('light');
   //const altOptKey: string = navigator.userAgent.toUpperCase().includes('MAC') ? 'Option' : 'Alt';
   const isMobile: boolean = window.matchMedia('(pointer:coarse)').matches;
@@ -61,7 +63,7 @@ function Header({ disclaimerClicked, logo }: HeaderProps) {
         placement="bottom-end"
         scale="m"
         type="click"
-        onCalciteDropdownOpen={(e: any) => {
+        onCalciteDropdownOpen={(e: CalciteDropdownCustomEvent<void>) => {
           e.target.shadowRoot
             ?.querySelector('.calcite-dropdown-content')
             ?.setAttribute(
@@ -69,6 +71,7 @@ function Header({ disclaimerClicked, logo }: HeaderProps) {
               `min-height: ${isMobile ? '590' : '590'}px`,
             );
         }}
+        closeOnSelectDisabled
       >
         <CalciteButton
           id="menuButton"
@@ -86,34 +89,31 @@ function Header({ disclaimerClicked, logo }: HeaderProps) {
           Menu
         </CalciteTooltip>
         <CalciteDropdownGroup
-          selection-mode="none"
+          selectionMode='single'
           group-title="About"
           key="disclaimer"
         >
-          <CalciteDropdownItem
-            onClick={(e: any) => {
-              disclaimerClicked();
-            }}
-          >
+          <CalciteDropdownItem 
+            onCalciteDropdownItemSelect={(e: CalciteDropdownItemCustomEvent<void>) => {disclaimerClicked();itemSelected(e);}}>
             Disclaimer
           </CalciteDropdownItem>
         </CalciteDropdownGroup>
         {links &&
-          links.map((group: any) => {
+          links.map((group: Link) => {
             return (
               <CalciteDropdownGroup
-                selection-mode="none"
+                selection-mode="single"
                 group-title={group.title}
                 key={group.title}
               >
-                {group.links.map((link: any) => {
+                {group.links.map((link: Link) => {
                   return (
                     <CalciteDropdownItem
                       rel="noreferrer"
                       href={link.href}
                       target="_blank"
                       key={link.title}
-                      onClick={reopenDropdown}
+                      onCalciteDropdownItemSelect={itemSelected}
                     >
                       {link.title}
                     </CalciteDropdownItem>
@@ -122,15 +122,15 @@ function Header({ disclaimerClicked, logo }: HeaderProps) {
               </CalciteDropdownGroup>
             );
           })}
-        <CalciteDropdownGroup selectionMode="none" group-title="Settings">
-          <CalciteDropdownItem onClick={reopenDropdown}>
+        <CalciteDropdownGroup selectionMode="single" group-title="Settings">
+          <CalciteDropdownItem onCalciteDropdownItemSelect={itemSelected}>
             <CalciteLabel layout="inline" className="label-wrapper">
               Light
               <CalciteIcon icon="brightness" scale="s"></CalciteIcon>
               <CalciteSwitch
                 checked={theme === 'dark' ? true : undefined}
-                onCalciteSwitchChange={(e: any) => {
-                  const isDark = toggleTheme(e.currentTarget.checked);
+                onCalciteSwitchChange={(e: CalciteSwitchCustomEvent<void>) => {
+                  const isDark = toggleTheme(e.target.checked);
                   setTheme(isDark ? 'dark' : 'light');
                   window.localStorage.setItem(
                     'calcite-imaps-theme',
@@ -153,6 +153,7 @@ function Header({ disclaimerClicked, logo }: HeaderProps) {
             </CalciteDropdownItem>} */}
           <CalciteDropdownItem
             iconStart="reset"
+            onCalciteDropdownItemSelect={itemSelected}
             onClick={() => {
               window.localStorage.setItem('imaps_reset', 'true');
               const url = new URL(window.location as any);

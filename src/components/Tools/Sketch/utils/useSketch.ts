@@ -42,7 +42,7 @@ const useSketch = (props: ToolProps) => {
     setActiveSketchTool('');
     setSelectedGraphics([...[], ...[]]);
   }, []);
-  const tipsClicked = useCallback((e: any) => {
+  const tipsClicked = useCallback(() => {
     props.showTips(tips);
   }, []);
   const checkGeometryType = (

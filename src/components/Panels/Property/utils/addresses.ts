@@ -18,7 +18,7 @@ export const initializeFeatureTable = async (
   ref: HTMLDivElement,
   view: MapView,
 ): Promise<FeatureTable> => {
-  const table: any = await getTableLayer(view);
+  const table: FeatureLayer | undefined = await getTableLayer(view);
   featureTable = new FeatureTable({
     container: ref,
     view: view,
@@ -61,7 +61,7 @@ export const initializeFeatureTable = async (
   return featureTable;
 };
 
-const selectionChanged = async (e: any) => {
+const selectionChanged = async (e: __esri.CollectionChangeEvent) => {
   if (e.added.length) {
     const featureSet: FeatureSet = await (
       featureTable.layer as __esri.FeatureLayer
@@ -102,7 +102,7 @@ const initializeGrid = (featureTable: FeatureTable) => {
     ) as any;
     grid?.addEventListener(
       'click',
-      (e: any) => {
+      (e: MouseEvent) => {
         if ((e.target as HTMLElement).nodeName === 'VAADIN-GRID-CELL-CONTENT') {
           featureTable.highlightIds.removeAll();
           const item = (grid.getEventContext(e) as any)?.item;

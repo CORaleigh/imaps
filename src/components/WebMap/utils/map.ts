@@ -20,7 +20,7 @@ import Geometry from '@arcgis/core/geometry/Geometry';
 export const initializeMap = async (
   ref: HTMLDivElement,
   mapId: string,
-  geometrySet: (geometry: Geometry) => void,
+  geometrySet: (geometry: Geometry | undefined) => void,
   widgetActivated: (
     view: MapView,
     setActiveTool?: (activeTool: string) => void,
@@ -153,7 +153,7 @@ const addUnloadListeners = (view: __esri.MapView) => {
     passive: true,
   });
 };
-const isSearchable = (layer: __esri.Layer, webmap: any) => {
+const isSearchable = (layer: __esri.Layer, webmap: __esri.WebMap) => {
   const found = webmap.applicationProperties.viewing.search.layers.find(
     (searchLayer: __esri.SearchLayer) => {
       return searchLayer.id === layer.id;
@@ -174,7 +174,7 @@ const getConfig = () => {
 };
 
 const getWebMap = async (mapId: string): Promise<WebMap> => {
-  let webmap: any;
+  let webmap: WebMap;
   const config = getConfig();
   if (
     window.localStorage.getItem(`imaps_webmap_${config}`) &&
@@ -209,16 +209,20 @@ const getWebMap = async (mapId: string): Promise<WebMap> => {
           return layers.includes(layer.title);
         });
 
-        matches.forEach((layer: any) => {
+        matches.forEach((layer: __esri.Layer) => {
           if (layer.parent) {
-            const parent = webmap.findLayerById(layer.parent.id);
-            if (parent) {
-              parent.add(layer);
-              parent.visible = true;
-              if (parent.parent) {
-                parent.parent.visible = true;
+            if (layer.parent instanceof __esri.Layer) {
+              if (webmap.findLayerById(layer.parent.id).type === 'group') {
+                const parent: __esri.GroupLayer = webmap.findLayerById(layer.parent.id) as __esri.GroupLayer;
+                if (parent) {
+                  parent.add(layer);
+                  parent.visible = true;
+                  if (parent.parent) {
+                    (parent.parent as __esri.GroupLayer).visible = true;
+                  }
+                  layer.visible = true;
+                }
               }
-              layer.visible = true;
             }
           }
         });
@@ -270,36 +274,41 @@ const removeGraphicsLayers = (view: MapView) => {
   ]);
   view.map.removeMany(
     view.map.allLayers
-      .filter((layer: any) => {
+      .filter((layer: __esri.Layer) => {
         return layer.type === 'map-notes';
       })
       .toArray(),
   );
 };
 
-const getAllGroups = (layers: any) => {
-  return layers.reduce((acc: any, emp: any) => {
+const getAllGroups = (layers: __esri.Layer[]): __esri.GroupLayer[] => {
+  return layers.reduce((acc: __esri.Layer[], layer: __esri.Layer) => {
     return acc.concat(
-      emp.layerType === 'GroupLayer' ? [emp, ...getAllGroups(emp.layers)] : [],
+      layer.type === 'group' ? [layer, ...getAllGroups((layer as __esri.GroupLayer).layers.toArray())] : []
     );
-  }, []);
+  }, []) as __esri.GroupLayer[];
 };
 export const saveMap = async (view: MapView) => {
   if (view && view?.ready) {
     const map = (view.map as any).toJSON();
     const groups = getAllGroups(map.operationalLayers);
 
-    groups.forEach((group: any) => {
-      if (group.layerType !== 'ArcGISMapServiceLayer') {
-        group.layers = group.layers.filter(function (layer: any) {
-          return (
-            layer.visibility ||
-            layer.title.includes('Property') ||
-            isSearchable(layer, map) ||
-            layer.type === 'group'
-          );
-        });
-      }
+    groups.forEach((group: __esri.GroupLayer) => {
+      const layersArray = group.layers.toArray(); 
+    
+      const layersToKeep = layersArray.filter((layer: __esri.Layer) => {
+        return (
+          layer.visible || // Correct visibility property
+          layer.title.includes('Property') ||
+          isSearchable(layer, map) ||
+          layer.type === 'group'
+        );
+      });
+    
+      // Remove the layers that should not be kept
+      const layersToRemove = layersArray.filter(layer => !layersToKeep.includes(layer));
+      
+      group.layers.removeMany(layersToRemove); // Use removeMany to remove layers
     });
     if (view.extent) {
       map.initialState = {

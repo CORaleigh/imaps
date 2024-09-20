@@ -30,7 +30,7 @@ const useSelect = (props: SelectProps) => {
     setSelectedProperty(props.selectedProperty);
   }, [props.selectedProperty]);
   useEffect(() => {
-    if (sketchVm && props.toolDismissed) {
+    if (sketchVm) {
       sketchVm.cancel();
       setSelectedTool('');
     }
@@ -41,11 +41,11 @@ const useSelect = (props: SelectProps) => {
       cancelSelect();
     }
   }, [props.isActive]);
-  const toolDismissed = useCallback((e: any) => {
+  const toolDismissed = useCallback(() => {
     props.toolDismissed();
     cancelSelect();
   }, []);
-  const tipsClicked = useCallback((e: any) => {
+  const tipsClicked = useCallback(() => {
     props.showTips(tips);
   }, []);
   return {

@@ -12,6 +12,7 @@ import CIMSymbol from '@arcgis/core/symbols/CIMSymbol';
 import * as cimSymbolUtils from '@arcgis/core/symbols/support/cimSymbolUtils';
 import * as symbolUtils from '@arcgis/core/symbols/support/symbolUtils';
 import Graphic from '@arcgis/core/Graphic';
+import { SymbolItem } from '../PointSymbols';
 let pointLayer: GraphicsLayer;
 let polylineLayer: GraphicsLayer;
 let polygonLayer: GraphicsLayer;
@@ -55,8 +56,7 @@ let polygonSketchViewModel: SketchViewModel;
 
 let textSketchViewModel: SketchViewModel;
 let sketchLayerView: __esri.GraphicsLayerView;
-// let highlights: any;
-// let highlightedGraphic: Graphic;
+
 
 export const initializeSketchViewModel = async (
   view: MapView,
@@ -123,7 +123,7 @@ const createSketchViewModels = (
   return sketchVM;
 };
 
-const addGraphic = (e: any) => {
+const addGraphic = (e: __esri.SketchViewModelCreateEvent) => {
   if (e.state === 'complete') {
     if (e.graphic.geometry.type === 'polygon') {
       e.graphic.symbol = fillSymbol;
@@ -232,7 +232,7 @@ const updateHighlightedGraphicSymbol = (
 };
 
 export const pointSymbolUpdated = async (
-  symbol: any,
+  symbol: SymbolItem,
   color: Color,
   size: number,
 ) => {
@@ -331,10 +331,9 @@ export const clearSketch = (
   removeAllGraphics();
 };
 
-export const getSymbols = (ids: string[], url: string) => {
+export const getSymbols = (ids: string[], url: string): Promise<SymbolItem[]> => {
   return new Promise((resolve, reject) => {
-    const promises: Promise<any>[] = [];
-
+    const promises: Promise<__esri.RequestResponse>[] = [];
     ids.forEach((id) => {
       const symbol: WebStyleSymbol = new WebStyleSymbol({
         styleUrl: `${url}/${id}/data`,
@@ -344,12 +343,16 @@ export const getSymbols = (ids: string[], url: string) => {
     });
     if (promises.length) {
     }
-    const items: any[] = [];
+    const items: SymbolItem[] = [];
 
-    Promise.all(promises).then((results: any) => {
-      results.forEach((result: any) => {
-        result.data.items.forEach((item: any) => {
-          item.url = result.url.replace('data', '');
+    Promise.all(promises).then((results: __esri.RequestResponse[]) => {
+      console.log(results);
+      results.forEach((result: __esri.RequestResponse) => {
+        
+        result.data.items.forEach((item: SymbolItem) => {
+          if (result.url) {
+            item.url = result.url.replace('data', '');
+          }
           items.push(item);
         });
       });

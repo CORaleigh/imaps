@@ -1,3 +1,5 @@
+import { CalciteDropdownItemCustomEvent } from "@esri/calcite-components";
+
 export const toggleTheme = (isDark: boolean) => {
   // document.body.classList.toggle("calcite-mode-dark");
   //document.querySelector('.esri-ui')?.classList.toggle("calcite-mode-dark");
@@ -27,10 +29,8 @@ export const toggleTheme = (isDark: boolean) => {
   return document.body.classList.contains('calcite-mode-dark');
 };
 
-export const reopenDropdown = (e: any) => {
+export const itemSelected = (e: CalciteDropdownItemCustomEvent<void>) => {
   requestAnimationFrame(() => {
-    if (e.target.closest('calcite-dropdown')) {
-      e.target.closest('calcite-dropdown').open = true;
-    }
+    e.target.selected = false;
   });
 };

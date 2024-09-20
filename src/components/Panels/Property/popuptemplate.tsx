@@ -2,6 +2,7 @@ import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import PopupTemplate from '@arcgis/core/PopupTemplate';
 import FieldInfo from '@arcgis/core/popup/FieldInfo';
 import Graphic from '@arcgis/core/Graphic';
+import ImageMediaInfo from '@arcgis/core/popup/content/ImageMediaInfo';
 
 import {
   createDeedButtons,
@@ -285,7 +286,7 @@ export const getPhotos = async (
       return r.name === 'CONDO_PHOTOS';
     },
   );
-  const mediaInfos: any[] = [];
+  const mediaInfos: ImageMediaInfo[] = [];
   const layer: FeatureLayer = feature.layer as FeatureLayer;
   const result = await layer?.queryRelatedFeatures({
     relationshipId: relationship?.id,
@@ -296,29 +297,29 @@ export const getPhotos = async (
   for (const key in result) {
     feature.setAttribute('OBJECTID', key);
     result[key].features.reverse().forEach((feature: Graphic) => {
-      mediaInfos.push({
-        title: '',
-        type: 'image',
-        caption: '',
-        value: {
-          sourceURL: `https://services.wake.gov/realestate/photos/mvideo/${feature.getAttribute(
-            'IMAGEDIR',
-          )}/${feature.getAttribute('IMAGENAME')}`,
-        },
-      });
+      mediaInfos.push(
+        new ImageMediaInfo({
+            title: '',
+            caption: '',
+            value: {
+              sourceURL: `https://services.wake.gov/realestate/photos/mvideo/${feature.getAttribute(
+                'IMAGEDIR',
+              )}/${feature.getAttribute('IMAGENAME')}`,
+            },
+        }
+      ));
     });
   }
   if (feature.getAttribute('CITY_DECODE')?.includes('DURHAM COUNTY')) {
     const photo = await getDurhamPhoto(feature);
 
-    mediaInfos.push({
+    mediaInfos.push(new ImageMediaInfo({
       title: '',
-      type: 'image',
       caption: '',
       value: {
         sourceURL: photo,
       },
-    });
+    }));
   }
   return mediaInfos;
 };

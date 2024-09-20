@@ -4,10 +4,11 @@ import SketchViewModel from '@arcgis/core/widgets/Sketch/SketchViewModel';
 import Graphic from '@arcgis/core/Graphic';
 import * as geometryEngine from '@arcgis/core/geometry/geometryEngine';
 import Geometry from '@arcgis/core/geometry/Geometry';
+import { CalciteInputCustomEvent } from '@esri/calcite-components';
 let distance = 0;
 let propertyLayerView: __esri.FeatureLayerView;
 let sketchVm: SketchViewModel;
-let highlight: any;
+let highlight: __esri.Handle;
 let layer: GraphicsLayer;
 
 export const cancelSelect = () => {
@@ -66,9 +67,12 @@ export const initializeSelect = async (
           layer.graphics.removeAll();
         }
         sketchVm.create(event.tool);
-        if (highlight) {
-          highlight.remove();
-        }
+        setTimeout(() => {
+          if (highlight) {
+            highlight.remove();
+          }
+        }, 500);
+
       }
       if (event.state === 'active') {
         if (distance === 0) {
@@ -127,7 +131,7 @@ const highlightProperties = async (
 };
 
 export const bufferDistanceChanged = (
-  event: any,
+  event: CalciteInputCustomEvent<void>,
   setDistance: (distance: number) => void,
 ) => {
   if (event.target.value === '') {

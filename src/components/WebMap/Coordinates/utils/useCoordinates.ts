@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback, MouseEventHandler } from 'react';
 import * as coordinateFormatter from '@arcgis/core/geometry/coordinateFormatter';
 import * as projection from '@arcgis/core/geometry/projection';
 
@@ -6,6 +6,7 @@ import Point from '@arcgis/core/geometry/Point';
 import PictureMarkerSymbol from '@arcgis/core/symbols/PictureMarkerSymbol';
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 import { CoordinateFormats, CoordinateProps } from './CoordinateProps';
+import { CalciteInputCustomEvent, CalciteSelectCustomEvent } from '@esri/calcite-components';
 let moveHandler: IHandle;
 let clickHandler: IHandle;
 const marker: PictureMarkerSymbol = new PictureMarkerSymbol({
@@ -49,37 +50,39 @@ const useCoordinates = (props: CoordinateProps) => {
     },
   ];
 
-  let currentPoint: Point | null = null;
+  let currentPoint: Point;
 
   const [selectedFormat, setSelectedFormat] = useState<CoordinateFormats>(
     formats[0],
   );
   const formatRef = useRef<CoordinateFormats>(formats[0]);
-  const settingsClicked = useCallback((e: any) => {
+  const settingsClicked = useCallback(() => {
     setShowSettings((prevSettings) => {
       return !prevSettings;
     });
   }, []);
-  const searchClicked = useCallback((e: any) => {
+  const searchClicked = useCallback(() => {
     setShowSearch((prevSearch) => {
       return !prevSearch;
     });
   }, []);
-  const modeClicked = useCallback((e: any) => {
-    e.target.active = !e.target.active;
-    layer.removeAll();
-    if (e.target.active) {
-      moveHandler?.remove();
-      addClickHandler(props.view, props.clickActivated);
-    } else {
-      clickHandler?.remove();
-      props.view.popupEnabled = true;
-      document.querySelector('.identify-widget')?.classList.add('active');
-      addMoveHandler();
-    }
+  const modeClicked = useCallback((e: React.MouseEvent<HTMLCalciteActionElement>) => {
+
+      e.currentTarget.active = !e.currentTarget.active;
+      layer.removeAll();
+      if (e.currentTarget.active) {
+        moveHandler?.remove();
+        addClickHandler(props.view, props.clickActivated);
+      } else {
+        clickHandler?.remove();
+        props.view.popupEnabled = true;
+        document.querySelector('.identify-widget')?.classList.add('active');
+        addMoveHandler();
+      }
+
   }, []);
   const formatChanged = useCallback(
-    (e: any) => {
+    (e: CalciteSelectCustomEvent<void>) => {
       if (coordInput.current) {
         coordInput.current.value = '';
       }
@@ -90,19 +93,19 @@ const useCoordinates = (props: CoordinateProps) => {
         setSelectedFormat(format);
         formatRef.current = format;
       }
-      displayCoordinates(currentPoint as any);
+      displayCoordinates(currentPoint);
     },
     [formatRef],
   );
-  const coordinateInputChanged = useCallback((e: any) => {
-    if (e.currentTarget.value === '') {
+  const coordinateInputChanged = useCallback((e: CalciteInputCustomEvent<void>) => {
+    if (e.target.value === '') {
       const layer = props.view.map.findLayerById('coordinate-widget');
       if (layer) {
         (layer as GraphicsLayer).removeAll();
       }
     }
   }, []);
-  const searchCoordinates = useCallback(async (e: any) => {
+  const searchCoordinates = useCallback(async (e: React.MouseEvent<HTMLCalciteButtonElement>) => {
     if (coordInput.current?.value === '') {
       coordInput.current?.setAttribute('status', 'invalid');
       return;
@@ -207,7 +210,7 @@ const useCoordinates = (props: CoordinateProps) => {
       : /^[-]((180[°|\s]\s*)(0{1,2}['|\s]\s*)(0{1,2}([.|,]0{1,20})?["|\s]\s*)|((1[0-7]\d|\d\d|\d)[°|\s]\s*)(([0-5]\d|\d)['|\s]\s*)(([0-5]\d|\d)([.|,]\d{1,20})?["|\s]\s*))/gm;
     return regex.test(`${value} `) ? 'valid' : 'invalid';
   };
-  const displayCoordinates = async (e: any) => {
+  const displayCoordinates = async (e: __esri.Point) => {
     if (!coordinateFormatter.isLoaded()) {
       await coordinateFormatter.load();
     }
@@ -269,7 +272,7 @@ const useCoordinates = (props: CoordinateProps) => {
     clickActivated(view);
     props.view.popupEnabled = false;
     document.querySelector('.identify-widget')?.classList.remove('active');
-    clickHandler = (props.view as __esri.MapView).on('click', (e: any) => {
+    clickHandler = (props.view as __esri.MapView).on('click', (e: __esri.ViewClickEvent) => {
       if (!props.view.map.findLayerById('coordinate-widget')) {
         props.view.map.add(layer);
       }
@@ -279,8 +282,8 @@ const useCoordinates = (props: CoordinateProps) => {
         attributes: null,
         symbol: marker,
       } as any);
-      currentPoint = e;
-      displayCoordinates(e);
+      currentPoint = e.mapPoint;
+      displayCoordinates(e.mapPoint);
     });
   };
   const addMoveHandler = async () => {
@@ -291,9 +294,9 @@ const useCoordinates = (props: CoordinateProps) => {
     displayCoordinates(props.view.extent.center);
     moveHandler = (props.view as __esri.MapView).on(
       'pointer-move',
-      (e: any) => {
-        currentPoint = e;
-        displayCoordinates(e);
+      (e: __esri.ViewPointerMoveEvent) => {
+        const currentPoint = props.view.toMap(e);
+        displayCoordinates(currentPoint);
       },
     );
   };

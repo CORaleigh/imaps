@@ -4,6 +4,7 @@ import {
   CalciteTipGroup,
   CalciteTipManager,
 } from '@esri/calcite-components-react';
+import { Tip } from '../Tools/Print/utils/tips';
 interface AppTip {
   title: string;
   text: string;
@@ -39,7 +40,7 @@ function AppTips(props: Props) {
       onCalciteTipManagerClose={() => setTips(undefined)}
     >
       <CalciteTipGroup>
-        {props.tips?.tips.map((tip: any) => {
+        {props.tips?.tips.map((tip: Tip) => {
           return (
             <CalciteTip heading={tip.title} key={tip.title}>
               {tip.text}

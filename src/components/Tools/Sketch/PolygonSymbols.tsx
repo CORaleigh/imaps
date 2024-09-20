@@ -6,7 +6,7 @@ interface Props {
   polygonSymbolUpdated: (
     fillColor: Color,
     outlineColor: Color,
-    width: any,
+    width: number,
   ) => void;
 }
 function PolygonSymbols(props: Props) {
@@ -29,7 +29,7 @@ function PolygonSymbols(props: Props) {
         id="polygon-fill"
         color={fillColor.toRgba()}
         label="Fill"
-        colorSet={(c: any) => {
+        colorSet={(c: Color) => {
           setFillColor(c);
           props.polygonSymbolUpdated(c, outlineColor, width);
         }}
@@ -38,7 +38,7 @@ function PolygonSymbols(props: Props) {
         id="polygon-outline"
         color={outlineColor.toRgba()}
         label="Outline"
-        colorSet={(c: any) => {
+        colorSet={(c: Color) => {
           setOutlineColor(c);
           props.polygonSymbolUpdated(fillColor, c, width);
         }}
@@ -48,7 +48,7 @@ function PolygonSymbols(props: Props) {
         min={0.1}
         max={18}
         value={width}
-        sizeSet={(size: any) => {
+        sizeSet={(size: number) => {
           setWidth(size);
           props.polygonSymbolUpdated(fillColor, outlineColor, width);
         }}

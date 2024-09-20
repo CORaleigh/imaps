@@ -21,10 +21,10 @@ const useLegend = (props: PanelProps) => {
   useEffect(() => {
     setIsActive(props.isActive);
   }, [props.isActive]);
-  const panelDismissed = useCallback((e: any) => {
+  const panelDismissed = useCallback(() => {
     props.panelDismissed();
   }, []);
-  const tipsClicked = useCallback((e: any) => {
+  const tipsClicked = useCallback(() => {
     props.showTips(tips);
   }, []);
   return {

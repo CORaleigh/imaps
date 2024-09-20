@@ -3,6 +3,7 @@ import { PrintProps } from './utils/PrintProps';
 import { tips } from './utils/tips';
 import {
   Exports,
+  Format,
   Layout,
   MapScale,
   getFormats,
@@ -13,6 +14,7 @@ import {
   roundScale,
   showPrintFrame,
 } from './utils/print';
+import { CalciteInputCustomEvent, CalciteRadioButtonCustomEvent, CalciteSelectCustomEvent, CalciteSwitchCustomEvent, CalciteTabTitleCustomEvent } from '@esri/calcite-components';
 
 const usePrint = (props: PrintProps) => {
   const loaded = useRef(false);
@@ -20,14 +22,14 @@ const usePrint = (props: PrintProps) => {
   const [isActive, setIsActive] = useState(false);
   const [selectedTab, setSelectedTab] = useState('layout');
   const [layouts, setLayouts] = useState<Layout[]>([]);
-  const [formats, setFormats] = useState<string[]>([]);
+  const [formats, setFormats] = useState<Format[]>([]);
 
   const [title, setTitle] = useState<string>('');
   const [fileName, setFileName] = useState<string>('');
 
   const [selectedLayout, setSelectedLayout] = useState<Layout>();
-  const [selectedFormat, setSelectedFormat] = useState<string>();
-  const [selectedImageFormat, setSelectedImageFormat] = useState<string>();
+  const [selectedFormat, setSelectedFormat] = useState<Format | undefined>();
+  const [selectedImageFormat, setSelectedImageFormat] = useState<Format | undefined>();
 
   const [useCustomScale, setUseCustomScale] = useState<boolean>(false);
 
@@ -48,50 +50,50 @@ const usePrint = (props: PrintProps) => {
 
   const [exports, setExports] = useState<Exports[]>([]);
 
-  const toolDismissed = useCallback((e: any) => {
+  const toolDismissed = useCallback(() => {
     props.toolDismissed();
     setShowFrame(false);
     hidePrintFrame(props.view);
   }, []);
-  const tipsClicked = useCallback((e: any) => {
+  const tipsClicked = useCallback(() => {
     props.showTips(tips);
   }, []);
-  const titleChanged = useCallback((e: any) => {
+  const titleChanged = useCallback((e: CalciteInputCustomEvent<void>) => {
     setTitle(e.target.value);
   }, []);
-  const layoutChanged = useCallback((e: any) => {
+  const layoutChanged = useCallback((e: CalciteSelectCustomEvent<void>) => {
     setSelectedLayout(e.target.selectedOption.value);
   }, []);
-  const formatChanged = useCallback((e: any) => {
+  const formatChanged = useCallback((e: CalciteSelectCustomEvent<void>) => {
     setSelectedFormat(e.target.selectedOption.value);
   }, []);
-  const showAttributesChanged = useCallback((e: any) => {
+  const showAttributesChanged = useCallback((e: CalciteSwitchCustomEvent<void>) => {
     setShowAttributes(e.target.checked);
   }, []);
-  const showLegendChanged = useCallback((e: any) => {
+  const showLegendChanged = useCallback((e: CalciteSwitchCustomEvent<void>) => {
     setShowLegend(e.target.checked);
   }, []);
-  const showFrameChanged = useCallback((e: any) => {
+  const showFrameChanged = useCallback((e: CalciteSwitchCustomEvent<void>) => {
     setShowFrame(e.target.checked);
   }, []);
 
-  const userDefinedScaleChanged = useCallback((e: any) => {
+  const userDefinedScaleChanged = useCallback((e: CalciteInputCustomEvent<void>) => {
     setPrintScale(parseInt(e.target.value) * 12);
   }, []);
-  const fileNameChanged = useCallback((e: any) => {
+  const fileNameChanged = useCallback((e: CalciteInputCustomEvent<void>) => {
     setFileName(e.target.value);
   }, []);
-  const imageFormatChanged = useCallback((e: any) => {
+  const imageFormatChanged = useCallback((e: CalciteSelectCustomEvent<void>) => {
     setSelectedImageFormat(e.target.selectedOption.value);
   }, []);
-  const imageHeightChanged = useCallback((e: any) => {
+  const imageHeightChanged = useCallback((e: CalciteInputCustomEvent<void>) => {
     setImageHeight(parseInt(e.target.value));
   }, []);
-  const imageWidthChanged = useCallback((e: any) => {
+  const imageWidthChanged = useCallback((e: CalciteInputCustomEvent<void>) => {
     setImageWidth(parseInt(e.target.value));
   }, []);
 
-  const customScaleChanged = useCallback((e: any) => {
+  const customScaleChanged = useCallback((e: CalciteSelectCustomEvent<void>) => {
     setCustomScale(e.target.selectedOption.value);
     if (!userDefined) {
       setPrintScale(parseInt(e.target.selectedOption.value.scale));
@@ -104,7 +106,7 @@ const usePrint = (props: PrintProps) => {
   }, [imageWidth, imageHeight]);
 
   const scaleTypeChanged = useCallback(
-    (e: any) => {
+    (e: CalciteRadioButtonCustomEvent<void>) => {
       setUseCustomScale(e.target.value === 'custom');
 
       if (e.target.value === 'custom' && customScale) {
@@ -116,12 +118,12 @@ const usePrint = (props: PrintProps) => {
     [props.view, customScale],
   );
 
-  const tabChanged = useCallback((e: any) => {
+  const tabChanged = useCallback((e: CalciteTabTitleCustomEvent<void>) => {
     setSelectedTab(e.target.title);
   }, []);
 
   const exportClicked = useCallback(
-    (e: any) => {
+    () => {
       prepareExport(
         props.view,
         useCustomScale ? printScale : roundScale(props.view.scale),
@@ -202,7 +204,7 @@ const usePrint = (props: PrintProps) => {
   useEffect(() => {
     if (!loaded.current) {
       loaded.current = true;
-      getLayouts().then((layouts: any) => {
+      getLayouts().then((layouts: Layout[]) => {
         setLayouts(layouts);
         setSelectedLayout(layouts[0]);
       });

@@ -22,10 +22,10 @@ export const intializeLocationSearch = async (
   container: HTMLDivElement,
   setIsIntersection: (isIntersection: boolean) => void,
 ): Promise<widgetSearch> => {
-  const sources: any[] = [];
-  const source = await addLocationSearch();
+  const sources: LocatorSearchSource[] & LayerSearchSource[] = [];
+  const source: LocatorSearchSource | LayerSearchSource[] = await addLocationSearch();
   sources.push(source);
-  const intersectionSource = await addIntersectionSource();
+  const intersectionSource: LayerSearchSource = await addIntersectionSource();
   sources.push(intersectionSource);
   const search = new widgetSearch({
     view: view,
@@ -46,15 +46,14 @@ export const intializeLocationSearch = async (
   });
   search.sources.addMany(sources);
 
-  search.allSources.on('after-add', (event: any) => {
-    if ((event.item as any).layer) {
-      const item: __esri.LayerSearchSource =
-        event.item as __esri.LayerSearchSource;
-      item.name = (event.item as any).layer.title;
-      item.placeholder = (event.item as any).layer.title;
+  search.allSources.on('after-add', (event: __esri.CollectionAfterAddEvent) => {
+    const item = event.item;
+    if (event.item instanceof LayerSearchSource) {
+      item.name = item.layer.title;
+      item.placeholder = item.layer.title;
     }
-    if (event.item.name.includes('World Geocoding')) {
-      search.allSources.remove(event.item);
+    if (item.name.includes('World Geocoding')) {
+      search.allSources.remove(item);
     }
   });
   return search;

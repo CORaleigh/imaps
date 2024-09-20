@@ -13,12 +13,26 @@ import IconPicker from './IconPicker';
 import IconSelectionPanel from './IconSelectionPanel';
 import ColorButton from './ColorButton';
 import Color from '@arcgis/core/Color';
+import { CalciteInputCustomEvent } from '@esri/calcite-components';
 interface Props {
-  pointSymbolUpdated: (symbol: any, c: any, pointSize: number) => void;
+  pointSymbolUpdated: (symbol: SymbolItem | undefined, c: Color, pointSize: number) => void;
 }
+export interface SymbolItem {
+  name: string;
+  title: string;
+  itemType: string;
+  dimensionality: string[];
+  category: string;
+  tags: string[]; // Array of strings for the tags
+  formats: string[];
+  cimRef: string;
+  thumbnail: { href: string};
+  url: string;
+}
+
 function PointSymbols(props: Props) {
-  const [symbols, setSymbols] = useState<any[]>([]);
-  const [symbol, setSymbol] = useState<any>();
+  const [symbols, setSymbols] = useState<SymbolItem[]>([]);
+  const [symbol, setSymbol] = useState<SymbolItem | undefined>();
   const [pointSize, setPointSize] = useState(16);
 
   const url = 'https://www.arcgis.com/sharing/rest/content/items/';
@@ -33,8 +47,9 @@ function PointSymbols(props: Props) {
   );
 
   useEffect(() => {
-    getSymbols(ids, url).then((items: any) => {
-      setSymbols(items as any[]);
+    getSymbols(ids, url).then((items: SymbolItem[]) => {
+      console.log(items);
+      setSymbols(items as SymbolItem[]);
       if (items.length) {
         setSymbol(items[0]);
         props.pointSymbolUpdated(items[0], pointColor, pointSize);
@@ -55,7 +70,7 @@ function PointSymbols(props: Props) {
                 id="point"
                 label="Point"
                 color={pointColor.toRgba()}
-                colorSet={(c: any) => {
+                colorSet={(c: Color) => {
                   setPointColor(c);
                   props.pointSymbolUpdated(symbol, c, pointSize);
                 }}
@@ -67,7 +82,7 @@ function PointSymbols(props: Props) {
                   min={6}
                   max={72}
                   value={pointSize.toString()}
-                  onCalciteInputChange={(e: any) => {
+                  onCalciteInputChange={(e: CalciteInputCustomEvent<void>) => {
                     setPointSize(parseFloat(e.target.value));
                     props.pointSymbolUpdated(
                       symbol,
@@ -81,7 +96,7 @@ function PointSymbols(props: Props) {
           )}
           {activeFlow === 'icon' && (
             <IconSelectionPanel
-              iconSelected={(icon: any) => {
+              iconSelected={(icon: SymbolItem) => {
                 setSymbol(icon);
                 props.pointSymbolUpdated(icon, pointColor, pointSize);
               }}

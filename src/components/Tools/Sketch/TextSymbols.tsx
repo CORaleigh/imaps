@@ -55,7 +55,7 @@ function TextSymbols(props: Props) {
         label="Font"
         color={fontColor.toRgba()}
         hideTransparency
-        colorSet={(c: any) => {
+        colorSet={(c: Color) => {
           setFontColor(c);
           props.textSymbolUpdated(
             fontSize,
@@ -110,7 +110,7 @@ function TextSymbols(props: Props) {
           label=""
           color={haloColor.toRgba()}
           hideTransparency
-          colorSet={(c: any) => {
+          colorSet={(c: Color) => {
             setHaloColor(c);
             props.textSymbolUpdated(
               fontSize,

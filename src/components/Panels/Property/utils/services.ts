@@ -2,7 +2,7 @@ import Graphic from '@arcgis/core/Graphic';
 import MapView from '@arcgis/core/views/MapView';
 import * as geometryEngine from '@arcgis/core/geometry/geometryEngine';
 import WebMap from '@arcgis/core/WebMap';
-const loadWebmap = async (serviceLayers: any[]): Promise<__esri.Layer[]> => {
+const loadWebmap = async (serviceLayers: string[]): Promise<__esri.Layer[]> => {
   const map = new WebMap({
     portalItem: {
       id: '95092428774c4b1fb6a3b6f5fed9fbc4',
@@ -16,7 +16,7 @@ const loadWebmap = async (serviceLayers: any[]): Promise<__esri.Layer[]> => {
   return layers.toArray();
 };
 const getServiceData = (
-  layers: any[],
+  layers: __esri.Layer[],
   graphic: Graphic,
   setFeatures: (features: Graphic[]) => void,
   setSearching: (searching: boolean) => void,
@@ -53,7 +53,7 @@ const getServiceData = (
   }
 };
 export const getServices = (
-  e: any,
+  item: HTMLCalciteAccordionItemElement,
   services: any[],
   view: MapView,
   graphic: Graphic,
@@ -62,11 +62,11 @@ export const getServices = (
 ) => {
   requestAnimationFrame(async () => {
     if (
-      (e.target as HTMLCalciteAccordionItemElement).hasAttribute('expanded')
+      item.hasAttribute('expanded')
     ) {
       setSearching(true);
       setFeatures([]);
-      const title = (e.target as HTMLCalciteAccordionItemElement).getAttribute(
+      const title = item.getAttribute(
         'item-title',
       );
       const service = services.find((s) => {
@@ -80,7 +80,7 @@ export const getServices = (
         });
 
         if (layers.length !== service.group.layers.length) {
-          const layers: any[] = await loadWebmap(service.group.layers);
+          const layers: __esri.Layer[] = await loadWebmap(service.group.layers);
           getServiceData(layers, graphic, setFeatures, setSearching, promises);
         } else {
           getServiceData(

@@ -8,6 +8,8 @@ import {
 } from '../utils/shell';
 import { Alert } from './alert';
 import { addShortcuts } from './shortcuts';
+import { Tips } from '../../Tools/Print/utils/tips';
+import { AppConfig } from '../../../config/config';
 
 const useShell = () => {
   const [mapId, setMapId] = useState('95092428774c4b1fb6a3b6f5fed9fbc4');
@@ -99,7 +101,7 @@ const useShell = () => {
     // addShortcuts(mapView, setGeometry);
     mapViewSet(mapView, setView, setLoading, setAlert);
   }, []);
-  const geometryCallback = useCallback((geometry: __esri.Geometry) => {
+  const geometryCallback = useCallback((geometry: __esri.Geometry | undefined) => {
     setGeometry(geometry);
   }, []);
   const widgetCallback = useCallback((mapView: __esri.MapView) => {
@@ -148,8 +150,8 @@ const useShell = () => {
     },
     [],
   );
-  const tipsCallback = (newTips: any) => {
-    setTips((oldTips: any) => {
+  const tipsCallback = (newTips: Tips) => {
+    setTips((oldTips: Tips) => {
       if (oldTips?.title === newTips?.title) {
         return undefined;
       }
@@ -160,7 +162,8 @@ const useShell = () => {
     setLoading(false);
     setAlert(alert);
   };
-  const getMapId = (config: any) => {
+  const getMapId = (config: AppConfig) => {
+    console.log(config)
     const url = new URL(window.location.href);
     const mapId = url.searchParams.get('id')
       ? url.searchParams.get('id')

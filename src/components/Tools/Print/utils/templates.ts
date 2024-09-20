@@ -1,4 +1,36 @@
-export const printTemplates = {
+export interface CustomTextElement {
+  [key: string]: string;
+}
+
+export interface LayoutOptions {
+  hasTitleText: boolean;
+  hasAuthorText: boolean;
+  hasCopyrightText: boolean;
+  hasLegend: boolean;
+  customTextElements: CustomTextElement[];
+}
+
+export interface Template {
+  layoutTemplate: string;
+  pageSize: [number, number];
+  pageUnits: string;
+  webMapFrameSize: [number, number];
+  layoutOptions: LayoutOptions;
+}
+
+export interface PrintTemplates {
+  results: {
+    paramName: string;
+    dataType: string;
+    value: Template[];
+  }[];
+  messages: string[];
+}
+
+
+
+
+export const printTemplates: PrintTemplates  = {
   results: [
     {
       paramName: 'Output_JSON',

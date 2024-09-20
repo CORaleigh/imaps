@@ -1,4 +1,14 @@
-export const services = [
+type ServiceGroup = {
+  title: string;
+  layers: string[];
+};
+
+export type PropertyService = {
+  group: ServiceGroup;
+};
+
+
+export const services: PropertyService[] = [
   {
     group: {
       title: 'Electoral',
@@ -73,3 +83,52 @@ export const services = [
     },
   },
 ];
+
+
+
+export interface Link {
+  title: string;
+  links: Link[];
+  href?: string;
+}
+
+type AlertLink = {
+  text: string;
+  url: string;
+  show: boolean;
+};
+
+type Alert = {
+  show: boolean;
+  autoClose: boolean;
+  duration: 'fast' | 'slow'; // Adjust if there are more options
+  kind: 'info' | 'warning' | 'error'; // Adjust based on your use case
+  icon: string;
+  title: string;
+  message: string;
+  optOut: boolean;
+  link: AlertLink;
+};
+
+type Logo = {
+  light: string;
+  dark: string;
+};
+
+type SubLink = {
+  title: string;
+  href: string;
+};
+
+type LinkGroup = {
+  title: string;
+  links: SubLink[];
+};
+
+export type AppConfig = {
+  title: string;
+  logo: Logo;
+  mapId: string;
+  alert: Alert;
+  links: LinkGroup[];
+};

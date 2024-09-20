@@ -3,6 +3,7 @@ import WebMap from '@arcgis/core/WebMap';
 import Collection from '@arcgis/core/core/Collection';
 import ActionToggle from '@arcgis/core/support/actions/ActionToggle';
 import LayerList from '@arcgis/core/widgets/LayerList';
+import LabelClass from '@arcgis/core/layers/support/LabelClass';
 import { lazy, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
@@ -10,6 +11,12 @@ import DevPlanFilter from '../DevPlanFilter';
 import { saveMap } from '../../../WebMap/utils/map';
 const OpacitySlider = lazy(() => import('../OpacitySlider'));
 let layers: LayerList;
+
+interface LabelExpression {
+  title: string;
+  expression: string;
+}
+
 export const initializeLayers = async (
   ref: HTMLDivElement,
   view: MapView,
@@ -128,12 +135,11 @@ const setPropertyColor = (layer: FeatureLayer, light: boolean) => {
   }
   layer.renderer = renderer;
 };
-const togglePropertyColor = (layer: FeatureLayer, sections: any) => {
+const togglePropertyColor = (layer: FeatureLayer, sections: Collection<Collection<__esri.ActionButton | ActionToggle>>) => {
   if (sections.length > 1) {
-    setPropertyColor(layer, !sections.getItemAt(1).getItemAt(0).value);
-    sections.getItemAt(1).getItemAt(0).icon = !sections
-      .getItemAt(1)
-      .getItemAt(0).value
+    const section = sections.getItemAt(1).getItemAt(0) as ActionToggle;
+    setPropertyColor(layer, !section.value);
+    sections.getItemAt(1).getItemAt(0).icon = !section.value
       ? 'toggle-off'
       : 'toggle-on';
   }
@@ -177,10 +183,9 @@ export const togglePropertyLabels = (
 
     //if ((event.action as ActionToggle).value) {
     (event.item.layer as __esri.FeatureLayer).labelingInfo = [
-      {
-        // autocasts as new LabelClass()
+      new LabelClass({
         symbol: {
-          type: 'text', // autocasts as new TextSymbol()
+          type: 'text',
           color: 'black',
           haloColor: 'white',
           haloSize: 1,
@@ -195,7 +200,7 @@ export const togglePropertyLabels = (
         },
         maxScale: 0,
         minScale: 5000,
-      } as any,
+      })
     ];
     // }
     // } else {
@@ -207,7 +212,7 @@ export const togglePropertyLabels = (
     // }
   }
 };
-const propertyLabelExpressions: any[] = [
+const propertyLabelExpressions: LabelExpression[] = [
   {
     expression: `First(Split($feature['SITE_ADDRESS'], ' ')) + ' ' + $feature.STMISC`,
     title: 'Address Labels',
@@ -230,75 +235,82 @@ const propertyLabelExpressions: any[] = [
   },
 ];
 
-const addPropertyLabelToggles = (item: any) => {
+const addPropertyLabelToggles = (item: __esri.ListItem) => {
+  // Check if the layer is a FeatureLayer (or a layer that supports labelingInfo)
   if (
     item.layer.title === 'Property' &&
     item.layer.type !== 'group' &&
-    item.actionsSections.length === 0
+    item.actionsSections.length === 0 &&
+    'labelingInfo' in item.layer
   ) {
-    let toggles: Collection = new Collection();
+    const featureLayer = item.layer as __esri.FeatureLayer; // Cast to FeatureLayer
+
+    let toggles: __esri.Collection<__esri.ActionToggle> = new Collection();
+
+    // Add property label toggles
     toggles.addMany(
       propertyLabelExpressions.map((expression) => {
+        const labelInfo = featureLayer.labelingInfo?.find(
+          (info: __esri.LabelClass) =>
+            info.labelExpressionInfo?.expression.includes(
+              expression.expression,
+            ) && featureLayer.labelsVisible
+        );
+
         return new ActionToggle({
-          value: item.layer.labelingInfo?.find((info: any) => {
-            return (
-              info.labelExpressionInfo?.expression.includes(
-                expression.expression,
-              ) && item.layer.labelsVisible
-            );
-          }),
+          value: !!labelInfo,
           title: expression.title,
           visible: true,
           icon: 'toggle-off',
         });
       }),
     );
-    (item as __esri.ListItem).actionsSections.push(toggles);
 
-    toggles = new Collection();
-    toggles.add({
-      value: item.layer.renderer?.symbol?.outline?.color?.isBright,
-      title: 'Light Outline',
-      visible: true,
-      type: 'toggle',
-      icon: 'toggle-off',
-    } as any);
-    (item as __esri.ListItem).actionsSections.push(toggles);
+    item.actionsSections.push(toggles);
 
-    (item as __esri.ListItem).actionsOpen = false;
+    // Add outline color toggle only if the renderer has a symbol (e.g., SimpleRenderer or UniqueValueRenderer)
+    const renderer = featureLayer.renderer;
 
+    if (
+      renderer.type === 'simple'
+    ) {
+      const symbolRenderer = renderer as __esri.SimpleRenderer;
+      const symbol = symbolRenderer.symbol;
+
+      if (symbol && 'outline' in symbol && symbol.outline) {
+        const simpleSymbol = symbol as __esri.SimpleMarkerSymbol | __esri.SimpleFillSymbol;
+
+        toggles = new Collection();
+        toggles.add({
+          value: (simpleSymbol.outline?.color as any).isBright ?? false,
+          title: 'Light Outline',
+          visible: true,
+          type: 'toggle',
+          icon: 'toggle-off',
+        } as __esri.ActionToggle);
+
+        item.actionsSections.push(toggles);
+      }
+    }
+
+    item.actionsOpen = false;
+
+    // Delay for adding title to actions
     setTimeout(() => {
       const title = document.createElement('h4');
       title.id = 'labels-actions-title';
       title.textContent = 'Labels';
-      title.setAttribute('style', 'padding: 0.5em;margin: 0;');
+      title.setAttribute('style', 'padding: 0.5em; margin: 0;');
+
       const actions = document.querySelector('.esri-layer-list__item-actions');
-      if (
-        actions?.parentElement &&
-        !document.getElementById('labels-actions-title')
-      ) {
+      if (actions?.parentElement && !document.getElementById('labels-actions-title')) {
         actions.prepend(title);
       }
     }, 1000);
   }
 };
 
-const addDevPlanFilters = (item: any) => {
-  if (
-    item.layer.title?.includes('Development Plans') &&
-    item.layer.type !== 'group' &&
-    item.actionsSections.length === 0
-  ) {
-    const filter = document.createElement('filter-container');
-    const root = createRoot(filter as HTMLDivElement);
-    root.render(
-      <Suspense fallback={''}>
-        <DevPlanFilter datefield={'apply_date'} layer={item.layer} />
-      </Suspense>,
-    );
-    ((item as __esri.ListItem).panel.content as any[]).push(filter);
-  }
-};
+
 
 const createPanel = (item: __esri.ListItem) => {
   if (
@@ -323,37 +335,28 @@ const createPanel = (item: __esri.ListItem) => {
   }
 };
 
-const layerListItemCreated = async (event: any) => {
+const layerListItemCreated = async (event: { item: __esri.ListItem }) => {
   const { item } = event;
-
   await item.layer.when();
   createPanel(item);
-
   item.open = item.layer.visible;
   item.layer.watch('visible', (visible: boolean) => {
-    // if (item.panel) {
-    //   item.panel.open = visible;
-    // }
     saveMap(layers.view as __esri.MapView);
     item.open = visible;
-
     createPanel(item);
-
     if (visible) {
-      if (item.layer.parent) {
-        if (item.layer.parent.type === 'group') {
-          item.layer.parent.visible = true;
+      let parentLayer = item.layer.parent as __esri.Layer;
+      while (parentLayer) {
+        if (parentLayer.type === 'group') {
+          parentLayer.visible = true;
         }
-      }
-      if (item.layer.parent.parent) {
-        if (item.layer.parent.parent.type === 'group') {
-          item.layer.parent.parent.visible = true;
-        }
+        parentLayer = parentLayer.parent as __esri.Layer;
       }
     }
   });
   addPropertyLabelToggles(item);
 };
+
 
 export const filterLayers = (
   value: string,
