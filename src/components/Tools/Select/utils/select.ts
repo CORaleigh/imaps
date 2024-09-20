@@ -20,7 +20,7 @@ export const cancelSelect = () => {
 };
 export const initializeSelect = async (
   view: MapView,
-  geometrySet: (geometry: Geometry) => void,
+  geometrySet: (geometry: Geometry | undefined) => void,
   setSelectedTool: (selectedTool: string) => void,
 ) => {
   layer = new GraphicsLayer({
@@ -161,7 +161,7 @@ export const createSketch = (
 export const bufferProperty = (
   property: Graphic,
   distance: number,
-  geometrySet: (geometry: Geometry) => void,
+  geometrySet: (geometry: Geometry | undefined) => void,
   view: MapView,
 ) => {
   const geom = buffer(distance, property) as __esri.Geometry;

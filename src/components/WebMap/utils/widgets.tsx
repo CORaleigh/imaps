@@ -17,8 +17,7 @@ let streetviewClick: IHandle | null = null;
 export const addWidgets = (
   view: MapView,
   widgetActivated: (
-    view: __esri.MapView,
-    setActiveTool?: (activeTool: string) => void,
+    view: __esri.MapView
   ) => void,
 ) => {
   view.ui.add(
@@ -82,8 +81,7 @@ const addOverview = async (view: __esri.MapView) => {
 const addCoordinates = async (
   view: __esri.MapView,
   widgetActivated: (
-    view: __esri.MapView,
-    setActiveTool?: (activeTool: string) => void,
+    view: __esri.MapView
   ) => void,
 ) => {
   const container = document.createElement('div');
@@ -121,8 +119,7 @@ const addCoordinates = async (
 const createStreetviewButton = (
   view: MapView,
   widgetActivated: (
-    view: __esri.MapView,
-    setActiveTool?: (activeTool: string) => void,
+    view: __esri.MapView
   ) => void,
 ): HTMLDivElement => {
   const button = document.createElement('div');
@@ -185,8 +182,7 @@ const createStreetviewButton = (
 export const createIdentifyButton = (
   view: MapView,
   widgetActivated: (
-    view: __esri.MapView,
-    setActiveTool?: (activeTool: string) => void,
+    view: __esri.MapView
   ) => void,
 ): HTMLDivElement => {
   const infoButton = document.createElement('div');

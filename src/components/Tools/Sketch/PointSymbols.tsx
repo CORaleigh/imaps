@@ -15,7 +15,7 @@ import ColorButton from './ColorButton';
 import Color from '@arcgis/core/Color';
 import { CalciteInputCustomEvent } from '@esri/calcite-components';
 interface Props {
-  pointSymbolUpdated: (symbol: SymbolItem | undefined, c: Color, pointSize: number) => void;
+  pointSymbolUpdated: (symbol: SymbolItem, c: Color, pointSize: number) => void;
 }
 export interface SymbolItem {
   name: string;
@@ -32,7 +32,7 @@ export interface SymbolItem {
 
 function PointSymbols(props: Props) {
   const [symbols, setSymbols] = useState<SymbolItem[]>([]);
-  const [symbol, setSymbol] = useState<SymbolItem | undefined>();
+  const [symbol, setSymbol] = useState<SymbolItem>(symbols[0]);
   const [pointSize, setPointSize] = useState(16);
 
   const url = 'https://www.arcgis.com/sharing/rest/content/items/';

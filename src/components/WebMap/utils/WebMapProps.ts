@@ -6,8 +6,7 @@ export interface WebMapProps {
   mapViewSet: (mapView: __esri.MapView) => void;
   geometrySet: (geometry: __esri.Geometry | undefined) => void;
   widgetActivated: (
-    view: __esri.MapView,
-    setActiveTool: (activeTool: string) => void,
+    view: __esri.MapView
   ) => void;
   alertSet?: (alert: Alert) => void;
 }

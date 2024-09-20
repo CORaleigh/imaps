@@ -170,7 +170,7 @@ const sendAlert = (
 
 export const widgetActivated = (
   view: MapView,
-  setActiveTool?: (activeTool: string) => void,
+  setActiveTool: (activeTool: string) => void,
 ) => {
   (view as any).activeTool = null;
   if (setActiveTool) {
