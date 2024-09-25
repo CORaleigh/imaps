@@ -7,4 +7,5 @@ export interface PrintProps {
   isActive: boolean;
   toolDismissed: () => void;
   showTips: (newTips: Tips) => void;
+  mapOnly?: boolean;
 }

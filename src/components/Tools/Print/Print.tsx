@@ -93,13 +93,13 @@ const Print = (props: PrintProps) => {
           >
             Layout
           </CalciteTabTitle>
-          <CalciteTabTitle
+          { props.mapOnly && <CalciteTabTitle
             onCalciteTabsActivate={tabChanged}
             title="map"
             selected={selectedTab === 'map' ? true : undefined}
           >
             Map only
-          </CalciteTabTitle>
+          </CalciteTabTitle>}
           <CalciteTabTitle
             onCalciteTabsActivate={tabChanged}
             title="exports"
@@ -229,7 +229,7 @@ const Print = (props: PrintProps) => {
             </CalciteButton>
           </div>
         </CalciteTab>
-        <CalciteTab>
+        { props.mapOnly && <CalciteTab>
           <div id="print-container">
             <CalciteLabel>
               File name
@@ -295,7 +295,7 @@ const Print = (props: PrintProps) => {
               Export
             </CalciteButton>
           </div>
-        </CalciteTab>
+        </CalciteTab>}
         <CalciteTab>
           {exports.length > 0 && (
             <CalciteList>
