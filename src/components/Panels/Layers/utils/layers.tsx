@@ -117,8 +117,6 @@ const addLayersFromWebmap = async (view: MapView, mapId?: String) => {
           !view.map.findLayerById(layer.id),
       );
       view.map.addMany(nongroup.toArray());
-      //console.log(nongroup.toArray().length)
-      // nongroup.forEach(layer => console.log(layer.title));
       return true;
     });
 };
@@ -159,7 +157,6 @@ export const togglePropertyLabels = (
     const selected = event.item.actionsSections
       .getItemAt(0)
       .filter((section) => {
-        console.log(section.icon);
         section.icon = (section as ActionToggle).value
           ? 'toggle-on'
           : 'toggle-off';

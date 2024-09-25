@@ -346,7 +346,6 @@ export const getSymbols = (ids: string[], url: string): Promise<SymbolItem[]> =>
     const items: SymbolItem[] = [];
 
     Promise.all(promises).then((results: __esri.RequestResponse[]) => {
-      console.log(results);
       results.forEach((result: __esri.RequestResponse) => {
         
         result.data.items.forEach((item: SymbolItem) => {

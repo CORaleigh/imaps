@@ -23,7 +23,6 @@ function AppTips(props: Props) {
     setTips(props.tips);
     setTimeout(() => {
       if (manager.current) {
-        console.log(props.tips?.title);
         if (manager.current.shadowRoot) {
           const heading = manager.current.shadowRoot.querySelector('.heading');
           if (heading) {

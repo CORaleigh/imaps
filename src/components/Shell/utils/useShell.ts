@@ -163,7 +163,6 @@ const useShell = () => {
     setAlert(alert);
   };
   const getMapId = (config: AppConfig) => {
-    console.log(config)
     const url = new URL(window.location.href);
     const mapId = url.searchParams.get('id')
       ? url.searchParams.get('id')

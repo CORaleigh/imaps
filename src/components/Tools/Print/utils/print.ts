@@ -80,7 +80,6 @@ export const getLayouts = async (): Promise<Layout[]> => {
 export const getFormats = async (url: string): Promise<Format[]> => {
   try {
     const result = await request(url, { query: { f: "json" } });
-    console.log(result);
     const parameter = result.data.parameters.find(
       (parameter: {name: string}) => parameter.name === "Format"
     );
@@ -190,7 +189,7 @@ export const prepareExport = (
   imageWidth: number | undefined,
   imageHeight: number | undefined
 ) => {
-  console.log(selectedFormat);
+  
   const exportId =
     exports.length === 0 ? 1 : exports[exports.length - 1].id + 1;
   const exportJob: Exports = {
@@ -462,7 +461,6 @@ export const showPrintFrame = (
   );
 
   const printTemplate = printTemplates.results[0].value.find((result) => {
-    console.log(result.layoutTemplate);
     return result.layoutTemplate === templateName;
   });
 

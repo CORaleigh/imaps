@@ -25,8 +25,6 @@ function PropertyTable(props: PropertyTableProps) {
     };
   }, []);
   useEffect(() => {
-    console.log(featureTable);
-
     if (featureTable) {
       updateTable(props.condos, featureTable);
     }

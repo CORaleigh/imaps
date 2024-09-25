@@ -48,7 +48,6 @@ function PointSymbols(props: Props) {
 
   useEffect(() => {
     getSymbols(ids, url).then((items: SymbolItem[]) => {
-      console.log(items);
       setSymbols(items as SymbolItem[]);
       if (items.length) {
         setSymbol(items[0]);

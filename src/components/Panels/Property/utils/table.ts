@@ -248,8 +248,6 @@ export const updateTable = async (
   features: Graphic[],
   featureTable: FeatureTable,
 ) => {
-  console.log(featureTable);
-
   if (featureTable) {
     try {
       const result: FeatureSet = await (

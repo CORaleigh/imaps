@@ -55,11 +55,6 @@ export const DevPlanFilter = (props: Props) => {
 
   return (
     <div>
-      {/* <CalciteInputDatePicker overlay-positioning="fixed" scale="m" max={`2022-11-11`}
-        onCalciteInputDatePickerChange={e => {
-            console.log(e.detail);
-        }}
-        ></CalciteInputDatePicker> */}
       <CalciteSlider
         labelHandles
         labelTicks

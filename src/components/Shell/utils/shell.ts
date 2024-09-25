@@ -114,7 +114,6 @@ const checkForPropertyService = async (
       const layerView = await view.whenLayerView(propertyLayer);
       await reactiveUtils.whenOnce(() => !layerView.updating);
       setLoading(false);
-      console.log(Date.now() - start);
     } catch (error) {
       console.log(error);
       setLoading(false);
