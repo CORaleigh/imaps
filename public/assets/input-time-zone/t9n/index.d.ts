@@ -62,7 +62,12 @@ export type InputTimeZoneMessages = {
   "America/Anguilla": string;
   "America/Antigua": string;
   "America/Araguaina": string;
+  "America/Argentina/Buenos_Aires": string;
+  "America/Argentina/Catamarca": string;
+  "America/Argentina/Cordoba": string;
+  "America/Argentina/Jujuy": string;
   "America/Argentina/La_Rioja": string;
+  "America/Argentina/Mendoza": string;
   "America/Argentina/Rio_Gallegos": string;
   "America/Argentina/Salta": string;
   "America/Argentina/San_Juan": string;
@@ -120,6 +125,7 @@ export type InputTimeZoneMessages = {
   "America/Halifax": string;
   "America/Havana": string;
   "America/Hermosillo": string;
+  "America/Indiana/Indianapolis": string;
   "America/Indiana/Knox": string;
   "America/Indiana/Marengo": string;
   "America/Indiana/Petersburg": string;
@@ -133,6 +139,7 @@ export type InputTimeZoneMessages = {
   "America/Jamaica": string;
   "America/Jujuy": string;
   "America/Juneau": string;
+  "America/Kentucky/Louisville": string;
   "America/Kentucky/Monticello": string;
   "America/Kralendijk": string;
   "America/La_Paz": string;
@@ -166,6 +173,7 @@ export type InputTimeZoneMessages = {
   "America/North_Dakota/Beulah": string;
   "America/North_Dakota/Center": string;
   "America/North_Dakota/New_Salem": string;
+  "America/Nuuk": string;
   "America/Ojinaga": string;
   "America/Panama": string;
   "America/Pangnirtung": string;
@@ -247,6 +255,7 @@ export type InputTimeZoneMessages = {
   "Asia/Famagusta": string;
   "Asia/Gaza": string;
   "Asia/Hebron": string;
+  "Asia/Ho_Chi_Minh": string;
   "Asia/Hong_Kong": string;
   "Asia/Hovd": string;
   "Asia/Irkutsk": string;
@@ -257,7 +266,9 @@ export type InputTimeZoneMessages = {
   "Asia/Kamchatka": string;
   "Asia/Karachi": string;
   "Asia/Katmandu": string;
+  "Asia/Kathmandu": string;
   "Asia/Khandyga": string;
+  "Asia/Kolkata": string;
   "Asia/Krasnoyarsk": string;
   "Asia/Kuala_Lumpur": string;
   "Asia/Kuching": string;
@@ -300,6 +311,7 @@ export type InputTimeZoneMessages = {
   "Asia/Vientiane": string;
   "Asia/Vladivostok": string;
   "Asia/Yakutsk": string;
+  "Asia/Yangon": string;
   "Asia/Yekaterinburg": string;
   "Asia/Yerevan": string;
   "Atlantic/Azores": string;
@@ -307,6 +319,7 @@ export type InputTimeZoneMessages = {
   "Atlantic/Canary": string;
   "Atlantic/Cape_Verde": string;
   "Atlantic/Faeroe": string;
+  "Atlantic/Faroe": string;
   "Atlantic/Madeira": string;
   "Atlantic/Reykjavik": string;
   "Atlantic/South_Georgia": string;
@@ -325,6 +338,34 @@ export type InputTimeZoneMessages = {
   "Australia/Perth": string;
   "Australia/Sydney": string;
   "Europe/Amsterdam": string;
+  "Etc/GMT": string;
+  "Etc/GMT+1": string;
+  "Etc/GMT+10": string;
+  "Etc/GMT+11": string;
+  "Etc/GMT+12": string;
+  "Etc/GMT+2": string;
+  "Etc/GMT+3": string;
+  "Etc/GMT+4": string;
+  "Etc/GMT+5": string;
+  "Etc/GMT+6": string;
+  "Etc/GMT+7": string;
+  "Etc/GMT+8": string;
+  "Etc/GMT+9": string;
+  "Etc/GMT-1": string;
+  "Etc/GMT-10": string;
+  "Etc/GMT-11": string;
+  "Etc/GMT-12": string;
+  "Etc/GMT-13": string;
+  "Etc/GMT-14": string;
+  "Etc/GMT-2": string;
+  "Etc/GMT-3": string;
+  "Etc/GMT-4": string;
+  "Etc/GMT-5": string;
+  "Etc/GMT-6": string;
+  "Etc/GMT-7": string;
+  "Etc/GMT-8": string;
+  "Etc/GMT-9": string;
+  "Etc/UTC": string;
   "Europe/Andorra": string;
   "Europe/Astrakhan": string;
   "Europe/Athens": string;
@@ -347,6 +388,7 @@ export type InputTimeZoneMessages = {
   "Europe/Kaliningrad": string;
   "Europe/Kiev": string;
   "Europe/Kirov": string;
+  "Europe/Kyiv": string;
   "Europe/Lisbon": string;
   "Europe/Ljubljana": string;
   "Europe/London": string;
@@ -385,6 +427,7 @@ export type InputTimeZoneMessages = {
   "Europe/Zaporozhye": string;
   "Europe/Zurich": string;
   "Indian/Antananarivo": string;
+  Factory: string;
   "Indian/Chagos": string;
   "Indian/Christmas": string;
   "Indian/Cocos": string;
@@ -411,6 +454,7 @@ export type InputTimeZoneMessages = {
   "Pacific/Guam": string;
   "Pacific/Honolulu": string;
   "Pacific/Johnston": string;
+  "Pacific/Kanton": string;
   "Pacific/Kiritimati": string;
   "Pacific/Kosrae": string;
   "Pacific/Kwajalein": string;
@@ -442,6 +486,7 @@ export type InputTimeZoneMessages = {
   Atlantic: string;
   Australia: string;
   Europe: string;
+  Global: string;
   Indian: string;
   Pacific: string;
   AD: string;

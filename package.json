@@ -12,14 +12,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@esri/calcite-components": "^2.12.2",
-    "@esri/calcite-components-react": "^2.12.2",
+    "@esri/calcite-components": "^2.13.1",
+    "@esri/calcite-components-react": "^2.13.1",
     "file-saver": "^2.0.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@arcgis/core": "^4.30.0",
+    "@arcgis/core": "^4.30.9",
     "@types/file-saver": "^2.0.5",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",

@@ -107,7 +107,8 @@
         // Prevents frozen columns from appearing offset from the table edge on load.
         // This is because VaadinGrid's positioning logic accounts for 'hidden' calcite dropdown items,
         // since they use 'visibility: hidden' instead of 'display: none'.
-        calcite-dropdown-item {
+        calcite-dropdown-item,
+        calcite-dropdown-item[hidden] {
           display: none;
         }
       }
