@@ -186,8 +186,26 @@ const getWebMap = async (mapId: string): Promise<WebMap> => {
           window?.localStorage?.getItem(`imaps_webmap_${config}`) as string,
         ),
       );
+      
       await webmap.load();
-      if (!webmap.basemap) {
+
+      //reload map from portal if layer ID not corret for Deed or Photos tables
+      let reload = false;
+      webmap.tables.forEach(table => {
+        if (table.type === 'feature') {
+          const featureLayer = table as __esri.FeatureLayer;
+          if (featureLayer.url.includes('/Property/') && featureLayer.layerId === 3 && table.title !== 'Deeds') {
+            reload = true;
+          }
+          if (featureLayer.url.includes('/Property/') && featureLayer.layerId === 2 && table.title !== 'Photos') {
+            reload = true;
+          }  
+        }
+      
+      });
+
+      if (!webmap.basemap || reload) {
+        console.log('reload')
         return loadWebMapFromPortal(mapId);
       }
     } catch (error) {
