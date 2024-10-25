@@ -120,9 +120,9 @@ let addressLayer: FeatureLayer;
 const getTableLayer = async (view: MapView) => {
   const layer = new FeatureLayer({
     portalItem: {
-      id: '4d7f78186b0649d081ac56058b041fb7',
+      id: '318be24592ea4dcba042511b3125fd53',//'4d7f78186b0649d081ac56058b041fb7',
     },
-    layerId: 0,
+    layerId: 2,//0,
   });
   addressLayer = layer;
   const table = await layer.load();
