@@ -1,11 +1,13 @@
 .measure-container {
   display: flex;
+ /* background-color: var(--calcite-ui-background-1); */
+
 }
 
 .measurement-hint {
-  background-color: var(--calcite-ui-foreground-1);
-  color: var(--calcite-ui-text-1);
-  font-size: var(--calcite-font-size--1);
+  /* background-color: var(--calcite-ui-background-1);
+  color: var(--calcite-ui-foreground-1);
+  font-size: var(--calcite-font-size--1); */
   padding: 1em;
 }
 

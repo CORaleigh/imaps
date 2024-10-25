@@ -30,9 +30,7 @@ calcite-shell[content-behind] .esri-view {
   width: calc(100% - 50px);
 }
 
-.measure-container {
-  background-color: var(--calcite-ui-foreground-1);
-}
-.select-container {
-  background-color: var(--calcite-ui-foreground-1);
-}
+
+/* .select-container {
+  background-color: var(--calcite-ui-background-1);
+} */

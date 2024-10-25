@@ -8,10 +8,10 @@
 .row calcite-input input {
   font-size: 16px !important;
 }
-.row button {
+/* .row button {
   background-color: var(--calcite-ui-foreground-2);
   color: var(--calcite-ui-background-1);
-}
+} */
 
 .esri-icon-non-visible::before {
   content: '\e610' !important;
