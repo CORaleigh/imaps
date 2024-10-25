@@ -204,7 +204,7 @@ const useShell = () => {
 };
 
 const checkDisclaimerOptOut = () => {
-  return window.localStorage.getItem('imaps_disclaimer_opted_out') === null;
+  return false//window.localStorage.getItem('imaps_disclaimer_opted_out') === null;
 };
 
 export default useShell;
