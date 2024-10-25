@@ -16,6 +16,7 @@ import esriConfig from '@arcgis/core/config';
 import * as geometryEngine from '@arcgis/core/geometry/geometryEngine';
 import { Alert } from '../../Shell/utils/alert';
 import Geometry from '@arcgis/core/geometry/Geometry';
+import Extent from '@arcgis/core/geometry/Extent';
 
 export const initializeMap = async (
   ref: HTMLDivElement,
@@ -31,10 +32,16 @@ export const initializeMap = async (
     container: ref,
     constraints: constraints as any,
   });
+  const config = getConfig();
   esriConfig.request.useIdentity = false;
 
-  const webmap: WebMap = await getWebMap(mapId);
+  const webmap: WebMap = await getWebMap(mapId, alertSet);
   view.map = webmap;
+  // const storedExtent = window.localStorage.getItem(`imaps_extent_${config}`);
+  // if (storedExtent) {
+  //   view.extent = Extent.fromJSON(JSON.parse(storedExtent));
+  //   window.localStorage.removeItem(`imaps_extent_${config}`)
+  // }
   addWidgets(view, widgetActivated);
   await view.when().catch((error) => {
     const alert: Alert = {
@@ -55,6 +62,9 @@ export const initializeMap = async (
       alertSet(alert);
     }
   });
+
+
+
   removeGraphicsLayers(view);
   view.map.add(selectionLayer);
   view.map.add(selectionCluster);
@@ -173,9 +183,43 @@ const getConfig = () => {
   return config;
 };
 
-const getWebMap = async (mapId: string): Promise<WebMap> => {
+// const modifiedSinceRefresh = (lastModified: Date, config: string) => {
+//   let lastRefresh = window.localStorage.getItem(`imaps_last_refresh_${config}`);
+//   if (!lastRefresh) {
+//     lastRefresh = new Date().toLocaleString();
+//     window.localStorage.setItem(`imaps_last_refresh_${config}`, lastRefresh);
+//   }
+//   return lastModified > new Date(lastRefresh);
+// }
+
+// const showModifiedAlert = (alertSet: (alert: Alert) => void) => {
+//   console.log('web map has been modified since last refresh');
+//   const alert: Alert = {
+//     show: true,
+//     autoClose: false,
+//     duration: 'fast',
+//     kind: 'info',
+//     icon: '',
+//     title: 'Web map modified',
+//     message: `The webmap has been modified since your last session, would you like to reload the web map?  The map will load with the same layers visible and at the same map extent.`,
+//     button: {
+//       show: true,
+//       text: 'Reload',
+//       buttonFunction: () => {console.log('button clicked')}
+//     }
+//   };
+//   if (alertSet) {
+//     alertSet(alert);
+//   }
+// }
+
+const getWebMap = async (mapId: string, alertSet: ((alert: Alert) => void) | undefined): Promise<WebMap> => {
   let webmap: WebMap;
   const config = getConfig();
+  // const lastModified = await getWebMapModifiedDate(mapId);
+  // if (modifiedSinceRefresh(lastModified, config) && alertSet) {
+  //   showModifiedAlert(alertSet)
+  // }
   if (
     window.localStorage.getItem(`imaps_webmap_${config}`) &&
     window.localStorage.getItem('imaps_reset') !== 'true'
@@ -206,11 +250,11 @@ const getWebMap = async (mapId: string): Promise<WebMap> => {
 
       if (!webmap.basemap || reload) {
         console.log('reload')
-        return loadWebMapFromPortal(mapId);
+        return loadWebMapFromPortal(mapId, config);
       }
     } catch (error) {
       console.log(error);
-      return loadWebMapFromPortal(mapId);
+      return loadWebMapFromPortal(mapId, config);
     }
     const url = new URL(window.location as any);
     if (url.searchParams.get('layers')) {
@@ -248,11 +292,21 @@ const getWebMap = async (mapId: string): Promise<WebMap> => {
     }
     return webmap;
   } else {
-    return loadWebMapFromPortal(mapId);
+    return loadWebMapFromPortal(mapId, config);
   }
 };
 
-const loadWebMapFromPortal = async (mapId: string) => {
+const getWebMapModifiedDate = async (mapId: string) => {
+  const webmap = new WebMap({
+    portalItem: {
+      id: mapId,
+    },
+  });
+  await webmap.load();
+  return webmap.portalItem.modified;
+}
+
+const loadWebMapFromPortal = async (mapId: string, config: string) => {
   window.localStorage.removeItem('imaps_reset');
   const webmap = new WebMap({
     portalItem: {
@@ -260,6 +314,9 @@ const loadWebMapFromPortal = async (mapId: string) => {
     },
   });
   await webmap.load();
+  window.localStorage.setItem(`imaps_last_refresh_${config}`, new Date().toLocaleString());
+  // console.log(`iMAPS refreshed at ${new Date().toLocaleString()}`)
+  // await makeLayersVisibleAfterRefresh(webmap);
   const groups = webmap.allLayers
     .filter((layer: __esri.Layer) => {
       return layer.type === 'group';
@@ -282,7 +339,7 @@ const loadWebMapFromPortal = async (mapId: string) => {
     webmap.layers.filter((layer: __esri.Layer) => {
       return layer.type !== 'group' && !layer.visible;
     }),
-  );
+  );  
   return webmap;
 };
 const removeGraphicsLayers = (view: MapView) => {
@@ -590,3 +647,71 @@ const addStreets = (view: MapView) => {
     console.log('cannot add streets layer');
   }
 };
+
+// const getVisibleLayers = (layers: __esri.Collection<__esri.Layer>) => {
+//   const visibleLayers: string[] = [];
+//   layers.forEach(layer => {
+//     if (layer.visible && layer.listMode !== 'hide') {
+//       // If the layer is a group layer, call the function recursively
+//       if (layer.type === "group") {
+//         getVisibleLayers((layer as __esri.GroupLayer).layers);
+//       } else {
+//         // If it's a non-group layer, add it to the visibleLayers array
+//         visibleLayers.push(layer.id);
+//       }
+//     }
+//   });
+//   return visibleLayers;
+// }
+
+export const resetImaps = (view: MapView) => {
+  const config = getConfig();
+  // const visibleLayers = getVisibleLayers(view.map.allLayers);
+  // window.localStorage.setItem(`imaps_visible_layers_${config}`, JSON.stringify(visibleLayers));
+  // window.localStorage.setItem(`imaps_extent_${config}`, JSON.stringify(view.extent.toJSON()))
+  // window.localStorage.setItem('imaps_reset', 'true');
+  const url = new URL(window.location as any);
+  let id: string = '';
+  if (url.searchParams.get('id')) {
+    id += url.searchParams.get('id');
+  } else if (url.searchParams.get('app')) {
+    id += url.searchParams.get('app');
+  }
+  window.localStorage.removeItem(`imaps_webmap_${id}`);
+  window.localStorage.removeItem('imaps_alert_read');
+  window.localStorage.removeItem('imaps_history');
+  window.localStorage.removeItem('imaps_table_template');
+  window.location.reload();
+}  
+
+
+const makeLayersVisibleAfterRefresh = (map: WebMap) => {
+  return new Promise((resolve, reject) => {
+    const config = getConfig();
+    const storedLayers = window.localStorage.getItem(`imaps_visible_layers_${config}`);
+    if (storedLayers) {
+      const storedVisibleLayers = JSON.parse(storedLayers);
+      console.log(storedVisibleLayers);
+      if (Array.isArray(storedVisibleLayers) && storedVisibleLayers.every(item => typeof item === 'string')) {
+        (storedVisibleLayers as string[]).forEach(storedLayer => { 
+          map.allLayers.forEach(layer => {
+            if (storedVisibleLayers.includes(layer.id)) {
+              layer.visible = true;
+              console.log(`Layer visible: ${layer.title}`);
+              // Traverse up to all parent group layers
+              let parentLayer = layer.parent as __esri.GroupLayer;
+              while (parentLayer) {
+                if (parentLayer.type === "group") {
+                  (parentLayer as __esri.GroupLayer).visible = true; // Make parent group layer visible
+                }
+                parentLayer = parentLayer.parent as __esri.GroupLayer; // Move to the next parent layer
+              }
+            }
+          });
+        })
+      }
+      resolve(true);
+    }
+  });
+
+}

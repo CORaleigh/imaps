@@ -1,9 +1,11 @@
 import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
-import { CalciteAlert, CalciteLink } from '@esri/calcite-components-react';
+import { CalciteAction, CalciteAlert, CalciteLink } from '@esri/calcite-components-react';
 import { Alert } from './utils/alert';
+import { resetImaps } from '../WebMap/utils/map';
 
 interface Props {
   alert: Alert | undefined;
+  resetMap?: () => void;
 }
 function AppAlert(props: Props) {
   const [alert, setAlert] = useState<Alert>();
@@ -43,6 +45,9 @@ function AppAlert(props: Props) {
           {alert?.link.text}
         </CalciteLink>
       )}
+      {alert?.button?.show && (
+        <CalciteAction icon='reset' text={alert.button.text} textEnabled slot='actions-end' onClick={props.resetMap}></CalciteAction>
+      )};
     </CalciteAlert>
   );
 }

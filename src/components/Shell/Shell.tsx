@@ -61,6 +61,9 @@ function Shell() {
     logo,
     disclaimerOptedOut,
     setDisclaimerOptedOut,
+    resetCallback,
+    setMapReset,
+    mapReset
   } = useShell();
   return (
     <div>
@@ -68,6 +71,7 @@ function Shell() {
         <Header
           disclaimerClicked={() => setShowDisclaimer(true)}
           logo={logo}
+          reset={() => setMapReset(true)}
         ></Header>
         <CalciteShellPanel
           slot="panel-start"
@@ -208,6 +212,7 @@ function Shell() {
           properties={properties}
           widgetActivated={widgetCallback}
           alertSet={alertSet}
+          resetMap={mapReset}
         ></WebMap>
         <CalciteScrim
           loading
@@ -215,7 +220,7 @@ function Shell() {
         ></CalciteScrim>
       </CalciteShell>
       <AppTips tips={tips}></AppTips>
-      <AppAlert alert={alert}></AppAlert>
+      <AppAlert alert={alert} resetMap={() => setMapReset(true)}></AppAlert>
 
       <CalciteDialog
         open={showDisclaimer}

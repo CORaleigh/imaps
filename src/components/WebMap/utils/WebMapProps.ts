@@ -9,4 +9,5 @@ export interface WebMapProps {
     view: __esri.MapView
   ) => void;
   alertSet?: (alert: Alert) => void;
+  resetMap: boolean;
 }

@@ -1,6 +1,6 @@
 import MapView from '@arcgis/core/views/MapView';
 import { useEffect, useRef } from 'react';
-import { displayProperties, initializeMap } from '../utils/map';
+import { displayProperties, initializeMap, resetImaps } from '../utils/map';
 import { WebMapProps } from './WebMapProps';
 
 const useWebMap = (props: WebMapProps) => {
@@ -40,7 +40,14 @@ const useWebMap = (props: WebMapProps) => {
       displayProperties(props.properties, view.current as __esri.MapView);
     }
   }, [props.properties]);
+  useEffect(() => {
+    if (props.resetMap && view.current) {
+      resetImaps(view.current);
+    }
+  }, [props.resetMap && view.current]);
+
   return { ref, loaded, view };
+
 };
 
 export default useWebMap;

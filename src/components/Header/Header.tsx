@@ -15,6 +15,7 @@ import './Header.css';
 import { itemSelected, toggleTheme } from './utils/header';
 import { CalciteDropdownCustomEvent, CalciteDropdownItemCustomEvent, CalciteSwitchCustomEvent } from '@esri/calcite-components';
 import { Link } from '../../config/config';
+import { resetImaps } from '../WebMap/utils/map';
 
 interface HeaderProps {
   disclaimerClicked: () => void;
@@ -22,8 +23,9 @@ interface HeaderProps {
     dark: string;
     light: string;
   };
+  reset: () => void;
 }
-function Header({ disclaimerClicked, logo }: HeaderProps) {
+function Header({ disclaimerClicked, logo, reset }: HeaderProps) {
   const ref = useRef<HTMLCalciteDropdownElement>();
 
   // const shortcuts = useRef<HTMLCalciteModalElement>();
@@ -154,22 +156,7 @@ function Header({ disclaimerClicked, logo }: HeaderProps) {
           <CalciteDropdownItem
             iconStart="reset"
             onCalciteDropdownItemSelect={itemSelected}
-            onClick={() => {
-              window.localStorage.setItem('imaps_reset', 'true');
-              const url = new URL(window.location as any);
-              let id: string = '';
-              if (url.searchParams.get('id')) {
-                id += url.searchParams.get('id');
-              } else if (url.searchParams.get('app')) {
-                id += url.searchParams.get('app');
-              }
-              window.localStorage.removeItem(`imaps_webmap_${id}`);
-              window.localStorage.removeItem('imaps_alert_read');
-              window.localStorage.removeItem('imaps_history');
-              window.localStorage.removeItem('imaps_table_template');
-              window.location.reload();
-            }}
-          >
+            onClick={reset}>
             Reset To Default
           </CalciteDropdownItem>
         </CalciteDropdownGroup>

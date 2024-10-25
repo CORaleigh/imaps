@@ -8,10 +8,17 @@ export interface Alert {
   message: string;
   link?: link;
   optOut?: boolean;
+  button?: alertButton;
 }
 
 interface link {
   show: boolean;
   url: string;
   text: string;
+}
+
+interface alertButton {
+  show: boolean;
+  text: string;
+  buttonFunction: Function
 }

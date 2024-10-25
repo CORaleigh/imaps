@@ -37,6 +37,8 @@ const useShell = () => {
   const [geometry, setGeometry] = useState<__esri.Geometry | undefined>(
     undefined,
   );
+  const [mapReset, setMapReset] = useState<boolean>(false);
+
   const [selectedProperty, setSelectedProperty] = useState<__esri.Graphic>();
 
   const [tips, setTips] = useState<any>();
@@ -104,6 +106,9 @@ const useShell = () => {
   const geometryCallback = useCallback((geometry: __esri.Geometry | undefined) => {
     setGeometry(geometry);
   }, []);
+  const resetCallback = useCallback((geometry: __esri.Geometry | undefined) => {
+    setMapReset(true);
+  }, []);  
   const widgetCallback = useCallback((mapView: __esri.MapView) => {
     if (mapView) {
       widgetActivated(mapView, setActiveTool);
@@ -200,6 +205,9 @@ const useShell = () => {
     logo,
     disclaimerOptedOut,
     setDisclaimerOptedOut,
+    resetCallback,
+    setMapReset,
+    mapReset
   };
 };
 
