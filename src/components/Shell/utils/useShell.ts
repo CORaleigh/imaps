@@ -12,7 +12,7 @@ import { Tips } from '../../Tools/Print/utils/tips';
 import { AppConfig } from '../../../config/config';
 
 const useShell = () => {
-  const [mapId, setMapId] = useState('95092428774c4b1fb6a3b6f5fed9fbc4');
+  const [mapId, setMapId] = useState<string | undefined>();
   const [logo, setLogo] = useState({
     dark: 'logo_dark.svg',
     light: 'logo.svg',

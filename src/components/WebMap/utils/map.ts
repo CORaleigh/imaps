@@ -33,6 +33,7 @@ export const initializeMap = async (
     constraints: constraints as any,
   });
   const config = getConfig();
+  console.log(config)
   esriConfig.request.useIdentity = false;
 
   const webmap: WebMap = await getWebMap(mapId, alertSet);

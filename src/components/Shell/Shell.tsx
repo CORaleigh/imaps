@@ -205,7 +205,7 @@ function Shell() {
             </Suspense>
           )}
         </div>
-        <WebMap
+        {mapId && <WebMap
           mapId={mapId}
           mapViewSet={mapCallback}
           geometrySet={geometryCallback}
@@ -213,7 +213,7 @@ function Shell() {
           widgetActivated={widgetCallback}
           alertSet={alertSet}
           resetMap={mapReset}
-        ></WebMap>
+        ></WebMap>}
         <CalciteScrim
           loading
           hidden={!loading ? true : undefined}

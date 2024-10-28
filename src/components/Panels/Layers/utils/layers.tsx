@@ -51,6 +51,7 @@ export const initializeLayers = async (
 };
 
 const addLayersFromWebmap = async (view: MapView, mapId?: String) => {
+  console.log(mapId);
   const url = new URL(window.location.href);
   //const mapId = url.searchParams.get('id') ? url.searchParams.get('id') : '95092428774c4b1fb6a3b6f5fed9fbc4';
   const map = new WebMap({
@@ -65,12 +66,13 @@ const addLayersFromWebmap = async (view: MapView, mapId?: String) => {
       console.log(error);
     })
     .then(() => {
+      console.log(map)
       const groups = view.map.allLayers
         .filter((layer) => {
           return layer.type === 'group';
         })
         .toArray();
-
+      console.log(groups);
       groups.forEach((group) => {
         const match = map.allLayers.find((layer) => {
           return layer.type === 'group' && layer.title === group.title;
