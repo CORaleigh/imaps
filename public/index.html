@@ -44,7 +44,22 @@
       gtag('js', new Date());
 
       gtag('config', 'G-WS0FB3FN0T');
-    </script>    
+    </script>
+    <script>
+      // Function to check the URL and perform the redirect
+      function redirectIfConfigPuma() {
+          // Get the current URL
+          const urlParams = new URLSearchParams(window.location.search);
+          // Check if 'config' parameter equals 'puma'
+          if (urlParams.get('config')?.toLowerCase() === 'puma') {
+              // Redirect to the new URL
+              window.location.href = 'https://gis.raleighnc.gov/imaps?config=puma';
+          }
+      }
+
+      // Execute the redirect function on page load
+      window.onload = redirectIfConfigPuma;
+  </script>  
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

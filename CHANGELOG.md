@@ -106,3 +106,9 @@
 
 ## Version 4.1.3 (9/29/2023)
 1. Fixed bug where bookmarks were not being stored with the web map
+
+## Version 4.2.0 (10/29/2024)
+1. Updated to ArcGIS JavaScript SDK 4.30 and Calcite Components 1.13
+2. Exports tab added to the print widget, similar to the updates made by Esri to their print widget
+3. Changing the visible columns in the property table is now its own button.  This was a change made in the SDK
+4. Added a configuration to allow for utility features to be visible for city staff
