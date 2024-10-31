@@ -31,8 +31,8 @@ calcite-loader {
 }
 
 .custom-width {
-  --calcite-shell-panel-width: 350px;
-  --calcite-shell-panel-min-width: 350px;
+  --calcite-shell-panel-width: 365px;
+  --calcite-shell-panel-min-width: 365px;
   --calcite-shell-panel-max-width: calc(100vw - 300px);
 }
 

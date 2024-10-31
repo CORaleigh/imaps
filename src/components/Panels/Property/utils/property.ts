@@ -21,7 +21,7 @@ export const getPropertyByGeometry = async (
     returnGeometry: true,
     outFields: ['PIN_NUM', 'OBJECTID'],
   });
-
+  console.log(layer);
   if (result.features.length) {
     const relatedCondos = await getRelatedCondos(
       view,

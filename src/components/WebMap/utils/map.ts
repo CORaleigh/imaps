@@ -33,7 +33,6 @@ export const initializeMap = async (
     constraints: constraints as any,
   });
   const config = getConfig();
-  console.log(config)
   esriConfig.request.useIdentity = false;
 
   const webmap: WebMap = await getWebMap(mapId, alertSet);
@@ -559,6 +558,7 @@ export const displayProperties = async (
     deleteFeatures: featureSet.features,
   });
   await selectionLayer.applyEdits({ addFeatures: properties });
+  console.log(properties)
   updateClusters(properties);
 };
 

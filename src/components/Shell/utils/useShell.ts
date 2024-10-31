@@ -212,7 +212,7 @@ const useShell = () => {
 };
 
 const checkDisclaimerOptOut = () => {
-  return false//window.localStorage.getItem('imaps_disclaimer_opted_out') === null;
+  return window.localStorage.getItem('imaps_disclaimer_opted_out') === null;
 };
 
 export default useShell;

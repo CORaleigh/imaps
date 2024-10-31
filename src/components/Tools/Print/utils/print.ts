@@ -420,7 +420,7 @@ const exportMap = async (
       new PrintParameters({
         template: template,
         view: view,
-        outSpatialReference: new SpatialReference({ wkid: 2264 }),
+        outSpatialReference: new SpatialReference({ wkid: 3632 }),
       }),
       {
         timeout: 120000,

@@ -229,6 +229,8 @@ function Shell() {
         heading="Disclaimer"
         id="disclaimer-dialog"
         placement="center"
+        closeDisabled
+        escapeDisabled
       >
         <p>
           iMAPS makes every effort to produce and publish the most current and
@@ -242,7 +244,7 @@ function Shell() {
           data.
         </p>
 
-        {/* <CalciteLabel slot="footer-start" layout="inline-space-between">
+        <CalciteLabel slot="footer-start" layout="inline-space-between">
           <CalciteCheckbox
             checked={disclaimerOptedOut ? true : undefined}
             onCalciteCheckboxChange={(e) => {
@@ -256,7 +258,7 @@ function Shell() {
             }}
           ></CalciteCheckbox>
           Don't show again
-        </CalciteLabel> */}
+        </CalciteLabel>
         <CalciteButton
           slot="footer-end"
           kind="brand"
@@ -264,7 +266,7 @@ function Shell() {
             setShowDisclaimer(false);
           }}
         >
-          Close
+          Acknowledge
         </CalciteButton>
       </CalciteDialog>
     </div>
