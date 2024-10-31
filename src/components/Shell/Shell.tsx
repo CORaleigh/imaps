@@ -240,7 +240,7 @@ function Shell() {
           interpretation. Register of Deeds documents accessed through this site
           are unofficial. The official records are maintained at the Wake County
           Register of Deeds office. The Wake County Register of Deeds assumes no
-          responsibility or liability associated with the use or misused of this
+          responsibility or liability associated with the use or misuse of this
           data.
         </p>
 
