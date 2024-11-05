@@ -28,7 +28,8 @@ export const initializeMap = async (
   ) => void,
   alertSet?: (alert: Alert) => void,
 ): Promise<MapView> => {
-  const view = new MapView({
+  
+  let view = new MapView({
     container: ref,
     constraints: constraints as any,
   });
@@ -37,11 +38,25 @@ export const initializeMap = async (
 
   const webmap: WebMap = await getWebMap(mapId, alertSet);
   view.map = webmap;
-  // const storedExtent = window.localStorage.getItem(`imaps_extent_${config}`);
-  // if (storedExtent) {
-  //   view.extent = Extent.fromJSON(JSON.parse(storedExtent));
-  //   window.localStorage.removeItem(`imaps_extent_${config}`)
-  // }
+  
+
+  
+  const lastModified = await getWebMapModifiedDate(mapId);
+  if (modifiedSinceRefresh(lastModified, config) && alertSet) {
+    //resetImaps(view);
+    const visibleLayers = getVisibleLayers(view.map.allLayers);
+    window.localStorage.setItem(`imaps_visible_layers_${config}`, JSON.stringify(visibleLayers));    
+    view = new MapView({
+      container: ref,
+      constraints: constraints as any,
+      map: await loadWebMapFromPortal(mapId, config)
+    });
+  }
+  const storedExtent = window.localStorage.getItem(`imaps_extent_${config}`);
+  if (storedExtent) {
+    view.extent = Extent.fromJSON(JSON.parse(storedExtent));
+    //window.localStorage.removeItem(`imaps_extent_${config}`)
+  }  
   addWidgets(view, widgetActivated);
   await view.when().catch((error) => {
     const alert: Alert = {
@@ -123,6 +138,9 @@ export const initializeMap = async (
         JSON.stringify(json),
       );
     }
+    if (view.extent) {
+      window.localStorage.setItem(`imaps_extent_${config}`, JSON.stringify(view.extent.toJSON()))
+    }    
   });
   view.map.watch('basemap', () => {
     const config = getConfig();
@@ -143,26 +161,6 @@ export const initializeMap = async (
   return view;
 };
 
-const addUnloadListeners = (view: __esri.MapView) => {
-  const handleBeforeUnload = () => {
-    saveMap(view);
-  };
-  const handleUnload = () => {
-    saveMap(view);
-  };
-  const handleVisibilityChange = () => {
-    if (document.visibilityState === 'hidden') {
-      saveMap(view);
-    }
-  };
-  window.addEventListener('beforeunload', handleBeforeUnload, {
-    passive: true,
-  });
-  window.addEventListener('unload', handleUnload, { passive: true });
-  document.addEventListener('visibilitychange', handleVisibilityChange, {
-    passive: true,
-  });
-};
 const isSearchable = (layer: __esri.Layer, webmap: __esri.WebMap) => {
   const found = webmap.applicationProperties.viewing.search.layers.find(
     (searchLayer: __esri.SearchLayer) => {
@@ -183,48 +181,24 @@ const getConfig = () => {
   return config;
 };
 
-// const modifiedSinceRefresh = (lastModified: Date, config: string) => {
-//   let lastRefresh = window.localStorage.getItem(`imaps_last_refresh_${config}`);
-//   if (!lastRefresh) {
-//     lastRefresh = new Date().toLocaleString();
-//     window.localStorage.setItem(`imaps_last_refresh_${config}`, lastRefresh);
-//   }
-//   return lastModified > new Date(lastRefresh);
-// }
-
-// const showModifiedAlert = (alertSet: (alert: Alert) => void) => {
-//   console.log('web map has been modified since last refresh');
-//   const alert: Alert = {
-//     show: true,
-//     autoClose: false,
-//     duration: 'fast',
-//     kind: 'info',
-//     icon: '',
-//     title: 'Web map modified',
-//     message: `The webmap has been modified since your last session, would you like to reload the web map?  The map will load with the same layers visible and at the same map extent.`,
-//     button: {
-//       show: true,
-//       text: 'Reload',
-//       buttonFunction: () => {console.log('button clicked')}
-//     }
-//   };
-//   if (alertSet) {
-//     alertSet(alert);
-//   }
-// }
+const modifiedSinceRefresh = (lastModified: Date, config: string) => {
+  let lastRefresh = window.localStorage.getItem(`imaps_last_refresh_${config}`);
+  if (!lastRefresh) {
+    lastRefresh = new Date().toLocaleString();
+    window.localStorage.setItem(`imaps_last_refresh_${config}`, lastRefresh);
+  }
+  return lastModified > new Date(lastRefresh);
+}
 
 const getWebMap = async (mapId: string, alertSet: ((alert: Alert) => void) | undefined): Promise<WebMap> => {
   let webmap: WebMap;
   const config = getConfig();
-  // const lastModified = await getWebMapModifiedDate(mapId);
-  // if (modifiedSinceRefresh(lastModified, config) && alertSet) {
-  //   showModifiedAlert(alertSet)
-  // }
   if (
     window.localStorage.getItem(`imaps_webmap_${config}`) &&
     window.localStorage.getItem('imaps_reset') !== 'true'
   ) {
     try {
+      
       webmap = WebMap.fromJSON(
         JSON.parse(
           window?.localStorage?.getItem(`imaps_webmap_${config}`) as string,
@@ -238,7 +212,7 @@ const getWebMap = async (mapId: string, alertSet: ((alert: Alert) => void) | und
       webmap.tables.forEach(table => {
         if (table.type === 'feature') {
           const featureLayer = table as __esri.FeatureLayer;
-          if (featureLayer.url.includes('/Property/') && featureLayer.layerId === 3 && table.title !== 'Deeds') {
+          if (featureLayer.url.includes('/Property/') && featureLayer.layerId === 3 && table.title !== 'Deeds' && table.title !== 'Books') {
             reload = true;
           }
           if (featureLayer.url.includes('/Property/') && featureLayer.layerId === 2 && table.title !== 'Photos') {
@@ -315,8 +289,8 @@ const loadWebMapFromPortal = async (mapId: string, config: string) => {
   });
   await webmap.load();
   window.localStorage.setItem(`imaps_last_refresh_${config}`, new Date().toLocaleString());
-  // console.log(`iMAPS refreshed at ${new Date().toLocaleString()}`)
-  // await makeLayersVisibleAfterRefresh(webmap);
+  console.log(`iMAPS refreshed at ${new Date().toLocaleString()}`)
+  await makeLayersVisibleAfterRefresh(webmap);
   const groups = webmap.allLayers
     .filter((layer: __esri.Layer) => {
       return layer.type === 'group';
@@ -357,7 +331,7 @@ const removeGraphicsLayers = (view: MapView) => {
 };
 
 const getAllGroups = (layers: __esri.Layer[]): __esri.GroupLayer[] => {
-  return layers.reduce((acc: __esri.Layer[], layer: __esri.Layer) => {
+  return layers.reduce((acc: __esri.Layer[], layer: any) => {
     return acc.concat(
       layer.type === 'group' ? [layer, ...getAllGroups((layer as __esri.GroupLayer).layers.toArray())] : []
     );
@@ -365,18 +339,17 @@ const getAllGroups = (layers: __esri.Layer[]): __esri.GroupLayer[] => {
 };
 export const saveMap = async (view: MapView) => {
   if (view && view?.ready) {
-    const map = (view.map as any).toJSON();
-    const groups = getAllGroups(map.operationalLayers);
-
+    const map = WebMap.fromJSON((view.map as any).toJSON());
+    await map.load();
+    const groups = getAllGroups(map.allLayers.toArray());//map.operationalLayers);
     groups.forEach((group: __esri.GroupLayer) => {
       const layersArray = group.layers.toArray(); 
-    
       const layersToKeep = layersArray.filter((layer: __esri.Layer) => {
         return (
           layer.visible || // Correct visibility property
           layer.title.includes('Property') ||
           isSearchable(layer, map) ||
-          layer.type === 'group'
+          layer.type === 'group' && (layer.parent as __esri.Layer).visible
         );
       });
     
@@ -558,7 +531,6 @@ export const displayProperties = async (
     deleteFeatures: featureSet.features,
   });
   await selectionLayer.applyEdits({ addFeatures: properties });
-  console.log(properties)
   updateClusters(properties);
 };
 
@@ -649,28 +621,38 @@ const addStreets = (view: MapView) => {
   }
 };
 
-// const getVisibleLayers = (layers: __esri.Collection<__esri.Layer>) => {
-//   const visibleLayers: string[] = [];
-//   layers.forEach(layer => {
-//     if (layer.visible && layer.listMode !== 'hide') {
-//       // If the layer is a group layer, call the function recursively
-//       if (layer.type === "group") {
-//         getVisibleLayers((layer as __esri.GroupLayer).layers);
-//       } else {
-//         // If it's a non-group layer, add it to the visibleLayers array
-//         visibleLayers.push(layer.id);
-//       }
-//     }
-//   });
-//   return visibleLayers;
-// }
+const getVisibleLayers = (layers: __esri.Collection<__esri.Layer>) => {
+  const visibleLayers: string[] = [];
+  layers.forEach(layer => {
+    if (layer.visible && layer.listMode !== 'hide') {
+      console.log(layer.title, layer.type, layer.parent)
+      // If the layer is a group layer, call the function recursively
+      if (layer.type === "group") {
+        getVisibleLayers((layer as __esri.GroupLayer).layers);
+      } else {
+        // If it's a non-group layer, add it to the visibleLayers array
+        if (layer.parent) {
+          
+          if ((layer.parent as __esri.Layer).visible) {
+            visibleLayers.push(layer.id);
+          }
+        } else {
+          visibleLayers.push(layer.id);          
+        }
+      }
+    }
+  });
+  return visibleLayers;
+}
 
 export const resetImaps = (view: MapView) => {
   const config = getConfig();
-  // const visibleLayers = getVisibleLayers(view.map.allLayers);
-  // window.localStorage.setItem(`imaps_visible_layers_${config}`, JSON.stringify(visibleLayers));
-  // window.localStorage.setItem(`imaps_extent_${config}`, JSON.stringify(view.extent.toJSON()))
-  // window.localStorage.setItem('imaps_reset', 'true');
+  const visibleLayers = getVisibleLayers(view.map.allLayers);
+  window.localStorage.setItem(`imaps_visible_layers_${config}`, JSON.stringify(visibleLayers));
+  if (view.extent) {
+    window.localStorage.setItem(`imaps_extent_${config}`, JSON.stringify(view.extent.toJSON()))
+  }
+ // window.localStorage.setItem('imaps_reset', 'true');
   const url = new URL(window.location as any);
   let id: string = '';
   if (url.searchParams.get('id')) {
@@ -690,9 +672,10 @@ const makeLayersVisibleAfterRefresh = (map: WebMap) => {
   return new Promise((resolve, reject) => {
     const config = getConfig();
     const storedLayers = window.localStorage.getItem(`imaps_visible_layers_${config}`);
+    console.log(storedLayers);
     if (storedLayers) {
+      window.localStorage.removeItem(`imaps_visible_layers_${config}`);
       const storedVisibleLayers = JSON.parse(storedLayers);
-      console.log(storedVisibleLayers);
       if (Array.isArray(storedVisibleLayers) && storedVisibleLayers.every(item => typeof item === 'string')) {
         (storedVisibleLayers as string[]).forEach(storedLayer => { 
           map.allLayers.forEach(layer => {
@@ -711,8 +694,8 @@ const makeLayersVisibleAfterRefresh = (map: WebMap) => {
           });
         })
       }
-      resolve(true);
     }
+    resolve(true);
   });
 
 }

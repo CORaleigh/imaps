@@ -66,49 +66,51 @@ const addLayersFromWebmap = async (view: MapView, mapId?: String) => {
       console.log(error);
     })
     .then(() => {
-      console.log(map)
       const groups = view.map.allLayers
-        .filter((layer) => {
-          return layer.type === 'group';
-        })
+        .filter((layer) => layer.type === 'group')
         .toArray();
-      console.log(groups);
+
       groups.forEach((group) => {
         const match = map.allLayers.find((layer) => {
           return layer.type === 'group' && layer.title === group.title;
         }) as __esri.GroupLayer;
+
         if (match) {
-          const matchlayers = match.layers.slice();
-          const layers = match.layers.filter((layer) => {
+          const matchlayers = match.layers.slice(); // Store a copy of the layers in match
+
+          // Store existing layers in the group before adding new ones
+          const existingLayers = (group as __esri.GroupLayer).layers.toArray();
+
+          // Iterate over matchlayers and add new layers if they don't exist yet
+          matchlayers.forEach((layer) => {
             const found = (group as __esri.GroupLayer).findLayerById(layer.id);
-            //attempting to update stored layer if updated in webmap (popup and renderer)
-            if (found !== undefined) {
-              if (found.type === 'feature') {
-                if ((layer as __esri.FeatureLayer).popupTemplate) {
-                  (found as __esri.FeatureLayer).popupTemplate = (
-                    layer as __esri.FeatureLayer
-                  ).popupTemplate;
-                }
-                if ((layer as __esri.FeatureLayer).renderer) {
-                  (found as __esri.FeatureLayer).renderer = (
-                    layer as __esri.FeatureLayer
-                  ).renderer;
-                }
+
+            if (found === undefined) {
+              // If the layer doesn't exist in the group, add it
+              (group as __esri.GroupLayer).add(layer);
+            } else {
+              // If the layer exists, update properties like popupTemplate, renderer, etc.
+              if ((layer as __esri.FeatureLayer).popupTemplate) {
+                (found as __esri.FeatureLayer).popupTemplate = (layer as __esri.FeatureLayer).popupTemplate;
+              }
+              if ((layer as __esri.FeatureLayer).renderer) {
+                (found as __esri.FeatureLayer).renderer = (layer as __esri.FeatureLayer).renderer;
               }
             }
-
-            return (
-              (group as __esri.GroupLayer).findLayerById(layer.id) === undefined
-            );
           });
-          (group as __esri.GroupLayer).addMany(layers.toArray());
 
-          (group as __esri.GroupLayer).layers.forEach((layer1) => {
-            let index = matchlayers.findIndex((layer2) => {
-              return layer1.id === layer2.id;
-            });
-            (group as __esri.GroupLayer).reorder(layer1, index);
+          // Now, sort layers in the group by matching their original order in matchlayers
+          const layerOrder = matchlayers.map(layer => layer.id); // Get the order of layers by ID
+          const sortedLayers = (group as __esri.GroupLayer).layers.toArray().sort((layerA, layerB) => {
+            // Compare the index of each layer's ID in matchlayers to determine correct order
+            return layerOrder.indexOf(layerA.id) - layerOrder.indexOf(layerB.id);
           });
+
+          // Reorder the group layers based on sortedLayers
+          sortedLayers.forEach((layer, index) => {
+            (group as __esri.GroupLayer).reorder(layer, index);
+          });
+
           matchlayers.destroy();
         }
       });

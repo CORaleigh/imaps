@@ -15,7 +15,6 @@ const useWebMap = (props: WebMapProps) => {
     console.error = function (...args) {};
     if (!loaded.current && props.mapId) {
       loaded.current = true;
-      console.log('id ' + props.mapId)
       initializeMap(
         ref.current,
         props.mapId,

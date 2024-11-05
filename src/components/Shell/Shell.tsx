@@ -266,7 +266,7 @@ function Shell() {
             setShowDisclaimer(false);
           }}
         >
-          Acknowledge
+          I Agree
         </CalciteButton>
       </CalciteDialog>
     </div>

@@ -106,10 +106,11 @@ const deedCreator: __esri.PopupTemplateContentCreator = async (e) => {
           objectIds: [objectids[0]],
           outFields: ['BOM_DOC_NUM', 'DEED_DOC_NUM'],
         });
-
-        const relatedFeature = relatedFeatures[objectids[0]].features[0];
-        deed = relatedFeature.getAttribute('DEED_DOC_NUM');
-        bom = relatedFeature.getAttribute('BOM_DOC_NUM');
+        if (relatedFeatures[objectids[0]]) {
+          const relatedFeature = relatedFeatures[objectids[0]].features[0];
+          deed = relatedFeature.getAttribute('DEED_DOC_NUM');
+          bom = relatedFeature.getAttribute('BOM_DOC_NUM');
+        }
       }
     }
 
@@ -118,7 +119,7 @@ const deedCreator: __esri.PopupTemplateContentCreator = async (e) => {
         const deedBtn = createButton('file-text', 'Deeds');
         deedBtn.onclick = () => {
           window.open(
-            'https://rodcrpi.wakegov.com/booksweb/pdfview.aspx?docid=' + deed + '&RecordDate=',
+            `https://rodcrpi.wakegov.com/booksweb/pdfview.aspx?docid=${deed}&RecordDate=`,
             'deedwindow',
           );
         };
@@ -128,7 +129,7 @@ const deedCreator: __esri.PopupTemplateContentCreator = async (e) => {
         const bombtn = createButton('map', 'Book of Maps');
         bombtn.onclick = () => {
           window.open(
-            'https://rodcrpi.wakegov.com/booksweb/pdfview.aspx?docid=' + bom + '&RecordDate=',
+            `https://rodcrpi.wakegov.com/booksweb/pdfview.aspx?docid=${bom}&RecordDate=`,
             'bomwindow',
           );
         };
@@ -193,7 +194,7 @@ const wellCreator = async (event: __esri.PopupTemplateCreatorEvent | undefined, 
     const btn = createButton('link', 'Wells');
     btn.onclick = () => {
       window.open(
-        'https://maps.wakegov.com/water-analysis/index.html#/?pin=' + pin,
+        `https://maps.wakegov.com/water-analysis/index.html#/?pin=${pin}`,
         'wells',
       );
     };
@@ -216,7 +217,7 @@ const wellCreator = async (event: __esri.PopupTemplateCreatorEvent | undefined, 
     const btn = createButton('link', 'Septic');
     btn.onclick = () => {
       window.open(
-        'https://maps.wakegov.com/septic/index.html#/?pin=' + pin,
+        `https://maps.wakegov.com/septic/index.html#/?pin=${pin}`,
         'septic',
       );
     };

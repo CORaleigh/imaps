@@ -166,9 +166,9 @@ const createStreetviewButton = (
             .querySelector('.map-tool.active')
             ?.classList.remove('active');
           document.querySelector('.streetview-widget')?.classList.add('active');
-          const cbll = e.mapPoint.latitude + ',' + e.mapPoint.longitude;
+          const cbll = `${e.mapPoint.latitude},${e.mapPoint.longitude}`;
           window.open(
-            'https://maps.google.com?layer=c&cbll=' + cbll + '&cbp=0,0,0,0,0',
+            `https://maps.google.com?layer=c&cbll=${cbll}&cbp=0,0,0,0,0`,
             'streetview',
           );
         });
