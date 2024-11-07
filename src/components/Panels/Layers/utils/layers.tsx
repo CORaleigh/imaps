@@ -77,10 +77,16 @@ const addLayersFromWebmap = async (view: MapView, mapId?: String) => {
 
         if (match) {
           const matchlayers = match.layers.slice(); // Store a copy of the layers in match
-
           // Store existing layers in the group before adding new ones
           const existingLayers = (group as __esri.GroupLayer).layers.toArray();
-
+          if ((match as __esri.GroupLayer).visibilityMode === 'exclusive') {
+            matchlayers.forEach(layer => {
+              const foundSublayer = view.map.findLayerById(layer.id);
+              if (foundSublayer) {
+                layer.visible = foundSublayer.visible;
+              }
+            })
+          }
           // Iterate over matchlayers and add new layers if they don't exist yet
           matchlayers.forEach((layer) => {
             const found = (group as __esri.GroupLayer).findLayerById(layer.id);
