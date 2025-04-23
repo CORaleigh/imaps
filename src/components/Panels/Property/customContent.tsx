@@ -87,7 +87,10 @@ const deedCreator: __esri.PopupTemplateContentCreator = async (e) => {
 
   let deed: string | null = null;
   let bom: string | null = null;
-
+  let deedBook: string | null = null;
+  let deedPage: string | null = null;
+  let bomBook: string | null = null;
+  let bomPage: string | null = null;  
   const graphic = e?.graphic as __esri.Graphic;
   const layer = graphic.layer as FeatureLayer;
   const cityDecode = graphic.getAttribute('CITY_DECODE');
@@ -104,12 +107,18 @@ const deedCreator: __esri.PopupTemplateContentCreator = async (e) => {
         const relatedFeatures = await layer.queryRelatedFeatures({
           relationshipId,
           objectIds: [objectids[0]],
-          outFields: ['BOM_DOC_NUM', 'DEED_DOC_NUM'],
+          outFields: ['BOM_DOC_NUM', 'DEED_DOC_NUM', 
+            'BOM_BOOK', 'BOM_PAGE', 'DEED_BOOK', 'DEED_PAGE'],
+          returnGeometry: false,
         });
         if (relatedFeatures[objectids[0]]) {
           const relatedFeature = relatedFeatures[objectids[0]].features[0];
           deed = relatedFeature.getAttribute('DEED_DOC_NUM');
           bom = relatedFeature.getAttribute('BOM_DOC_NUM');
+          deedBook = relatedFeature.getAttribute('DEED_BOOK');
+          deedPage = relatedFeature.getAttribute('DEED_PAGE');
+          bomBook = relatedFeature.getAttribute('BOM_BOOK');
+          bomPage = relatedFeature.getAttribute('BOM_PAGE');
         }
       }
     }
@@ -119,7 +128,9 @@ const deedCreator: __esri.PopupTemplateContentCreator = async (e) => {
         const deedBtn = createButton('file-text', 'Deeds');
         deedBtn.onclick = () => {
           window.open(
-            `https://rodcrpi.wakegov.com/booksweb/pdfview.aspx?docid=${deed}&RecordDate=`,
+            //`https://rodcrpi.wakegov.com/booksweb/pdfview.aspx?docid=${deed}&RecordDate=`,
+            `https://rodrecords.wake.gov/web/document-image-pdf/DOCC${deed}/063b1544-5bbd-437f-9a5c-f5e90107ae28/${deedBook}-${deedPage}-1.pdf?index=1`,
+            //`https://rodrecords.wake.gov/web/web/integration/search?field_BookPageID.Volume=${deedBook}&field_BookPageID.Page=${deedPage}`,
             'deedwindow',
           );
         };
@@ -129,7 +140,9 @@ const deedCreator: __esri.PopupTemplateContentCreator = async (e) => {
         const bombtn = createButton('map', 'Book of Maps');
         bombtn.onclick = () => {
           window.open(
-            `https://rodcrpi.wakegov.com/booksweb/pdfview.aspx?docid=${bom}&RecordDate=`,
+           // `https://rodcrpi.wakegov.com/booksweb/pdfview.aspx?docid=${bom}&RecordDate=`,
+           `https://rodrecords.wake.gov/web/document-image-pdf/DOCC${bom}/063b1544-5bbd-437f-9a5c-f5e90107ae28/BM${bomBook}-${bomPage}-1.pdf?index=1`,
+           //`https://rodrecords.wake.gov/web/web/integration/search?field_BookPageID.Volume=BM${bomBook}&field_BookPageID.Page=${bomPage}`,
             'bomwindow',
           );
         };
