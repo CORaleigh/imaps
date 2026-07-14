@@ -43,7 +43,7 @@ function Toolbar(props: Props) {
             )
           }
         ></CalciteAction>
-        <CalciteTooltip closeOnClick referenceElement="propertySearch">
+        <CalciteTooltip closeOnClick referenceElement="propertySearch" placement='right'>
           Property Search
         </CalciteTooltip>
         <CalciteAction

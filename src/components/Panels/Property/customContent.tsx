@@ -129,8 +129,8 @@ const deedCreator: __esri.PopupTemplateContentCreator = async (e) => {
         deedBtn.onclick = () => {
           window.open(
             //`https://rodcrpi.wakegov.com/booksweb/pdfview.aspx?docid=${deed}&RecordDate=`,
-            `https://rodrecords.wake.gov/web/document-image-pdf/DOCC${deed}/063b1544-5bbd-437f-9a5c-f5e90107ae28/${deedBook}-${deedPage}-1.pdf?index=1`,
-            //`https://rodrecords.wake.gov/web/web/integration/search?field_BookPageID.Volume=${deedBook}&field_BookPageID.Page=${deedPage}`,
+            //`https://rodrecords.wake.gov/web/document-image-pdf/DOCC${deed}/063b1544-5bbd-437f-9a5c-f5e90107ae28/${deedBook}-${deedPage}-1.pdf?index=1`,
+            `https://rodrecords.wake.gov/web/web/integration/search?field_BookPageID.Volume=${deedBook}&field_BookPageID.Page=${deedPage}`,
             'deedwindow',
           );
         };
@@ -141,8 +141,8 @@ const deedCreator: __esri.PopupTemplateContentCreator = async (e) => {
         bombtn.onclick = () => {
           window.open(
            // `https://rodcrpi.wakegov.com/booksweb/pdfview.aspx?docid=${bom}&RecordDate=`,
-           `https://rodrecords.wake.gov/web/document-image-pdf/DOCC${bom}/063b1544-5bbd-437f-9a5c-f5e90107ae28/BM${bomBook}-${bomPage}-1.pdf?index=1`,
-           //`https://rodrecords.wake.gov/web/web/integration/search?field_BookPageID.Volume=BM${bomBook}&field_BookPageID.Page=${bomPage}`,
+           //`https://rodrecords.wake.gov/web/document-image-pdf/DOCC${bom}/063b1544-5bbd-437f-9a5c-f5e90107ae28/BM${bomBook}-${bomPage}-1.pdf?index=1`,
+           `https://rodrecords.wake.gov/web/web/integration/search?field_BookPageID.Volume=BM${bomBook}&field_BookPageID.Page=${bomPage}`,
             'bomwindow',
           );
         };
