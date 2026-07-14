@@ -1,0 +1,8 @@
+.measureContainer {
+  margin: 1em;
+  background-color: var(--calcite-color-foreground-1);
+}
+.measurePanel {
+  --calcite-panel-background-color: var(--calcite-color-foreground-1);
+}
+

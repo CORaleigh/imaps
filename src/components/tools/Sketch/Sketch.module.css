@@ -1,0 +1,14 @@
+.panelContent {
+  background-color: var(
+    --calcite-panel-background-color,
+    var(--calcite-color-foreground-1)
+  );
+  padding: var(--calcite-internal-panel-default-space);
+  --calcite-font-size--1: 16px;
+
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+}
+

@@ -2,62 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-    name="description"
-    content="Wake County GIS and Raleigh GIS developed the iMAPS online interactive mapping application to provide easy access to reliable property information.Wake County GIS and Raleigh GIS developed the iMAPS online interactive mapping application to provide easy access to reliable property information."
-  />
-    <link
-      id="jsapi-theme-light"
-      rel="stylesheet"
-      href="/assets/themes/light/main.css"
-    />
-    <link
-      disabled
-      id="jsapi-theme-dark"
-      rel="stylesheet"
-      href="/assets/themes/dark/main.css"
-    />          
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
     <title>iMAPS</title>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WS0FB3FN0T"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-WS0FB3FN0T');
-      gtag('event', 'app_version', {
-        'version': '4.2.1'
-      });      
-    </script>    
-    <script>
-      // Function to check the URL and perform the redirect
-      function redirectIfConfigPuma() {
-          // Get the current URL
-          const urlParams = new URLSearchParams(window.location.search);
-          // Check if 'config' parameter equals 'puma'
-          if (urlParams.get('config')?.toLowerCase() === 'puma') {
-              // Redirect to the new URL
-              window.location.href = 'https://gis.raleighnc.gov/imaps?config=puma';
-          }
-      }
-
-      // Execute the redirect function on page load
-      window.onload = redirectIfConfigPuma;
-  </script>  
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <script type="application/javascript">
-      if (/MSIE|Trident/.test(window.navigator.userAgent)) window.location.href = '/imaps/ie.html';
-      try {
-        new Function('import("")');
-      } catch (err) {
-        window.location.href = '/imaps/ie.html'
-      }      
-    </script>     
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

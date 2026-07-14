@@ -1,0 +1,19 @@
+.basemapGallery {
+  width: 100%;
+  min-height: 100%;
+}
+
+.basemapsPanel {
+  display: flex;
+  flex-direction: column;
+  height: calc(100dvh - 65px);
+}
+
+.basemapsPanel calcite-tabs {
+  flex: 1; /* Takes remaining space */
+  overflow: auto;
+}
+
+.basemapsPanel [slot="content-top"] {
+  width: 100%;
+}

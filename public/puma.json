@@ -4,28 +4,12 @@
       "light": "puma.svg",
       "dark": "puma_dark.svg"
     },
-    "mapId": "1feff5b9d152475b828c8483b12a86bb",
-    "alert": {
-        "show": false,
-        "autoClose": false,
-        "duration": "fast",
-        "kind": "info",
-        "icon": "information",
-        "title": "iMAPS has been updated!",
-        "message": "See a list of what's new at the link below. Questions? Please email gis@wake.gov.",
-        "optOut": true,
-        "link": {
-          "text": "What's New",
-          "url": "https://maps.wake.gov/imaps/iMAPShelpPDF.pdf#page=3",
-          "show": true
-        }
-      },    
+    "mapId": "1feff5b9d152475b828c8483b12a86bb", 
     "links": [
         {
           "title": "Help",
           "links": [
             { "title": "Feedback", "href": "https://survey123.arcgis.com/share/433f05ff71ed4db5b8fc2c4aa306b12d" },
-            { "title": "User Guide", "href": "https://maps.wake.gov/imaps/iMAPShelpPDF.pdf" },
             { "title": "FAQs", "href": "https://www.wake.gov/departments-government/geographic-information-services-gis/maps-apps-data/imaps-information#video" }
           ]
         },

@@ -1,0 +1,10 @@
+#locationSearch {
+  --calcite-font-size--1: 16px;
+}
+.searchContainer {
+  width: 100%;
+}
+
+.locationContainer {
+  margin: 1em;
+}

@@ -1,0 +1,55 @@
+
+#printPanel {
+  --calcite-font-size--1: 16px;
+}
+:global(.arcgis-print__export-title) {
+  font-weight: 700;
+  font-size: var(--calcite-font-size);
+}
+
+:global(.arcgis-print__exported-files-empty) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--calcite-spacing-lg) var(--calcite-spacing-sm);
+  font-size: small;
+}
+
+:global(.arcgis-print__panel-container) {
+  display: flex;
+  flex: 1 0;
+  flex-direction: column;
+  gap: var(--calcite-spacing-sm);
+}
+
+:global(.arcgis-print__export-section--centered) {
+  text-align: center;
+}
+
+.arcgis-print__exported-file-link-title,
+:global(.arcgis-print__exported-file-link-description) {
+  word-wrap: break-word;
+  word-break: break-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  font-size: var(--calcite-font-size--2);
+}
+
+:global(.arcgis-print__exported-file) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+
+.tabContent {
+  background-color: var(
+    --calcite-panel-background-color,
+    var(--calcite-color-foreground-1)
+  );
+  padding: var(--calcite-internal-panel-default-space);
+}

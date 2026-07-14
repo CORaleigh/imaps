@@ -1,0 +1,72 @@
+:global(div[slot="top-right"]) :global(calcite-panel) {
+  min-width: 350px;
+  max-width: 350px;
+}
+
+:global(div[slot="bottom-left"]) {
+  z-index: 0;
+}
+
+.customActions {
+  position: absolute;
+  left: 45px;
+  top: -7px;
+  --calcite-action-bar-background-color: transparent;
+}
+
+
+.customActions calcite-action {
+  --calcite-action-background-color: var(--calcite-color-surface-2);
+  --calcite-action-background-color-hover:  var(--calcite-color-surface-2)
+  
+
+}
+.customActions calcite-action[active] {
+  --calcite-action-background-color-press: var(--calcite-color-brand);
+  --calcite-action-text-color-press: white;
+  --calcite-action-background-color: var(--calcite-color-surface-2);
+
+}
+
+.customActions calcite-action[active]:hover {
+  --calcite-action-text-color-press: white;
+    --calcite-action-background-color-press: var(--calcite-color-brand);
+
+  
+}
+
+.customActions calcite-action:hover {
+  --calcite-action-text-color-press: var(--calcite-action-text-color,);
+  --calcite-action-background-color: var(--calcite-color-surface-2);
+  --calcite-action-background-color-press: var(--calcite-color-surface-2);
+
+  
+}
+
+
+
+/* .customActions calcite-action {
+  margin-bottom: var(--calcite-spacing-sm-plus);
+}
+
+.customActions calcite-action[active] {
+  --calcite-color-foreground-3: var(--calcite-color-brand);
+  --calcite-color-text-1: white;
+} */
+
+@media (max-width: 600px) {
+  :global(div[slot="top-right"]) :global(calcite-panel) {
+    min-width: calc(100vw - 48px - var(--calcite-spacing-lg));
+    max-width: calc(100vw - 48px - var(--calcite-spacing-lg));
+    margin-right: 48px;
+    padding-right: 20px;
+    margin-left: 0;
+  }
+  :global(div[slot="bottom-right"]) :global(calcite-panel) {
+    margin-right: 48px;
+  }
+
+  :global(arcgis-map) {
+    width: calc(100% - 48px);
+  }
+}

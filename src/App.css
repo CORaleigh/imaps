@@ -1,5 +1,30 @@
-.App {
+#root,
+html,
+body {
   height: 100%;
-  width: 100%;
-  display: flex;
+  margin: 0;
+  --calcite-shell-panel-min-width: 390px;
+  --calcite-shell-panel-width: 390px;
+  --calcite-shell-panel-max-width: 50vw;
+  --calcite-z-index-header: unset;
+  --calcite-flow-background-color: var(--calcite-color-foreground-1);
 }
+
+
+calcite-shell-panel calcite-panel {
+  max-height: calc(100vh - 65px);
+  --calcite-tab-content-space-y: 0;
+}
+
+@media (max-width: 500px) {
+  #root,
+  html,
+  body {
+    --calcite-shell-panel-min-width: calc(100vw - 48px);
+    --calcite-shell-panel-width: calc(100vw - 48px);
+    --calcite-shell-panel-max-width: calc(100vw - 48px);
+  }
+}
+
+
+

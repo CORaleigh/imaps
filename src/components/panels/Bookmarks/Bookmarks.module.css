@@ -1,0 +1,11 @@
+/* .bookmarksPanel {
+  display: flex;
+  flex-direction: column;
+  height: calc(100dvh - 65px);
+  --calcite-font-size--1: 16px;
+} */
+.bookmarksPanel calcite-flow-item {
+  flex: 1; /* Takes remaining space */
+  overflow: auto;
+}
+

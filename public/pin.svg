@@ -1,0 +1,56 @@
+<svg
+   xmlns="http://www.w3.org/2000/svg"
+   viewBox="0 0 50 50">
+<style
+   type="text/css"
+   id="style930">
+	.st0{fill:#E6E6E5;}
+	.st1{fill:none;stroke:#333333;stroke-width:9.6312;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st2{fill:#333333;}
+	.st3{fill:#FFFFFF;}
+	.st4{fill:#333333;stroke:#333333;stroke-width:0.6019;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st5{fill:#D2D6D8;}
+	.st6{fill:#6BC0EC;}
+	.st7{fill:#6DC390;}
+	.st8{fill:#FEE44C;}
+	.st9{fill:#D94346;enable-background:new    ;}
+</style>
+<g
+   id="g978">
+			<g
+   id="g944">
+				<circle
+   class="st3"
+   cx="67.099998"
+   cy="57.200001"
+   r="8.8000002"
+   id="circle938" />
+				<circle
+   class="st3"
+   cx="95.099998"
+   cy="57.200001"
+   r="8.8000002"
+   id="circle940" />
+				<path
+   class="st3"
+   d="M 258.7,66.1 H 133.6 c -4.9,0 -8.8,-4 -8.8,-8.8 v 0 c 0,-4.9 4,-8.8 8.8,-8.8 h 125.1 c 4.9,0 8.8,4 8.8,8.8 v 0 c 0,4.8 -3.9,8.8 -8.8,8.8 z"
+   id="path942" />
+			</g>
+			<g
+   id="g974"
+   transform="matrix(0.77809479,0,0,0.86547114,-118.59534,-97.284474)">
+				<path
+   class="st9"
+   d="m 205.5,133.8 c 0,8.2 -2.9,10.5 -18.2,32.7 -0.8,1.2 -2.4,1.4 -3.5,0.6 -0.3,-0.2 -0.5,-0.4 -0.6,-0.6 C 167.8,144.2 165,142 165,133.8 c 0,-11.2 9.1,-20.3 20.3,-20.3 11.2,0 20.2,9.1 20.2,20.3 z"
+   id="path972" />
+			</g>
+			<ellipse
+   class="st3"
+   cx="25.58563"
+   cy="17.563547"
+   id="circle976"
+   rx="6.8472342"
+   ry="7.6161461"
+   style="stroke-width:0.820621" />
+		</g>
+</svg>

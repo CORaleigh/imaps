@@ -1,12 +1,17 @@
-import React, { lazy } from 'react';
-import './App.css';
-const Shell = lazy(() => import('./components/Shell/Shell'));
+import "@arcgis/map-components/components/arcgis-map";
+import "./App.css";
+import MapProvider from "./context/MapProvider";
+import Shell from "./components/Shell";
+import AppAlert from "./components/AppAlert";
 
 function App() {
   return (
-    <div className="App">
-      <Shell></Shell>
-    </div>
+    <MapProvider>
+      <>
+        <Shell></Shell>
+        <AppAlert></AppAlert>
+      </>
+    </MapProvider>
   );
 }
 

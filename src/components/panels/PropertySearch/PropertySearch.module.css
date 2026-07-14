@@ -1,0 +1,56 @@
+#propertySearch {
+  display: flex;
+  flex-direction: column;
+  height: calc(100dvh - 65px);
+}
+
+/* #propertySearch  {
+  --calcite-font-size--1: 16px;
+} */
+
+#propertySearch calcite-tabs {
+  flex: 1; /* Takes remaining space */
+  overflow: auto;
+}
+
+.searchTop {
+  display: flex;
+  width: 100vw;
+}
+
+.featureHeader {
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--calcite-color-foreground-1);
+}
+.featureHeader h2 {
+  width: 100%;
+  text-align: center;
+}
+
+.featureSubTitle {
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--calcite-color-foreground-1);
+}
+
+.featureTitle {
+  font-size: var(--calcite-font-size-xl);
+  margin-top: var(--calcite-spacing-lg);
+  line-height: var(--calcite-font-line-height-relative-tight);
+  letter-spacing: 0px;
+  color: var(--calcite-color-text-1);
+  font-weight: var(--calcite-font-weight-semibold);
+  padding: 0 var(--calcite-spacing-sm);
+  background-color: var(--calcite-color-foreground-1);
+}
+
+
+
+.searchContainer {
+  width: 100%;
+}
+
+.featureTable {
+  height: 100%;
+}
