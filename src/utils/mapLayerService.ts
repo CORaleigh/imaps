@@ -53,9 +53,15 @@ class LayerService {
     const raw = localStorage.getItem(this.persistKey);
     const persisted: PersistState = raw ? JSON.parse(raw) : { layers: [] };
 
-    this.persistedStateCache = new Map(
-      persisted.layers.map((l) => [l.id, l.visible]),
-    );
+    // Titles are not unique (e.g. "Property" appears multiple times, and every
+    // group child is also emitted as a top-level row). A plain Map() would keep
+    // only the LAST row for a duplicate title. OR the values so a title counts as
+    // "visible last session" if ANY row with that title was visible.
+    const cache = new Map<string, boolean>();
+    for (const l of persisted.layers) {
+      cache.set(l.id, (cache.get(l.id) ?? false) || l.visible);
+    }
+    this.persistedStateCache = cache;
 
     return this.persistedStateCache;
   }
@@ -136,12 +142,10 @@ class LayerService {
             (layer.visible && parentVisible);
 
           if (child.type === "group") {
+            // Thread the current group's effective visibility down, rather than
+            // re-reading child.parent.visible (which can be stale/undefined).
             if (
-              addLayerRecursive(
-                child,
-                newGroup,
-                (child.parent as GroupLayer).visible,
-              )
+              addLayerRecursive(child, newGroup, layer.visible && parentVisible)
             ) {
               anyChildAdded = true;
             }
@@ -176,8 +180,9 @@ class LayerService {
     };
 
     // Use for loop instead of forEach for potential early exit
+    // A top-level layer's parent is the WebMap (no `.visible`), so seed true.
     for (const layer of this.webmapTemplate.layers.toArray()) {
-      addLayerRecursive(layer, webmap, (layer.parent as GroupLayer).visible);
+      addLayerRecursive(layer, webmap, true);
     }
 
     // Add tables - use Set for faster lookup
@@ -484,12 +489,15 @@ class LayerService {
         layer.opacity = lp.opacity;
       }
 
-      // Now set sublayers for GroupLayer
+      // Now set sublayers for GroupLayer.
+      // Match by title, NOT by index: group membership and order change at
+      // runtime (layers are added/removed by visibility), so index N on the live
+      // side is not the same layer as index N in the persisted array.
       if (layer instanceof GroupLayer && layer.layers && lp.sublayers) {
-        const sublayersArray = layer.layers.toArray();
-        for (let idx = 0; idx < sublayersArray.length; idx++) {
-          const sl = sublayersArray[idx];
-          const slPersist = lp.sublayers[idx];
+        for (const sl of layer.layers.toArray()) {
+          const slPersist = lp.sublayers.find(
+            (s) => String(s.id) === String(sl.title ?? sl.id),
+          );
           if (slPersist) {
             sl.visible = slPersist.visible;
             if (slPersist.opacity != null) sl.opacity = slPersist.opacity;
@@ -597,14 +605,11 @@ class LayerService {
         }
       }
     } else if (layer instanceof GroupLayer && layer.layers && lp.sublayers) {
-      const sublayersArray = layer.layers.toArray();
-      for (
-        let idx = 0;
-        idx < sublayersArray.length && idx < lp.sublayers.length;
-        idx++
-      ) {
-        const sl = sublayersArray[idx];
-        const slPersist = lp.sublayers[idx];
+      // Match by title, NOT by index (see restorePersistedState for rationale).
+      for (const sl of layer.layers.toArray()) {
+        const slPersist = lp.sublayers.find(
+          (s) => String(s.id) === String(sl.title ?? sl.id),
+        );
         if (slPersist) {
           sl.visible = slPersist.visible;
           if (slPersist.opacity != null) sl.opacity = slPersist.opacity;
