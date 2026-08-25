@@ -22,6 +22,7 @@ import type Polygon from "@arcgis/core/geometry/Polygon";
 import { updatePropertyLabels } from "../components/panels/LayerList/layers";
 import esriConfig from "@arcgis/core/config";
 import Portal from "@arcgis/core/portal/Portal";
+import { convertToNewFormat } from "./storageConvert";
 
 const MapProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   /** -------------------- Refs -------------------- **/
@@ -216,6 +217,26 @@ const MapProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
       const mapId = params.get("id") ?? config.mapId ?? DEFAULT_MAP_ID;
 
+      let oldStorageId = "imaps_webmap_";
+      if (mapId !== DEFAULT_MAP_ID) {
+        oldStorageId += `${mapId}`;
+      }
+      if (app === "puma") {
+        oldStorageId = "imaps_webmap_puma";
+      }
+      console.log(oldStorageId);
+      if (localStorage.getItem(oldStorageId)) {
+        const oldJson = JSON.parse(localStorage.getItem(oldStorageId)!);
+        const state = { layers: convertToNewFormat(oldJson) };
+
+        localStorage.setItem(
+          `imaps_${mapId}_layerVisibility`,
+          JSON.stringify(state),
+        );
+
+        localStorage.removeItem(oldStorageId);
+      }
+
       const { webmap, webmapTemplate } =
         await layerService.createWebMapWithRequiredAndPersisted(mapId);
 
@@ -237,28 +258,6 @@ const MapProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           localStorage.removeItem(`imaps_${webMapId.current}_extent`);
         }
       }
-      //check for old storage keys and reset if found
-      if (
-        localStorage.getItem(`imaps_webmap_`) ||
-        localStorage.getItem(`imaps_webmap_${webMapId.current}`)
-      ) {
-        //show alert to user
-        setAlert({
-          show: true,
-          message: `Layer storage has been reset due to a change in the storage process in the latest 
-          update to iMAPS.  Any layers visible in the previous session will need to be made visible again.`,
-          id: Date.now(),
-          title: "Layer Storage Reset",
-          autoCloseDuration: "slow",
-          autoClose: true,
-          kind: "brand",
-          icon: "information",
-        });
-        //remove old storage keys
-        localStorage.removeItem(`imaps_webmap_`);
-        localStorage.removeItem(`imaps_webmap_${webMapId.current}`);
-      }
-
       setMapReady(true);
     }
 
